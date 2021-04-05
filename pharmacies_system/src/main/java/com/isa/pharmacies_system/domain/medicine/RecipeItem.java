@@ -1,11 +1,14 @@
 package com.isa.pharmacies_system.domain.medicine;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import javax.persistence.*;
 
 @Entity
 @Table(name="recipe_items")
 public class RecipeItem extends Item{
 
+    @JsonBackReference
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Recipe recipe;
 

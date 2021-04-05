@@ -19,6 +19,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.isa.pharmacies_system.domain.rating.MedicineRating;
 
 import javax.persistence.ManyToMany;
@@ -27,21 +28,23 @@ import javax.persistence.OneToMany;
 @Entity
 @Table(name="medicine")
 public class Medicine extends MedicineInfo {
-	
-	
+
+	@JsonManagedReference
 	@OneToMany(mappedBy = "medicineWithPrices", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private Set<MedicinePrice> medicinePrices = new HashSet<MedicinePrice>();
-	
+
+	@JsonManagedReference
 	@OneToMany(mappedBy = "medicineItem", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private Set<Item> items = new HashSet<Item>();
-	
+
+	@JsonManagedReference
 	@OneToMany(mappedBy = "reservedMedicine", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-	@JsonIgnoreProperties({"reservedMedicine", "patientForMedicineReservation", "dateOfTakingMedicine", "pharmacyForMedicineReservation", "statusOfMedicineReservation"})
 	private Set<MedicineReservation> medicineReservations= new HashSet<MedicineReservation>();
 	
 	@Column(name="medicineAverageRating", unique=false, nullable=false)
 	private double medicineAverageRating;
-	
+
+	@JsonManagedReference
 	@OneToMany(mappedBy = "medicineForRating", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private Set<MedicineRating> medicineRatings = new HashSet<MedicineRating>();
 	

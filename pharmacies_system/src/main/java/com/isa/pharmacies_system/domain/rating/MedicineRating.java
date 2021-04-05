@@ -10,6 +10,7 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.isa.pharmacies_system.domain.medicine.Medicine;
 import com.isa.pharmacies_system.domain.user.Patient;
 
@@ -19,6 +20,7 @@ public class MedicineRating extends Rating {
 	
 	//apoteka
 	//pacijent samo jednom moze da da ocenu apoteci, posle ide update
+	@JsonBackReference
 	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private Medicine medicineForRating;
 

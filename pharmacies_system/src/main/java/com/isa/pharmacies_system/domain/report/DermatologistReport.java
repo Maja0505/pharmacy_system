@@ -1,5 +1,6 @@
 package com.isa.pharmacies_system.domain.report;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.isa.pharmacies_system.domain.medicine.Recipe;
 import com.isa.pharmacies_system.domain.schedule.DermatologistAppointment;
 

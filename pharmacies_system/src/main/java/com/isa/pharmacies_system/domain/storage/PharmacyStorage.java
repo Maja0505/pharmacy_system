@@ -10,6 +10,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.isa.pharmacies_system.domain.pharmacy.Pharmacy;
 
 @Entity
@@ -17,6 +18,7 @@ import com.isa.pharmacies_system.domain.pharmacy.Pharmacy;
 public class PharmacyStorage extends Storage {
 	
 	//proveriti da li je bolja verzija sa MedicinePrice ili samo Medicine
+	@JsonManagedReference
 	@OneToMany(mappedBy = "pharmacyStorageWithItem", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private Set<PharmacyStorageItem> pharmacyStorageItems = new HashSet<PharmacyStorageItem>();
 	

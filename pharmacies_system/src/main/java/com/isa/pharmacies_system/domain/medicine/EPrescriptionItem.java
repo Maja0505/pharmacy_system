@@ -1,5 +1,7 @@
 package com.isa.pharmacies_system.domain.medicine;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -13,7 +15,8 @@ import javax.persistence.Table;
 @Entity
 @Table(name="eprescription_items")
 public class EPrescriptionItem extends Item {
-	
+
+	@JsonBackReference
 	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private EPrescription ePrescriton;
 	
