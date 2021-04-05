@@ -16,6 +16,7 @@ import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.isa.pharmacies_system.domain.pharmacy.Pharmacy;
 import com.isa.pharmacies_system.domain.user.Dermatologist;
 
@@ -28,12 +29,12 @@ public class WorkerSchedule {
 	@SequenceGenerator(name = "mySeqGenWorkerSchedule", sequenceName = "mySeqWorkerSchedule", initialValue = 1, allocationSize = 1)
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "mySeqGenWorkerSchedule")
 	private long id;
-
-
-	@JsonIgnoreProperties({"workingStartTime","workingEndTime","statusOfWorkingHours","workerSchedule"})
+	
+	@JsonManagedReference
 	@OneToMany(mappedBy = "workerSchedule", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private Set<WorkingHours> workingHours = new HashSet<WorkingHours>();
 	
+	@JsonBackReference
 	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private Pharmacy pharmacy;
 

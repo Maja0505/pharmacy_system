@@ -15,6 +15,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.isa.pharmacies_system.domain.user.Supplier;
 
@@ -34,10 +35,12 @@ public class Offer {
 	private Instant deliveryDate;
 	
 	//dobavljac
+	@JsonBackReference
 	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private Supplier offerSupplier;
 	
 	//id narudzbenice
+	@JsonBackReference
 	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private Order orderForOffer;
 	

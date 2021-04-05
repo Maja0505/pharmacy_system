@@ -10,12 +10,14 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.isa.pharmacies_system.domain.medicine.Item;
 
 @Entity
 @Table(name="order_items")
 public class OrderItem extends Item {
 	
+	@JsonBackReference
 	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private Order orderWithItem;
 	

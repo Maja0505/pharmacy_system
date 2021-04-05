@@ -23,6 +23,7 @@ import com.isa.pharmacies_system.domain.user.Dermatologist;
 import com.isa.pharmacies_system.domain.user.Pharmacist;
 import com.isa.pharmacies_system.domain.user.PharmacyAdmin;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 
 @Entity
@@ -37,7 +38,7 @@ public class Pharmacy {
 	@Column(name="pharmacyName", unique = false, nullable = false)
 	private String pharmacyName;
 
-	@JsonIgnoreProperties({"workingHours", "pharmacy"})
+	@JsonManagedReference
 	@OneToMany(mappedBy = "pharmacy", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private Set<WorkerSchedule> workerSchedule = new HashSet<WorkerSchedule>();
 	
@@ -48,20 +49,19 @@ public class Pharmacy {
 	//@JsonIgnoreProperties({"email", "password", "firstName", "lastName", "userAddress", "phoneNumber", "typeOfUser", "listOfOrders", "PharmacyForPharmacyAdmin" })
 	//private Set<PharmacyAdmin> pharmacyAdmins = new HashSet<PharmacyAdmin>();
 
-	@JsonIgnoreProperties({"email","password","firstName","lastName","userAddress","phoneNumber","typeOfUser","dermatologistSchedules","dermatologistVacationRequests","dermatologistAverageRating","dermatologistAppointments","dermatologistComplaints","dermatologistRatings"})
 	@ManyToMany(fetch = FetchType.LAZY)
 	private Set<Dermatologist> dermatologistsInPharmacy = new HashSet<Dermatologist>();
 
-	@JsonIgnoreProperties({"email","password","firstName","lastName","userAddress","phoneNumber","typeOfUser","pharmacistSchedule","pharmacistVacationRequests","pharmacistAverageRating","pharmacistAppointments","pharmacyForPharmacist","pharmacistComplaints","pharmacistRatings"})
+	@JsonManagedReference
 	@OneToMany(mappedBy = "pharmacyForPharmacist", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private Set<Pharmacist> pharmacistsInPharmacy = new HashSet<Pharmacist>();
 	
 	//lista termina za preglede kod dermatologa koje moze da zakaze (STATUS: OPEN) koji se odrzavaju u apoteci
-	@JsonIgnoreProperties({"dermatologistAppointmentStartTime","dermatologistAppointmentEndTime","dermatologistForAppointment","pharmacyForDermatologistAppointment"})
+	@JsonManagedReference
 	@OneToMany(mappedBy = "pharmacyForDermatologistAppointment", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private Set<DermatologistAppointment> dermatologistAppointmentsInPharmacy = new HashSet<DermatologistAppointment>();
 
-	@JsonIgnoreProperties({"pharmacistForComplaint","patientWithComplaint","content","typeOfComplaint"})
+	@JsonManagedReference
 	@OneToMany(mappedBy = "pharmacyForComplaint", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private Set<PharmacyComplaint> pharmacyComplaints = new HashSet<PharmacyComplaint>();
 
@@ -75,14 +75,15 @@ public class Pharmacy {
 	//PHARMACY STORAGE -> SADRZI KOLICINU LEKOVA
 
 	//PROMOCIJE
+	@JsonManagedReference
 	@OneToMany(mappedBy = "pharmacyForPromotions", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private Set<Promotions> promotionsForPharmacy = new HashSet<Promotions>();
-
+	
+	@JsonManagedReference
 	@OneToMany(mappedBy = "pharmacyForMedicineReservation", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-	@JsonIgnoreProperties({"reservedMedicine", "patientForMedicineReservation", "dateOfTakingMedicine", "pharmacyForMedicineReservation", "statusOfMedicineReservation"})
 	private Set<MedicineReservation> pharmacyMedicineReservations = new HashSet<MedicineReservation>();
 	
-	
+	@JsonManagedReference
 	@OneToMany(mappedBy = "pharmacyForRating", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private Set<PharmacyRating> pharmacyRatings = new HashSet<PharmacyRating>();
 	

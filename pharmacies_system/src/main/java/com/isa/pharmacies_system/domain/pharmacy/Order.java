@@ -18,7 +18,9 @@ import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.isa.pharmacies_system.domain.user.PharmacyAdmin;
 
 @Entity
@@ -31,6 +33,7 @@ public class Order {
 	private long id;
 	
 	//spisak lekova sa kolicinama
+	@JsonManagedReference
 	@OneToMany(mappedBy = "orderWithItem", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private Set<OrderItem> orderItems = new HashSet<OrderItem>();
 	
@@ -39,10 +42,12 @@ public class Order {
 	private Instant orderEndDate;
 	
 	//admin apoteke
+	@JsonBackReference
 	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private PharmacyAdmin pharmacyAdminForOrder;
 	
 	//spisak svih ponuda za narudzbenicu
+	@JsonManagedReference
 	@OneToMany(mappedBy = "orderForOffer", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private Set<Offer> listOfOffersForOrder = new HashSet<Offer>();
 	

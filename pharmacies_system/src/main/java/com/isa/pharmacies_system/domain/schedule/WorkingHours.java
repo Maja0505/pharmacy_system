@@ -14,6 +14,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
@@ -38,7 +39,7 @@ public class WorkingHours {
 	@Enumerated(EnumType.ORDINAL)
 	private StatusOfWorkingHours statusOfWorkingHours;
 
-	@JsonIgnoreProperties({"workingHours", "pharmacy"})
+	@JsonBackReference
 	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private WorkerSchedule workerSchedule;
 

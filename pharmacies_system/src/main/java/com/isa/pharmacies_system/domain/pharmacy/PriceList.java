@@ -17,6 +17,7 @@ import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.isa.pharmacies_system.domain.medicine.MedicinePrice;
 
 @Entity
@@ -33,6 +34,7 @@ public class PriceList {
 	@Column(name="pharmacistAppointmentPricePerHour", unique=false, nullable=false)
 	private double pharmacistAppointmentPricePerHour;
 	
+	@JsonManagedReference
 	@OneToMany(mappedBy = "priceListForMedicine", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private Set<MedicinePrice> medicinePrices = new HashSet<MedicinePrice>();
 	
