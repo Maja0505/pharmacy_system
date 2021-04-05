@@ -18,6 +18,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.isa.pharmacies_system.domain.user.PharmacyAdmin;
 
@@ -39,6 +40,7 @@ public class Order {
 	private Instant orderEndDate;
 	
 	//admin apoteke
+	@JsonBackReference
 	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private PharmacyAdmin pharmacyAdminForOrder;
 	

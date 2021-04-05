@@ -16,6 +16,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.isa.pharmacies_system.domain.user.Patient;
 
@@ -26,7 +27,8 @@ public class EPrescription {
 	@SequenceGenerator(name = "mySeqGenEPrescription", sequenceName = "mySeqEPrescription", initialValue = 1, allocationSize = 1)
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "mySeqGenEPrescription")
 	private long id;
-	
+
+	@JsonBackReference
 	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private Patient patientForEPrescription;
 	

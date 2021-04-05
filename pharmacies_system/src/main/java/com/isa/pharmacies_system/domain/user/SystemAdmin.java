@@ -9,12 +9,14 @@ import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.isa.pharmacies_system.domain.complaint.ComplaintResponse;
 
 @Entity
 @Table(name="system_admin")
 public class SystemAdmin extends Users{
-	
+
+	@JsonManagedReference
 	@OneToMany(mappedBy = "systemAdminForComplaintResponse", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private Set<ComplaintResponse> systemAdminComplaintResponses = new HashSet<ComplaintResponse>();
 	

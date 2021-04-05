@@ -14,6 +14,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.isa.pharmacies_system.domain.user.SystemAdmin;
 
 @Entity
@@ -27,7 +28,8 @@ public class ComplaintResponse {
 	
 	@Column(name="complaintResponseContent", unique=false, nullable=false)
 	private String complaintResponseContent;
-	
+
+	@JsonBackReference
 	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private SystemAdmin systemAdminForComplaintResponse;
 	
