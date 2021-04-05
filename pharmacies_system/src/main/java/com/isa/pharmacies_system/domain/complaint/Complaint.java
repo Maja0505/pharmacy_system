@@ -27,7 +27,7 @@ public class Complaint {
 	@SequenceGenerator(name = "mySeqGenComplaint", sequenceName = "mySeqComplaint", initialValue = 1, allocationSize = 1)
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "mySeqGenComplaint")
 	private long id;
-	
+
 	@JsonBackReference
 	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private Patient patientWithComplaint;

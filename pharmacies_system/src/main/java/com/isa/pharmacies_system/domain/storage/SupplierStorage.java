@@ -15,13 +15,15 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.isa.pharmacies_system.domain.user.Supplier;
 
 @Entity
 @Table(name="supplier_storages")
 public class SupplierStorage extends Storage {
-	
-	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+
+	@JsonManagedReference
+	@OneToMany(mappedBy = "supplierStorageWithItem",fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private Set<SupplierStorageItem> supplierStorageItems = new HashSet<SupplierStorageItem>();
 		
 	@OneToOne(cascade = CascadeType.ALL)

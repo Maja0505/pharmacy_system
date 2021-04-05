@@ -13,6 +13,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.isa.pharmacies_system.domain.pharmacy.PriceList;
 
@@ -32,7 +33,8 @@ public class MedicinePrice {
 	
 	@Column(name="medicinePrice", unique=false, nullable=false)
 	private double medicinePrice;
-	
+
+	@JsonBackReference
 	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private Medicine medicineWithPrices;
 	

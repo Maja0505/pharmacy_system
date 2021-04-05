@@ -16,7 +16,9 @@ import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.isa.pharmacies_system.domain.user.Patient;
 
 @Entity
@@ -26,7 +28,8 @@ public class EPrescription {
 	@SequenceGenerator(name = "mySeqGenEPrescription", sequenceName = "mySeqEPrescription", initialValue = 1, allocationSize = 1)
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "mySeqGenEPrescription")
 	private long id;
-	
+
+	@JsonBackReference
 	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private Patient patientForEPrescription;
 	
@@ -34,6 +37,7 @@ public class EPrescription {
 	private Instant creationDate;
 	
 	//spisak lekova sa kolicinama
+	@JsonManagedReference
 	@OneToMany(mappedBy = "ePrescriton", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private Set<EPrescriptionItem> ePrescriptionItems = new HashSet<EPrescriptionItem>();
 	

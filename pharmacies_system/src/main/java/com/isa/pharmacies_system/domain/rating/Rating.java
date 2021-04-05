@@ -16,6 +16,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.isa.pharmacies_system.domain.storage.TypeOfStorage;
 import com.isa.pharmacies_system.domain.user.Patient;
 
@@ -30,7 +31,8 @@ public class Rating {
 	
 	@Column(name="grade", unique=false, nullable=false)
 	private RatingScale grade;
-	
+
+	@JsonBackReference
 	@ManyToOne(cascade = {CascadeType.MERGE,CascadeType.DETACH,CascadeType.REFRESH,CascadeType.REMOVE}, fetch = FetchType.EAGER)
 	private Patient patientWithRating;
 	

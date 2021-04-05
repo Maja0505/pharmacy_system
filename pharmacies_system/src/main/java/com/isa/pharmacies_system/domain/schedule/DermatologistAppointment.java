@@ -33,7 +33,7 @@ public class DermatologistAppointment extends Appointment {
 	@JsonBackReference
 	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private Pharmacy pharmacyForDermatologistAppointment;
-	
+
 	@JsonBackReference
 	@ManyToOne(cascade = {CascadeType.DETACH,CascadeType.MERGE,CascadeType.REFRESH,CascadeType.REMOVE}, fetch = FetchType.EAGER)
 	private Patient patientWithDermatologistAppointment;

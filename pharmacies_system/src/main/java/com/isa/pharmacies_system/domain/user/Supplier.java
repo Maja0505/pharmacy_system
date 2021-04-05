@@ -12,6 +12,7 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.isa.pharmacies_system.domain.pharmacy.Offer;
 
 @Entity
@@ -19,6 +20,7 @@ import com.isa.pharmacies_system.domain.pharmacy.Offer;
 public class Supplier extends Users {
 	
 	//lista ponuda
+	@JsonManagedReference
 	@OneToMany(mappedBy = "offerSupplier", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private Set<Offer> listOfOffers = new HashSet<Offer>();
 

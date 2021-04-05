@@ -28,7 +28,7 @@ public class ComplaintResponse {
 	
 	@Column(name="complaintResponseContent", unique=false, nullable=false)
 	private String complaintResponseContent;
-	
+
 	@JsonBackReference
 	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private SystemAdmin systemAdminForComplaintResponse;

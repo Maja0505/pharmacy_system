@@ -39,7 +39,6 @@ public class Patient extends Users {
 	private CategoryOfPatient categoryOfPatient;
 	
 	@ManyToMany(fetch = FetchType.LAZY)
-	@JsonIgnoreProperties({"medicineCode","typeOfMedicine","formOfMedicine","ingredients","manufacturerOfMedicine","prescriptionRegime","alternativeMedicines","notes","medicinePrices","items","medicineReservations","medicineAverageRating","medicineAverageRating","medicineRatings"})
 	private Set<Medicine> medicineAllergies = new HashSet<Medicine>();
 
 	@JsonManagedReference
@@ -51,7 +50,6 @@ public class Patient extends Users {
 	private Set<DermatologistAppointment> dermatologistAppointment = new HashSet<DermatologistAppointment>();
 
 	@ManyToMany(fetch = FetchType.LAZY)
-	@JsonIgnoreProperties({"pharmacyName","workerSchedule","pharmacyAddress","dermatologistsInPharmacy","pharmacistsInPharmacy","dermatologistAppointmentsInPharmacy","pharmacyComplaints","pharmacyAverageRating","pharmacyDescription","promotionsForPharmacy","pharmacyMedicineReservations","pharmacyRatings"})
 	private Set<Pharmacy> pharmaciesSubscription = new HashSet<>();
 
 	@JsonManagedReference

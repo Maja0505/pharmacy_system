@@ -15,6 +15,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.isa.pharmacies_system.domain.pharmacy.Pharmacy;
@@ -35,13 +36,13 @@ public class MedicineReservation {
 	private long id;
 	
 	//lijek koji se rezevise
+	@JsonBackReference
 	@ManyToOne(cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
-	@JsonIgnoreProperties({"medicineReservations","formOfMedicine","ingredients","alternativeMedicines","notes","medicinePrices","items","medicineAverageRating","medicineRatings","medicinePriceStartTime","medicnePriceEndTime","medicinePrice","medicineWithPrices","priceListForMedicine"})
 	private Medicine reservedMedicine;
 
 	//pacijent koji kreira rezervaciju
+	@JsonBackReference
 	@ManyToOne(cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
-	@JsonIgnoreProperties({"patientPoints","pharmaciesSubscription","patientRatings","categoryOfPatient","medicineAllergies","appointments","patientMedicineReservations","patientEPrescriptions","patientComplaints","password","userAddress","phoneNumber","typeOfUser"})
 	private Patient patientForMedicineReservation;
 	
 	//datum preuzimanja lijeka

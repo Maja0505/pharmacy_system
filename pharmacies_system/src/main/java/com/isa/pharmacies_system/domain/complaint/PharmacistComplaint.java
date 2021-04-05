@@ -16,7 +16,7 @@ import com.isa.pharmacies_system.domain.user.Pharmacist;
 @Entity
 @Table(name="pharmacist_complaints")
 public class PharmacistComplaint extends Complaint {
-	
+
 	@JsonBackReference
 	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private Pharmacist pharmacistForComplaint;

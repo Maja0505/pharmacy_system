@@ -10,12 +10,14 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.isa.pharmacies_system.domain.user.Pharmacist;
 
 @Entity
 @Table(name="pharmacist_ratings")
 public class PharmacistRating extends Rating{
-	
+
+	@JsonBackReference
 	@ManyToOne(cascade = {CascadeType.MERGE,CascadeType.DETACH,CascadeType.REFRESH,CascadeType.REMOVE}, fetch = FetchType.EAGER)
 	private Pharmacist pharmacistForRating;
 

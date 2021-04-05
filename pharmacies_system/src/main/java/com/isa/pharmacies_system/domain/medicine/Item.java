@@ -1,5 +1,7 @@
 package com.isa.pharmacies_system.domain.medicine;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import static javax.persistence.InheritanceType.JOINED;
 
 import javax.persistence.CascadeType;
@@ -24,7 +26,8 @@ public class Item {
 	@SequenceGenerator(name = "mySeqGenItem", sequenceName = "mySeqItem", initialValue = 1, allocationSize = 1)
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "mySeqGenItem")
 	private long id;
-	
+
+	@JsonBackReference
 	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private Medicine medicineItem;
 	
