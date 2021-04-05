@@ -7,6 +7,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.isa.pharmacies_system.domain.complaint.PharmacistComplaint;
 import com.isa.pharmacies_system.domain.pharmacy.Pharmacy;
@@ -27,28 +28,28 @@ import javax.persistence.Column;
 @Table(name="pharmacists")
 public class Pharmacist extends Users {
 
-	@JsonIgnoreProperties({"workingHours", "pharmacy"})
 	@OneToOne(cascade = CascadeType.ALL)
 	private WorkerSchedule pharmacistSchedule;
 
+	@JsonManagedReference
 	@OneToMany(mappedBy = "vacationRequestPharmacist", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-	@JsonIgnoreProperties({"vacationRequestPharmacist","vacationStartDate","vacationEndDate","typeOfVacation","statusOfVacationRequest","vacationRequestNotes","typeOfVacationRequest"})
 	private Set<PharmacistVacationRequest> pharmacistVacationRequests = new HashSet<PharmacistVacationRequest>();
 	
 	@Column(name="pharmacistAverageRating", unique=false, nullable=false)
 	private double pharmacistAverageRating;
 
-	@JsonIgnoreProperties({"appointmentPrice","statusOfAppointment","appointmentPoints","typeOfAppointment","pharmacistAppointmentStartTime","pharmacistAppointmentDuration","patientWithAppointment","pharmacistForAppointment"})
+	@JsonManagedReference
 	@OneToMany(mappedBy = "pharmacistForAppointment", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private Set<PharmacistAppointment> pharmacistAppointments = new HashSet<PharmacistAppointment>();
 
 	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-	@JsonIgnoreProperties({"workerSchedule","pharmacyComplaints","pharmacyAverageRating","pharmacyDescription","pharmacyMedicineReservations","pharmacyName","pharmacyAddress","dermatologistsInPharmacy","pharmacistsInPharmacy","dermatologistAppointmentsInPharmacy","promotionsForPharmacy","pharmacyRatings","pharmacistForAppointment"})
 	private Pharmacy pharmacyForPharmacist;
-	
+
+	@JsonManagedReference
 	@OneToMany(mappedBy = "pharmacistForComplaint", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private Set<PharmacistComplaint> pharmacistComplaints = new HashSet<PharmacistComplaint>();
-	
+
+	@JsonManagedReference
 	@OneToMany(mappedBy = "pharmacistForRating", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private Set<PharmacistRating> pharmacistRatings = new HashSet<PharmacistRating>();
 	

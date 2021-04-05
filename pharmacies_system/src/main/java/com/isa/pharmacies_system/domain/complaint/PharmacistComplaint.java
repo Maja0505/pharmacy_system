@@ -10,12 +10,14 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.isa.pharmacies_system.domain.user.Pharmacist;
 
 @Entity
 @Table(name="pharmacist_complaints")
 public class PharmacistComplaint extends Complaint {
-	
+
+	@JsonBackReference
 	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private Pharmacist pharmacistForComplaint;
 	

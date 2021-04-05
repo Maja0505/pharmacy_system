@@ -15,6 +15,7 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -31,11 +32,11 @@ public class PharmacistAppointment extends Appointment {
 	@Column(name="pharmacistAppointmentDuration", unique=false, nullable=false)
 	private double pharmacistAppointmentDuration;
 
-	@JsonIgnoreProperties({"patientRecipe","pharmaciesSubscription","patientMedicineReservations","patientEPrescriptions","patientComplaints","patientRatings","appointments","medicineAllergies","categoryOfPatient","patientPoints","userAddress","email","password","firstName","lastName","phoneNumber","typeOfUser"})
+	@JsonBackReference
 	@ManyToOne(cascade = {CascadeType.DETACH,CascadeType.MERGE,CascadeType.REFRESH,CascadeType.REMOVE}, fetch = FetchType.EAGER)
 	private Patient patientWithPharmacistAppointment;
 
-	@JsonIgnoreProperties({"pharmacistSchedule","pharmacistVacationRequests","pharmacistAverageRating","userAddress","pharmacistAppointments","pharmacyForPharmacist","pharmacistComplaints","pharmacistRatings","email","password","firstName","lastName","phoneNumber","typeOfUser"})
+	@JsonBackReference
 	@ManyToOne(cascade = {CascadeType.DETACH,CascadeType.MERGE,CascadeType.REFRESH,CascadeType.REMOVE}, fetch = FetchType.EAGER)
 	private Pharmacist pharmacistForAppointment;
 	

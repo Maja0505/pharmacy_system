@@ -10,6 +10,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.isa.pharmacies_system.domain.pharmacy.Order;
 import com.isa.pharmacies_system.domain.pharmacy.Pharmacy;
 
@@ -19,6 +21,7 @@ public class PharmacyAdmin extends Users{
 	
 	
 	//spisak svih narudzbenica
+	@JsonManagedReference
 	@OneToMany(mappedBy = "pharmacyAdminForOrder", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private Set<Order> listOfOrders = new HashSet<Order>();
 	

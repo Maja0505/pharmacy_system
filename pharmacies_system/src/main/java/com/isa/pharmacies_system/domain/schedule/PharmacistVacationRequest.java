@@ -6,6 +6,7 @@ import javax.persistence.FetchType;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.isa.pharmacies_system.domain.user.Pharmacist;
@@ -14,7 +15,7 @@ import com.isa.pharmacies_system.domain.user.Pharmacist;
 @Table(name="dermatologist_vacation_requests")
 public class PharmacistVacationRequest extends VacationRequest{
 
-	@JsonIgnore
+	@JsonBackReference
 	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private Pharmacist vacationRequestPharmacist;
 	

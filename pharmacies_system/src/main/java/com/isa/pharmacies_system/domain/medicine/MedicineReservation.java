@@ -41,8 +41,8 @@ public class MedicineReservation {
 	private Medicine reservedMedicine;
 
 	//pacijent koji kreira rezervaciju
+	@JsonBackReference
 	@ManyToOne(cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
-	@JsonIgnoreProperties({"patientPoints","pharmaciesSubscription","patientRatings","categoryOfPatient","medicineAllergies","appointments","patientMedicineReservations","patientEPrescriptions","patientComplaints","password","userAddress","phoneNumber","typeOfUser"})
 	private Patient patientForMedicineReservation;
 	
 	//datum preuzimanja lijeka

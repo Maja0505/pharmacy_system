@@ -1,5 +1,6 @@
 package com.isa.pharmacies_system.domain.medicine;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.isa.pharmacies_system.domain.user.Patient;
@@ -18,6 +19,7 @@ public class Recipe {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "mySeqGenRecipe")
     private long id;
 
+    @JsonBackReference
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Patient patientForRecipe;
 
