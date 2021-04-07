@@ -1,5 +1,6 @@
 package com.isa.pharmacies_system.services;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.isa.pharmacies_system.iservices.IUsersService;
