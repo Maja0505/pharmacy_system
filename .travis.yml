@@ -10,15 +10,14 @@ jobs:
         - cd front
         - npm install
         - npm run build || true
- 
 
-    - if: branch = master
-        deploy:
-          provider: heroku
-          api_key: $HEROKU_API_KEY
-          app: pharmacies-system
-    
-    
+      deploy:
+        on:
+          branch: master
+        provider: heroku
+        api_key: $HEROKU_API_KEY
+        app: pharmacies-system
+
     - language: java
       sudo: required
       jdk: oraclejdk11
@@ -36,9 +35,10 @@ jobs:
         - ./mvnw sonar:sonar -Dsonar.projectKey=$PROJECT_KEY -Dsonar.organization=nemanja0505 -Dsonar.host.url=https://sonarcloud.io -Dsonar.login=$SONAR_TOKEN
 
       dist: trusty
-    
-    - if: branch = master
-        deploy:
-          provider: heroku
-          api_key: $HEROKU_API_KEY
-          app: pharmacy-system-isa
+
+      deploy:
+        on:
+          branch: master
+        provider: heroku
+        api_key: $HEROKU_API_KEY
+        app: pharmacy-system-isa
