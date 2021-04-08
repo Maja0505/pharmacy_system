@@ -11,10 +11,12 @@ jobs:
         - npm install
         - npm run build || true
  
-      deploy:
-        provider: heroku
-        api_key: $HEROKU_API_KEY
-        app: pharmacies-system
+
+    - if: branch = master
+        deploy:
+          provider: heroku
+          api_key: $HEROKU_API_KEY
+          app: pharmacies-system
     
     
     - language: java
@@ -35,7 +37,8 @@ jobs:
 
       dist: trusty
     
-      deploy:
-        provider: heroku
-        api_key: $HEROKU_API_KEY
-        app: pharmacy-system-isa
+    - if: branch = master
+        deploy:
+          provider: heroku
+          api_key: $HEROKU_API_KEY
+          app: pharmacy-system-isa
