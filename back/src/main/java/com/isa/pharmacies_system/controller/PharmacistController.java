@@ -2,7 +2,7 @@ package com.isa.pharmacies_system.controller;
 
 import com.isa.pharmacies_system.DTO.PharmacistPasswordDTO;
 import com.isa.pharmacies_system.DTO.PharmacistPersonalInfoDTO;
-import com.isa.pharmacies_system.coverter.PharmacistConverter;
+import com.isa.pharmacies_system.converter.PharmacistConverter;
 import com.isa.pharmacies_system.domain.user.Pharmacist;
 import com.isa.pharmacies_system.service.iService.IPharmacistService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,8 +10,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @Controller
 @RequestMapping("api/pharmacist")

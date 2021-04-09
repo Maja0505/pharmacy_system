@@ -1,6 +1,5 @@
-package com.isa.pharmacies_system.coverter;
+package com.isa.pharmacies_system.converter;
 
-import com.isa.pharmacies_system.DTO.PharmacistPasswordDTO;
 import com.isa.pharmacies_system.DTO.PharmacistPersonalInfoDTO;
 import com.isa.pharmacies_system.domain.user.Pharmacist;
 
