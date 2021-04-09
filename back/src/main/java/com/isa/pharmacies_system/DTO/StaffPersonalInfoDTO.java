@@ -2,7 +2,7 @@ package com.isa.pharmacies_system.DTO;
 
 import com.isa.pharmacies_system.domain.pharmacy.Address;
 
-public class PharmacistPersonalInfoDTO {
+public class StaffPersonalInfoDTO {
 
     private Long id;
     private String firstName;
@@ -12,8 +12,7 @@ public class PharmacistPersonalInfoDTO {
     private String password;
     private String email;
 
-
-    public PharmacistPersonalInfoDTO() {
+    public StaffPersonalInfoDTO() {
     }
 
     public Long getId() {
@@ -71,5 +70,4 @@ public class PharmacistPersonalInfoDTO {
     public void setEmail(String email) {
         this.email = email;
     }
-
 }

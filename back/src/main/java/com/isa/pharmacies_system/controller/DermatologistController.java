@@ -1,8 +1,8 @@
 package com.isa.pharmacies_system.controller;
 
-import com.isa.pharmacies_system.DTO.DermatologistPasswordDTO;
-import com.isa.pharmacies_system.DTO.DermatologistPersonalInfoDTO;
-import com.isa.pharmacies_system.converter.DermatologistConverter;
+import com.isa.pharmacies_system.DTO.StaffPasswordDTO;
+import com.isa.pharmacies_system.DTO.StaffPersonalInfoDTO;
+import com.isa.pharmacies_system.converter.StaffConverter;
 import com.isa.pharmacies_system.domain.user.Dermatologist;
 import com.isa.pharmacies_system.service.iService.IDermatologistService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,19 +16,19 @@ import org.springframework.web.bind.annotation.*;
 public class DermatologistController {
 
     private IDermatologistService dermatologistService;
-    private DermatologistConverter dermatologistConverter;
+    private StaffConverter staffConverter;
 
     @Autowired
     public DermatologistController(IDermatologistService dermatologistService) {
         this.dermatologistService = dermatologistService;
-        this.dermatologistConverter = new DermatologistConverter();
+        this.staffConverter = new StaffConverter();
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<DermatologistPersonalInfoDTO> getDermatologistPersonalInfo(@PathVariable Long id){
+    public ResponseEntity<StaffPersonalInfoDTO> getDermatologistPersonalInfo(@PathVariable Long id){
         try {
             Dermatologist dermatologist = dermatologistService.getDermatologist(id);
-            return new ResponseEntity<>(dermatologistConverter.convertPersonalInfoToDTO(dermatologist), HttpStatus.OK);
+            return new ResponseEntity<>(staffConverter.convertDermatologistPersonalInfoToDTO(dermatologist), HttpStatus.OK);
         }catch (Exception e){
             return new ResponseEntity<>(null,HttpStatus.NOT_FOUND);
         }
@@ -36,10 +36,10 @@ public class DermatologistController {
     }
 
     @PutMapping(value = "/update", consumes = "application/json")
-    public ResponseEntity<Boolean> updateDermatologistPersonalInfo(@RequestBody DermatologistPersonalInfoDTO dermatologistPersonalInfoDTO){
+    public ResponseEntity<Boolean> updateDermatologistPersonalInfo(@RequestBody StaffPersonalInfoDTO dermatologistPersonalInfoDTO){
         try {
             Dermatologist dermatologist = dermatologistService.getDermatologist(dermatologistPersonalInfoDTO.getId());
-            dermatologistService.saveDermatologist(dermatologistConverter.convertDTOToPersonalInfo(dermatologistPersonalInfoDTO,dermatologist));
+            dermatologistService.saveDermatologist(staffConverter.convertDTOToDermatologistPersonalInfo(dermatologistPersonalInfoDTO,dermatologist));
             return new ResponseEntity<>(HttpStatus.OK);
         }catch (Exception e){
             return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
@@ -48,15 +48,14 @@ public class DermatologistController {
     }
 
     @PutMapping(value = "/changePassword",consumes = "application/json")
-    public ResponseEntity<Boolean> changeDermatologistPassword(@RequestBody DermatologistPasswordDTO dermatologistPasswordDTO){
-
-        if (dermatologistService.changePassword(dermatologistPasswordDTO)){
-            return new ResponseEntity<>(HttpStatus.OK);
-        }else {
+    public ResponseEntity<Boolean> changeDermatologistPassword(@RequestBody StaffPasswordDTO dermatologistPasswordDTO){
+        try {
+            if (dermatologistService.changePassword(dermatologistPasswordDTO))
+                return new ResponseEntity<>(HttpStatus.OK);
+        }catch (Exception e ){
             return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
         }
-
-
+        return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
     }
 
 }

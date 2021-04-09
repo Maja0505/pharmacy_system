@@ -1,13 +1,11 @@
 package com.isa.pharmacies_system.service;
 
-import com.isa.pharmacies_system.DTO.PharmacistPasswordDTO;
+import com.isa.pharmacies_system.DTO.StaffPasswordDTO;
 import com.isa.pharmacies_system.domain.user.Pharmacist;
 import com.isa.pharmacies_system.repository.IPharmacistRepository;
 import com.isa.pharmacies_system.service.iService.IPharmacistService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 public class PharmacistService implements IPharmacistService {
@@ -30,7 +28,7 @@ public class PharmacistService implements IPharmacistService {
     }
 
     @Override
-    public Boolean changePassword(PharmacistPasswordDTO pharmacistPasswordDTO) {
+    public Boolean changePassword(StaffPasswordDTO pharmacistPasswordDTO) {
         Pharmacist pharmacist = getPharmacist(pharmacistPasswordDTO.getId());
 
         if(checkPassword(pharmacistPasswordDTO.getConfirmedPassword(),pharmacist.getPassword()) &&

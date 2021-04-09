@@ -1,6 +1,6 @@
 package com.isa.pharmacies_system.service;
 
-import com.isa.pharmacies_system.DTO.DermatologistPasswordDTO;
+import com.isa.pharmacies_system.DTO.StaffPasswordDTO;
 import com.isa.pharmacies_system.domain.user.Dermatologist;
 import com.isa.pharmacies_system.repository.IDermatologistRepository;
 import com.isa.pharmacies_system.service.iService.IDermatologistService;
@@ -28,7 +28,7 @@ public class DermatologistService implements IDermatologistService {
     }
 
     @Override
-    public Boolean changePassword(DermatologistPasswordDTO dermatologistPasswordDTO) {
+    public Boolean changePassword(StaffPasswordDTO dermatologistPasswordDTO) {
         Dermatologist dermatologist = getDermatologist(dermatologistPasswordDTO.getId());
 
         if(checkPassword(dermatologistPasswordDTO.getConfirmedPassword(),dermatologist.getPassword()) &&
