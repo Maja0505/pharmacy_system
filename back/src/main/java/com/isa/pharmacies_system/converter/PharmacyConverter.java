@@ -2,6 +2,7 @@ package com.isa.pharmacies_system.converter;
 
 import java.util.HashSet;
 
+import com.isa.pharmacies_system.DTO.PharmacyNewDTO;
 import com.isa.pharmacies_system.domain.complaint.PharmacyComplaint;
 import com.isa.pharmacies_system.domain.medicine.MedicineReservation;
 import com.isa.pharmacies_system.domain.pharmacy.Address;
@@ -12,7 +13,6 @@ import com.isa.pharmacies_system.domain.schedule.DermatologistAppointment;
 import com.isa.pharmacies_system.domain.schedule.WorkerSchedule;
 import com.isa.pharmacies_system.domain.user.Dermatologist;
 import com.isa.pharmacies_system.domain.user.Pharmacist;
-import com.isa.pharmacies_system.dto.PharmacyNewDTO;
 
 public class PharmacyConverter {
 	public PharmacyConverter() {

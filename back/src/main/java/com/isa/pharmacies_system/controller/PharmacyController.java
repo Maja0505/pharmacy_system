@@ -14,8 +14,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.isa.pharmacies_system.DTO.PharmacyNewDTO;
 import com.isa.pharmacies_system.domain.pharmacy.Pharmacy;
-import com.isa.pharmacies_system.dto.PharmacyNewDTO;
 import com.isa.pharmacies_system.service.iService.IPharmacyService;
 
 @Controller
@@ -44,14 +44,9 @@ public class PharmacyController {
 	}
 
 	@PostMapping(value = "/create", consumes = "application/json")
-	@CrossOrigin(origins = "*", allowedHeaders = "*")
 	public ResponseEntity<Pharmacy> createNewPharmacy(@RequestBody PharmacyNewDTO pharmacyNewDTO) {
 		try {
 			// dodati kreiranje cjenovnika (nekog fiksnog) i storage-a za apoteku
-			System.out.println("Usao u kontroler");
-			if (pharmacyNewDTO!=null) {
-				System.out.println(pharmacyNewDTO.getPharmacyDescription()+" "+pharmacyNewDTO.getPharmacyName());
-			}
 			return new ResponseEntity<>(iPharmacyService.create(pharmacyNewDTO), HttpStatus.CREATED);
 		} catch (Exception e) {
 			System.out.println(e.getMessage());

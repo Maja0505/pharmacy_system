@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.isa.pharmacies_system.DTO.PharmacyNewDTO;
 import com.isa.pharmacies_system.converter.PharmacyConverter;
 import com.isa.pharmacies_system.domain.medicine.MedicinePrice;
 import com.isa.pharmacies_system.domain.pharmacy.Pharmacy;
@@ -14,7 +15,6 @@ import com.isa.pharmacies_system.domain.storage.PharmacyStorage;
 import com.isa.pharmacies_system.domain.storage.PharmacyStorageItem;
 import com.isa.pharmacies_system.domain.storage.Storage;
 import com.isa.pharmacies_system.domain.storage.TypeOfStorage;
-import com.isa.pharmacies_system.dto.PharmacyNewDTO;
 import com.isa.pharmacies_system.repository.IPharmacyRepository;
 import com.isa.pharmacies_system.repository.IPharmacyStorageRepository;
 import com.isa.pharmacies_system.repository.IPriceListRepository;
@@ -42,7 +42,6 @@ public class PharmacyService implements IPharmacyService {
 	
 	@Override
 	public Pharmacy create(PharmacyNewDTO pharmacyNewDTO) throws Exception {
-		System.out.println("Usao u service");
 		Pharmacy pharmacy = iPharmacyRepository.save(pharmacyConverter.convertPharmacyNewDTOToPharmacy(pharmacyNewDTO));
 		if (pharmacy==null) {
 			throw new Exception("Unsuccessful created pharmacy!");

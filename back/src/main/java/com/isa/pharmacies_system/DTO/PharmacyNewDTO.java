@@ -1,4 +1,4 @@
-package com.isa.pharmacies_system.dto;
+package com.isa.pharmacies_system.DTO;
 
 import com.isa.pharmacies_system.domain.pharmacy.Pharmacy;
 
