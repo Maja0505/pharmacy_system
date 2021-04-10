@@ -33,53 +33,12 @@ public class PharmacistAppointmentController {
     public ResponseEntity<List<PatientAppointmentInfoDTO>> getAllPastPharmacistAppointment(@PathVariable("pharmacistId") Long id,@PathVariable int page){
         try {
             Page<PharmacistAppointment> pharmacistAppointmentList = pharmacistAppointmentService.getAllPastPharmacistAppointmentByPharmacist(id,page);
-            return new ResponseEntity<>(patientConverter.convertPatientAppointmentInfoToDTO(pharmacistAppointmentList), HttpStatus.OK);
+            return new ResponseEntity<>(patientConverter.convertPatientPharmacistAppointmentInfoToDTO(pharmacistAppointmentList), HttpStatus.OK);
         }catch (Exception e){
             return new ResponseEntity<>(null,HttpStatus.NOT_FOUND);
         }
     }
 
-    @GetMapping(value = "/sortByPatientFirstName/{asc}",consumes = "application/json")
-    public ResponseEntity<List<PatientAppointmentInfoDTO>> getSortedPastPharmacistAppointmentByPatientFistName(@RequestBody List<PatientAppointmentInfoDTO> patientAppointmentInfoDTOList, @PathVariable String asc){
-        try {
-            if(asc.equals("asc")){
-                return new ResponseEntity<>(pharmacistAppointmentService.sortByPatientFirstName(patientAppointmentInfoDTOList,true),HttpStatus.OK);
-            }else{
-                return new ResponseEntity<>(pharmacistAppointmentService.sortByPatientFirstName(patientAppointmentInfoDTOList,false),HttpStatus.OK);
-            }
-        }catch (Exception e){
-            return new ResponseEntity<>(null,HttpStatus.BAD_REQUEST);
-        }
-
-    }
-
-    @GetMapping(value = "/sortByPatientLastName/{asc}",consumes = "application/json")
-    public ResponseEntity<List<PatientAppointmentInfoDTO>> getSortedPastPharmacistAppointmentByPatientLastName(@RequestBody List<PatientAppointmentInfoDTO> patientAppointmentInfoDTOList, @PathVariable String asc){
-        try {
-            if(asc.equals("asc")){
-                return new ResponseEntity<>(pharmacistAppointmentService.sortByPatientLastName(patientAppointmentInfoDTOList,true),HttpStatus.OK);
-            }else{
-                return new ResponseEntity<>(pharmacistAppointmentService.sortByPatientLastName(patientAppointmentInfoDTOList,false),HttpStatus.OK);
-            }
-        }catch (Exception e){
-            return new ResponseEntity<>(null,HttpStatus.BAD_REQUEST);
-        }
-
-    }
-
-    @GetMapping(value = "/sortByAppointmentStartTime/{asc}",consumes = "application/json")
-    public ResponseEntity<List<PatientAppointmentInfoDTO>> getSortedPastPharmacistAppointmentByAppointmentStartTime(@RequestBody List<PatientAppointmentInfoDTO> patientAppointmentInfoDTOList, @PathVariable String asc){
-        try {
-            if(asc.equals("asc")){
-                return new ResponseEntity<>(pharmacistAppointmentService.sortByAppointmentStartTime(patientAppointmentInfoDTOList,true),HttpStatus.OK);
-            }else{
-                return new ResponseEntity<>(pharmacistAppointmentService.sortByAppointmentStartTime(patientAppointmentInfoDTOList,false),HttpStatus.OK);
-            }
-        }catch (Exception e){
-            return new ResponseEntity<>(null,HttpStatus.BAD_REQUEST);
-        }
-
-    }
 
     @GetMapping(value = "/sortByAppointmentDuration/{asc}",consumes = "application/json")
     public ResponseEntity<List<PatientAppointmentInfoDTO>> getSortedPastPharmacistAppointmentByAppointmentDuration(@RequestBody List<PatientAppointmentInfoDTO> patientAppointmentInfoDTOList, @PathVariable String asc){
@@ -94,21 +53,6 @@ public class PharmacistAppointmentController {
         }
 
     }
-
-    @GetMapping(value = "/sortByAppointmentPrice/{asc}",consumes = "application/json")
-    public ResponseEntity<List<PatientAppointmentInfoDTO>> getSortedPastPharmacistAppointmentByAppointmentPrice(@RequestBody List<PatientAppointmentInfoDTO> patientAppointmentInfoDTOList, @PathVariable String asc){
-        try {
-            if(asc.equals("asc")){
-                return new ResponseEntity<>(pharmacistAppointmentService.sortByAppointmentPrice(patientAppointmentInfoDTOList,true),HttpStatus.OK);
-            }else{
-                return new ResponseEntity<>(pharmacistAppointmentService.sortByAppointmentPrice(patientAppointmentInfoDTOList,false),HttpStatus.OK);
-            }
-        }catch (Exception e){
-            return new ResponseEntity<>(null,HttpStatus.BAD_REQUEST);
-        }
-
-    }
-
 
 
 }

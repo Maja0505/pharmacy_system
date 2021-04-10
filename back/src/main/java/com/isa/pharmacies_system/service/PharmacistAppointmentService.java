@@ -29,41 +29,14 @@ public class PharmacistAppointmentService implements IPharmacistAppointmentServi
     }
 
     @Override
-    public List<PatientAppointmentInfoDTO> sortByPatientFirstName(List<PatientAppointmentInfoDTO> patientAppointmentInfoDTOList,Boolean asc) {
-        doSort(patientAppointmentInfoDTOList,Comparator.comparing(PatientAppointmentInfoDTO::getPatientFirstName),asc);
-        return patientAppointmentInfoDTOList;
-    }
-
-    @Override
-    public List<PatientAppointmentInfoDTO> sortByPatientLastName(List<PatientAppointmentInfoDTO> patientAppointmentInfoDTOList, Boolean asc) {
-        doSort(patientAppointmentInfoDTOList,Comparator.comparing(PatientAppointmentInfoDTO::getPatientLastName),asc);
-        return patientAppointmentInfoDTOList;
-    }
-
-    @Override
-    public List<PatientAppointmentInfoDTO> sortByAppointmentStartTime(List<PatientAppointmentInfoDTO> patientAppointmentInfoDTOList, Boolean asc) {
-        doSort(patientAppointmentInfoDTOList,Comparator.comparing(PatientAppointmentInfoDTO::getAppointmentStartTime),asc);
-        return patientAppointmentInfoDTOList;
-    }
-
-    @Override
     public List<PatientAppointmentInfoDTO> sortByAppointmentDuration(List<PatientAppointmentInfoDTO> patientAppointmentInfoDTOList, Boolean asc) {
-        doSort(patientAppointmentInfoDTOList,Comparator.comparing(PatientAppointmentInfoDTO::getAppointmentDuration),asc);
-        return patientAppointmentInfoDTOList;
-    }
-
-    @Override
-    public List<PatientAppointmentInfoDTO> sortByAppointmentPrice(List<PatientAppointmentInfoDTO> patientAppointmentInfoDTOList, Boolean asc) {
-        doSort(patientAppointmentInfoDTOList,Comparator.comparing(PatientAppointmentInfoDTO::getAppointmentPrice),asc);
-        return patientAppointmentInfoDTOList;
-    }
-
-    private void doSort(List<PatientAppointmentInfoDTO> list,Comparator comparator,Boolean asc){
         if(asc){
-            Collections.sort(list, comparator);
+            Collections.sort(patientAppointmentInfoDTOList, Comparator.comparing(PatientAppointmentInfoDTO::getAppointmentDuration));
         }else{
-            Collections.sort(list, comparator.reversed());
+            Collections.sort(patientAppointmentInfoDTOList, Comparator.comparing(PatientAppointmentInfoDTO::getAppointmentDuration).reversed());
         }
+        return patientAppointmentInfoDTOList;
     }
+
 
 }

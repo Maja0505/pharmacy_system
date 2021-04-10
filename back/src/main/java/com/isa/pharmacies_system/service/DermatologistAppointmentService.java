@@ -1,0 +1,42 @@
+package com.isa.pharmacies_system.service;
+
+import com.isa.pharmacies_system.DTO.PatientAppointmentInfoDTO;
+import com.isa.pharmacies_system.domain.schedule.DermatologistAppointment;
+import com.isa.pharmacies_system.repository.IDermatologistAppointmentRepository;
+import com.isa.pharmacies_system.service.iService.IDermatologistAppointmentService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.stereotype.Service;
+
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+
+@Service
+public class DermatologistAppointmentService implements IDermatologistAppointmentService {
+
+    private IDermatologistAppointmentRepository dermatologistAppointmentRepository;
+
+    @Autowired
+    public DermatologistAppointmentService(IDermatologistAppointmentRepository dermatologistAppointmentRepository) {
+        this.dermatologistAppointmentRepository = dermatologistAppointmentRepository;
+    }
+
+    @Override
+    public Page<DermatologistAppointment> getAllPastDermatologistAppointmentByDermatologist(Long id, int page) {
+        return dermatologistAppointmentRepository.findAllPastDermatologistAppointment(id, PageRequest.of(page,10));
+    }
+
+    @Override
+    public List<PatientAppointmentInfoDTO> sortByAppointmentEndTime(List<PatientAppointmentInfoDTO> patientAppointmentInfoDTOList, Boolean asc) {
+        if(asc){
+            Collections.sort(patientAppointmentInfoDTOList, Comparator.comparing(PatientAppointmentInfoDTO::getAppointmentEndTime));
+        }else{
+            Collections.sort(patientAppointmentInfoDTOList, Comparator.comparing(PatientAppointmentInfoDTO::getAppointmentEndTime).reversed());
+        }
+        return patientAppointmentInfoDTOList;
+    }
+
+
+}
