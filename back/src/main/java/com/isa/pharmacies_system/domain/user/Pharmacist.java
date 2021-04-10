@@ -6,9 +6,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.*;
 import com.isa.pharmacies_system.domain.complaint.PharmacistComplaint;
 import com.isa.pharmacies_system.domain.pharmacy.Pharmacy;
 import com.isa.pharmacies_system.domain.rating.PharmacistRating;
@@ -32,7 +30,8 @@ public class Pharmacist extends Users {
 	private WorkerSchedule pharmacistSchedule;
 
 	@JsonManagedReference
-	@OneToMany(mappedBy = "vacationRequestPharmacist", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "vacationRequestPharmacist", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@JsonIgnoreProperties("vacationRequestPharmacist")
 	private Set<PharmacistVacationRequest> pharmacistVacationRequests = new HashSet<PharmacistVacationRequest>();
 	
 	@Column(name="pharmacistAverageRating", unique=false, nullable=false)
@@ -42,7 +41,8 @@ public class Pharmacist extends Users {
 	@OneToMany(mappedBy = "pharmacistForAppointment", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private Set<PharmacistAppointment> pharmacistAppointments = new HashSet<PharmacistAppointment>();
 
-	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@JsonBackReference
+	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private Pharmacy pharmacyForPharmacist;
 
 	@JsonManagedReference
