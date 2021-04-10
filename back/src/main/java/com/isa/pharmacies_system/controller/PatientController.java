@@ -2,6 +2,8 @@ package com.isa.pharmacies_system.controller;
 
 import com.isa.pharmacies_system.DTO.UserPasswordDTO;
 import com.isa.pharmacies_system.DTO.UserPersonalInfoDTO;
+import com.isa.pharmacies_system.DTO.PatientAdditionalInfoDTO;
+import com.isa.pharmacies_system.converter.PatientConverter;
 import com.isa.pharmacies_system.converter.UserConverter;
 import com.isa.pharmacies_system.domain.user.Patient;
 import com.isa.pharmacies_system.service.iService.IPatientService;
@@ -21,11 +23,13 @@ public class PatientController {
 
     private IPatientService patientService;
     private UserConverter userConverter;
+    private PatientConverter patientConverter;
 
     @Autowired
     public PatientController(IPatientService patientService) {
         this.patientService = patientService;
         this.userConverter = new UserConverter();
+        this.patientConverter = new PatientConverter();
     }
 
     @GetMapping("/{id}")
@@ -70,6 +74,16 @@ public class PatientController {
                 return new ResponseEntity<>(HttpStatus.OK);
             }
             return new ResponseEntity<>(HttpStatus.NOT_MODIFIED);
+        }catch (Exception e){
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @GetMapping("/{id}/additionalInfo")
+    public ResponseEntity<PatientAdditionalInfoDTO> getPatientAdditonalInfo(@PathVariable Long id){
+        try{
+            Patient patient = patientService.findOne(id);
+            return new ResponseEntity<>(patientConverter.convertPatientAdditionalInfoToDTO(patient),HttpStatus.OK);
         }catch (Exception e){
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
