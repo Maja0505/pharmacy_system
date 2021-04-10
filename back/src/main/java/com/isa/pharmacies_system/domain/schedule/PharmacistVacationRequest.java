@@ -16,7 +16,7 @@ import com.isa.pharmacies_system.domain.user.Pharmacist;
 public class PharmacistVacationRequest extends VacationRequest{
 
 	@JsonBackReference
-	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private Pharmacist vacationRequestPharmacist;
 	
 	public PharmacistVacationRequest() {

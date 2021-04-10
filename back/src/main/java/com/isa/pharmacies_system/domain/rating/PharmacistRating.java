@@ -18,7 +18,7 @@ import com.isa.pharmacies_system.domain.user.Pharmacist;
 public class PharmacistRating extends Rating{
 
 	@JsonBackReference
-	@ManyToOne(cascade = {CascadeType.MERGE,CascadeType.DETACH,CascadeType.REFRESH,CascadeType.REMOVE}, fetch = FetchType.EAGER)
+	@ManyToOne(cascade = {CascadeType.MERGE,CascadeType.DETACH,CascadeType.REFRESH,CascadeType.REMOVE}, fetch = FetchType.LAZY)
 	private Pharmacist pharmacistForRating;
 
 	public PharmacistRating() {
