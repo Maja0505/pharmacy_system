@@ -43,9 +43,7 @@ public class PharmacyService implements IPharmacyService {
 	@Override
 	public Pharmacy create(PharmacyNewDTO pharmacyNewDTO) throws Exception {
 		Pharmacy pharmacy = iPharmacyRepository.save(pharmacyConverter.convertPharmacyNewDTOToPharmacy(pharmacyNewDTO));
-		if (pharmacy==null) {
-			throw new Exception("Unsuccessful created pharmacy!");
-		}
+		
 		addPriceListForCreatedPharmacy(pharmacy, pharmacyNewDTO.getPriceForDermatologistAppointment(),pharmacyNewDTO.getPriceForPharmacistAppointment());
 		addStorageForCreatedPharmacy(pharmacy);
 		return pharmacy;
@@ -58,10 +56,7 @@ public class PharmacyService implements IPharmacyService {
 		priceList.setDermatologistAppointmentPricePerHour(priceForDermatologistAppointment);
 		priceList.setPharmacistAppointmentPricePerHour(priceForPharmacistAppointment);
 		priceList.setMedicinePrices(new HashSet<MedicinePrice>());
-		PriceList createdPriceList = iPriceListRepository.save(priceList);
-		if (createdPriceList==null) {
-			throw new Exception("Unsuccessful created price list for pharmacy!");
-		}
+		iPriceListRepository.save(priceList);
 	}
 	
 	private void addStorageForCreatedPharmacy(Pharmacy pharmacy) throws Exception {
@@ -69,11 +64,9 @@ public class PharmacyService implements IPharmacyService {
 		pharmacyStorage.setTypeOfStorage(TypeOfStorage.Pharmacy_storage);
 		pharmacyStorage.setPharmacy(pharmacy);
 		pharmacyStorage.setPharmacyStorageItems(new HashSet<PharmacyStorageItem>());
-		PharmacyStorage pharmacyStorageCreated = iPharmacyStorageRepository.save(pharmacyStorage);
-		Storage storageCreated = iStorageRepository.save((Storage) pharmacyStorageCreated);
-		if (pharmacyStorageCreated==null || storageCreated==null) {
-			throw new Exception("Unsuccessful created storage for pharmacy!");
-		}
+		iPharmacyStorageRepository.save(pharmacyStorage);
+		iStorageRepository.save((Storage) pharmacyStorage);
+		
 	}
 
 	@Override
@@ -83,7 +76,7 @@ public class PharmacyService implements IPharmacyService {
 
 	@Override
 	public Pharmacy getById(Long id) throws Exception {
-		Pharmacy pharmacy = iPharmacyRepository.findById(id).get();
+		Pharmacy pharmacy = iPharmacyRepository.findById(id).orElse(null);
 		if (pharmacy==null) {
 			throw new Exception("Don't exist pharmacy with id "+id+"!");
 		}
