@@ -2,7 +2,6 @@ package com.isa.pharmacies_system.service;
 
 import com.isa.pharmacies_system.DTO.UserPasswordDTO;
 import com.isa.pharmacies_system.domain.medicine.Medicine;
-import com.isa.pharmacies_system.domain.medicine.MedicineInfo;
 import com.isa.pharmacies_system.domain.user.Patient;
 import com.isa.pharmacies_system.repository.IPatientRepository;
 import com.isa.pharmacies_system.service.iService.IMedicineService;
