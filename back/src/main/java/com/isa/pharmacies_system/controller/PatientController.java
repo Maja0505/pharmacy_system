@@ -89,6 +89,19 @@ public class PatientController {
         }
     }
 
+    @PutMapping("/{patientId}/addMedicineAllergie/{medicineId}")
+    public ResponseEntity<Boolean> addMedicineAllergie(@PathVariable Long patientId, @PathVariable Long medicineId){
+
+        try {
+            Patient patient = patientService.findOne(patientId);
+            patientService.addMedicineAllergie(patient,medicineId);
+            return new ResponseEntity<>(HttpStatus.OK);
+        }catch (Exception e){
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+
+    }
+
 
 
 }

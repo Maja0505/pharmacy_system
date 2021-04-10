@@ -1,8 +1,11 @@
 package com.isa.pharmacies_system.service;
 
 import com.isa.pharmacies_system.DTO.UserPasswordDTO;
+import com.isa.pharmacies_system.domain.medicine.Medicine;
+import com.isa.pharmacies_system.domain.medicine.MedicineInfo;
 import com.isa.pharmacies_system.domain.user.Patient;
 import com.isa.pharmacies_system.repository.IPatientRepository;
+import com.isa.pharmacies_system.service.iService.IMedicineService;
 import com.isa.pharmacies_system.service.iService.IPatientService;
 import org.springframework.stereotype.Service;
 
@@ -12,9 +15,11 @@ import java.util.List;
 public class PatientService implements IPatientService {
 
     private IPatientRepository patientRepository;
+    private IMedicineService medicineService;
 
-    public PatientService(IPatientRepository patientRepository) {
+    public PatientService(IPatientRepository patientRepository, IMedicineService medicineService) {
         this.patientRepository = patientRepository;
+        this.medicineService = medicineService;
     }
 
     public Patient findOne(Long id){
@@ -41,5 +46,11 @@ public class PatientService implements IPatientService {
 
     public Boolean checkPassword(String first, String second){
         return first.equals(second);
+    }
+
+    public void addMedicineAllergie(Patient patient, Long medicineId){
+        Medicine medicine = medicineService.findOne(medicineId);
+        patient.getMedicineAllergies().add(medicine);
+        savePatient(patient);
     }
 }
