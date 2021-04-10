@@ -2,26 +2,24 @@ package com.isa.pharmacies_system.DTO;
 
 import com.isa.pharmacies_system.domain.pharmacy.Address;
 
-public class PatientInfoDTO {
+public class UserPersonalInfoDTO {
 
-    private long id;
-
+    private Long id;
     private String firstName;
-
     private String lastName;
-
-    private Address userAddress;
-
+    private Address address;
     private String phoneNumber;
+    private String email;
 
 
-    public PatientInfoDTO(){};
+    public UserPersonalInfoDTO() {
+    }
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -41,12 +39,12 @@ public class PatientInfoDTO {
         this.lastName = lastName;
     }
 
-    public Address getUserAddress() {
-        return userAddress;
+    public Address getAddress() {
+        return address;
     }
 
-    public void setUserAddress(Address userAddress) {
-        this.userAddress = userAddress;
+    public void setAddress(Address address) {
+        this.address = address;
     }
 
     public String getPhoneNumber() {
@@ -57,4 +55,7 @@ public class PatientInfoDTO {
         this.phoneNumber = phoneNumber;
     }
 
+    public String getEmail() { return email; }
+
+    public void setEmail(String email) { this.email = email; }
 }
