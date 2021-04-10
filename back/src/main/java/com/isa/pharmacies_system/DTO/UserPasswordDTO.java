@@ -1,13 +1,13 @@
 package com.isa.pharmacies_system.DTO;
 
-public class StaffPasswordDTO {
+public class UserPasswordDTO {
 
     private Long id;
     private String confirmedPassword;
     private String newPassword;
     private String confirmedNewPassword;
 
-    public StaffPasswordDTO() {
+    public UserPasswordDTO() {
     }
 
     public Long getId() {

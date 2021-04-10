@@ -1,8 +1,8 @@
 package com.isa.pharmacies_system.controller;
 
-import com.isa.pharmacies_system.DTO.StaffPasswordDTO;
-import com.isa.pharmacies_system.DTO.StaffPersonalInfoDTO;
-import com.isa.pharmacies_system.converter.StaffConverter;
+import com.isa.pharmacies_system.DTO.UserPasswordDTO;
+import com.isa.pharmacies_system.DTO.UserPersonalInfoDTO;
+import com.isa.pharmacies_system.converter.UserConverter;
 import com.isa.pharmacies_system.domain.user.Pharmacist;
 import com.isa.pharmacies_system.service.iService.IPharmacistService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,19 +16,19 @@ import org.springframework.web.bind.annotation.*;
 public class PharmacistController {
 
     private IPharmacistService pharmacistService;
-    private StaffConverter staffConverter;
+    private UserConverter userConverter;
 
     @Autowired
     public PharmacistController(IPharmacistService pharmacistService) {
         this.pharmacistService = pharmacistService;
-        this.staffConverter = new StaffConverter();
+        this.userConverter = new UserConverter();
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<StaffPersonalInfoDTO> getPharmacistPersonalInfo(@PathVariable Long id){
+    public ResponseEntity<UserPersonalInfoDTO> getPharmacistPersonalInfo(@PathVariable Long id){
         try {
             Pharmacist pharmacist = pharmacistService.getPharmacist(id);
-            return new ResponseEntity<>(staffConverter.convertPharmacistPersonalInfoToDTO(pharmacist),HttpStatus.OK);
+            return new ResponseEntity<>(userConverter.convertPharmacistPersonalInfoToDTO(pharmacist),HttpStatus.OK);
         }catch (Exception e){
             return new ResponseEntity<>(null,HttpStatus.NOT_FOUND);
         }
@@ -36,10 +36,10 @@ public class PharmacistController {
     }
 
     @PutMapping(value = "/update", consumes = "application/json")
-    public ResponseEntity<Boolean> updatePharmacistPersonalInfo(@RequestBody StaffPersonalInfoDTO pharmacistPersonalInfoDTO){
+    public ResponseEntity<Boolean> updatePharmacistPersonalInfo(@RequestBody UserPersonalInfoDTO pharmacistPersonalInfoDTO){
         try {
             Pharmacist pharmacist = pharmacistService.getPharmacist(pharmacistPersonalInfoDTO.getId());
-            pharmacistService.savePharmacist(staffConverter.convertDTOToPharmacistPersonalInfo(pharmacistPersonalInfoDTO,pharmacist));
+            pharmacistService.savePharmacist(userConverter.convertDTOToPharmacistPersonalInfo(pharmacistPersonalInfoDTO,pharmacist));
             return new ResponseEntity<>(HttpStatus.OK);
         }catch (Exception e){
             return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
@@ -48,7 +48,7 @@ public class PharmacistController {
     }
 
     @PutMapping(value = "/changePassword",consumes = "application/json")
-    public ResponseEntity<Boolean> changePharmacistPassword(@RequestBody StaffPasswordDTO pharmacistPasswordDTO){
+    public ResponseEntity<Boolean> changePharmacistPassword(@RequestBody UserPasswordDTO pharmacistPasswordDTO){
         try {
             if (pharmacistService.changePassword(pharmacistPasswordDTO))
                 return new ResponseEntity<>(HttpStatus.OK);
