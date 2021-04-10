@@ -18,7 +18,7 @@ public class PatientService implements IPatientService {
     }
 
     public Patient findOne(Long id){
-        return patientRepository.findById(id).orElseGet(null);
+        return patientRepository.findById(id).orElse(null);
     }
 
     public List<Patient> findAll(){
