@@ -11,4 +11,5 @@ public interface IPatientService {
     List<Patient> findAll();
     void savePatient(Patient patient);
     Boolean changePassword(UserPasswordDTO userPasswordDTO);
+    void addMedicineAllergie(Patient patient, Long medicineId);
 }
