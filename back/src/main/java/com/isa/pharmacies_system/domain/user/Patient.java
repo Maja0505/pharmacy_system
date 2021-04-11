@@ -47,7 +47,7 @@ public class Patient extends Users {
 
 	@JsonManagedReference
 	@OneToMany(mappedBy = "patientWithDermatologistAppointment", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-	private Set<DermatologistAppointment> dermatologistAppointment = new HashSet<DermatologistAppointment>();
+	private Set<DermatologistAppointment> dermatologistAppointment = new HashSet<>();
 
 	@ManyToMany(fetch = FetchType.LAZY)
 	private Set<Pharmacy> pharmaciesSubscription = new HashSet<>();

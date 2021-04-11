@@ -8,19 +8,45 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+import com.isa.pharmacies_system.domain.schedule.StatusOfAppointment;
+import com.isa.pharmacies_system.domain.user.Patient;
+import com.isa.pharmacies_system.service.iService.IPatientService;
 
 import java.util.Collections;
 import java.util.Comparator;
+
 import java.util.List;
 
 @Service
 public class DermatologistAppointmentService implements IDermatologistAppointmentService {
 
     private IDermatologistAppointmentRepository dermatologistAppointmentRepository;
+    private IPatientService patientService;
 
     @Autowired
-    public DermatologistAppointmentService(IDermatologistAppointmentRepository dermatologistAppointmentRepository) {
+    public DermatologistAppointmentService(IDermatologistAppointmentRepository dermatologistAppointmentRepository, IPatientService patientService) {
+
         this.dermatologistAppointmentRepository = dermatologistAppointmentRepository;
+        this.patientService = patientService;
+    }
+
+    @Override
+    public DermatologistAppointment findOne(Long id){
+        return dermatologistAppointmentRepository.findById(id).orElse(null);
+    }
+
+    @Override
+    public List<DermatologistAppointment> getOpenDermatologistAppointment(){
+        return dermatologistAppointmentRepository.getOpenDermatologistAppointment();
+    }
+
+    @Override
+    public void bookDermatologistAppointment(Long patientId,DermatologistAppointment dermatologistAppointment){
+
+        Patient patient = patientService.findOne(patientId);
+        dermatologistAppointment.setPatientWithDermatologistAppointment(patient);
+        dermatologistAppointment.setStatusOfAppointment(StatusOfAppointment.Reserved);
+        dermatologistAppointmentRepository.save(dermatologistAppointment);
     }
 
     @Override
@@ -42,6 +68,5 @@ public class DermatologistAppointmentService implements IDermatologistAppointmen
         }
         return patientAppointmentInfoDTOList;
     }
-
 
 }

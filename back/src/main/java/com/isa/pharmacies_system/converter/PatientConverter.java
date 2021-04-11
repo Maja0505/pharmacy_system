@@ -2,17 +2,19 @@ package com.isa.pharmacies_system.converter;
 
 import com.isa.pharmacies_system.DTO.PatientAdditionalInfoDTO;
 import com.isa.pharmacies_system.DTO.PatientAppointmentInfoDTO;
-import com.isa.pharmacies_system.DTO.UserPersonalInfoDTO;
 import com.isa.pharmacies_system.domain.schedule.DermatologistAppointment;
 import com.isa.pharmacies_system.domain.schedule.PharmacistAppointment;
 import com.isa.pharmacies_system.domain.user.Patient;
 import org.springframework.data.domain.Page;
-
 import java.util.ArrayList;
 import java.util.List;
 
 public class PatientConverter{
+
+    private  DermatologistAppointmentConverter dermatologistAppointmentConverter;
+
     public PatientConverter() {
+        dermatologistAppointmentConverter = new DermatologistAppointmentConverter();
     }
 
     public PatientAdditionalInfoDTO convertPatientAdditionalInfoToDTO(Patient patient){
@@ -20,7 +22,6 @@ public class PatientConverter{
         PatientAdditionalInfoDTO patientAdditionalInfoDTO = new PatientAdditionalInfoDTO();
         patientAdditionalInfoDTO.setPatientPoints(patient.getPatientPoints());
         patientAdditionalInfoDTO.setCategoryOfPatient(patient.getCategoryOfPatient());
-
         return patientAdditionalInfoDTO;
     }
 
