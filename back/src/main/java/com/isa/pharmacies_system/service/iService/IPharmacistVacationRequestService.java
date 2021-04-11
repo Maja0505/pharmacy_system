@@ -10,6 +10,5 @@ public interface IPharmacistVacationRequestService {
     Boolean createPharmacistVacationRequest(PharmacistVacationRequest pharmacistVacationRequest,Long pharmacistId);
     Pharmacist findPharmacistForVacationRequest(Long id);
     List<PharmacistVacationRequest> getAllPharmacistVacationRequest();
-    Boolean checkPharmacistVacationRequest(PharmacistVacationRequest pharmacistVacationRequest);
-
+    List<PharmacistVacationRequest> getAllPharmacistVacationRequestByPharmacistId(Long id);
 }

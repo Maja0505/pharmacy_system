@@ -51,12 +51,6 @@ insert into medicine (medicine_average_rating, id) values (4.9,4);
 insert into suppliers (id) values (10);
 insert into suppliers (id) values (11);
 
-
-insert into vacation_requests (id,vacation_start_date,vacation_end_date,type_of_vacation,status_of_vacation_request,vacation_request_notes,type_of_vacation_request) values (nextval('my_seq_gen_vacation_request'),'2020-02-10','2020-03-10',0,0,'Bolest',0);
-insert into vacation_requests (id,vacation_start_date,vacation_end_date,type_of_vacation,status_of_vacation_request,vacation_request_notes,type_of_vacation_request) values (nextval('my_seq_gen_vacation_request'),'2021-02-10','2021-03-10',0,1,'Nezgoda',0);
-insert into vacation_requests (id,vacation_start_date,vacation_end_date,type_of_vacation,status_of_vacation_request,vacation_request_notes,type_of_vacation_request) values (nextval('my_seq_gen_vacation_request'),'2020-04-10','2021-05-10',1,2,'Ma ne pitaj',1);
-insert into vacation_requests (id,vacation_start_date,vacation_end_date,type_of_vacation,status_of_vacation_request,vacation_request_notes,type_of_vacation_request) values (nextval('my_seq_gen_vacation_request'),'2021-07-10','2021-08-10',1,1,'Polomio desni kuk',1);
-
 insert into appointments (id,appointment_points,appointment_price,status_of_appointment,type_of_appointment) values (nextval('my_seq_appointment'),5,15,0,0);
 insert into appointments (id,appointment_points,appointment_price,status_of_appointment,type_of_appointment) values (nextval('my_seq_appointment'),5,133,0,0);
 insert into appointments (id,appointment_points,appointment_price,status_of_appointment,type_of_appointment) values (nextval('my_seq_appointment'),5,30,3,1);
