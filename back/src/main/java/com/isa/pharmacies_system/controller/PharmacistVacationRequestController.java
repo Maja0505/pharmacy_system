@@ -26,7 +26,7 @@ public class PharmacistVacationRequestController {
     }
 
     @GetMapping("/")
-    public ResponseEntity<List<PharmacistVacationRequest>> getPharmacistVacationRequest(){
+    public ResponseEntity<List<PharmacistVacationRequest>> getAllPharmacistVacationRequest(){
         try {
             return new ResponseEntity<>(pharmacistVacationRequestService.getAllPharmacistVacationRequest(), HttpStatus.OK);
         }catch (Exception e){

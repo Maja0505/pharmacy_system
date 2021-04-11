@@ -1,25 +1,32 @@
 package com.isa.pharmacies_system.service;
 
 import com.isa.pharmacies_system.domain.schedule.PharmacistVacationRequest;
+import com.isa.pharmacies_system.domain.schedule.TypeOfVacationRequest;
+import com.isa.pharmacies_system.domain.schedule.VacationRequest;
 import com.isa.pharmacies_system.domain.user.Pharmacist;
 import com.isa.pharmacies_system.repository.IPharmacistVacationRequestRepository;
 import com.isa.pharmacies_system.service.iService.IPharmacistService;
 import com.isa.pharmacies_system.service.iService.IPharmacistVacationRequestService;
+import com.isa.pharmacies_system.service.iService.IVacationRequestService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class PharmacistVacationRequestService implements IPharmacistVacationRequestService {
 
     private IPharmacistVacationRequestRepository pharmacistVacationRequestRepository;
     private IPharmacistService pharmacistService;
+    private IVacationRequestService vacationRequestService;
 
     @Autowired
-    public PharmacistVacationRequestService(IPharmacistVacationRequestRepository pharmacistVacationRequestRepository, IPharmacistService pharmacistService) {
+    public PharmacistVacationRequestService(IPharmacistVacationRequestRepository pharmacistVacationRequestRepository, IPharmacistService pharmacistService, IVacationRequestService vacationRequestService) {
         this.pharmacistVacationRequestRepository = pharmacistVacationRequestRepository;
         this.pharmacistService = pharmacistService;
+        this.vacationRequestService = vacationRequestService;
     }
 
 
@@ -27,11 +34,21 @@ public class PharmacistVacationRequestService implements IPharmacistVacationRequ
     public Boolean createPharmacistVacationRequest(PharmacistVacationRequest pharmacistVacationRequest,Long pharmacistId) {
         Pharmacist pharmacist = findPharmacistForVacationRequest(pharmacistId);
         pharmacistVacationRequest.setVacationRequestPharmacist(pharmacist);
-        if(pharmacist != null && checkPharmacistVacationRequest(pharmacistVacationRequest)){
+        List<VacationRequest> list = makeVacationRequestListFromPharmacistRequestList(pharmacistId);
+        if(pharmacist != null && vacationRequestService.checkVacationRequest(pharmacistVacationRequest,list)){
             pharmacistVacationRequestRepository.save(pharmacistVacationRequest);
             return true;
         }
         return false;
+    }
+
+    private List<VacationRequest> makeVacationRequestListFromPharmacistRequestList(Long pharmacistId){
+        List<VacationRequest> list = new ArrayList<>();
+        for (PharmacistVacationRequest p:getAllPharmacistVacationRequestByPharmacistId(pharmacistId)
+        ) {
+            list.add(p);
+        }
+        return list;
     }
 
     @Override
@@ -41,35 +58,14 @@ public class PharmacistVacationRequestService implements IPharmacistVacationRequ
 
     @Override
     public List<PharmacistVacationRequest> getAllPharmacistVacationRequest() {
-        return pharmacistVacationRequestRepository.findAll();
+        return pharmacistVacationRequestRepository.findAll().stream()
+                .filter(pharmacistVacationRequest -> pharmacistVacationRequest.getTypeOfVacationRequest().equals(TypeOfVacationRequest.Pharmacist_vacation_request))
+                .collect(Collectors.toList());
     }
 
     @Override
-    public Boolean checkPharmacistVacationRequest(PharmacistVacationRequest pharmacistVacationRequest) {
-        if(pharmacistVacationRequest.getVacationStartDate().isAfter(pharmacistVacationRequest.getVacationEndDate())){
-            return false;
-        }
-        List<PharmacistVacationRequest> listPharmacistVacationRequestInDatabase = getAllPharmacistVacationRequest();
-        for (PharmacistVacationRequest request:listPharmacistVacationRequestInDatabase
-             ) {
-            if(pharmacistVacationRequest.getVacationStartDate().isEqual(request.getVacationStartDate())
-                || pharmacistVacationRequest.getVacationEndDate().isEqual(request.getVacationEndDate())){
-                return false;
-            }
-            if(pharmacistVacationRequest.getVacationStartDate().isAfter(request.getVacationStartDate())
-                    && pharmacistVacationRequest.getVacationStartDate().isBefore(request.getVacationEndDate())){
-                return false;
-            }
-            if(pharmacistVacationRequest.getVacationEndDate().isAfter(request.getVacationStartDate())
-                && pharmacistVacationRequest.getVacationEndDate().isBefore(request.getVacationEndDate())){
-               return false;
-            }
-            if(pharmacistVacationRequest.getVacationStartDate().isBefore(request.getVacationStartDate())
-               && pharmacistVacationRequest.getVacationEndDate().isAfter(request.getVacationEndDate())){
-               return false;
-            }
-        }
-        return true;
+    public List<PharmacistVacationRequest> getAllPharmacistVacationRequestByPharmacistId(Long id) {
+        return pharmacistVacationRequestRepository.findAllByVacationRequestPharmacistId(id);
     }
 
 
