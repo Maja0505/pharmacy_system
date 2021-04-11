@@ -44,10 +44,9 @@ public class Pharmacy {
 	
 	private Address pharmacyAddress;
 	
-	
-	//@OneToMany(mappedBy = "pharmacyForPharmacyAdmin", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-	//@JsonIgnoreProperties({"email", "password", "firstName", "lastName", "userAddress", "phoneNumber", "typeOfUser", "listOfOrders", "PharmacyForPharmacyAdmin" })
-	//private Set<PharmacyAdmin> pharmacyAdmins = new HashSet<PharmacyAdmin>();
+	@JsonManagedReference
+	@OneToMany(mappedBy = "pharmacyForPharmacyAdmin", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	private Set<PharmacyAdmin> pharmacyAdmins = new HashSet<PharmacyAdmin>();
 
 	@ManyToMany(fetch = FetchType.LAZY)
 	private Set<Dermatologist> dermatologistsInPharmacy = new HashSet<Dermatologist>();
@@ -115,8 +114,6 @@ public class Pharmacy {
 		this.pharmacyRatings = pharmacyRatings;
 	}
 
-
-	/*
 	public Set<PharmacyAdmin> getPharmacyAdmins() {
 		return pharmacyAdmins;
 	}
@@ -124,7 +121,7 @@ public class Pharmacy {
 	public void setPharmacyAdmins(Set<PharmacyAdmin> pharmacyAdmins) {
 		this.pharmacyAdmins = pharmacyAdmins;
 	}
-	*/
+	
 	public long getId() {
 		return id;
 	}
