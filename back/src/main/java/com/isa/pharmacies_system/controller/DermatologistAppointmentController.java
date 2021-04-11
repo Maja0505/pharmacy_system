@@ -57,7 +57,7 @@ public class DermatologistAppointmentController {
     }
 
     @PutMapping(value = "/book/{patientId}", consumes = "application/json")
-    public ResponseEntity<Boolean> bookDermatologistAppointment(@PathVariable Long patientId, @RequestBody DermatologistAppointmentDTO dermatologistAppointmentDTO) throws InterruptedException{
+    public ResponseEntity<Boolean> bookDermatologistAppointment(@PathVariable Long patientId, @RequestBody DermatologistAppointmentDTO dermatologistAppointmentDTO){
 
         try{
             Patient patient = patientService.findOne(patientId);
@@ -65,6 +65,8 @@ public class DermatologistAppointmentController {
             dermatologistAppointmentService.bookDermatologistAppointment(patient,dermatologistAppointment);
             emailService.sendNotificationForSuccessBookAppointment(patient);
             return new ResponseEntity<>(HttpStatus.OK);
+        }catch (InterruptedException e){
+            throw new RuntimeException(e);
         }catch (Exception e){
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
