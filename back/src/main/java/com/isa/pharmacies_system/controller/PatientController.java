@@ -39,7 +39,7 @@ public class PatientController {
         this.dermatologistAppointmentService = dermatologistAppointmentService;
     }
 
-    @GetMapping("/{id}")
+    @GetMapping(value = "/{id}", consumes = "application/json")
     public ResponseEntity<Patient> getPatient(@PathVariable Long id){
 
         Patient patient = patientService.findOne(id);
@@ -53,7 +53,7 @@ public class PatientController {
         return new ResponseEntity<>(patientService.findAll(), HttpStatus.OK);
     }
 
-    @GetMapping("/{id}/profileInfo")
+    @GetMapping(value = "/{id}/profileInfo", consumes = "application/json")
     public ResponseEntity<UserPersonalInfoDTO> getPatientProfileInfo(@PathVariable Long id){
 
         try{
@@ -89,8 +89,8 @@ public class PatientController {
         }
     }
 
-    @GetMapping("/{id}/additionalInfo")
-    public ResponseEntity<PatientAdditionalInfoDTO> getPatientAdditonalInfo(@PathVariable Long id){
+    @GetMapping(value = "/{id}/additionalInfo", consumes = "application/json")
+    public ResponseEntity<PatientAdditionalInfoDTO> getPatientAdditionalInfo(@PathVariable Long id){
 
         try{
             Patient patient = patientService.findOne(id);
@@ -100,12 +100,12 @@ public class PatientController {
         }
     }
 
-    @PutMapping("/{patientId}/addMedicineAllergie/{medicineId}")
-    public ResponseEntity<Boolean> addMedicineAllergie(@PathVariable Long patientId, @PathVariable Long medicineId){
+    @PutMapping(value = "/{patientId}/addMedicineAllergie/{medicineId}", consumes = "application/json")
+    public ResponseEntity<Boolean> addMedicineAllergies(@PathVariable Long patientId, @PathVariable Long medicineId){
 
         try {
             Patient patient = patientService.findOne(patientId);
-            patientService.addMedicineAllergie(patient,medicineId);
+            patientService.addMedicineAllergies(patient,medicineId);
             return new ResponseEntity<>(HttpStatus.OK);
         }catch (Exception e){
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -113,7 +113,7 @@ public class PatientController {
 
     }
 
-    @GetMapping("/{id}/dermatologistAppointment")
+    @GetMapping(value = "/{id}/dermatologistAppointment", consumes = "application/json")
     public ResponseEntity<List<DermatologistAppointmentDTO>> getDermatologistAppointmentsForPatient(@PathVariable Long id){
 
         try {

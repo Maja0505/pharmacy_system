@@ -1,13 +1,11 @@
 package com.isa.pharmacies_system.domain.schedule;
 
-import java.time.Instant;
 import java.time.LocalDateTime;
 
 import javax.persistence.*;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.isa.pharmacies_system.domain.pharmacy.Pharmacy;
 import com.isa.pharmacies_system.domain.user.Dermatologist;
 import com.isa.pharmacies_system.domain.user.Patient;

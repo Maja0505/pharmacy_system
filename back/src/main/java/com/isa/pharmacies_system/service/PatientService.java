@@ -24,18 +24,22 @@ public class PatientService implements IPatientService {
         this.medicineService = medicineService;
     }
 
+    @Override
     public Patient findOne(Long id){
         return patientRepository.findById(id).orElse(null);
     }
 
+    @Override
     public List<Patient> findAll(){
         return patientRepository.findAll();
     }
 
+    @Override
     public void savePatient(Patient patient){
         patientRepository.save(patient);
     }
 
+    @Override
     public Boolean changePassword(UserPasswordDTO userPasswordDTO){
 
         Patient patient = findOne(userPasswordDTO.getId());
@@ -51,13 +55,15 @@ public class PatientService implements IPatientService {
         return first.equals(second);
     }
 
-    public void addMedicineAllergie(Patient patient, Long medicineId){
+    @Override
+    public void addMedicineAllergies(Patient patient, Long medicineId){
 
         Medicine medicine = medicineService.findOne(medicineId);
         patient.getMedicineAllergies().add(medicine);
         savePatient(patient);
     }
 
+    @Override
     public Set<DermatologistAppointment> getDermatologistAppointmentForPatient(Long id){
 
         Patient patient = findOne(id);
