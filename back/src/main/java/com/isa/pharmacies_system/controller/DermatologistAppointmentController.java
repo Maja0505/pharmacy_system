@@ -15,11 +15,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import com.isa.pharmacies_system.DTO.DermatologistAppointmentDTO;
 import com.isa.pharmacies_system.converter.DermatologistAppointmentConverter;
-import com.isa.pharmacies_system.domain.schedule.DermatologistAppointment;
-import com.isa.pharmacies_system.service.iService.IDermatologistAppointmentService;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 
@@ -52,13 +47,26 @@ public class DermatologistAppointmentController {
         }
     }
 
-    @PostMapping(value = "/{patientId}", consumes = "application/json")
+    @PutMapping(value = "/book/{patientId}", consumes = "application/json")
     public ResponseEntity<Boolean> bookDermatologistAppointment(@PathVariable Long patientId, @RequestBody DermatologistAppointmentDTO dermatologistAppointmentDTO){
 
         try{
             DermatologistAppointment dermatologistAppointment = dermatologistAppointmentService.findOne(dermatologistAppointmentDTO.getId());
             dermatologistAppointmentService.bookDermatologistAppointment(patientId,dermatologistAppointment);
             return new ResponseEntity<>(HttpStatus.OK);
+        }catch (Exception e){
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @PutMapping(value = "/cancel")
+    public ResponseEntity<Boolean> cancelDermatologistAppointment(@RequestBody DermatologistAppointmentDTO dermatologistAppointmentDTO){
+        try {
+            DermatologistAppointment dermatologistAppointment = dermatologistAppointmentService.findOne(dermatologistAppointmentDTO.getId());
+            if(dermatologistAppointmentService.cancelDermatologistAppointment(dermatologistAppointment)){
+                return new ResponseEntity<>(HttpStatus.OK);
+            }
+            return new ResponseEntity<>(HttpStatus.NOT_MODIFIED);
         }catch (Exception e){
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
