@@ -25,6 +25,7 @@ public class PharmacyAdmin extends Users{
 	@OneToMany(mappedBy = "pharmacyAdminForOrder", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private Set<Order> listOfOrders = new HashSet<Order>();
 	
+	@JsonBackReference
 	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private Pharmacy pharmacyForPharmacyAdmin;
 
