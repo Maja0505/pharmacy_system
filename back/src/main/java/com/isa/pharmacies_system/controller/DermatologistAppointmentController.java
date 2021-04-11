@@ -30,10 +30,8 @@ public class DermatologistAppointmentController {
     private IDermatologistAppointmentService dermatologistAppointmentService;
     private PatientConverter patientConverter;
     private DermatologistAppointmentConverter dermatologistAppointmentConverter;
-
     @Autowired
     private EmailService emailService;
-
     private IPatientService patientService;
 
     @Autowired
