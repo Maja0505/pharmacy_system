@@ -66,8 +66,7 @@ public class DermatologistAppointmentController {
             emailService.sendNotificationForSuccessBookAppointment(patient);
             return new ResponseEntity<>(HttpStatus.OK);
         }catch (InterruptedException e){
-            throw new RuntimeException(e);
-        }catch (Exception e){
+            Thread.currentThread().interrupt();
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
