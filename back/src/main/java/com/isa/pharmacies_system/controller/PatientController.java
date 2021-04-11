@@ -1,11 +1,12 @@
 package com.isa.pharmacies_system.controller;
 
-import com.isa.pharmacies_system.DTO.UserPasswordDTO;
-import com.isa.pharmacies_system.DTO.UserPersonalInfoDTO;
-import com.isa.pharmacies_system.DTO.PatientAdditionalInfoDTO;
+import com.isa.pharmacies_system.DTO.*;
+import com.isa.pharmacies_system.converter.DermatologistAppointmentConverter;
 import com.isa.pharmacies_system.converter.PatientConverter;
 import com.isa.pharmacies_system.converter.UserConverter;
+import com.isa.pharmacies_system.domain.schedule.DermatologistAppointment;
 import com.isa.pharmacies_system.domain.user.Patient;
+import com.isa.pharmacies_system.service.DermatologistAppointmentService;
 import com.isa.pharmacies_system.service.iService.IPatientService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -15,6 +16,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Set;
 
 @Controller
 @RequestMapping(value = "/api/patient", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -24,16 +26,22 @@ public class PatientController {
     private IPatientService patientService;
     private UserConverter userConverter;
     private PatientConverter patientConverter;
+    private DermatologistAppointmentService dermatologistAppointmentService;
+    private DermatologistAppointmentConverter dermatologistAppointmentConverter;
 
     @Autowired
-    public PatientController(IPatientService patientService) {
+    public PatientController(IPatientService patientService, DermatologistAppointmentService dermatologistAppointmentService) {
+
         this.patientService = patientService;
         this.userConverter = new UserConverter();
         this.patientConverter = new PatientConverter();
+        this.dermatologistAppointmentConverter = new DermatologistAppointmentConverter();
+        this.dermatologistAppointmentService = dermatologistAppointmentService;
     }
 
-    @GetMapping("/{id}")
+    @GetMapping(value = "/{id}", consumes = "application/json")
     public ResponseEntity<Patient> getPatient(@PathVariable Long id){
+
         Patient patient = patientService.findOne(id);
         if(patient == null){
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -45,8 +53,9 @@ public class PatientController {
         return new ResponseEntity<>(patientService.findAll(), HttpStatus.OK);
     }
 
-    @GetMapping("/{id}/profileInfo")
+    @GetMapping(value = "/{id}/profileInfo", consumes = "application/json")
     public ResponseEntity<UserPersonalInfoDTO> getPatientProfileInfo(@PathVariable Long id){
+
         try{
             Patient patient = patientService.findOne(id);
             return new ResponseEntity<>(userConverter.convertPatientPersonalInfoToDTO(patient),HttpStatus.OK);
@@ -57,6 +66,7 @@ public class PatientController {
 
     @PutMapping(value ="/update", consumes = "application/json")
     public ResponseEntity<Boolean> updatePatientProfileInfo(@RequestBody UserPersonalInfoDTO userPersonalInfoDTO){
+
         try{
             Patient patient = patientService.findOne(userPersonalInfoDTO.getId());
             patientService.savePatient(userConverter.convertDTOToPatientPersonalInfo(userPersonalInfoDTO,patient));
@@ -79,8 +89,9 @@ public class PatientController {
         }
     }
 
-    @GetMapping("/{id}/additionalInfo")
-    public ResponseEntity<PatientAdditionalInfoDTO> getPatientAdditonalInfo(@PathVariable Long id){
+    @GetMapping(value = "/{id}/additionalInfo", consumes = "application/json")
+    public ResponseEntity<PatientAdditionalInfoDTO> getPatientAdditionalInfo(@PathVariable Long id){
+
         try{
             Patient patient = patientService.findOne(id);
             return new ResponseEntity<>(patientConverter.convertPatientAdditionalInfoToDTO(patient),HttpStatus.OK);
@@ -89,12 +100,12 @@ public class PatientController {
         }
     }
 
-    @PutMapping("/{patientId}/addMedicineAllergie/{medicineId}")
-    public ResponseEntity<Boolean> addMedicineAllergie(@PathVariable Long patientId, @PathVariable Long medicineId){
+    @PutMapping(value = "/{patientId}/addMedicineAllergie/{medicineId}", consumes = "application/json")
+    public ResponseEntity<Boolean> addMedicineAllergies(@PathVariable Long patientId, @PathVariable Long medicineId){
 
         try {
             Patient patient = patientService.findOne(patientId);
-            patientService.addMedicineAllergie(patient,medicineId);
+            patientService.addMedicineAllergies(patient,medicineId);
             return new ResponseEntity<>(HttpStatus.OK);
         }catch (Exception e){
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -102,6 +113,15 @@ public class PatientController {
 
     }
 
+    @GetMapping(value = "/{id}/dermatologistAppointment", consumes = "application/json")
+    public ResponseEntity<List<DermatologistAppointmentDTO>> getDermatologistAppointmentsForPatient(@PathVariable Long id){
 
-
+        try {
+            Set<DermatologistAppointment> dermatologistAppointments = patientService.getDermatologistAppointmentForPatient(id);
+            List<DermatologistAppointmentDTO> dermatologistAppointmentDTOS = dermatologistAppointmentConverter.convertListOfDermatologistAppointmentToDermatologistAppointmentDTOS(List.copyOf(dermatologistAppointments));
+            return new ResponseEntity<>(dermatologistAppointmentDTOS,HttpStatus.OK);
+        }catch (Exception e){
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
 }

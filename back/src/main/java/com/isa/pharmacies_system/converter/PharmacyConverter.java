@@ -2,6 +2,7 @@ package com.isa.pharmacies_system.converter;
 
 import java.util.HashSet;
 
+import com.isa.pharmacies_system.DTO.PharmacyDTO;
 import com.isa.pharmacies_system.DTO.PharmacyNewDTO;
 import com.isa.pharmacies_system.domain.complaint.PharmacyComplaint;
 import com.isa.pharmacies_system.domain.medicine.MedicineReservation;
@@ -17,6 +18,16 @@ import com.isa.pharmacies_system.domain.user.Pharmacist;
 public class PharmacyConverter {
 	public PharmacyConverter() {
 		// TODO Auto-generated constructor stub
+	}
+
+
+	public PharmacyDTO convertPharmacyToPharmacyDTO(Pharmacy pharmacy){
+
+		PharmacyDTO pharmacyDTO = new PharmacyDTO();
+		pharmacyDTO.setId(pharmacy.getId());
+		pharmacyDTO.setPharmacyName(pharmacy.getPharmacyName());
+		pharmacyDTO.setPharmacyAddress(pharmacy.getPharmacyAddress());
+		return pharmacyDTO;
 	}
 	
 	public Pharmacy convertPharmacyNewDTOToPharmacy(PharmacyNewDTO pharmacyNewDTO) {
