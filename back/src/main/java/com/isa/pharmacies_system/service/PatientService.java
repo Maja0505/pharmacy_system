@@ -2,6 +2,7 @@ package com.isa.pharmacies_system.service;
 
 import com.isa.pharmacies_system.DTO.UserPasswordDTO;
 import com.isa.pharmacies_system.domain.medicine.Medicine;
+import com.isa.pharmacies_system.domain.schedule.DermatologistAppointment;
 import com.isa.pharmacies_system.domain.user.Patient;
 import com.isa.pharmacies_system.repository.IPatientRepository;
 import com.isa.pharmacies_system.service.iService.IMedicineService;
@@ -9,6 +10,7 @@ import com.isa.pharmacies_system.service.iService.IPatientService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Set;
 
 @Service
 public class PatientService implements IPatientService {
@@ -17,6 +19,7 @@ public class PatientService implements IPatientService {
     private IMedicineService medicineService;
 
     public PatientService(IPatientRepository patientRepository, IMedicineService medicineService) {
+
         this.patientRepository = patientRepository;
         this.medicineService = medicineService;
     }
@@ -34,6 +37,7 @@ public class PatientService implements IPatientService {
     }
 
     public Boolean changePassword(UserPasswordDTO userPasswordDTO){
+
         Patient patient = findOne(userPasswordDTO.getId());
         if(checkPassword(patient.getPassword(), userPasswordDTO.getConfirmedPassword()) && checkPassword(userPasswordDTO.getNewPassword(), userPasswordDTO.getConfirmedNewPassword())){
             patient.setPassword(userPasswordDTO.getNewPassword());
@@ -48,8 +52,15 @@ public class PatientService implements IPatientService {
     }
 
     public void addMedicineAllergie(Patient patient, Long medicineId){
+
         Medicine medicine = medicineService.findOne(medicineId);
         patient.getMedicineAllergies().add(medicine);
         savePatient(patient);
+    }
+
+    public Set<DermatologistAppointment> getDermatologistAppointmentForPatient(Long id){
+
+        Patient patient = findOne(id);
+        return patient.getDermatologistAppointment();
     }
 }

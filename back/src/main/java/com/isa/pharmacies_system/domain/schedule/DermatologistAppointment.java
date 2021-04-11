@@ -3,11 +3,7 @@ package com.isa.pharmacies_system.domain.schedule;
 import java.time.Instant;
 import java.time.LocalDateTime;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -35,7 +31,7 @@ public class DermatologistAppointment extends Appointment {
 	private Pharmacy pharmacyForDermatologistAppointment;
 
 	@JsonBackReference
-	@ManyToOne(cascade = {CascadeType.DETACH,CascadeType.MERGE,CascadeType.REFRESH,CascadeType.REMOVE}, fetch = FetchType.EAGER)
+	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private Patient patientWithDermatologistAppointment;
 
 
@@ -51,8 +47,6 @@ public class DermatologistAppointment extends Appointment {
 		this.dermatologistForAppointment = dermatologistForAppointment;
 		this.pharmacyForDermatologistAppointment = pharmacyForDermatologistAppointment;
 	}
-
-
 
 	public LocalDateTime getDermatologistAppointmentStartTime() {
 		return dermatologistAppointmentStartTime;
@@ -85,5 +79,12 @@ public class DermatologistAppointment extends Appointment {
 	public void setPharmacyForDermatologistAppointment(Pharmacy pharmacyForDermatologistAppointment) {
 		this.pharmacyForDermatologistAppointment = pharmacyForDermatologistAppointment;
 	}
-	
+
+	public Patient getPatientWithDermatologistAppointment() {
+		return patientWithDermatologistAppointment;
+	}
+
+	public void setPatientWithDermatologistAppointment(Patient patientWithDermatologistAppointment) {
+		this.patientWithDermatologistAppointment = patientWithDermatologistAppointment;
+	}
 }
