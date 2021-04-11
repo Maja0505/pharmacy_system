@@ -29,8 +29,8 @@ public class DermatologistAppointmentController {
         this.patientConverter = new PatientConverter();
     }
 
-    @GetMapping("/allPastAppointment/{dermatologistId}/{page}")
-    public ResponseEntity<List<PatientAppointmentInfoDTO>> getAllPastDermatologistAppointment(@PathVariable ("dermatologistId") Long id,@PathVariable int page){
+    @GetMapping("/allPastAppointmentByDermatologist/{dermatologistId}/{page}")
+    public ResponseEntity<List<PatientAppointmentInfoDTO>> getAllPastDermatologistAppointmentByDermatologist(@PathVariable ("dermatologistId") Long id,@PathVariable int page){
         try {
             Page<DermatologistAppointment> dermatologistAppointments = dermatologistAppointmentService.getAllPastDermatologistAppointmentByDermatologist(id,page);
             return new ResponseEntity<>(patientConverter.convertPatientDermatologistAppointmentInfoToDTO(dermatologistAppointments), HttpStatus.OK);
@@ -38,6 +38,16 @@ public class DermatologistAppointmentController {
             return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
         }
 
+    }
+
+    @GetMapping("/allPastAppointmentByDermatologistAndPharmacy/{dermatologistId}/{pharmacyId}/{page}")
+    public ResponseEntity<List<PatientAppointmentInfoDTO>> getAllPastDermatologistAppointmentByDermatologistAndPharmacy(@PathVariable Long dermatologistId,@PathVariable Long pharmacyId,@PathVariable int page){
+        try {
+            Page<DermatologistAppointment> dermatologistAppointments = dermatologistAppointmentService.getAllPastDermatologistAppointmentByDermatologistAndPharmacy(dermatologistId,pharmacyId,page);
+            return new ResponseEntity<>(patientConverter.convertPatientDermatologistAppointmentInfoToDTO(dermatologistAppointments),HttpStatus.OK);
+        }catch (Exception e){
+            return new ResponseEntity<>(null,HttpStatus.BAD_REQUEST);
+        }
     }
 
     @GetMapping(value = "/sortByAppointmentEndTime/{asc}",consumes = "application/json")

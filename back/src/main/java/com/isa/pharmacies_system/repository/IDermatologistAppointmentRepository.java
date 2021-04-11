@@ -11,4 +11,7 @@ public interface IDermatologistAppointmentRepository extends JpaRepository<Derma
     @Query("select a from DermatologistAppointment a where a.dermatologistForAppointment.id = ?1 and a.dermatologistAppointmentEndTime < CURRENT_TIMESTAMP ")
     Page<DermatologistAppointment> findAllPastDermatologistAppointment(Long id, Pageable pageable);
 
+    @Query("select a from DermatologistAppointment  a where a.dermatologistForAppointment.id = ?1 and a.pharmacyForDermatologistAppointment.id = ?2 and a.dermatologistAppointmentEndTime < CURRENT_TIMESTAMP")
+    Page<DermatologistAppointment> findAllPastDermatologistAppointmentByPharmacy(Long idDermatologist,Long idPharmacy,Pageable pageable);
+
 }
