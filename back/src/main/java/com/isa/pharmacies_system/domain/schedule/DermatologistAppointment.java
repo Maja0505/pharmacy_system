@@ -38,6 +38,13 @@ public class DermatologistAppointment extends Appointment {
 	@ManyToOne(cascade = {CascadeType.DETACH,CascadeType.MERGE,CascadeType.REFRESH,CascadeType.REMOVE}, fetch = FetchType.EAGER)
 	private Patient patientWithDermatologistAppointment;
 
+	public Patient getPatientWithDermatologistAppointment() {
+		return patientWithDermatologistAppointment;
+	}
+
+	public void setPatientWithDermatologistAppointment(Patient patientWithDermatologistAppointment) {
+		this.patientWithDermatologistAppointment = patientWithDermatologistAppointment;
+	}
 
 	public DermatologistAppointment() {
 		
