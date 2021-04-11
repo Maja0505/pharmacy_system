@@ -3,7 +3,10 @@ package com.isa.pharmacies_system.controller;
 import com.isa.pharmacies_system.DTO.PatientAppointmentInfoDTO;
 import com.isa.pharmacies_system.converter.PatientConverter;
 import com.isa.pharmacies_system.domain.schedule.DermatologistAppointment;
+import com.isa.pharmacies_system.domain.user.Patient;
+import com.isa.pharmacies_system.service.EmailService;
 import com.isa.pharmacies_system.service.iService.IDermatologistAppointmentService;
+import com.isa.pharmacies_system.service.iService.IPatientService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -15,11 +18,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import com.isa.pharmacies_system.DTO.DermatologistAppointmentDTO;
 import com.isa.pharmacies_system.converter.DermatologistAppointmentConverter;
-import com.isa.pharmacies_system.domain.schedule.DermatologistAppointment;
-import com.isa.pharmacies_system.service.iService.IDermatologistAppointmentService;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 
@@ -32,12 +30,18 @@ public class DermatologistAppointmentController {
     private IDermatologistAppointmentService dermatologistAppointmentService;
     private PatientConverter patientConverter;
     private DermatologistAppointmentConverter dermatologistAppointmentConverter;
+    @Autowired
+    private EmailService emailService;
+    private IPatientService patientService;
 
     @Autowired
-    public DermatologistAppointmentController(IDermatologistAppointmentService dermatologistAppointmentService) {
+    public DermatologistAppointmentController(IDermatologistAppointmentService dermatologistAppointmentService, IPatientService patientService) {
         this.dermatologistAppointmentService = dermatologistAppointmentService;
         this.patientConverter = new PatientConverter();
         this.dermatologistAppointmentConverter = new DermatologistAppointmentConverter();
+        this.patientService = patientService;
+
+
 
     }
 
@@ -52,13 +56,29 @@ public class DermatologistAppointmentController {
         }
     }
 
-    @PostMapping(value = "/{patientId}", consumes = "application/json")
+    @PutMapping(value = "/book/{patientId}", consumes = "application/json")
     public ResponseEntity<Boolean> bookDermatologistAppointment(@PathVariable Long patientId, @RequestBody DermatologistAppointmentDTO dermatologistAppointmentDTO){
 
         try{
+            Patient patient = patientService.findOne(patientId);
             DermatologistAppointment dermatologistAppointment = dermatologistAppointmentService.findOne(dermatologistAppointmentDTO.getId());
-            dermatologistAppointmentService.bookDermatologistAppointment(patientId,dermatologistAppointment);
+            dermatologistAppointmentService.bookDermatologistAppointment(patient,dermatologistAppointment);
+            emailService.sendNotificationForSuccessBookAppointment(patient);
             return new ResponseEntity<>(HttpStatus.OK);
+        }catch (InterruptedException e){
+            Thread.currentThread().interrupt();
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @PutMapping(value = "/cancel")
+    public ResponseEntity<Boolean> cancelDermatologistAppointment(@RequestBody DermatologistAppointmentDTO dermatologistAppointmentDTO){
+        try {
+            DermatologistAppointment dermatologistAppointment = dermatologistAppointmentService.findOne(dermatologistAppointmentDTO.getId());
+            if(dermatologistAppointmentService.cancelDermatologistAppointment(dermatologistAppointment)){
+                return new ResponseEntity<>(HttpStatus.OK);
+            }
+            return new ResponseEntity<>(HttpStatus.NOT_MODIFIED);
         }catch (Exception e){
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
