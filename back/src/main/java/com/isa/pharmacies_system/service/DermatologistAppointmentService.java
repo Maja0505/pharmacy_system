@@ -24,12 +24,14 @@ public class DermatologistAppointmentService implements IDermatologistAppointmen
 
     private IDermatologistAppointmentRepository dermatologistAppointmentRepository;
     private IPatientService patientService;
+    private EmailService emailService;
 
     @Autowired
-    public DermatologistAppointmentService(IDermatologistAppointmentRepository dermatologistAppointmentRepository, IPatientService patientService) {
+    public DermatologistAppointmentService(IDermatologistAppointmentRepository dermatologistAppointmentRepository, IPatientService patientService,EmailService emailService) {
 
         this.dermatologistAppointmentRepository = dermatologistAppointmentRepository;
         this.patientService = patientService;
+        this.emailService = emailService;
     }
 
     @Override
@@ -43,10 +45,9 @@ public class DermatologistAppointmentService implements IDermatologistAppointmen
     }
 
     @Override
-    public void bookDermatologistAppointment(Long patientId,DermatologistAppointment dermatologistAppointment){
+    public void bookDermatologistAppointment(Patient patient,DermatologistAppointment dermatologistAppointment){
 
         if(isAppointmentOpen(dermatologistAppointment)){
-            Patient patient = patientService.findOne(patientId);
             dermatologistAppointment.setPatientWithDermatologistAppointment(patient);
             dermatologistAppointment.setStatusOfAppointment(StatusOfAppointment.Reserved);
             dermatologistAppointmentRepository.save(dermatologistAppointment);

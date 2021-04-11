@@ -3,7 +3,10 @@ package com.isa.pharmacies_system.controller;
 import com.isa.pharmacies_system.DTO.PatientAppointmentInfoDTO;
 import com.isa.pharmacies_system.converter.PatientConverter;
 import com.isa.pharmacies_system.domain.schedule.DermatologistAppointment;
+import com.isa.pharmacies_system.domain.user.Patient;
+import com.isa.pharmacies_system.service.EmailService;
 import com.isa.pharmacies_system.service.iService.IDermatologistAppointmentService;
+import com.isa.pharmacies_system.service.iService.IPatientService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -29,10 +32,18 @@ public class DermatologistAppointmentController {
     private DermatologistAppointmentConverter dermatologistAppointmentConverter;
 
     @Autowired
-    public DermatologistAppointmentController(IDermatologistAppointmentService dermatologistAppointmentService) {
+    private EmailService emailService;
+
+    private IPatientService patientService;
+
+    @Autowired
+    public DermatologistAppointmentController(IDermatologistAppointmentService dermatologistAppointmentService, IPatientService patientService) {
         this.dermatologistAppointmentService = dermatologistAppointmentService;
         this.patientConverter = new PatientConverter();
         this.dermatologistAppointmentConverter = new DermatologistAppointmentConverter();
+        this.patientService = patientService;
+
+
 
     }
 
@@ -51,8 +62,10 @@ public class DermatologistAppointmentController {
     public ResponseEntity<Boolean> bookDermatologistAppointment(@PathVariable Long patientId, @RequestBody DermatologistAppointmentDTO dermatologistAppointmentDTO){
 
         try{
+            Patient patient = patientService.findOne(patientId);
             DermatologistAppointment dermatologistAppointment = dermatologistAppointmentService.findOne(dermatologistAppointmentDTO.getId());
-            dermatologistAppointmentService.bookDermatologistAppointment(patientId,dermatologistAppointment);
+            dermatologistAppointmentService.bookDermatologistAppointment(patient,dermatologistAppointment);
+            emailService.sendNotificationForSuccessBookAppointment(patient);
             return new ResponseEntity<>(HttpStatus.OK);
         }catch (Exception e){
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
