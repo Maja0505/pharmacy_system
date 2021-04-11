@@ -57,7 +57,7 @@ public class DermatologistAppointmentController {
     }
 
     @PutMapping(value = "/book/{patientId}", consumes = "application/json")
-    public ResponseEntity<Boolean> bookDermatologistAppointment(@PathVariable Long patientId, @RequestBody DermatologistAppointmentDTO dermatologistAppointmentDTO){
+    public ResponseEntity<Boolean> bookDermatologistAppointment(@PathVariable Long patientId, @RequestBody DermatologistAppointmentDTO dermatologistAppointmentDTO) throws InterruptedException{
 
         try{
             Patient patient = patientService.findOne(patientId);
