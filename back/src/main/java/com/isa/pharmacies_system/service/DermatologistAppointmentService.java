@@ -10,7 +10,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import com.isa.pharmacies_system.domain.schedule.StatusOfAppointment;
 import com.isa.pharmacies_system.domain.user.Patient;
-import com.isa.pharmacies_system.service.iService.IPatientService;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
@@ -23,15 +22,12 @@ import java.util.List;
 public class DermatologistAppointmentService implements IDermatologistAppointmentService {
 
     private IDermatologistAppointmentRepository dermatologistAppointmentRepository;
-    private IPatientService patientService;
-    private EmailService emailService;
 
     @Autowired
-    public DermatologistAppointmentService(IDermatologistAppointmentRepository dermatologistAppointmentRepository, IPatientService patientService,EmailService emailService) {
+    public DermatologistAppointmentService(IDermatologistAppointmentRepository dermatologistAppointmentRepository) {
 
         this.dermatologistAppointmentRepository = dermatologistAppointmentRepository;
-        this.patientService = patientService;
-        this.emailService = emailService;
+
     }
 
     @Override
@@ -40,8 +36,8 @@ public class DermatologistAppointmentService implements IDermatologistAppointmen
     }
 
     @Override
-    public List<DermatologistAppointment> getOpenDermatologistAppointment(){
-        return dermatologistAppointmentRepository.getOpenDermatologistAppointment();
+    public List<DermatologistAppointment> getOpenDermatologistAppointment(Long pharmacyId){
+        return dermatologistAppointmentRepository.getOpenDermatologistAppointment(pharmacyId);
     }
 
     @Override

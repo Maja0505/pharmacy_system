@@ -3,6 +3,9 @@ package com.isa.pharmacies_system.controller;
 
 import java.util.List;
 
+import com.isa.pharmacies_system.DTO.PharmacistAppointmentTimeDTO;
+import com.isa.pharmacies_system.DTO.PharmacyDTO;
+import com.isa.pharmacies_system.converter.PharmacyConverter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,10 +25,13 @@ import com.isa.pharmacies_system.service.iService.IPharmacyService;
 @RequestMapping(value = "api/pharmacy")
 public class PharmacyController {
 	private IPharmacyService iPharmacyService;
+	private PharmacyConverter pharmacyConverter;
 
 	@Autowired
-	public PharmacyController(IPharmacyService iPharmacyService) {
+	public PharmacyController(IPharmacyService iPharmacyService)
+	{
 		this.iPharmacyService = iPharmacyService;
+		this.pharmacyConverter = new PharmacyConverter();
 	}
 
 	@GetMapping(value = "/{id}")
@@ -51,6 +57,17 @@ public class PharmacyController {
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
 			return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+		}
+	}
+
+	@GetMapping(value = "/free", consumes = "application/json")
+	public ResponseEntity<List<PharmacyDTO>> getAllPharmacyWithFreePharmacistByDate(@RequestBody PharmacistAppointmentTimeDTO timeDTO){
+
+		try {
+			List<Pharmacy> pharmacies = iPharmacyService.getAllPharmacyWithFreePharmacistByDate(timeDTO);
+			return new ResponseEntity<>(pharmacyConverter.convertPharmacyListToPharmacyDTOList(pharmacies),HttpStatus.OK);
+		}catch (Exception e){
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
 	}
 

@@ -4,9 +4,12 @@ import com.isa.pharmacies_system.DTO.*;
 import com.isa.pharmacies_system.converter.DermatologistAppointmentConverter;
 import com.isa.pharmacies_system.converter.PatientConverter;
 import com.isa.pharmacies_system.converter.UserConverter;
+import com.isa.pharmacies_system.domain.medicine.Medicine;
 import com.isa.pharmacies_system.domain.schedule.DermatologistAppointment;
 import com.isa.pharmacies_system.domain.user.Patient;
 import com.isa.pharmacies_system.service.DermatologistAppointmentService;
+import com.isa.pharmacies_system.service.MedicineService;
+import com.isa.pharmacies_system.service.iService.IMedicineService;
 import com.isa.pharmacies_system.service.iService.IPatientService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -28,15 +31,18 @@ public class PatientController {
     private PatientConverter patientConverter;
     private DermatologistAppointmentService dermatologistAppointmentService;
     private DermatologistAppointmentConverter dermatologistAppointmentConverter;
+    private IMedicineService medicineService;
 
     @Autowired
-    public PatientController(IPatientService patientService, DermatologistAppointmentService dermatologistAppointmentService) {
+    public PatientController(IPatientService patientService, DermatologistAppointmentService dermatologistAppointmentService, MedicineService medicineService) {
 
         this.patientService = patientService;
         this.userConverter = new UserConverter();
         this.patientConverter = new PatientConverter();
         this.dermatologistAppointmentConverter = new DermatologistAppointmentConverter();
         this.dermatologistAppointmentService = dermatologistAppointmentService;
+        this.medicineService = medicineService;
+
     }
 
     @GetMapping(value = "/{id}", consumes = "application/json")
@@ -104,8 +110,9 @@ public class PatientController {
     public ResponseEntity<Boolean> addMedicineAllergies(@PathVariable Long patientId, @PathVariable Long medicineId){
 
         try {
+            Medicine medicine = medicineService.findOne(medicineId);
             Patient patient = patientService.findOne(patientId);
-            patientService.addMedicineAllergies(patient,medicineId);
+            patientService.addMedicineAllergies(patient,medicine);
             return new ResponseEntity<>(HttpStatus.OK);
         }catch (Exception e){
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);

@@ -7,6 +7,7 @@ public class PharmacyDTO {
     private long id;
     private String pharmacyName;
     private Address pharmacyAddress;
+    private double pharmacyAverageRating;
 
     public PharmacyDTO() {
     }
@@ -33,5 +34,13 @@ public class PharmacyDTO {
 
     public void setPharmacyAddress(Address pharmacyAddress) {
         this.pharmacyAddress = pharmacyAddress;
+    }
+
+    public double getPharmacyAverageRating() {
+        return pharmacyAverageRating;
+    }
+
+    public void setPharmacyAverageRating(double pharmacyAverageRating) {
+        this.pharmacyAverageRating = pharmacyAverageRating;
     }
 }
