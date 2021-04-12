@@ -44,7 +44,6 @@ public class PharmacyAdminController {
 	@PostMapping(value = "/create", consumes = "application/json")
 	public ResponseEntity<PharmacyAdmin> createNewPharmacyAdmin(@RequestBody PharmacyAdminNewDTO pharmacyNewDTO) {
 		try {
-			// dodati kreiranje cjenovnika (nekog fiksnog) i storage-a za apoteku
 			return new ResponseEntity<>(iPharmacyAdminService.create(pharmacyNewDTO), HttpStatus.CREATED);
 		} catch (Exception e) {
 			System.out.println(e.getMessage());

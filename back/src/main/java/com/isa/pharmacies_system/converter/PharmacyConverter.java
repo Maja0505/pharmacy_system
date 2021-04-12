@@ -6,7 +6,6 @@ import com.isa.pharmacies_system.DTO.PharmacyDTO;
 import com.isa.pharmacies_system.DTO.PharmacyNewDTO;
 import com.isa.pharmacies_system.domain.complaint.PharmacyComplaint;
 import com.isa.pharmacies_system.domain.medicine.MedicineReservation;
-import com.isa.pharmacies_system.domain.pharmacy.Address;
 import com.isa.pharmacies_system.domain.pharmacy.Pharmacy;
 import com.isa.pharmacies_system.domain.pharmacy.Promotions;
 import com.isa.pharmacies_system.domain.rating.PharmacyRating;
@@ -35,7 +34,7 @@ public class PharmacyConverter {
 		pharmacy.setDermatologistAppointmentsInPharmacy(new HashSet<DermatologistAppointment>());
 		pharmacy.setDermatologistsInPharmacy(new HashSet<Dermatologist>());
 		pharmacy.setPharmacistsInPharmacy(new HashSet<Pharmacist>());
-		pharmacy.setPharmacyAddress(new Address(0,pharmacyNewDTO.getStreetName(),pharmacyNewDTO.getStreetNumber(),pharmacyNewDTO.getCity(), pharmacyNewDTO.getCountry(),0.0,0.0));
+		pharmacy.setPharmacyAddress(pharmacyNewDTO.getPharmacyAddress());
 		pharmacy.setPharmacyAverageRating(0.0);
 		pharmacy.setPharmacyComplaints(new HashSet<PharmacyComplaint>());
 		pharmacy.setPharmacyDescription(pharmacyNewDTO.getPharmacyDescription());
@@ -49,12 +48,9 @@ public class PharmacyConverter {
 	
 	public PharmacyNewDTO convertPharmacyToPharmacyNewDTO(Pharmacy pharmacy) {
 		PharmacyNewDTO pharmacyNewDTO= new PharmacyNewDTO();
-		pharmacyNewDTO.setCity(pharmacy.getPharmacyAddress().getCity());
-		pharmacyNewDTO.setCountry(pharmacy.getPharmacyAddress().getCountry());
+		pharmacyNewDTO.setPharmacyAddress(pharmacy.getPharmacyAddress());
 		pharmacyNewDTO.setPharmacyDescription(pharmacy.getPharmacyDescription());
 		pharmacyNewDTO.setPharmacyName(pharmacy.getPharmacyName());
-		pharmacyNewDTO.setStreetName(pharmacy.getPharmacyAddress().getStreetName());
-		pharmacyNewDTO.setStreetNumber(pharmacy.getPharmacyAddress().getStreetNumber());
 		return pharmacyNewDTO;
 	}
 }
