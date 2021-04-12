@@ -2,13 +2,12 @@ package com.isa.pharmacies_system.DTO;
 
 import com.isa.pharmacies_system.domain.pharmacy.Address;
 
-public class PharmacyDTO {
+public class PharmacyDTO extends PharmacyInfoDTO{
 
     private long id;
-    private String pharmacyName;
-    private Address pharmacyAddress;
 
     public PharmacyDTO() {
+    	super();
     }
 
     public long getId() {
@@ -17,21 +16,5 @@ public class PharmacyDTO {
 
     public void setId(long id) {
         this.id = id;
-    }
-
-    public String getPharmacyName() {
-        return pharmacyName;
-    }
-
-    public void setPharmacyName(String pharmacyName) {
-        this.pharmacyName = pharmacyName;
-    }
-
-    public Address getPharmacyAddress() {
-        return pharmacyAddress;
-    }
-
-    public void setPharmacyAddress(Address pharmacyAddress) {
-        this.pharmacyAddress = pharmacyAddress;
     }
 }

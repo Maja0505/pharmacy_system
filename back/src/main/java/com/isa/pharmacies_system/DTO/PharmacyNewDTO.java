@@ -1,59 +1,25 @@
 package com.isa.pharmacies_system.DTO;
 
+import com.isa.pharmacies_system.domain.pharmacy.Address;
 import com.isa.pharmacies_system.domain.pharmacy.Pharmacy;
 
-public class PharmacyNewDTO {
-	
-	private String pharmacyName;
-	private String streetName;
-	private String streetNumber;
-	private String city;
-	private String country;
+public class PharmacyNewDTO extends PharmacyInfoDTO {
+
 	private String pharmacyDescription;
 	private double priceForPharmacistAppointment;
 	private double priceForDermatologistAppointment;
-	
+
 	public PharmacyNewDTO() {
-	}
-	
-	public String getPharmacyName() {
-		return pharmacyName;
+		super();
 	}
 
-	public void setPharmacyName(String pharmacyName) {
-		this.pharmacyName = pharmacyName;
-	}
-
-	public String getStreetName() {
-		return streetName;
-	}
-
-	public void setStreetName(String streetName) {
-		this.streetName = streetName;
-	}
-
-	public String getStreetNumber() {
-		return streetNumber;
-	}
-
-	public void setStreetNumber(String streetNumber) {
-		this.streetNumber = streetNumber;
-	}
-
-	public String getCity() {
-		return city;
-	}
-
-	public void setCity(String city) {
-		this.city = city;
-	}
-
-	public String getCountry() {
-		return country;
-	}
-
-	public void setCountry(String country) {
-		this.country = country;
+	public PharmacyNewDTO(String pharmacyName, Address pharmacyAddress, String pharmacyDescription,
+			double priceForPharmacistAppointment, double priceForDermatologistAppointment) {
+		super(pharmacyName, pharmacyAddress);
+		// TODO Auto-generated constructor stub
+		this.pharmacyDescription = pharmacyDescription;
+		this.priceForPharmacistAppointment = priceForPharmacistAppointment;
+		this.priceForDermatologistAppointment = priceForDermatologistAppointment;
 	}
 
 	public String getPharmacyDescription() {
@@ -63,7 +29,7 @@ public class PharmacyNewDTO {
 	public void setPharmacyDescription(String pharmacyDescription) {
 		this.pharmacyDescription = pharmacyDescription;
 	}
-	
+
 	public double getPriceForPharmacistAppointment() {
 		return priceForPharmacistAppointment;
 	}

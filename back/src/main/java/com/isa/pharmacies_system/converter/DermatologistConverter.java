@@ -29,21 +29,18 @@ public class DermatologistConverter {
 		dermatologist.setDermatologistRatings(new HashSet<DermatologistRating>());
 		dermatologist.setDermatologistSchedules(new HashSet<WorkerSchedule>());
 		dermatologist.setDermatologistVacationRequests(new HashSet<DermatologistVacationRequest>());
-		dermatologist.setUserAddress(new Address(0,dermatologistNewDTO.getStreetName(),dermatologistNewDTO.getStreetNumber(),dermatologistNewDTO.getCity(),dermatologistNewDTO.getCountry(),0.0,0.0));
+		dermatologist.setUserAddress(dermatologistNewDTO.getResidentialAddress());
 		return dermatologist;
 	}
 	
 	public DermatologistNewDTO convertDermatologistToDermatologistNewDTO(Dermatologist dermatologist) {
 		DermatologistNewDTO dermatologistNewDTO = new DermatologistNewDTO();
-		dermatologistNewDTO.setCity(dermatologist.getUserAddress().getCity());
-		dermatologistNewDTO.setCountry(dermatologist.getUserAddress().getCountry());
+		dermatologistNewDTO.setResidentialAddress(dermatologist.getUserAddress());
 		dermatologistNewDTO.setEmail(dermatologist.getEmail());
 		dermatologistNewDTO.setFirstName(dermatologist.getFirstName());
 		dermatologistNewDTO.setLastName(dermatologist.getLastName());
 		dermatologistNewDTO.setPassword(dermatologist.getPassword());
 		dermatologistNewDTO.setPhoneNumber(dermatologist.getPhoneNumber());
-		dermatologistNewDTO.setStreetName(dermatologist.getUserAddress().getStreetName());
-		dermatologistNewDTO.setStreetNumber(dermatologist.getUserAddress().getStreetNumber());
 		return dermatologistNewDTO;
 	}
 }
