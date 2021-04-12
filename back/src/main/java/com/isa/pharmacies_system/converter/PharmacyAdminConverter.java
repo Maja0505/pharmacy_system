@@ -22,22 +22,19 @@ public class PharmacyAdminConverter {
 		pharmacyAdmin.setPassword(pharmacyAdminNewDTO.getPassword());
 		pharmacyAdmin.setPhoneNumber(pharmacyAdminNewDTO.getPhoneNumber());
 		pharmacyAdmin.setTypeOfUser(TypeOfUser.Pharmacy_admin);
-		pharmacyAdmin.setUserAddress(new Address(0,pharmacyAdminNewDTO.getStreetName(),pharmacyAdminNewDTO.getStreetNumber(),pharmacyAdminNewDTO.getCity(),pharmacyAdminNewDTO.getCountry(),0.0,0.0));
+		pharmacyAdmin.setUserAddress(pharmacyAdminNewDTO.getResidentialAddress());
 		return pharmacyAdmin;
 	}
 	
 	public PharmacyAdminNewDTO convertPharmacyAdminToPharmacyAdminNewDTO(PharmacyAdmin pharmacyAdmin) {
 		PharmacyAdminNewDTO pharmacyAdminNewDTO = new PharmacyAdminNewDTO();
-		pharmacyAdminNewDTO.setCity(pharmacyAdmin.getUserAddress().getCity());
-		pharmacyAdminNewDTO.setCountry(pharmacyAdmin.getUserAddress().getCountry());
 		pharmacyAdminNewDTO.setEmail(pharmacyAdmin.getEmail());
 		pharmacyAdminNewDTO.setFirstName(pharmacyAdmin.getFirstName());
 		pharmacyAdminNewDTO.setIdPharmacy(pharmacyAdmin.getPharmacyForPharmacyAdmin().getId());
 		pharmacyAdminNewDTO.setLastName(pharmacyAdmin.getLastName());
 		pharmacyAdminNewDTO.setPassword(pharmacyAdmin.getPassword());
 		pharmacyAdminNewDTO.setPhoneNumber(pharmacyAdmin.getPhoneNumber());
-		pharmacyAdminNewDTO.setStreetName(pharmacyAdmin.getUserAddress().getStreetName());
-		pharmacyAdminNewDTO.setStreetNumber(pharmacyAdmin.getUserAddress().getStreetNumber());
+		pharmacyAdminNewDTO.setResidentialAddress(pharmacyAdmin.getUserAddress());
 		return pharmacyAdminNewDTO;
 	}
 }
