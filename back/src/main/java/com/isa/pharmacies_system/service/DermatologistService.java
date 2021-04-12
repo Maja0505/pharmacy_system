@@ -1,11 +1,17 @@
 package com.isa.pharmacies_system.service;
 
 import com.isa.pharmacies_system.DTO.UserPasswordDTO;
+import com.isa.pharmacies_system.domain.schedule.DermatologistVacationRequest;
+import com.isa.pharmacies_system.domain.schedule.StatusOfVacationRequest;
 import com.isa.pharmacies_system.domain.user.Dermatologist;
 import com.isa.pharmacies_system.repository.IDermatologistRepository;
 import com.isa.pharmacies_system.service.iService.IDermatologistService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.time.LocalDate;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class DermatologistService implements IDermatologistService {
@@ -45,6 +51,14 @@ public class DermatologistService implements IDermatologistService {
     @Override
     public Boolean checkPassword(String firstPassword,String secondPassword) {
         return firstPassword.equals(secondPassword);
+    }
+
+    @Override
+    public List<DermatologistVacationRequest> getAllFutureDermatologistVacation(Long dermatologistId) {
+        Dermatologist dermatologist = getDermatologist(dermatologistId);
+        return dermatologist.getDermatologistVacationRequests().stream()
+                .filter(dvq -> (dvq.getVacationEndDate().isAfter(LocalDate.now()) && !dvq.getStatusOfVacationRequest().equals(StatusOfVacationRequest.Declined)))
+                .collect(Collectors.toList());
     }
 
 }

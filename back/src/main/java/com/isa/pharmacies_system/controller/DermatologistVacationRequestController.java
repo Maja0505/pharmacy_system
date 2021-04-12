@@ -3,15 +3,14 @@ package com.isa.pharmacies_system.controller;
 import com.isa.pharmacies_system.DTO.VacationRequestDTO;
 import com.isa.pharmacies_system.converter.VacationRequestConverter;
 import com.isa.pharmacies_system.domain.schedule.DermatologistVacationRequest;
+import com.isa.pharmacies_system.domain.schedule.VacationRequest;
 import com.isa.pharmacies_system.service.iService.IDermatologistVacationRequestService;
+import com.isa.pharmacies_system.service.iService.IVacationRequestService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -21,10 +20,12 @@ public class DermatologistVacationRequestController {
 
     private IDermatologistVacationRequestService dermatologistVacationRequestService;
     private VacationRequestConverter vacationRequestConverter;
+    private IVacationRequestService vacationRequestService;
 
     @Autowired
-    public DermatologistVacationRequestController(IDermatologistVacationRequestService dermatologistVacationRequestService) {
+    public DermatologistVacationRequestController(IDermatologistVacationRequestService dermatologistVacationRequestService, IVacationRequestService vacationRequestService) {
         this.dermatologistVacationRequestService = dermatologistVacationRequestService;
+        this.vacationRequestService = vacationRequestService;
         this.vacationRequestConverter = new VacationRequestConverter();
     }
 
@@ -41,7 +42,8 @@ public class DermatologistVacationRequestController {
     public ResponseEntity<Boolean> createDermatologistVacationRequest(@RequestBody VacationRequestDTO vacationRequestDTO){
         try {
             DermatologistVacationRequest dermatologistVacationRequest = vacationRequestConverter.convertVacationRequestDTOToDermatologistRequest(vacationRequestDTO);
-            if(dermatologistVacationRequestService.createDermatologistVacationRequest(dermatologistVacationRequest,vacationRequestDTO.getStaffId())){
+            List<VacationRequest> list = dermatologistVacationRequestService.makeVacationRequestFromDermatologistRequest(vacationRequestDTO.getStaffId());
+            if(checkIsDermatologistVacationRequestCreated(dermatologistVacationRequest,vacationRequestDTO.getStaffId(),list)){
                 return new ResponseEntity<>(HttpStatus.CREATED);
             }else{
                 return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -51,4 +53,10 @@ public class DermatologistVacationRequestController {
         }
     }
 
+    private Boolean checkIsDermatologistVacationRequestCreated(DermatologistVacationRequest dermatologistVacationRequest,Long dermatologistId,List<VacationRequest> vacationRequestList) {
+        if (vacationRequestService.checkVacationRequest(dermatologistVacationRequest, vacationRequestList)) {
+            return dermatologistVacationRequestService.createDermatologistVacationRequest(dermatologistVacationRequest, dermatologistId);
+        }
+        return false;
+    }
 }

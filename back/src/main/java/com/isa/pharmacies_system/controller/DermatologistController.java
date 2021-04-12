@@ -3,6 +3,7 @@ package com.isa.pharmacies_system.controller;
 import com.isa.pharmacies_system.DTO.UserPasswordDTO;
 import com.isa.pharmacies_system.DTO.UserPersonalInfoDTO;
 import com.isa.pharmacies_system.converter.UserConverter;
+import com.isa.pharmacies_system.domain.schedule.DermatologistVacationRequest;
 import com.isa.pharmacies_system.domain.user.Dermatologist;
 import com.isa.pharmacies_system.service.iService.IDermatologistService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +12,8 @@ import org.springframework.http.ResponseEntity;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @Controller
 @RequestMapping("api/dermatologist")
@@ -59,4 +62,13 @@ public class DermatologistController {
         return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
     }
 
+    @GetMapping("/futureVacationRequest/{id}")
+    public ResponseEntity<List<DermatologistVacationRequest>> getFutureDermatologistVacationRequest(@PathVariable Long id){
+        try {
+            return new ResponseEntity<>(dermatologistService.getAllFutureDermatologistVacation(id),HttpStatus.OK);
+        }catch (Exception e){
+            return new ResponseEntity<>(null,HttpStatus.NOT_FOUND);
+        }
+
+    }
 }

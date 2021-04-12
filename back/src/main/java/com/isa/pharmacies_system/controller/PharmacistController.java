@@ -3,6 +3,7 @@ package com.isa.pharmacies_system.controller;
 import com.isa.pharmacies_system.DTO.UserPasswordDTO;
 import com.isa.pharmacies_system.DTO.UserPersonalInfoDTO;
 import com.isa.pharmacies_system.converter.UserConverter;
+import com.isa.pharmacies_system.domain.schedule.PharmacistVacationRequest;
 import com.isa.pharmacies_system.domain.user.Pharmacist;
 import com.isa.pharmacies_system.service.iService.IPharmacistService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +11,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @Controller
 @RequestMapping("api/pharmacist")
@@ -57,5 +60,14 @@ public class PharmacistController {
         }
         return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
 
+    }
+
+    @GetMapping("/futureVacationRequest/{id}")
+    public ResponseEntity<List<PharmacistVacationRequest>> getAllFuturePharmacistVacationRequest(@PathVariable Long id){
+        try {
+            return new ResponseEntity<>(pharmacistService.getAllFuturePharmacistVacationRequest(id),HttpStatus.OK);
+        }catch (Exception e){
+            return new ResponseEntity<>(null,HttpStatus.NOT_FOUND);
+        }
     }
 }
