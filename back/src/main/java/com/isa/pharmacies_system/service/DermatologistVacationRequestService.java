@@ -50,7 +50,7 @@ public class DermatologistVacationRequestService implements IDermatologistVacati
 
     @Override
     public Dermatologist findDermatologistForVacationRequest(Long id) {
-        return dermatologistRepository.findById(id).orElseGet(null);
+        return dermatologistRepository.findById(id).orElse(null);
     }
 
     @Override

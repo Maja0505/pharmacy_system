@@ -51,7 +51,7 @@ public class PharmacistVacationRequestService implements IPharmacistVacationRequ
 
     @Override
     public Pharmacist findPharmacistForVacationRequest(Long id) {
-        return pharmacistRepository.findById(id).orElseGet(null);
+        return pharmacistRepository.findById(id).orElse(null);
     }
 
     @Override
