@@ -3,7 +3,7 @@ package com.isa.pharmacies_system.DTO;
 import com.isa.pharmacies_system.domain.pharmacy.Address;
 import com.isa.pharmacies_system.domain.pharmacy.PriceList;
 
-public class PharmacyDTO {
+public class PharmacyDTO extends PharmacyInfoDTO{
 
     private long id;
     private String pharmacyName;
@@ -11,7 +11,9 @@ public class PharmacyDTO {
     private double pharmacyAverageRating;
     private PriceListForAppointmentDTO priceListForAppointmentDTO;
 
+
     public PharmacyDTO() {
+    	super();
     }
 
     public long getId() {
@@ -53,4 +55,5 @@ public class PharmacyDTO {
     public void setPriceListForAppointmentDTO(PriceListForAppointmentDTO priceListForAppointmentDTO) {
         this.priceListForAppointmentDTO = priceListForAppointmentDTO;
     }
+
 }

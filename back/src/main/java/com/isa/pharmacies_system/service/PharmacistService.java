@@ -2,6 +2,8 @@ package com.isa.pharmacies_system.service;
 
 import com.isa.pharmacies_system.DTO.PharmacistAppointmentTimeDTO;
 import com.isa.pharmacies_system.DTO.UserPasswordDTO;
+import com.isa.pharmacies_system.domain.schedule.PharmacistVacationRequest;
+import com.isa.pharmacies_system.domain.schedule.StatusOfVacationRequest;
 import com.isa.pharmacies_system.domain.user.Pharmacist;
 import com.isa.pharmacies_system.repository.IPharmacistRepository;
 import com.isa.pharmacies_system.repository.IPharmacyRepository;
@@ -9,6 +11,8 @@ import com.isa.pharmacies_system.service.iService.IPharmacistService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+
+import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -65,4 +69,14 @@ public class PharmacistService implements IPharmacistService {
         pharmacists = pharmacists.stream().filter(pharmacist -> utilityMethods.doesPharmacistHaveOpenSelectedAppoinemnt(timeDTO, pharmacist)).collect(Collectors.toList());
         return pharmacists;
     }
+
+    @Override
+    public List<PharmacistVacationRequest> getAllFuturePharmacistVacationRequest(Long pharmacistId) {
+        Pharmacist pharmacist = getPharmacist(pharmacistId);
+        return pharmacist.getPharmacistVacationRequests().stream()
+                .filter(pvq -> (pvq.getVacationEndDate().isAfter(LocalDate.now()) && !pvq.getStatusOfVacationRequest().equals(StatusOfVacationRequest.Declined)))
+                .collect(Collectors.toList());
+    }
+
+
 }

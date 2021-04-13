@@ -1,16 +1,26 @@
 package com.isa.pharmacies_system.controller;
 
-import com.isa.pharmacies_system.DTO.UserPasswordDTO;
-import com.isa.pharmacies_system.DTO.UserPersonalInfoDTO;
-import com.isa.pharmacies_system.converter.UserConverter;
-import com.isa.pharmacies_system.domain.user.Dermatologist;
-import com.isa.pharmacies_system.service.iService.IDermatologistService;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+import com.isa.pharmacies_system.DTO.DermatologistNewDTO;
+import com.isa.pharmacies_system.DTO.UserPasswordDTO;
+import com.isa.pharmacies_system.DTO.UserPersonalInfoDTO;
+import com.isa.pharmacies_system.converter.UserConverter;
+import com.isa.pharmacies_system.domain.schedule.DermatologistVacationRequest;
+import com.isa.pharmacies_system.domain.user.Dermatologist;
+import com.isa.pharmacies_system.service.iService.IDermatologistService;
+
 
 @Controller
 @RequestMapping("api/dermatologist")
@@ -28,12 +38,10 @@ public class DermatologistController {
     @GetMapping("/{id}")
     public ResponseEntity<UserPersonalInfoDTO> getDermatologistPersonalInfo(@PathVariable Long id){
         try {
-            Dermatologist dermatologist = dermatologistService.getDermatologist(id);
-            return new ResponseEntity<>(userConverter.convertDermatologistPersonalInfoToDTO(dermatologist), HttpStatus.OK);
+            return new ResponseEntity<>(userConverter.convertDermatologistPersonalInfoToDTO(dermatologistService.getById(id)), HttpStatus.OK);
         }catch (Exception e){
             return new ResponseEntity<>(null,HttpStatus.NOT_FOUND);
         }
-
     }
 
     @PutMapping(value = "/update", consumes = "application/json")
@@ -45,7 +53,6 @@ public class DermatologistController {
         }catch (Exception e){
             return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
         }
-
     }
 
     @PutMapping(value = "/changePassword",consumes = "application/json")
@@ -58,5 +65,29 @@ public class DermatologistController {
         }
         return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
     }
+    
+    @GetMapping(value = "/all")
+	public ResponseEntity<List<Dermatologist>> getAllPharmacies() {
+		return new ResponseEntity<>(dermatologistService.getAll(), HttpStatus.OK);
+	}
 
+	@PostMapping(value = "/create", consumes = "application/json")
+	public ResponseEntity<Dermatologist> createNewPharmacyAdmin(@RequestBody DermatologistNewDTO dermatologistNewDTO) {
+		try {
+			return new ResponseEntity<>(dermatologistService.create(dermatologistNewDTO), HttpStatus.CREATED);
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+			return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+		}
+	}
+
+    @GetMapping("/futureVacationRequest/{id}")
+    public ResponseEntity<List<DermatologistVacationRequest>> getFutureDermatologistVacationRequest(@PathVariable Long id){
+        try {
+            return new ResponseEntity<>(dermatologistService.getAllFutureDermatologistVacation(id),HttpStatus.OK);
+        }catch (Exception e){
+            return new ResponseEntity<>(null,HttpStatus.NOT_FOUND);
+        }
+
+    }
 }

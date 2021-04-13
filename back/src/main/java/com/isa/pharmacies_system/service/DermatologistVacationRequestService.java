@@ -4,10 +4,9 @@ import com.isa.pharmacies_system.domain.schedule.DermatologistVacationRequest;
 import com.isa.pharmacies_system.domain.schedule.TypeOfVacationRequest;
 import com.isa.pharmacies_system.domain.schedule.VacationRequest;
 import com.isa.pharmacies_system.domain.user.Dermatologist;
+import com.isa.pharmacies_system.repository.IDermatologistRepository;
 import com.isa.pharmacies_system.repository.IDermatologistVacationRequestRepository;
-import com.isa.pharmacies_system.service.iService.IDermatologistService;
 import com.isa.pharmacies_system.service.iService.IDermatologistVacationRequestService;
-import com.isa.pharmacies_system.service.iService.IVacationRequestService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,29 +18,27 @@ import java.util.stream.Collectors;
 public class DermatologistVacationRequestService implements IDermatologistVacationRequestService {
 
     private IDermatologistVacationRequestRepository dermatologistVacationRequestRepository;
-    private IDermatologistService dermatologistService;
-    private IVacationRequestService vacationRequestService;
+    private IDermatologistRepository dermatologistRepository;
 
     @Autowired
-    public DermatologistVacationRequestService(IDermatologistVacationRequestRepository dermatologistVacationRequestRepository, IDermatologistService dermatologistService, IVacationRequestService vacationRequestService) {
+    public DermatologistVacationRequestService(IDermatologistVacationRequestRepository dermatologistVacationRequestRepository, IDermatologistRepository dermatologistRepository) {
         this.dermatologistVacationRequestRepository = dermatologistVacationRequestRepository;
-        this.dermatologistService = dermatologistService;
-        this.vacationRequestService = vacationRequestService;
+        this.dermatologistRepository = dermatologistRepository;
     }
 
     @Override
     public Boolean createDermatologistVacationRequest(DermatologistVacationRequest dermatologistVacationRequest, Long dermatologistId) {
         Dermatologist dermatologist = findDermatologistForVacationRequest(dermatologistId);
         dermatologistVacationRequest.setVacationRequestDermatologist(dermatologist);
-        List<VacationRequest> list = makeVacationRequestFromDermatologistRequest(dermatologistId);
-        if(dermatologist != null && vacationRequestService.checkVacationRequest(dermatologistVacationRequest,list)){
+        if(dermatologist != null){
             dermatologistVacationRequestRepository.save(dermatologistVacationRequest);
             return true;
         }
         return false;
     }
 
-    private List<VacationRequest> makeVacationRequestFromDermatologistRequest(Long dermatologistId){
+    @Override
+    public List<VacationRequest> makeVacationRequestFromDermatologistRequest(Long dermatologistId){
         List<VacationRequest> list = new ArrayList<>();
         for (DermatologistVacationRequest p:getAllDermatologistVacationRequestByDermatologistId(dermatologistId)
         ) {
@@ -50,9 +47,10 @@ public class DermatologistVacationRequestService implements IDermatologistVacati
         return list;
     }
 
+
     @Override
     public Dermatologist findDermatologistForVacationRequest(Long id) {
-        return dermatologistService.getDermatologist(id);
+        return dermatologistRepository.findById(id).orElse(null);
     }
 
     @Override

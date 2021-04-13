@@ -6,6 +6,7 @@ import com.isa.pharmacies_system.DTO.UserPasswordDTO;
 import com.isa.pharmacies_system.DTO.UserPersonalInfoDTO;
 import com.isa.pharmacies_system.converter.PharmacistConverter;
 import com.isa.pharmacies_system.converter.UserConverter;
+import com.isa.pharmacies_system.domain.schedule.PharmacistVacationRequest;
 import com.isa.pharmacies_system.domain.user.Pharmacist;
 import com.isa.pharmacies_system.service.iService.IPharmacistService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -68,15 +69,25 @@ public class PharmacistController {
 
     //#1[3.16]Korak2
     @GetMapping(value = "/free/{pharmacyId}", consumes = "application/json")
-    public ResponseEntity<List<PharmacistInfoDTO>> getAllPharmacistsWithOpenAppointmentsByPharmacyId(@PathVariable Long pharmacyId, @RequestBody PharmacistAppointmentTimeDTO timeDTO){
+    public ResponseEntity<List<PharmacistInfoDTO>> getAllPharmacistsWithOpenAppointmentsByPharmacyId(@PathVariable Long pharmacyId, @RequestBody PharmacistAppointmentTimeDTO timeDTO) {
 
         try {
-            List<Pharmacist> pharmacists = pharmacistService.getAllPharmacistsWithOpenAppointmentsByPharmacyId(pharmacyId,timeDTO);
+            List<Pharmacist> pharmacists = pharmacistService.getAllPharmacistsWithOpenAppointmentsByPharmacyId(pharmacyId, timeDTO);
             List<PharmacistInfoDTO> pharmacistInfoDTOS = pharmacistConverter.convertPharmacistListToPharmacistInfoDTOList(pharmacists);
-            return new ResponseEntity<>(pharmacistInfoDTOS,HttpStatus.OK);
-        }catch (Exception e){
+            return new ResponseEntity<>(pharmacistInfoDTOS, HttpStatus.OK);
+        } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
-
     }
+
+    @GetMapping("/futureVacationRequest/{id}")
+    public ResponseEntity<List<PharmacistVacationRequest>> getAllFuturePharmacistVacationRequest (@PathVariable Long
+    id){
+        try {
+            return new ResponseEntity<>(pharmacistService.getAllFuturePharmacistVacationRequest(id), HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+        }
+    }
+
 }
