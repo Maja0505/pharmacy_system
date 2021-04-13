@@ -4,7 +4,9 @@ import java.util.List;
 
 import com.isa.pharmacies_system.DTO.DermatologistNewDTO;
 import com.isa.pharmacies_system.DTO.UserPasswordDTO;
+import com.isa.pharmacies_system.domain.schedule.DermatologistVacationRequest;
 import com.isa.pharmacies_system.domain.user.Dermatologist;
+
 
 public interface IDermatologistService {
 
@@ -15,4 +17,5 @@ public interface IDermatologistService {
     Dermatologist create(DermatologistNewDTO dermatologistNewDTO);
     Boolean changePassword(UserPasswordDTO dermatologistPasswordDTO);
     Boolean checkPassword(String firstPassword,String secondPassword);
+    List<DermatologistVacationRequest> getAllFutureDermatologistVacation(Long dermatologistId);
 }

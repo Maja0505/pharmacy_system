@@ -6,6 +6,7 @@ import com.isa.pharmacies_system.service.iService.IVacationRequestService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -20,10 +21,12 @@ public class VacationRequestService implements IVacationRequestService {
 
     @Override
     public Boolean checkVacationRequest(VacationRequest vacationRequest,List<VacationRequest> listVacationRequestsInDatabase) {
+        if(vacationRequest.getVacationStartDate().isBefore(LocalDate.now())){
+           return false; 
+        }
         if(vacationRequest.getVacationStartDate().isAfter(vacationRequest.getVacationEndDate())){
             return false;
         }
-
         for (VacationRequest request:listVacationRequestsInDatabase
         ) {
             if(vacationRequest.getVacationStartDate().isEqual(request.getVacationStartDate())

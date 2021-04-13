@@ -2,8 +2,11 @@ package com.isa.pharmacies_system.controller;
 
 import com.isa.pharmacies_system.DTO.VacationRequestDTO;
 import com.isa.pharmacies_system.converter.VacationRequestConverter;
+import com.isa.pharmacies_system.domain.schedule.DermatologistVacationRequest;
 import com.isa.pharmacies_system.domain.schedule.PharmacistVacationRequest;
+import com.isa.pharmacies_system.domain.schedule.VacationRequest;
 import com.isa.pharmacies_system.service.iService.IPharmacistVacationRequestService;
+import com.isa.pharmacies_system.service.iService.IVacationRequestService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,10 +21,12 @@ public class PharmacistVacationRequestController {
 
     private IPharmacistVacationRequestService pharmacistVacationRequestService;
     private VacationRequestConverter vacationRequestConverter;
+    private IVacationRequestService vacationRequestService;
 
     @Autowired
-    public PharmacistVacationRequestController(IPharmacistVacationRequestService pharmacistVacationRequestService) {
+    public PharmacistVacationRequestController(IPharmacistVacationRequestService pharmacistVacationRequestService, IVacationRequestService vacationRequestService) {
         this.pharmacistVacationRequestService = pharmacistVacationRequestService;
+        this.vacationRequestService = vacationRequestService;
         this.vacationRequestConverter = new VacationRequestConverter();
     }
 
@@ -38,7 +43,8 @@ public class PharmacistVacationRequestController {
     public ResponseEntity<Boolean> createPharmacistVacationRequest(@RequestBody VacationRequestDTO vacationRequestDTO){
        try {
            PharmacistVacationRequest pharmacistVacationRequest = vacationRequestConverter.convertVacationRequestDTOToPharmacistRequest(vacationRequestDTO);
-           if(pharmacistVacationRequestService.createPharmacistVacationRequest(pharmacistVacationRequest,vacationRequestDTO.getStaffId())){
+           List<VacationRequest> list = pharmacistVacationRequestService.makeVacationRequestListFromPharmacistRequestList(vacationRequestDTO.getStaffId());
+           if(checkIsPharmacistVacationRequestCreated(pharmacistVacationRequest,vacationRequestDTO.getStaffId(),list)){
                return new ResponseEntity<>(HttpStatus.CREATED);
            }else{
                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -47,6 +53,13 @@ public class PharmacistVacationRequestController {
            return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
        }
 
+    }
+
+    private Boolean checkIsPharmacistVacationRequestCreated(PharmacistVacationRequest pharmacistVacationRequest, Long pharmacistId, List<VacationRequest> vacationRequestList){
+        if(vacationRequestService.checkVacationRequest(pharmacistVacationRequest,vacationRequestList)){
+            return pharmacistVacationRequestService.createPharmacistVacationRequest(pharmacistVacationRequest,pharmacistId);
+        }
+        return false;
     }
 
 }

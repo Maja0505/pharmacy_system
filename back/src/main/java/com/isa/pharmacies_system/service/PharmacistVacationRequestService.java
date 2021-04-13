@@ -4,10 +4,9 @@ import com.isa.pharmacies_system.domain.schedule.PharmacistVacationRequest;
 import com.isa.pharmacies_system.domain.schedule.TypeOfVacationRequest;
 import com.isa.pharmacies_system.domain.schedule.VacationRequest;
 import com.isa.pharmacies_system.domain.user.Pharmacist;
+import com.isa.pharmacies_system.repository.IPharmacistRepository;
 import com.isa.pharmacies_system.repository.IPharmacistVacationRequestRepository;
-import com.isa.pharmacies_system.service.iService.IPharmacistService;
 import com.isa.pharmacies_system.service.iService.IPharmacistVacationRequestService;
-import com.isa.pharmacies_system.service.iService.IVacationRequestService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,14 +18,12 @@ import java.util.stream.Collectors;
 public class PharmacistVacationRequestService implements IPharmacistVacationRequestService {
 
     private IPharmacistVacationRequestRepository pharmacistVacationRequestRepository;
-    private IPharmacistService pharmacistService;
-    private IVacationRequestService vacationRequestService;
+    private IPharmacistRepository pharmacistRepository;
 
     @Autowired
-    public PharmacistVacationRequestService(IPharmacistVacationRequestRepository pharmacistVacationRequestRepository, IPharmacistService pharmacistService, IVacationRequestService vacationRequestService) {
+    public PharmacistVacationRequestService(IPharmacistVacationRequestRepository pharmacistVacationRequestRepository, IPharmacistRepository pharmacistRepository) {
         this.pharmacistVacationRequestRepository = pharmacistVacationRequestRepository;
-        this.pharmacistService = pharmacistService;
-        this.vacationRequestService = vacationRequestService;
+        this.pharmacistRepository = pharmacistRepository;
     }
 
 
@@ -35,14 +32,15 @@ public class PharmacistVacationRequestService implements IPharmacistVacationRequ
         Pharmacist pharmacist = findPharmacistForVacationRequest(pharmacistId);
         pharmacistVacationRequest.setVacationRequestPharmacist(pharmacist);
         List<VacationRequest> list = makeVacationRequestListFromPharmacistRequestList(pharmacistId);
-        if(pharmacist != null && vacationRequestService.checkVacationRequest(pharmacistVacationRequest,list)){
+        if(pharmacist != null){
             pharmacistVacationRequestRepository.save(pharmacistVacationRequest);
             return true;
         }
         return false;
     }
 
-    private List<VacationRequest> makeVacationRequestListFromPharmacistRequestList(Long pharmacistId){
+    @Override
+    public List<VacationRequest> makeVacationRequestListFromPharmacistRequestList(Long pharmacistId){
         List<VacationRequest> list = new ArrayList<>();
         for (PharmacistVacationRequest p:getAllPharmacistVacationRequestByPharmacistId(pharmacistId)
         ) {
@@ -53,7 +51,7 @@ public class PharmacistVacationRequestService implements IPharmacistVacationRequ
 
     @Override
     public Pharmacist findPharmacistForVacationRequest(Long id) {
-        return pharmacistService.getPharmacist(id);
+        return pharmacistRepository.findById(id).orElse(null);
     }
 
     @Override
