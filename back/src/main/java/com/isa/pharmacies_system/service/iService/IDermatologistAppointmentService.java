@@ -12,11 +12,11 @@ public interface IDermatologistAppointmentService{
 
     DermatologistAppointment findOne(Long id);
     List<DermatologistAppointment> getOpenDermatologistAppointment();
-    void bookDermatologistAppointment(Patient patient, DermatologistAppointment dermatologistAppointment);
+    Boolean bookDermatologistAppointment(Long patientId, Long appointmentId);
     Page<DermatologistAppointment> getAllPastDermatologistAppointmentByDermatologist(Long id, int page);
     Page<DermatologistAppointment> getAllPastDermatologistAppointmentByDermatologistAndPharmacy(Long idDermatologist,Long idPharmacy, int page);
     List<PatientAppointmentInfoDTO> sortByAppointmentEndTime(List<PatientAppointmentInfoDTO> patientAppointmentInfoDTOList, Boolean asc);
     Boolean cancelDermatologistAppointment(DermatologistAppointment dermatologistAppointment);
-
+    List<DermatologistAppointment> getAllFutureOpenDermatologistAppointmentForDermatologistInPharmacy(Long dermatologistId,Long pharmacyId);
 
 }

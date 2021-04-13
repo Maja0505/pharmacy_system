@@ -2,6 +2,7 @@ package com.isa.pharmacies_system.service.iService;
 
 import com.isa.pharmacies_system.DTO.UserPasswordDTO;
 import com.isa.pharmacies_system.domain.schedule.DermatologistAppointment;
+import com.isa.pharmacies_system.domain.schedule.PharmacistAppointment;
 import com.isa.pharmacies_system.domain.user.Patient;
 
 import java.util.List;

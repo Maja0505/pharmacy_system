@@ -3,10 +3,8 @@ package com.isa.pharmacies_system.controller;
 import com.isa.pharmacies_system.DTO.PatientAppointmentInfoDTO;
 import com.isa.pharmacies_system.converter.PatientConverter;
 import com.isa.pharmacies_system.domain.schedule.DermatologistAppointment;
-import com.isa.pharmacies_system.domain.user.Patient;
 import com.isa.pharmacies_system.service.EmailService;
 import com.isa.pharmacies_system.service.iService.IDermatologistAppointmentService;
-import com.isa.pharmacies_system.service.iService.IPatientService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -30,19 +28,14 @@ public class DermatologistAppointmentController {
     private IDermatologistAppointmentService dermatologistAppointmentService;
     private PatientConverter patientConverter;
     private DermatologistAppointmentConverter dermatologistAppointmentConverter;
-    @Autowired
     private EmailService emailService;
-    private IPatientService patientService;
 
     @Autowired
-    public DermatologistAppointmentController(IDermatologistAppointmentService dermatologistAppointmentService, IPatientService patientService) {
+    public DermatologistAppointmentController(IDermatologistAppointmentService dermatologistAppointmentService, EmailService emailService) {
         this.dermatologistAppointmentService = dermatologistAppointmentService;
+        this.emailService = emailService;
         this.patientConverter = new PatientConverter();
         this.dermatologistAppointmentConverter = new DermatologistAppointmentConverter();
-        this.patientService = patientService;
-
-
-
     }
 
     @GetMapping("/all/open")
@@ -56,15 +49,14 @@ public class DermatologistAppointmentController {
         }
     }
 
-    @PutMapping(value = "/book/{patientId}", consumes = "application/json")
-    public ResponseEntity<Boolean> bookDermatologistAppointment(@PathVariable Long patientId, @RequestBody DermatologistAppointmentDTO dermatologistAppointmentDTO){
-
+    @PutMapping(value = "/book/{appointmentId}/{patientId}")
+    public ResponseEntity<Boolean> bookDermatologistAppointment(@PathVariable Long patientId, @PathVariable Long appointmentId){
         try{
-            Patient patient = patientService.findOne(patientId);
-            DermatologistAppointment dermatologistAppointment = dermatologistAppointmentService.findOne(dermatologistAppointmentDTO.getId());
-            dermatologistAppointmentService.bookDermatologistAppointment(patient,dermatologistAppointment);
-            emailService.sendNotificationForSuccessBookAppointment(patient);
-            return new ResponseEntity<>(HttpStatus.OK);
+            if(dermatologistAppointmentService.bookDermatologistAppointment(patientId,appointmentId)){
+                emailService.sendNotificationForSuccessBookAppointment(patientId);
+                return new ResponseEntity<>(HttpStatus.OK);
+            }
+                return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
         }catch (InterruptedException e){
             Thread.currentThread().interrupt();
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -85,7 +77,7 @@ public class DermatologistAppointmentController {
     }
 
 
-
+    //Nemanja
     @GetMapping("/allPastAppointmentByDermatologist/{dermatologistId}/{page}")
     public ResponseEntity<List<PatientAppointmentInfoDTO>> getAllPastDermatologistAppointmentByDermatologist(@PathVariable ("dermatologistId") Long id,@PathVariable int page){
         try {
@@ -97,6 +89,7 @@ public class DermatologistAppointmentController {
 
     }
 
+    //Nemanja
     @GetMapping("/allPastAppointmentByDermatologistAndPharmacy/{dermatologistId}/{pharmacyId}/{page}")
     public ResponseEntity<List<PatientAppointmentInfoDTO>> getAllPastDermatologistAppointmentByDermatologistAndPharmacy(@PathVariable Long dermatologistId,@PathVariable Long pharmacyId,@PathVariable int page){
         try {
@@ -107,6 +100,7 @@ public class DermatologistAppointmentController {
         }
     }
 
+    //Nemanja
     @GetMapping(value = "/sortByAppointmentEndTime/{asc}",consumes = "application/json")
     public ResponseEntity<List<PatientAppointmentInfoDTO>> getSortedPastDermatologistAppointmentByAppointmentEndTime(@RequestBody List<PatientAppointmentInfoDTO> patientAppointmentInfoDTOList,@PathVariable String asc){
         try {
@@ -117,6 +111,17 @@ public class DermatologistAppointmentController {
             }
         }catch (Exception e){
             return new ResponseEntity<>(null,HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    //Nemanja
+    @GetMapping("/allFutureOpen/{dermatologistId}/{pharmacyId}")
+    public ResponseEntity<List<DermatologistAppointmentDTO>> getAllFutureOpenDermatologistAppointmentByDermatologistInPharmacy(@PathVariable Long dermatologistId,@PathVariable Long pharmacyId){
+        try {
+            List<DermatologistAppointment> dermatologistAppointmentList = dermatologistAppointmentService.getAllFutureOpenDermatologistAppointmentForDermatologistInPharmacy(dermatologistId,pharmacyId);
+            return new ResponseEntity<>(dermatologistAppointmentConverter.convertListOfDermatologistAppointmentToDermatologistAppointmentDTOS(dermatologistAppointmentList),HttpStatus.OK);
+        }catch (Exception e){
+            return new ResponseEntity<>(null,HttpStatus.NOT_FOUND);
         }
     }
 
