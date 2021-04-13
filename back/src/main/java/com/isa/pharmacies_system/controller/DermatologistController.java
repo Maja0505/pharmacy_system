@@ -17,8 +17,10 @@ import com.isa.pharmacies_system.DTO.DermatologistNewDTO;
 import com.isa.pharmacies_system.DTO.UserPasswordDTO;
 import com.isa.pharmacies_system.DTO.UserPersonalInfoDTO;
 import com.isa.pharmacies_system.converter.UserConverter;
+import com.isa.pharmacies_system.domain.schedule.DermatologistVacationRequest;
 import com.isa.pharmacies_system.domain.user.Dermatologist;
 import com.isa.pharmacies_system.service.iService.IDermatologistService;
+
 
 @Controller
 @RequestMapping("api/dermatologist")
@@ -79,4 +81,13 @@ public class DermatologistController {
 		}
 	}
 
+    @GetMapping("/futureVacationRequest/{id}")
+    public ResponseEntity<List<DermatologistVacationRequest>> getFutureDermatologistVacationRequest(@PathVariable Long id){
+        try {
+            return new ResponseEntity<>(dermatologistService.getAllFutureDermatologistVacation(id),HttpStatus.OK);
+        }catch (Exception e){
+            return new ResponseEntity<>(null,HttpStatus.NOT_FOUND);
+        }
+
+    }
 }

@@ -2,6 +2,8 @@ package com.isa.pharmacies_system.service;
 
 import com.isa.pharmacies_system.DTO.DermatologistNewDTO;
 import com.isa.pharmacies_system.DTO.UserPasswordDTO;
+import com.isa.pharmacies_system.domain.schedule.DermatologistVacationRequest;
+import com.isa.pharmacies_system.domain.schedule.StatusOfVacationRequest;
 import com.isa.pharmacies_system.converter.DermatologistConverter;
 import com.isa.pharmacies_system.domain.user.Dermatologist;
 import com.isa.pharmacies_system.domain.user.Users;
@@ -13,6 +15,9 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.time.LocalDate;
+import java.util.stream.Collectors;
 
 @Service
 public class DermatologistService implements IDermatologistService {
@@ -58,7 +63,15 @@ public class DermatologistService implements IDermatologistService {
         return firstPassword.equals(secondPassword);
     }
 
-	@Override
+    @Override
+    public List<DermatologistVacationRequest> getAllFutureDermatologistVacation(Long dermatologistId) {
+        Dermatologist dermatologist = getDermatologist(dermatologistId);
+        return dermatologist.getDermatologistVacationRequests().stream()
+                .filter(dvq -> (dvq.getVacationEndDate().isAfter(LocalDate.now()) && !dvq.getStatusOfVacationRequest().equals(StatusOfVacationRequest.Declined)))
+                .collect(Collectors.toList());
+    }
+
+    @Override
 	public Dermatologist create(DermatologistNewDTO dermatologistNewDTO) {
 		Dermatologist dermatologist = dermatologistConverter.convertDermatologistNewDTOToDermatologist(dermatologistNewDTO);
 		iUserRepository.save((Users) dermatologist);
