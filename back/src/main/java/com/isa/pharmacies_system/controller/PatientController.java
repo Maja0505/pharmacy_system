@@ -45,7 +45,8 @@ public class PatientController {
 
     }
 
-    @GetMapping(value = "/{id}", consumes = "application/json")
+    //#1
+    @GetMapping(value = "/{id}")
     public ResponseEntity<Patient> getPatient(@PathVariable Long id){
 
         Patient patient = patientService.findOne(id);
@@ -55,11 +56,14 @@ public class PatientController {
         return new ResponseEntity<>(patient, HttpStatus.OK);
     }
 
+    //#1
+    @GetMapping(value = "/all")
     public ResponseEntity<List<Patient>> getAllPatient(){
         return new ResponseEntity<>(patientService.findAll(), HttpStatus.OK);
     }
 
-    @GetMapping(value = "/{id}/profileInfo", consumes = "application/json")
+    //#1
+    @GetMapping(value = "/{id}/profileInfo")
     public ResponseEntity<UserPersonalInfoDTO> getPatientProfileInfo(@PathVariable Long id){
 
         try{
@@ -70,6 +74,7 @@ public class PatientController {
         }
     }
 
+    //#1
     @PutMapping(value ="/update", consumes = "application/json")
     public ResponseEntity<Boolean> updatePatientProfileInfo(@RequestBody UserPersonalInfoDTO userPersonalInfoDTO){
 
@@ -82,6 +87,7 @@ public class PatientController {
         }
     }
 
+    //#1
     @PutMapping(value = "/changePassword",consumes = "application/json")
     public ResponseEntity<Boolean> changePassword(@RequestBody UserPasswordDTO userPasswordDTO){
 
@@ -95,6 +101,7 @@ public class PatientController {
         }
     }
 
+    //#1
     @GetMapping(value = "/{id}/additionalInfo", consumes = "application/json")
     public ResponseEntity<PatientAdditionalInfoDTO> getPatientAdditionalInfo(@PathVariable Long id){
 
@@ -106,6 +113,7 @@ public class PatientController {
         }
     }
 
+    //#1
     @PutMapping(value = "/{patientId}/addMedicineAllergie/{medicineId}", consumes = "application/json")
     public ResponseEntity<Boolean> addMedicineAllergies(@PathVariable Long patientId, @PathVariable Long medicineId){
 
@@ -120,6 +128,7 @@ public class PatientController {
 
     }
 
+    //#1
     @GetMapping(value = "/{id}/dermatologistAppointment", consumes = "application/json")
     public ResponseEntity<List<DermatologistAppointmentDTO>> getDermatologistAppointmentsForPatient(@PathVariable Long id){
 

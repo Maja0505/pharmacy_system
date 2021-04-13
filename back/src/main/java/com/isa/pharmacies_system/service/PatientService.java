@@ -37,6 +37,7 @@ public class PatientService implements IPatientService {
         patientRepository.save(patient);
     }
 
+    //#1
     @Override
     public Boolean changePassword(UserPasswordDTO userPasswordDTO){
 
@@ -49,10 +50,7 @@ public class PatientService implements IPatientService {
         return false;
     }
 
-    public Boolean checkPassword(String first, String second){
-        return first.equals(second);
-    }
-
+    //#1
     @Override
     public void addMedicineAllergies(Patient patient, Medicine medicine){
 
@@ -61,10 +59,16 @@ public class PatientService implements IPatientService {
         savePatient(patient);
     }
 
+    //#1
     @Override
     public Set<DermatologistAppointment> getDermatologistAppointmentForPatient(Long id){
 
         Patient patient = findOne(id);
         return patient.getDermatologistAppointment();
     }
+
+    private Boolean checkPassword(String first, String second){
+        return first.equals(second);
+    }
+
 }

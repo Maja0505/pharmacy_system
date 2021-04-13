@@ -1,21 +1,31 @@
 package com.isa.pharmacies_system.service;
 
+import com.isa.pharmacies_system.DTO.PharmacistAppointmentTimeDTO;
 import com.isa.pharmacies_system.DTO.UserPasswordDTO;
 import com.isa.pharmacies_system.domain.user.Pharmacist;
 import com.isa.pharmacies_system.repository.IPharmacistRepository;
+import com.isa.pharmacies_system.repository.IPharmacyRepository;
 import com.isa.pharmacies_system.service.iService.IPharmacistService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class PharmacistService implements IPharmacistService {
 
     private IPharmacistRepository pharmacistRepository;
+    private IPharmacyRepository pharmacyRepository;
+    private UtilityMethods utilityMethods;
 
     @Autowired
-    public PharmacistService(IPharmacistRepository pharmacistRepository) {
+    public PharmacistService(IPharmacistRepository pharmacistRepository, IPharmacyRepository pharmacyRepository) {
         this.pharmacistRepository = pharmacistRepository;
+        this.pharmacyRepository = pharmacyRepository;
+        this.utilityMethods = new UtilityMethods();
     }
+
 
     @Override
     public Pharmacist getPharmacist(Long id){
@@ -45,5 +55,14 @@ public class PharmacistService implements IPharmacistService {
     @Override
     public Boolean checkPassword(String firstPassword,String secondPassword) {
         return firstPassword.equals(secondPassword);
+    }
+
+    //#1[3.16]Korak2
+    @Override
+    public List<Pharmacist> getAllPharmacistsWithOpenAppointmentsByPharmacyId(Long pharmacyId, PharmacistAppointmentTimeDTO timeDTO){
+        List<Pharmacist> pharmacists = pharmacyRepository.getAllPharmacistsForPharmacy(pharmacyId);
+        pharmacists = pharmacists.stream().filter(pharmacist -> utilityMethods.isPharmacistWorkInSelectedDate(timeDTO,pharmacist)).collect(Collectors.toList());
+        pharmacists = pharmacists.stream().filter(pharmacist -> utilityMethods.doesPharmacistHaveOpenSelectedAppoinemnt(timeDTO, pharmacist)).collect(Collectors.toList());
+        return pharmacists;
     }
 }

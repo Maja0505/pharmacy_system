@@ -39,7 +39,7 @@ public class PharmacyService implements IPharmacyService {
 	private IStorageRepository iStorageRepository;
 	private IPriceListRepository iPriceListRepository;
 	private PharmacyConverter pharmacyConverter;
-	
+	private UtilityMethods utilityMethods;
 	
 	@Autowired
 	public PharmacyService(IPharmacyRepository iPharmacyRepository, IPriceListRepository iPriceListRepository,IPharmacyStorageRepository iPharmacyStorageRepository,IStorageRepository iStorageRepository) {
@@ -48,6 +48,7 @@ public class PharmacyService implements IPharmacyService {
 		this.iPharmacyStorageRepository=iPharmacyStorageRepository;
 		this.iStorageRepository= iStorageRepository;
 		this.pharmacyConverter = new PharmacyConverter();
+		this.utilityMethods = new UtilityMethods();
 	}
 	
 	@Override
@@ -97,59 +98,19 @@ public class PharmacyService implements IPharmacyService {
 	//dobavi sve apoteke
 	//proveri za svaku apoteku da li ima farmaceuta koji ima zadato radno vreme u tom peridu
 	//proveri za svakog farmaceuta da li ima sloboda izabrani termin
+	@Override
 	public List<Pharmacy> getAllPharmacyWithFreePharmacistByDate(PharmacistAppointmentTimeDTO timeDTO){
 		List<Pharmacy> pharmacies = iPharmacyRepository.findAll();
 		List<Pharmacy> pharmacyList = new ArrayList<>();
 		for (Pharmacy pharmacy:pharmacies) {
 			List<Pharmacist> pharmacists = List.copyOf(pharmacy.getPharmacistsInPharmacy());
-			pharmacists = pharmacists.stream().filter(pharmacist -> isPharmacistWorkInSelectedDate(timeDTO,pharmacist)).collect(Collectors.toList());
-			pharmacists = pharmacists.stream().filter(pharmacist -> doesPharmacistHaveOpenSelectedAppoinemnt(timeDTO, pharmacist)).collect(Collectors.toList());
+			pharmacists = pharmacists.stream().filter(pharmacist -> utilityMethods.isPharmacistWorkInSelectedDate(timeDTO,pharmacist)).collect(Collectors.toList());
+			pharmacists = pharmacists.stream().filter(pharmacist -> utilityMethods.doesPharmacistHaveOpenSelectedAppoinemnt(timeDTO, pharmacist)).collect(Collectors.toList());
 			if(pharmacists.stream().count() > 0){
 				pharmacyList.add(pharmacy);
 			}
 		}
 		return pharmacyList;
-	}
-
-	//#1[3.16]
-	//da li je selektovan datum u okviru radnog vremena farmaceuta
-	public  Boolean isPharmacistWorkInSelectedDate(PharmacistAppointmentTimeDTO timeDTO,Pharmacist pharmacist){
-		return pharmacist.getPharmacistSchedule().getWorkingHours().stream().filter(workingHours -> isSelectedDateInWorkingHoursOfPharmacist(timeDTO,workingHours)).count()>0;
-	}
-	//#1[3.16]
-	//provera za radno vreme
-	public Boolean isSelectedDateInWorkingHoursOfPharmacist(PharmacistAppointmentTimeDTO timeDTO, WorkingHours workingHours){
-		return (workingHours.getWorkingStartTime().isBefore(timeDTO.getStartTime()) || workingHours.getWorkingStartTime().isEqual(timeDTO.getStartTime())) && (workingHours.getWorkingEndTime().isAfter(timeDTO.getStartTime().plusMinutes((long)timeDTO.getDuration())) || workingHours.getWorkingEndTime().isEqual(timeDTO.getStartTime().plusMinutes((long)timeDTO.getDuration()))) && workingHours.getStatusOfWorkingHours().equals(StatusOfWorkingHours.Not_Vacation);
-	}
-
-	//#1[3.16]
-	//da li je selektovan datum slobodan kod odredjenog farmaceuta
-	public Boolean doesPharmacistHaveOpenSelectedAppoinemnt(PharmacistAppointmentTimeDTO timeDTO, Pharmacist pharmacist){
-		return pharmacist.getPharmacistAppointments().stream().filter(pharmacistAppointment -> isSelectedDateReserved(timeDTO,pharmacistAppointment)).count() == 0;
-	}
-
-	//#1[3.16]
-	//provera da li je selektovan datum izmedju pocetka i kraja appointmenta
-	// i provera da li ja appointmnet izmedju pocetka i kraja izabranog datuma
-	public Boolean isSelectedDateReserved(PharmacistAppointmentTimeDTO timeDTO, PharmacistAppointment pharmacistAppointment){
-		LocalDateTime appointmentStartTime = pharmacistAppointment.getPharmacistAppointmentStartTime();
-		LocalDateTime appintmentEndTime = pharmacistAppointment.getPharmacistAppointmentStartTime().plusMinutes((long)pharmacistAppointment.getPharmacistAppointmentDuration());
-		return  isSelectedStartBetweenTwoDates(timeDTO.getStartTime(),appointmentStartTime,appintmentEndTime)
-				|| isSelectedEndBetweenTwoDates(timeDTO.getStartTime().plusMinutes((long)timeDTO.getDuration()),appointmentStartTime,appintmentEndTime)
-				|| isSelectedStartBetweenTwoDates(appointmentStartTime,timeDTO.getStartTime(),timeDTO.getStartTime().plusMinutes((long)timeDTO.getDuration()))
-				|| isSelectedEndBetweenTwoDates(appintmentEndTime,timeDTO.getStartTime(),timeDTO.getStartTime().plusMinutes((long)timeDTO.getDuration()));
-	}
-
-	//#1[3.16]
-	//kraj jednog moze biti jednak pocetku drugog
-	public Boolean isSelectedEndBetweenTwoDates(LocalDateTime localDateTime, LocalDateTime start, LocalDateTime end){
-		return 	(localDateTime.isAfter(start)) && (localDateTime.isEqual(end) || localDateTime.isBefore(end));
-	}
-
-	//#1[3.16]
-	//pocetak jednog moze biti jednak kraju drugog
-	public Boolean isSelectedStartBetweenTwoDates(LocalDateTime localDateTime, LocalDateTime start, LocalDateTime end){
-		return 	(localDateTime.isEqual(start) || localDateTime.isAfter(start)) && (localDateTime.isBefore(end));
 	}
 
 }

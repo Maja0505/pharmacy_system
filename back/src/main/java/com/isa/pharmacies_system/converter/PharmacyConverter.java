@@ -18,10 +18,9 @@ import com.isa.pharmacies_system.domain.user.Dermatologist;
 import com.isa.pharmacies_system.domain.user.Pharmacist;
 
 public class PharmacyConverter {
-	public PharmacyConverter() {
-		// TODO Auto-generated constructor stub
-	}
 
+	public PharmacyConverter() {
+	}
 
 	public PharmacyDTO convertPharmacyToPharmacyDTO(Pharmacy pharmacy){
 

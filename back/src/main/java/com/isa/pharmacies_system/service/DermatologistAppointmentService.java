@@ -35,11 +35,13 @@ public class DermatologistAppointmentService implements IDermatologistAppointmen
         return dermatologistAppointmentRepository.findById(id).orElse(null);
     }
 
+    //#1[3.13]
     @Override
     public List<DermatologistAppointment> getOpenDermatologistAppointment(Long pharmacyId){
         return dermatologistAppointmentRepository.getOpenDermatologistAppointment(pharmacyId);
     }
 
+    //#1[3.13]
     @Override
     public void bookDermatologistAppointment(Patient patient,DermatologistAppointment dermatologistAppointment){
 
@@ -51,6 +53,7 @@ public class DermatologistAppointmentService implements IDermatologistAppointmen
 
     }
 
+    //#1[3.15]
     @Override
     public Boolean cancelDermatologistAppointment(DermatologistAppointment dermatologistAppointment){
 
@@ -61,21 +64,6 @@ public class DermatologistAppointmentService implements IDermatologistAppointmen
             return true;
         }
         return false;
-    }
-
-    public Boolean isAppointmentReserved(DermatologistAppointment dermatologistAppointment){
-       return dermatologistAppointment.getStatusOfAppointment().equals(StatusOfAppointment.Reserved);
-    }
-
-    public Boolean isAppointmentOpen(DermatologistAppointment dermatologistAppointment){
-        return dermatologistAppointment.getStatusOfAppointment().equals(StatusOfAppointment.Open);
-    }
-
-    public Boolean isCancellationPossible(LocalDateTime start){
-
-        LocalDateTime now = LocalDateTime.now();
-        Duration duration = Duration.between(now,start);
-        return duration.toHours() >= 24;
     }
 
     @Override
@@ -98,4 +86,21 @@ public class DermatologistAppointmentService implements IDermatologistAppointmen
         return patientAppointmentInfoDTOList;
     }
 
+    //#1
+    private Boolean isAppointmentReserved(DermatologistAppointment dermatologistAppointment){
+        return dermatologistAppointment.getStatusOfAppointment().equals(StatusOfAppointment.Reserved);
+    }
+
+    //#1
+    private Boolean isAppointmentOpen(DermatologistAppointment dermatologistAppointment){
+        return dermatologistAppointment.getStatusOfAppointment().equals(StatusOfAppointment.Open);
+    }
+
+    //#1
+    private Boolean isCancellationPossible(LocalDateTime start){
+
+        LocalDateTime now = LocalDateTime.now();
+        Duration duration = Duration.between(now,start);
+        return duration.toHours() >= 24;
+    }
 }

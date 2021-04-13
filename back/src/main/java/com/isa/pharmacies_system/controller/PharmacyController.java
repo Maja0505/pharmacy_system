@@ -1,11 +1,13 @@
 package com.isa.pharmacies_system.controller;
 
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.isa.pharmacies_system.DTO.PharmacistAppointmentTimeDTO;
 import com.isa.pharmacies_system.DTO.PharmacyDTO;
 import com.isa.pharmacies_system.converter.PharmacyConverter;
+import com.isa.pharmacies_system.service.iService.IPriceListService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,11 +28,13 @@ import com.isa.pharmacies_system.service.iService.IPharmacyService;
 public class PharmacyController {
 	private IPharmacyService iPharmacyService;
 	private PharmacyConverter pharmacyConverter;
+	private IPriceListService priceListService;
 
 	@Autowired
-	public PharmacyController(IPharmacyService iPharmacyService)
+	public PharmacyController(IPharmacyService iPharmacyService,IPriceListService priceListService)
 	{
 		this.iPharmacyService = iPharmacyService;
+		this.priceListService = priceListService;
 		this.pharmacyConverter = new PharmacyConverter();
 	}
 
@@ -60,12 +64,18 @@ public class PharmacyController {
 		}
 	}
 
+	//#1[3.16]-korak1
 	@GetMapping(value = "/free", consumes = "application/json")
 	public ResponseEntity<List<PharmacyDTO>> getAllPharmacyWithFreePharmacistByDate(@RequestBody PharmacistAppointmentTimeDTO timeDTO){
 
 		try {
 			List<Pharmacy> pharmacies = iPharmacyService.getAllPharmacyWithFreePharmacistByDate(timeDTO);
-			return new ResponseEntity<>(pharmacyConverter.convertPharmacyListToPharmacyDTOList(pharmacies),HttpStatus.OK);
+			List<PharmacyDTO> pharmacyDTOS = new ArrayList<>();
+			for (Pharmacy pharmacy: pharmacies) {
+				PharmacyDTO pharmacyDTO = pharmacyConverter.convertPharmacyToPharmacyDTO(pharmacy);
+				pharmacyDTOS.add(priceListService.addPriceListToPharmacyDTO(pharmacyDTO));
+			}
+			return new ResponseEntity<>(pharmacyDTOS,HttpStatus.OK);
 		}catch (Exception e){
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}

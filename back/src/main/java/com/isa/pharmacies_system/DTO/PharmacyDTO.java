@@ -1,6 +1,7 @@
 package com.isa.pharmacies_system.DTO;
 
 import com.isa.pharmacies_system.domain.pharmacy.Address;
+import com.isa.pharmacies_system.domain.pharmacy.PriceList;
 
 public class PharmacyDTO {
 
@@ -8,6 +9,7 @@ public class PharmacyDTO {
     private String pharmacyName;
     private Address pharmacyAddress;
     private double pharmacyAverageRating;
+    private PriceListForAppointmentDTO priceListForAppointmentDTO;
 
     public PharmacyDTO() {
     }
@@ -42,5 +44,13 @@ public class PharmacyDTO {
 
     public void setPharmacyAverageRating(double pharmacyAverageRating) {
         this.pharmacyAverageRating = pharmacyAverageRating;
+    }
+
+    public PriceListForAppointmentDTO getPriceListForAppointmentDTO() {
+        return priceListForAppointmentDTO;
+    }
+
+    public void setPriceListForAppointmentDTO(PriceListForAppointmentDTO priceListForAppointmentDTO) {
+        this.priceListForAppointmentDTO = priceListForAppointmentDTO;
     }
 }

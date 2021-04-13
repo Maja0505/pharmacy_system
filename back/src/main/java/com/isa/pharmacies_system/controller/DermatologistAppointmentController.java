@@ -35,17 +35,16 @@ public class DermatologistAppointmentController {
 
     @Autowired
     public DermatologistAppointmentController(IDermatologistAppointmentService dermatologistAppointmentService, IPatientService patientService, EmailService emailService) {
+
         this.dermatologistAppointmentService = dermatologistAppointmentService;
         this.patientConverter = new PatientConverter();
         this.dermatologistAppointmentConverter = new DermatologistAppointmentConverter();
         this.patientService = patientService;
         this.emailService = emailService;
-
-
-
     }
 
     @GetMapping("/all/open/{pharmacyId}")
+    //#1[3.13]
     public ResponseEntity<List<DermatologistAppointmentDTO>> getOpenDermatologistAppointment(@PathVariable Long pharmacyId){
 
         try{
@@ -56,6 +55,7 @@ public class DermatologistAppointmentController {
         }
     }
 
+    //#1[3.13]
     @PutMapping(value = "/book/{patientId}", consumes = "application/json")
     public ResponseEntity<Boolean> bookDermatologistAppointment(@PathVariable Long patientId, @RequestBody DermatologistAppointmentDTO dermatologistAppointmentDTO){
 
@@ -71,6 +71,7 @@ public class DermatologistAppointmentController {
         }
     }
 
+    //#1[3.15]
     @PutMapping(value = "/cancel")
     public ResponseEntity<Boolean> cancelDermatologistAppointment(@RequestBody DermatologistAppointmentDTO dermatologistAppointmentDTO){
         try {
@@ -83,8 +84,6 @@ public class DermatologistAppointmentController {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
-
-
 
     @GetMapping("/allPastAppointmentByDermatologist/{dermatologistId}/{page}")
     public ResponseEntity<List<PatientAppointmentInfoDTO>> getAllPastDermatologistAppointmentByDermatologist(@PathVariable ("dermatologistId") Long id,@PathVariable int page){
