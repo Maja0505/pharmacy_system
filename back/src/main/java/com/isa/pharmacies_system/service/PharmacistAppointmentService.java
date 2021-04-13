@@ -59,7 +59,7 @@ public class PharmacistAppointmentService implements IPharmacistAppointmentServi
     public Boolean bookPharmacistAppointment(Long patientId, Long pharmacistId, PharmacistAppointmentTimeDTO timeDTO){
         Patient patient = patientRepository.findById(patientId).orElse(null);
         Pharmacist pharmacist = pharmacistRepository.findById(pharmacistId).orElse(null);
-        if((utilityMethods.isPharmacistWorkInSelectedDate(timeDTO,pharmacist)) && (utilityMethods.doesPharmacistHaveOpenSelectedAppoinemnt(timeDTO, pharmacist))){
+        if(patient != null && pharmacist != null && (utilityMethods.isPharmacistWorkInSelectedDate(timeDTO,pharmacist)) && (utilityMethods.doesPharmacistHaveOpenSelectedAppoinemnt(timeDTO, pharmacist))){
             pharmacistAppointmentRepository.save(createNewPharmacistAppointment(patient, pharmacist, timeDTO));
             return true;
         }else{
@@ -68,7 +68,6 @@ public class PharmacistAppointmentService implements IPharmacistAppointmentServi
 
     }
 
-    @NonNull
     private PharmacistAppointment createNewPharmacistAppointment(Patient patient, Pharmacist pharmacist, PharmacistAppointmentTimeDTO timeDTO){
 
         PharmacistAppointment pharmacistAppointment = new PharmacistAppointment();
