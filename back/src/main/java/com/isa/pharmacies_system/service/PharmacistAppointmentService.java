@@ -11,6 +11,7 @@ import com.isa.pharmacies_system.repository.IPharmacistAppointmentRepository;
 import com.isa.pharmacies_system.repository.IPharmacistRepository;
 import com.isa.pharmacies_system.repository.IPriceListRepository;
 import com.isa.pharmacies_system.service.iService.IPharmacistAppointmentService;
+import lombok.NonNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -67,6 +68,7 @@ public class PharmacistAppointmentService implements IPharmacistAppointmentServi
 
     }
 
+    @NonNull
     private PharmacistAppointment createNewPharmacistAppointment(Patient patient, Pharmacist pharmacist, PharmacistAppointmentTimeDTO timeDTO){
 
         PharmacistAppointment pharmacistAppointment = new PharmacistAppointment();
