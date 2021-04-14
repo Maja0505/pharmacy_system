@@ -16,12 +16,10 @@ import java.util.Set;
 public class PatientService implements IPatientService {
 
     private IPatientRepository patientRepository;
-    private IMedicineService medicineService;
 
-    public PatientService(IPatientRepository patientRepository, IMedicineService medicineService) {
+    public PatientService(IPatientRepository patientRepository) {
 
         this.patientRepository = patientRepository;
-        this.medicineService = medicineService;
     }
 
     @Override
@@ -39,6 +37,7 @@ public class PatientService implements IPatientService {
         patientRepository.save(patient);
     }
 
+    //#1
     @Override
     public Boolean changePassword(UserPasswordDTO userPasswordDTO){
 
@@ -51,22 +50,25 @@ public class PatientService implements IPatientService {
         return false;
     }
 
-    public Boolean checkPassword(String first, String second){
-        return first.equals(second);
-    }
-
+    //#1
     @Override
-    public void addMedicineAllergies(Patient patient, Long medicineId){
+    public void addMedicineAllergies(Patient patient, Medicine medicine){
 
-        Medicine medicine = medicineService.findOne(medicineId);
+
         patient.getMedicineAllergies().add(medicine);
         savePatient(patient);
     }
 
+    //#1
     @Override
     public Set<DermatologistAppointment> getDermatologistAppointmentForPatient(Long id){
 
         Patient patient = findOne(id);
         return patient.getDermatologistAppointment();
     }
+
+    private Boolean checkPassword(String first, String second){
+        return first.equals(second);
+    }
+
 }

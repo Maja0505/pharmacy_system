@@ -11,7 +11,7 @@ import java.util.List;
 public interface IDermatologistAppointmentService{
 
     DermatologistAppointment findOne(Long id);
-    List<DermatologistAppointment> getOpenDermatologistAppointment();
+    List<DermatologistAppointment> getOpenDermatologistAppointment(Long pharmacyId);
     void bookDermatologistAppointment(Patient patient, DermatologistAppointment dermatologistAppointment);
     Page<DermatologistAppointment> getAllPastDermatologistAppointmentByDermatologist(Long id, int page);
     Page<DermatologistAppointment> getAllPastDermatologistAppointmentByDermatologistAndPharmacy(Long idDermatologist,Long idPharmacy, int page);
