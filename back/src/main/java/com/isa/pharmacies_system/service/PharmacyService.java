@@ -1,19 +1,14 @@
 package com.isa.pharmacies_system.service;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import com.isa.pharmacies_system.DTO.PharmacistAppointmentTimeDTO;
-import com.isa.pharmacies_system.DTO.PharmacyDTO;
-import com.isa.pharmacies_system.domain.schedule.PharmacistAppointment;
-import com.isa.pharmacies_system.domain.schedule.StatusOfWorkingHours;
-import com.isa.pharmacies_system.domain.schedule.WorkingHours;
 import com.isa.pharmacies_system.domain.user.Pharmacist;
+import com.isa.pharmacies_system.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.web.embedded.netty.NettyWebServer;
 import org.springframework.stereotype.Service;
 
 import com.isa.pharmacies_system.DTO.PharmacyNewDTO;
@@ -25,10 +20,6 @@ import com.isa.pharmacies_system.domain.storage.PharmacyStorage;
 import com.isa.pharmacies_system.domain.storage.PharmacyStorageItem;
 import com.isa.pharmacies_system.domain.storage.Storage;
 import com.isa.pharmacies_system.domain.storage.TypeOfStorage;
-import com.isa.pharmacies_system.repository.IPharmacyRepository;
-import com.isa.pharmacies_system.repository.IPharmacyStorageRepository;
-import com.isa.pharmacies_system.repository.IPriceListRepository;
-import com.isa.pharmacies_system.repository.IStorageRepository;
 import com.isa.pharmacies_system.service.iService.IPharmacyService;
 
 @Service
@@ -40,13 +31,15 @@ public class PharmacyService implements IPharmacyService {
 	private IPriceListRepository iPriceListRepository;
 	private PharmacyConverter pharmacyConverter;
 	private UtilityMethods utilityMethods;
+	private IWorkingHoursRepository workingHoursRepository;
 	
 	@Autowired
-	public PharmacyService(IPharmacyRepository iPharmacyRepository, IPriceListRepository iPriceListRepository,IPharmacyStorageRepository iPharmacyStorageRepository,IStorageRepository iStorageRepository) {
+	public PharmacyService(IPharmacyRepository iPharmacyRepository, IPriceListRepository iPriceListRepository, IPharmacyStorageRepository iPharmacyStorageRepository, IStorageRepository iStorageRepository, IWorkingHoursRepository workingHoursRepository) {
 		this.iPharmacyRepository=iPharmacyRepository;
 		this.iPriceListRepository= iPriceListRepository;
 		this.iPharmacyStorageRepository=iPharmacyStorageRepository;
 		this.iStorageRepository= iStorageRepository;
+		this.workingHoursRepository = workingHoursRepository;
 		this.pharmacyConverter = new PharmacyConverter();
 		this.utilityMethods = new UtilityMethods();
 	}
@@ -104,13 +97,23 @@ public class PharmacyService implements IPharmacyService {
 		List<Pharmacy> pharmacyList = new ArrayList<>();
 		for (Pharmacy pharmacy:pharmacies) {
 			List<Pharmacist> pharmacists = List.copyOf(pharmacy.getPharmacistsInPharmacy());
-			pharmacists = pharmacists.stream().filter(pharmacist -> utilityMethods.isPharmacistWorkInSelectedDate(timeDTO,pharmacist)).collect(Collectors.toList());
-			pharmacists = pharmacists.stream().filter(pharmacist -> utilityMethods.doesPharmacistHaveOpenSelectedAppoinemnt(timeDTO, pharmacist)).collect(Collectors.toList());
+			pharmacists = pharmacists.stream().filter(pharmacist -> doesPharmacistWorkInSelectedDate(timeDTO,pharmacist) && doesPharmacistHaveOpenSelectedAppointment(timeDTO,pharmacist)).collect(Collectors.toList());
 			if(pharmacists.stream().count() > 0){
 				pharmacyList.add(pharmacy);
 			}
 		}
 		return pharmacyList;
+	}
+
+	//#1 da li farmaceut ima radno vreme izabranog datuma
+	private Boolean doesPharmacistWorkInSelectedDate(PharmacistAppointmentTimeDTO timeDTO, Pharmacist pharmacist){
+		return (workingHoursRepository.getWorkingHourByDate(pharmacist.getId(),timeDTO.getStartTime(),timeDTO.getStartTime().plusMinutes((long)timeDTO.getDuration()))).stream().count()>0;
+	}
+
+	//#1[3.16]Korak1/2/3
+	//da li je selektovan datum slobodan kod odredjenog farmaceuta
+	private Boolean doesPharmacistHaveOpenSelectedAppointment(PharmacistAppointmentTimeDTO timeDTO, Pharmacist pharmacist){
+		return pharmacist.getPharmacistAppointments().stream().filter(pharmacistAppointment -> utilityMethods.isSelectedDateReserved(timeDTO,pharmacistAppointment)).count() == 0;
 	}
 
 }

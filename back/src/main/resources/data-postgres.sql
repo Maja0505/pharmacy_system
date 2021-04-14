@@ -25,15 +25,14 @@ INSERT INTO pharmacy_admins (id, pharmacy_for_pharmacy_admin_id) VALUES (5, 2);
 INSERT INTO dermatologists (id,dermatologist_average_rating) VALUES (8,4.3);
 INSERT INTO dermatologists (id,dermatologist_average_rating) VALUES (9,2.3);
 
+INSERT INTO pharmacists (id,pharmacist_average_rating,pharmacy_for_pharmacist_id) VALUES (6,4.3,1);
+INSERT INTO pharmacists (id,pharmacist_average_rating,pharmacy_for_pharmacist_id) VALUES (7,4.3,2);
 
-insert into worker_schedule (id,pharmacy_id) values (1,1);
-insert into worker_schedule (id,pharmacy_id) values (2,2);
-INSERT INTO working_hours (id, status_of_working_hours,working_end_time,working_start_time,worker_schedule_id) VALUES (1,1,'2021-04-12 20:00','2021-04-12 10:50',1);
+insert into worker_schedule (id,pharmacy_id,pharmacist_id,type_of_worker_schedule) values (1,1,6,1);
+insert into worker_schedule (id,pharmacy_id,pharmacist_id,type_of_worker_schedule) values (2,2,7,1);
+INSERT INTO working_hours (id, status_of_working_hours,working_end_time,working_start_time,worker_schedule_id) VALUES (1,1,'2021-04-12 16:00','2021-04-12 10:50',1);
 INSERT INTO working_hours (id, status_of_working_hours,working_end_time,working_start_time,worker_schedule_id) VALUES (2,1,'2021-04-12 20:00','2021-04-12 10:50',2);
 
-
-INSERT INTO pharmacists (id,pharmacist_schedule_id,pharmacist_average_rating,pharmacy_for_pharmacist_id) VALUES (6,1,4.3,1);
-INSERT INTO pharmacists (id,pharmacist_schedule_id,pharmacist_average_rating,pharmacy_for_pharmacist_id) VALUES (7,2,4.3,2);
 
 INSERT INTO patient (id, category_of_patient, patient_points) VALUES (1, 0, 0.0);
 INSERT INTO patient (id, category_of_patient, patient_points) VALUES (2, 1, 10.0);

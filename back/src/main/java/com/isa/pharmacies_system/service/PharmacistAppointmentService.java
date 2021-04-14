@@ -6,12 +6,8 @@ import com.isa.pharmacies_system.DTO.PriceListForAppointmentDTO;
 import com.isa.pharmacies_system.domain.schedule.*;
 import com.isa.pharmacies_system.domain.user.Patient;
 import com.isa.pharmacies_system.domain.user.Pharmacist;
-import com.isa.pharmacies_system.repository.IPatientRepository;
-import com.isa.pharmacies_system.repository.IPharmacistAppointmentRepository;
-import com.isa.pharmacies_system.repository.IPharmacistRepository;
-import com.isa.pharmacies_system.repository.IPriceListRepository;
+import com.isa.pharmacies_system.repository.*;
 import com.isa.pharmacies_system.service.iService.IPharmacistAppointmentService;
-import lombok.NonNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -29,13 +25,15 @@ public class PharmacistAppointmentService implements IPharmacistAppointmentServi
     private IPatientRepository patientRepository;
     private IPriceListRepository priceListRepository;
     private UtilityMethods utilityMethods;
+    private IWorkingHoursRepository workingHoursRepository;
 
     @Autowired
-    public PharmacistAppointmentService(IPharmacistAppointmentRepository pharmacistAppointmentRepository, IPharmacistRepository pharmacistRepository, IPatientRepository patientRepository, IPriceListRepository priceListRepository) {
+    public PharmacistAppointmentService(IPharmacistAppointmentRepository pharmacistAppointmentRepository, IPharmacistRepository pharmacistRepository, IPatientRepository patientRepository, IPriceListRepository priceListRepository, IWorkingHoursRepository workingHoursRepository) {
         this.pharmacistAppointmentRepository = pharmacistAppointmentRepository;
         this.pharmacistRepository = pharmacistRepository;
         this.patientRepository = patientRepository;
         this.priceListRepository = priceListRepository;
+        this.workingHoursRepository = workingHoursRepository;
         this.utilityMethods = new UtilityMethods();
     }
 
@@ -59,15 +57,26 @@ public class PharmacistAppointmentService implements IPharmacistAppointmentServi
     public Boolean bookPharmacistAppointment(Long patientId, Long pharmacistId, PharmacistAppointmentTimeDTO timeDTO){
         Patient patient = patientRepository.findById(patientId).orElse(null);
         Pharmacist pharmacist = pharmacistRepository.findById(pharmacistId).orElse(null);
-        if(patient != null && pharmacist != null && (utilityMethods.isPharmacistWorkInSelectedDate(timeDTO,pharmacist)) && (utilityMethods.doesPharmacistHaveOpenSelectedAppoinemnt(timeDTO, pharmacist))){
+        if(patient != null && pharmacist != null && doesPharmacistWorkInSelectedDate(timeDTO, pharmacist)
+                && (doesPharmacistHaveOpenSelectedAppointment(timeDTO, pharmacist))){
             pharmacistAppointmentRepository.save(createNewPharmacistAppointment(patient, pharmacist, timeDTO));
             return true;
         }else{
             return false;
         }
-
     }
 
+    //#1
+    private Boolean doesPharmacistWorkInSelectedDate(PharmacistAppointmentTimeDTO timeDTO, Pharmacist pharmacist){
+        return (workingHoursRepository.getWorkingHourByDate(pharmacist.getId(),timeDTO.getStartTime(),timeDTO.getStartTime().plusMinutes((long)timeDTO.getDuration()))).stream().count()>0;
+    }
+
+    //#1
+    private Boolean doesPharmacistHaveOpenSelectedAppointment(PharmacistAppointmentTimeDTO timeDTO, Pharmacist pharmacist){
+        return pharmacist.getPharmacistAppointments().stream().filter(pharmacistAppointment -> utilityMethods.isSelectedDateReserved(timeDTO,pharmacistAppointment)).count() == 0;
+    }
+
+    //#1
     private PharmacistAppointment createNewPharmacistAppointment(Patient patient, Pharmacist pharmacist, PharmacistAppointmentTimeDTO timeDTO){
 
         PharmacistAppointment pharmacistAppointment = new PharmacistAppointment();

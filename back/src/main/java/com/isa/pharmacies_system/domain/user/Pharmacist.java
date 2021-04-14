@@ -26,8 +26,8 @@ import javax.persistence.Column;
 @Table(name="pharmacists")
 public class Pharmacist extends Users {
 
-	@OneToOne(cascade = CascadeType.ALL)
-	private WorkerSchedule pharmacistSchedule;
+	//@OneToOne(cascade = CascadeType.ALL)
+	//private WorkerSchedule pharmacistSchedule;
 
 	@JsonManagedReference
 	@OneToMany(mappedBy = "vacationRequestPharmacist", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
@@ -64,7 +64,7 @@ public class Pharmacist extends Users {
 			Pharmacy pharmacyForPharmacist, Set<PharmacistComplaint> pharmacistComplaints,
 			Set<PharmacistRating> pharmacistRatings) {
 		super();
-		this.pharmacistSchedule = pharmacistSchedule;
+		//this.pharmacistSchedule = pharmacistSchedule;
 		this.pharmacistVacationRequests = pharmacistVacationRequests;
 		this.pharmacistAverageRating = pharmacistAverageRating;
 		this.pharmacistAppointments = pharmacistAppointments;
@@ -75,13 +75,13 @@ public class Pharmacist extends Users {
 
 
 
-	public WorkerSchedule getPharmacistSchedule() {
+	/*public WorkerSchedule getPharmacistSchedule() {
 		return pharmacistSchedule;
 	}
 
 	public void setPharmacistSchedule(WorkerSchedule pharmacistSchedule) {
 		this.pharmacistSchedule = pharmacistSchedule;
-	}
+	}*/
 
 	public Set<PharmacistVacationRequest> getPharmacistVacationRequests() {
 		return pharmacistVacationRequests;
