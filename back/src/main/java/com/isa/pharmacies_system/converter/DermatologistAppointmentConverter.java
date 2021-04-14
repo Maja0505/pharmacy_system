@@ -1,8 +1,11 @@
 package com.isa.pharmacies_system.converter;
 
+import com.isa.pharmacies_system.DTO.AppointmentScheduleByStaffDTO;
 import com.isa.pharmacies_system.DTO.DermatologistAppointmentDTO;
 import com.isa.pharmacies_system.DTO.UserPersonalInfoDTO;
 import com.isa.pharmacies_system.domain.schedule.DermatologistAppointment;
+import com.isa.pharmacies_system.domain.schedule.StatusOfAppointment;
+import com.isa.pharmacies_system.domain.schedule.TypeOfAppointment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,5 +41,13 @@ public class DermatologistAppointmentConverter {
         return dermatologistAppointmentDTOS;
     }
 
-
+    public DermatologistAppointment convertAppointmentScheduleByStaffDTOToDermatologistAppointment(AppointmentScheduleByStaffDTO appointmentScheduleByStaffDTO){
+        DermatologistAppointment dermatologistAppointment = new DermatologistAppointment();
+        dermatologistAppointment.setDermatologistAppointmentStartTime(appointmentScheduleByStaffDTO.getAppointmentStartTime());
+        dermatologistAppointment.setDermatologistAppointmentEndTime(appointmentScheduleByStaffDTO.getAppointmentEndTime());
+        dermatologistAppointment.setAppointmentPoints(0);
+        dermatologistAppointment.setStatusOfAppointment(StatusOfAppointment.Reserved);
+        dermatologistAppointment.setTypeOfAppointment(TypeOfAppointment.Dermatologist_appointment);
+        return dermatologistAppointment;
+    }
 }

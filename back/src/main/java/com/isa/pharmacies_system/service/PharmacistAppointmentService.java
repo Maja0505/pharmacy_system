@@ -87,7 +87,7 @@ public class PharmacistAppointmentService implements IPharmacistAppointmentServi
         pharmacistAppointment.setTypeOfAppointment(TypeOfAppointment.Pharmacist_appointment);
         pharmacistAppointment.setAppointmentPoints(0);
         pharmacistAppointment.setAppointmentPrice(priceListForAppointmentDTO.getPharmacistAppointmentPricePerHour());
-        pharmacistAppointment.setPharmacistAppointmentDuration(timeDTO.getDuration());
+        pharmacistAppointment.setPharmacistAppointmentDuration((long)timeDTO.getDuration());
         pharmacistAppointment.setPharmacistAppointmentStartTime(timeDTO.getStartTime());
         return pharmacistAppointment;
 

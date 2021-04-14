@@ -5,6 +5,7 @@ import com.isa.pharmacies_system.DTO.UserPasswordDTO;
 import com.isa.pharmacies_system.domain.medicine.Medicine;
 import com.isa.pharmacies_system.domain.pharmacy.Pharmacy;
 import com.isa.pharmacies_system.domain.schedule.DermatologistAppointment;
+import com.isa.pharmacies_system.domain.schedule.PharmacistAppointment;
 import com.isa.pharmacies_system.domain.user.Patient;
 
 import java.time.LocalDateTime;

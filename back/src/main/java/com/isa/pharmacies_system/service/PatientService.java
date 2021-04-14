@@ -5,7 +5,6 @@ import com.isa.pharmacies_system.domain.medicine.Medicine;
 import com.isa.pharmacies_system.domain.schedule.DermatologistAppointment;
 import com.isa.pharmacies_system.domain.user.Patient;
 import com.isa.pharmacies_system.repository.IPatientRepository;
-import com.isa.pharmacies_system.service.iService.IMedicineService;
 import com.isa.pharmacies_system.service.iService.IPatientService;
 import org.springframework.stereotype.Service;
 
@@ -40,7 +39,6 @@ public class PatientService implements IPatientService {
     //#1
     @Override
     public Boolean changePassword(UserPasswordDTO userPasswordDTO){
-
         Patient patient = findOne(userPasswordDTO.getId());
         if(checkPassword(patient.getPassword(), userPasswordDTO.getConfirmedPassword()) && checkPassword(userPasswordDTO.getNewPassword(), userPasswordDTO.getConfirmedNewPassword())){
             patient.setPassword(userPasswordDTO.getNewPassword());
@@ -53,8 +51,6 @@ public class PatientService implements IPatientService {
     //#1
     @Override
     public void addMedicineAllergies(Patient patient, Medicine medicine){
-
-
         patient.getMedicineAllergies().add(medicine);
         savePatient(patient);
     }
