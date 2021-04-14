@@ -46,11 +46,13 @@ public class DermatologistAppointmentService implements IDermatologistAppointmen
         return dermatologistAppointmentRepository.findById(id).orElse(null);
     }
 
+    //#1[3.13]
     @Override
-    public List<DermatologistAppointment> getOpenDermatologistAppointment(){
-        return dermatologistAppointmentRepository.getOpenDermatologistAppointment();
+    public List<DermatologistAppointment> getOpenDermatologistAppointment(Long pharmacyId){
+        return dermatologistAppointmentRepository.getOpenDermatologistAppointment(pharmacyId);
     }
 
+    //#1[3.13]
     @Override
     public Boolean bookDermatologistAppointment(Long patientId,Long appointmentId){
 
@@ -65,6 +67,7 @@ public class DermatologistAppointmentService implements IDermatologistAppointmen
         return false;
     }
 
+    //#1[3.15]
     @Override
     public Boolean cancelDermatologistAppointment(DermatologistAppointment dermatologistAppointment){
 

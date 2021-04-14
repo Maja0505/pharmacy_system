@@ -10,6 +10,9 @@ import java.util.List;
 
 public interface IDermatologistAppointmentRepository extends JpaRepository<DermatologistAppointment,Long> {
 
+    @Query(value = "select d  from DermatologistAppointment as d where d.statusOfAppointment = 0 and d.pharmacyForDermatologistAppointment.id = ?1 and d.dermatologistAppointmentStartTime > CURRENT_DATE")
+    List<DermatologistAppointment> getOpenDermatologistAppointment(Long pharmacyId);
+
     //Nemanja
     @Query("select a from DermatologistAppointment a where a.dermatologistForAppointment.id = ?1 and a.dermatologistAppointmentEndTime < CURRENT_TIMESTAMP ")
     Page<DermatologistAppointment> findAllPastDermatologistAppointment(Long id, Pageable pageable);
@@ -28,4 +31,6 @@ public interface IDermatologistAppointmentRepository extends JpaRepository<Derma
     //Nemanja
     @Query("select a from DermatologistAppointment a where a.dermatologistForAppointment.id = ?1 and a.statusOfAppointment = 1 and a.pharmacyForDermatologistAppointment.id = ?2 and a.dermatologistAppointmentStartTime > CURRENT_TIMESTAMP")
     List<DermatologistAppointment> findAllFutureReservedDermatologistAppointmentByDermatologistAndPharmacy(Long dermatologistId,Long pharmacyId);
+
+
 }

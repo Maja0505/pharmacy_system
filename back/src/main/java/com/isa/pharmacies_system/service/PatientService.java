@@ -3,29 +3,22 @@ package com.isa.pharmacies_system.service;
 import com.isa.pharmacies_system.DTO.UserPasswordDTO;
 import com.isa.pharmacies_system.domain.medicine.Medicine;
 import com.isa.pharmacies_system.domain.schedule.DermatologistAppointment;
-import com.isa.pharmacies_system.domain.schedule.PharmacistAppointment;
-import com.isa.pharmacies_system.domain.schedule.StatusOfAppointment;
 import com.isa.pharmacies_system.domain.user.Patient;
 import com.isa.pharmacies_system.repository.IPatientRepository;
-import com.isa.pharmacies_system.service.iService.IMedicineService;
 import com.isa.pharmacies_system.service.iService.IPatientService;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 @Service
 public class PatientService implements IPatientService {
 
     private IPatientRepository patientRepository;
-    private IMedicineService medicineService;
 
-    public PatientService(IPatientRepository patientRepository, IMedicineService medicineService) {
+    public PatientService(IPatientRepository patientRepository) {
 
         this.patientRepository = patientRepository;
-        this.medicineService = medicineService;
     }
 
     @Override
@@ -43,9 +36,9 @@ public class PatientService implements IPatientService {
         patientRepository.save(patient);
     }
 
+    //#1
     @Override
     public Boolean changePassword(UserPasswordDTO userPasswordDTO){
-
         Patient patient = findOne(userPasswordDTO.getId());
         if(checkPassword(patient.getPassword(), userPasswordDTO.getConfirmedPassword()) && checkPassword(userPasswordDTO.getNewPassword(), userPasswordDTO.getConfirmedNewPassword())){
             patient.setPassword(userPasswordDTO.getNewPassword());
@@ -55,18 +48,14 @@ public class PatientService implements IPatientService {
         return false;
     }
 
-    public Boolean checkPassword(String first, String second){
-        return first.equals(second);
-    }
-
+    //#1
     @Override
-    public void addMedicineAllergies(Patient patient, Long medicineId){
-
-        Medicine medicine = medicineService.findOne(medicineId);
+    public void addMedicineAllergies(Patient patient, Medicine medicine){
         patient.getMedicineAllergies().add(medicine);
         savePatient(patient);
     }
 
+    //#1
     @Override
     public Set<DermatologistAppointment> getDermatologistAppointmentForPatient(Long id){
 
@@ -74,5 +63,8 @@ public class PatientService implements IPatientService {
         return patient.getDermatologistAppointment();
     }
 
+    private Boolean checkPassword(String first, String second){
+        return first.equals(second);
+    }
 
 }

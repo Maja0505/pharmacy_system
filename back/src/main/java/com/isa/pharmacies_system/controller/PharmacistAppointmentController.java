@@ -1,18 +1,17 @@
 package com.isa.pharmacies_system.controller;
 
 import com.isa.pharmacies_system.DTO.PatientAppointmentInfoDTO;
+import com.isa.pharmacies_system.DTO.PharmacistAppointmentTimeDTO;
 import com.isa.pharmacies_system.converter.PatientConverter;
 import com.isa.pharmacies_system.domain.schedule.PharmacistAppointment;
+import com.isa.pharmacies_system.service.EmailService;
 import com.isa.pharmacies_system.service.iService.IPharmacistAppointmentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -22,10 +21,12 @@ public class PharmacistAppointmentController {
 
     private IPharmacistAppointmentService pharmacistAppointmentService;
     private PatientConverter patientConverter;
+    private EmailService emailService;
 
     @Autowired
-    public PharmacistAppointmentController(IPharmacistAppointmentService pharmacistAppointmentService) {
+    public PharmacistAppointmentController(IPharmacistAppointmentService pharmacistAppointmentService, EmailService emailService) {
         this.pharmacistAppointmentService = pharmacistAppointmentService;
+        this.emailService = emailService;
         this.patientConverter = new PatientConverter();
     }
 
@@ -52,6 +53,22 @@ public class PharmacistAppointmentController {
             return new ResponseEntity<>(null,HttpStatus.BAD_REQUEST);
         }
 
+    }
+
+    //#1[3.16]Korak3
+    @PostMapping(value = "/book/{pharmacistId}/{patientId}", consumes = "application/json")
+    public ResponseEntity<Boolean> bookPharmacistAppointment(@PathVariable Long patientId,@PathVariable Long pharmacistId,@RequestBody PharmacistAppointmentTimeDTO timeDTO){
+
+        try {
+            if(pharmacistAppointmentService.bookPharmacistAppointment(patientId,pharmacistId,timeDTO)){
+                return new ResponseEntity<>(HttpStatus.OK);
+                //emailService.sendNotificationForSuccessBookAppointment(patientId);
+            }
+            return new ResponseEntity<>(HttpStatus.NOT_MODIFIED);
+        }catch (Exception e){
+            Thread.currentThread().interrupt();
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
     }
 
 

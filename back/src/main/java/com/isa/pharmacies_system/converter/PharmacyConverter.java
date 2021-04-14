@@ -1,6 +1,8 @@
 package com.isa.pharmacies_system.converter;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 
 import com.isa.pharmacies_system.DTO.PharmacyDTO;
 import com.isa.pharmacies_system.DTO.PharmacyNewDTO;
@@ -15,10 +17,9 @@ import com.isa.pharmacies_system.domain.user.Dermatologist;
 import com.isa.pharmacies_system.domain.user.Pharmacist;
 
 public class PharmacyConverter {
-	public PharmacyConverter() {
-		// TODO Auto-generated constructor stub
-	}
 
+	public PharmacyConverter() {
+	}
 
 	public PharmacyDTO convertPharmacyToPharmacyDTO(Pharmacy pharmacy){
 
@@ -26,7 +27,16 @@ public class PharmacyConverter {
 		pharmacyDTO.setId(pharmacy.getId());
 		pharmacyDTO.setPharmacyName(pharmacy.getPharmacyName());
 		pharmacyDTO.setPharmacyAddress(pharmacy.getPharmacyAddress());
+		pharmacyDTO.setPharmacyAverageRating(pharmacy.getPharmacyAverageRating());
 		return pharmacyDTO;
+	}
+
+	public List<PharmacyDTO> convertPharmacyListToPharmacyDTOList(List<Pharmacy> pharmacies){
+		List<PharmacyDTO> pharmacyDTOS = new ArrayList<>();
+		for (Pharmacy pharmacy: pharmacies) {
+			pharmacyDTOS.add(convertPharmacyToPharmacyDTO(pharmacy));
+		}
+		return pharmacyDTOS;
 	}
 	
 	public Pharmacy convertPharmacyNewDTOToPharmacy(PharmacyNewDTO pharmacyNewDTO) {
