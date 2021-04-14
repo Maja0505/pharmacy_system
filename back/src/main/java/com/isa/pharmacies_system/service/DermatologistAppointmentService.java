@@ -1,10 +1,12 @@
 package com.isa.pharmacies_system.service;
 
+import com.isa.pharmacies_system.DTO.AppointmentScheduleByStaffDTO;
 import com.isa.pharmacies_system.DTO.PatientAppointmentInfoDTO;
+import com.isa.pharmacies_system.domain.pharmacy.Pharmacy;
 import com.isa.pharmacies_system.domain.schedule.DermatologistAppointment;
 import com.isa.pharmacies_system.domain.schedule.PharmacistAppointment;
-import com.isa.pharmacies_system.repository.IDermatologistAppointmentRepository;
-import com.isa.pharmacies_system.repository.IPatientRepository;
+import com.isa.pharmacies_system.domain.user.Dermatologist;
+import com.isa.pharmacies_system.repository.*;
 import com.isa.pharmacies_system.service.iService.IDermatologistAppointmentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -26,12 +28,16 @@ public class DermatologistAppointmentService implements IDermatologistAppointmen
 
     private IDermatologistAppointmentRepository dermatologistAppointmentRepository;
     private IPatientRepository patientRepository;
+    private IDermatologistRepository dermatologistRepository;
+    private IPharmacyRepository pharmacyRepository;
     private UtilityMethods utilityMethods;
 
     @Autowired
-    public DermatologistAppointmentService(IDermatologistAppointmentRepository dermatologistAppointmentRepository, IPatientRepository patientRepository) {
+    public DermatologistAppointmentService(IDermatologistAppointmentRepository dermatologistAppointmentRepository, IPatientRepository patientRepository, IDermatologistRepository dermatologistRepository, IPharmacyRepository pharmacyRepository) {
         this.dermatologistAppointmentRepository = dermatologistAppointmentRepository;
         this.patientRepository = patientRepository;
+        this.dermatologistRepository = dermatologistRepository;
+        this.pharmacyRepository = pharmacyRepository;
         this.utilityMethods = new UtilityMethods();
     }
 
@@ -91,7 +97,7 @@ public class DermatologistAppointmentService implements IDermatologistAppointmen
         List<DermatologistAppointment> dermatologistAppointmentList = getAllFutureReservedDermatologistAppointmentByPatient(patient);
         List<PharmacistAppointment> pharmacistAppointmentList = getAllFutureReservedPharmacistAppointmentByPatient(patient);
 
-        if(checkDoesPatientHaveDermatologistAppointmentWithSameTime(dermatologistAppointment,dermatologistAppointmentList)
+        if(checkDoesHaveAnyOtherDermatologistAppointmentWithSameTime(dermatologistAppointment,dermatologistAppointmentList)
             || checkDoesPatientHavePharmacistAppointmentWithSameTime(dermatologistAppointment,pharmacistAppointmentList)){
             return true;
         }
@@ -113,7 +119,7 @@ public class DermatologistAppointmentService implements IDermatologistAppointmen
     }
 
     //Nemanja
-    private Boolean checkDoesPatientHaveDermatologistAppointmentWithSameTime(DermatologistAppointment dermatologistAppointment,List<DermatologistAppointment> list){
+    private Boolean checkDoesHaveAnyOtherDermatologistAppointmentWithSameTime(DermatologistAppointment dermatologistAppointment,List<DermatologistAppointment> list){
         LocalDateTime startTime = dermatologistAppointment.getDermatologistAppointmentStartTime();
         LocalDateTime endTime = dermatologistAppointment.getDermatologistAppointmentEndTime();
 
@@ -178,6 +184,55 @@ public class DermatologistAppointmentService implements IDermatologistAppointmen
     @Override
     public List<DermatologistAppointment> getAllFutureOpenDermatologistAppointmentForDermatologistInPharmacy(Long dermatologistId, Long pharmacyId) {
         return dermatologistAppointmentRepository.findAllFutureOpenDermatologistAppointmentByDermatologistAndPharmacy(dermatologistId,pharmacyId);
+    }
+
+    //Nemanja
+    @Override
+    public List<DermatologistAppointment> findAllFutureReservedDermatologistAppointmentByDermatologistAndPharmacy(Long dermatologistId, Long pharmacyId) {
+        return dermatologistAppointmentRepository.findAllFutureReservedDermatologistAppointmentByDermatologistAndPharmacy(dermatologistId,pharmacyId);
+    }
+
+    //Nemanja
+    @Override
+    public Boolean bookDermatologistAppointmentByDermatologist(AppointmentScheduleByStaffDTO appointmentScheduleByStaffDTO, DermatologistAppointment dermatologistAppointment) {
+        if(!isDermatologistAppointmentInsideDermatologistWorkTime(appointmentScheduleByStaffDTO)
+            || !utilityMethods.isTimeBeforeOtherTime(appointmentScheduleByStaffDTO.getAppointmentStartTime(),appointmentScheduleByStaffDTO.getAppointmentEndTime())){
+            return false;
+        }
+        Patient patient = patientRepository.findById(appointmentScheduleByStaffDTO.getPatientId()).orElse(null);
+        Dermatologist dermatologist = dermatologistRepository.findById(appointmentScheduleByStaffDTO.getStaffId()).orElse(null);
+        if(!doesPatientHaveAnotherAppointmentInSameTime(patient,dermatologistAppointment)
+            && !doesDermatologistHaveAppointmentInSameTime(dermatologist,dermatologistAppointment)){
+            Pharmacy pharmacy = pharmacyRepository.findById(appointmentScheduleByStaffDTO.getPharmacyId()).orElse(null);
+            dermatologistAppointment.setDermatologistForAppointment(dermatologist);
+            dermatologistAppointment.setPharmacyForDermatologistAppointment(pharmacy);
+            dermatologistAppointment.setPatientWithDermatologistAppointment(patient);
+            dermatologistAppointmentRepository.save(dermatologistAppointment);
+            return true;
+        }
+        return false;
+    }
+
+    //Nemanja
+    private Boolean isDermatologistAppointmentInsideDermatologistWorkTime(AppointmentScheduleByStaffDTO appointmentScheduleByStaffDTO){
+        LocalDateTime appointmentStartTime = appointmentScheduleByStaffDTO.getAppointmentStartTime();
+        LocalDateTime appointmentEndTime = appointmentScheduleByStaffDTO.getAppointmentEndTime();
+        LocalDateTime workStartTime = appointmentScheduleByStaffDTO.getStaffWorkStartTime();
+        LocalDateTime workEndTime = appointmentScheduleByStaffDTO.getStaffWorkEndTime();
+        return utilityMethods.isTimeIntervalOutsideSecondTimeInterval(workStartTime,workEndTime,appointmentStartTime,appointmentEndTime);
+    }
+
+    //Nemanja
+    private Boolean doesDermatologistHaveAppointmentInSameTime(Dermatologist dermatologist, DermatologistAppointment dermatologistAppointment) {
+        List<DermatologistAppointment> dermatologistAppointmentList = getAllFutureReservedAndOpenDermatologistAppointmentByDermatologist(dermatologist);
+        return checkDoesHaveAnyOtherDermatologistAppointmentWithSameTime(dermatologistAppointment,dermatologistAppointmentList);
+    }
+
+    //Nemanja
+    private List<DermatologistAppointment> getAllFutureReservedAndOpenDermatologistAppointmentByDermatologist(Dermatologist dermatologist){
+        return dermatologist.getDermatologistAppointments().stream()
+                .filter(d -> ((d.getStatusOfAppointment().equals(StatusOfAppointment.Reserved) || d.getStatusOfAppointment().equals(StatusOfAppointment.Open)) && d.getDermatologistAppointmentStartTime().isAfter(LocalDateTime.now())))
+                .collect(Collectors.toList());
     }
 
 }

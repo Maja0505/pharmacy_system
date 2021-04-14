@@ -1,5 +1,6 @@
 package com.isa.pharmacies_system.controller;
 
+import com.isa.pharmacies_system.DTO.AppointmentScheduleByStaffDTO;
 import com.isa.pharmacies_system.DTO.PatientAppointmentInfoDTO;
 import com.isa.pharmacies_system.converter.PatientConverter;
 import com.isa.pharmacies_system.domain.schedule.DermatologistAppointment;
@@ -76,7 +77,6 @@ public class DermatologistAppointmentController {
         }
     }
 
-
     //Nemanja
     @GetMapping("/allPastAppointmentByDermatologist/{dermatologistId}/{page}")
     public ResponseEntity<List<PatientAppointmentInfoDTO>> getAllPastDermatologistAppointmentByDermatologist(@PathVariable ("dermatologistId") Long id,@PathVariable int page){
@@ -122,6 +122,34 @@ public class DermatologistAppointmentController {
             return new ResponseEntity<>(dermatologistAppointmentConverter.convertListOfDermatologistAppointmentToDermatologistAppointmentDTOS(dermatologistAppointmentList),HttpStatus.OK);
         }catch (Exception e){
             return new ResponseEntity<>(null,HttpStatus.NOT_FOUND);
+        }
+    }
+
+    //Nemanja
+    @GetMapping("/allFutureReserved/{dermatologistId}/{pharmacyId}")
+    public ResponseEntity<List<DermatologistAppointmentDTO>> getAllFutureReservedDermatologistAppointmentByDermatologistInPharmacy(@PathVariable Long dermatologistId,@PathVariable Long pharmacyId){
+        try {
+            List<DermatologistAppointment> dermatologistAppointmentList = dermatologistAppointmentService.findAllFutureReservedDermatologistAppointmentByDermatologistAndPharmacy(dermatologistId,pharmacyId);
+            return new ResponseEntity<>(dermatologistAppointmentConverter.convertListOfDermatologistAppointmentToDermatologistAppointmentDTOS(dermatologistAppointmentList),HttpStatus.OK);
+        }catch (Exception e){
+            return new ResponseEntity<>(null,HttpStatus.NOT_FOUND);
+        }
+    }
+
+    //Nemanja (potrebno je dodati logiku za dobijanje cene dermatologistAppointmenta za odrdjenu apteku)
+    @PostMapping(value = "/bookByDermatologist",consumes = "application/json")
+    public ResponseEntity<Boolean> bookDermatologistAppointmentByDermatologist(@RequestBody AppointmentScheduleByStaffDTO appointmentScheduleByStaffDTO){
+        try {
+            Double priceOfAppointment = 40.0;
+            DermatologistAppointment dermatologistAppointment = dermatologistAppointmentConverter.convertAppointmentScheduleByStaffDTOToDermatologistAppointment(appointmentScheduleByStaffDTO,priceOfAppointment);
+            if(dermatologistAppointmentService.bookDermatologistAppointmentByDermatologist(appointmentScheduleByStaffDTO,dermatologistAppointment)){
+                emailService.sendNotificationForSuccessBookAppointment(appointmentScheduleByStaffDTO.getPatientId());
+                return new ResponseEntity<>(HttpStatus.CREATED);
+            }else{
+                return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
+            }
+        }catch (Exception e ){
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
 
