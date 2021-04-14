@@ -36,7 +36,11 @@ public class EmailService {
         mail.setTo("isa2020.team36@gmail.com");
         mail.setFrom(env.getProperty("spring.mail.username"));
         mail.setSubject("Zakazivanje pregleda");
-        mail.setText("Pozdrav " + patient.getFirstName() + ",\n\nUspesno ste zakazali pregled.\n");
+        if(patient != null){
+            mail.setText("Pozdrav " + patient.getFirstName() + ",\n\nUspesno ste zakazali pregled.\n");
+        }else{
+            mail.setText("Pozdrav !!!!");
+        }
         javaMailSender.send(mail);
     }
 

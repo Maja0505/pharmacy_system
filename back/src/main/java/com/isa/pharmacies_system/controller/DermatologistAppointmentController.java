@@ -149,6 +149,7 @@ public class DermatologistAppointmentController {
                 return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
             }
         }catch (Exception e ){
+            Thread.currentThread().interrupt();
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
