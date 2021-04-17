@@ -4,9 +4,12 @@ import com.isa.pharmacies_system.DTO.*;
 import com.isa.pharmacies_system.converter.DermatologistAppointmentConverter;
 import com.isa.pharmacies_system.converter.PatientConverter;
 import com.isa.pharmacies_system.converter.UserConverter;
+import com.isa.pharmacies_system.domain.medicine.Medicine;
 import com.isa.pharmacies_system.domain.schedule.DermatologistAppointment;
 import com.isa.pharmacies_system.domain.user.Patient;
 import com.isa.pharmacies_system.service.DermatologistAppointmentService;
+import com.isa.pharmacies_system.service.MedicineService;
+import com.isa.pharmacies_system.service.iService.IMedicineService;
 import com.isa.pharmacies_system.service.iService.IPatientService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -28,18 +31,22 @@ public class PatientController {
     private PatientConverter patientConverter;
     private DermatologistAppointmentService dermatologistAppointmentService;
     private DermatologistAppointmentConverter dermatologistAppointmentConverter;
+    private IMedicineService medicineService;
 
     @Autowired
-    public PatientController(IPatientService patientService, DermatologistAppointmentService dermatologistAppointmentService) {
+    public PatientController(IPatientService patientService, DermatologistAppointmentService dermatologistAppointmentService, MedicineService medicineService) {
 
         this.patientService = patientService;
         this.userConverter = new UserConverter();
         this.patientConverter = new PatientConverter();
         this.dermatologistAppointmentConverter = new DermatologistAppointmentConverter();
         this.dermatologistAppointmentService = dermatologistAppointmentService;
+        this.medicineService = medicineService;
+
     }
 
-    @GetMapping(value = "/{id}", consumes = "application/json")
+    //#1
+    @GetMapping(value = "/{id}")
     public ResponseEntity<Patient> getPatient(@PathVariable Long id){
 
         Patient patient = patientService.findOne(id);
@@ -49,11 +56,14 @@ public class PatientController {
         return new ResponseEntity<>(patient, HttpStatus.OK);
     }
 
+    //#1
+    @GetMapping(value = "/all")
     public ResponseEntity<List<Patient>> getAllPatient(){
         return new ResponseEntity<>(patientService.findAll(), HttpStatus.OK);
     }
 
-    @GetMapping(value = "/{id}/profileInfo", consumes = "application/json")
+    //#1
+    @GetMapping(value = "/{id}/profileInfo")
     public ResponseEntity<UserPersonalInfoDTO> getPatientProfileInfo(@PathVariable Long id){
 
         try{
@@ -64,6 +74,7 @@ public class PatientController {
         }
     }
 
+    //#1
     @PutMapping(value ="/update", consumes = "application/json")
     public ResponseEntity<Boolean> updatePatientProfileInfo(@RequestBody UserPersonalInfoDTO userPersonalInfoDTO){
 
@@ -76,6 +87,7 @@ public class PatientController {
         }
     }
 
+    //#1
     @PutMapping(value = "/changePassword",consumes = "application/json")
     public ResponseEntity<Boolean> changePassword(@RequestBody UserPasswordDTO userPasswordDTO){
 
@@ -89,6 +101,7 @@ public class PatientController {
         }
     }
 
+    //#1
     @GetMapping(value = "/{id}/additionalInfo", consumes = "application/json")
     public ResponseEntity<PatientAdditionalInfoDTO> getPatientAdditionalInfo(@PathVariable Long id){
 
@@ -100,12 +113,14 @@ public class PatientController {
         }
     }
 
+    //#1
     @PutMapping(value = "/{patientId}/addMedicineAllergie/{medicineId}", consumes = "application/json")
     public ResponseEntity<Boolean> addMedicineAllergies(@PathVariable Long patientId, @PathVariable Long medicineId){
 
         try {
+            Medicine medicine = medicineService.findOne(medicineId);
             Patient patient = patientService.findOne(patientId);
-            patientService.addMedicineAllergies(patient,medicineId);
+            patientService.addMedicineAllergies(patient,medicine);
             return new ResponseEntity<>(HttpStatus.OK);
         }catch (Exception e){
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -113,6 +128,7 @@ public class PatientController {
 
     }
 
+    //#1
     @GetMapping(value = "/{id}/dermatologistAppointment", consumes = "application/json")
     public ResponseEntity<List<DermatologistAppointmentDTO>> getDermatologistAppointmentsForPatient(@PathVariable Long id){
 
