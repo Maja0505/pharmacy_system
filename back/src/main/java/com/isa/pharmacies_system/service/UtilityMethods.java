@@ -2,6 +2,9 @@ package com.isa.pharmacies_system.service;
 
 import com.isa.pharmacies_system.DTO.PharmacistAppointmentTimeDTO;
 import com.isa.pharmacies_system.domain.schedule.PharmacistAppointment;
+import com.isa.pharmacies_system.domain.schedule.StatusOfAppointment;
+
+import java.time.Duration;
 import java.time.LocalDateTime;
 
 public class UtilityMethods {
@@ -34,13 +37,15 @@ public class UtilityMethods {
     //#1[3.16]Korak1/2/3
     //provera da li je selektovan datum izmedju pocetka i kraja appointmenta
     // i provera da li ja appointmnet izmedju pocetka i kraja izabranog datuma
+    //da li je rezervisan
     public Boolean isSelectedDateReserved(PharmacistAppointmentTimeDTO timeDTO, PharmacistAppointment pharmacistAppointment){
         LocalDateTime appointmentStartTime = pharmacistAppointment.getPharmacistAppointmentStartTime();
         LocalDateTime appintmentEndTime = pharmacistAppointment.getPharmacistAppointmentStartTime().plusMinutes((long)pharmacistAppointment.getPharmacistAppointmentDuration());
-        return  isSelectedStartBetweenTwoDates(timeDTO.getStartTime(),appointmentStartTime,appintmentEndTime)
+        return  (isSelectedStartBetweenTwoDates(timeDTO.getStartTime(),appointmentStartTime,appintmentEndTime)
                 || isSelectedEndBetweenTwoDates(timeDTO.getStartTime().plusMinutes((long)timeDTO.getDuration()),appointmentStartTime,appintmentEndTime)
                 || isSelectedStartBetweenTwoDates(appointmentStartTime,timeDTO.getStartTime(),timeDTO.getStartTime().plusMinutes((long)timeDTO.getDuration()))
-                || isSelectedEndBetweenTwoDates(appintmentEndTime,timeDTO.getStartTime(),timeDTO.getStartTime().plusMinutes((long)timeDTO.getDuration()));
+                || isSelectedEndBetweenTwoDates(appintmentEndTime,timeDTO.getStartTime(),timeDTO.getStartTime().plusMinutes((long)timeDTO.getDuration())))
+                && pharmacistAppointment.getStatusOfAppointment().equals(StatusOfAppointment.Reserved);
     }
 
     //#1[3.16]Korak1/2/3
@@ -53,5 +58,12 @@ public class UtilityMethods {
     //pocetak jednog moze biti jednak kraju drugog
     public Boolean isSelectedStartBetweenTwoDates(LocalDateTime localDateTime, LocalDateTime start, LocalDateTime end){
         return 	(localDateTime.isEqual(start) || localDateTime.isAfter(start)) && (localDateTime.isBefore(end));
+    }
+
+    public Boolean isCancellationPossible(LocalDateTime start){
+
+        LocalDateTime now = LocalDateTime.now();
+        Duration duration = Duration.between(now,start);
+        return duration.toHours() >= 24;
     }
 }
