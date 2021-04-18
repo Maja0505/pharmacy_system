@@ -41,14 +41,13 @@ public class DermatologistAppointmentConverter {
         return dermatologistAppointmentDTOS;
     }
 
-    public DermatologistAppointment convertAppointmentScheduleByStaffDTOToDermatologistAppointment(AppointmentScheduleByStaffDTO appointmentScheduleByStaffDTO,Double price){
+    public DermatologistAppointment convertAppointmentScheduleByStaffDTOToDermatologistAppointment(AppointmentScheduleByStaffDTO appointmentScheduleByStaffDTO){
         DermatologistAppointment dermatologistAppointment = new DermatologistAppointment();
         dermatologistAppointment.setDermatologistAppointmentStartTime(appointmentScheduleByStaffDTO.getAppointmentStartTime());
         dermatologistAppointment.setDermatologistAppointmentEndTime(appointmentScheduleByStaffDTO.getAppointmentEndTime());
         dermatologistAppointment.setAppointmentPoints(0);
         dermatologistAppointment.setStatusOfAppointment(StatusOfAppointment.Reserved);
         dermatologistAppointment.setTypeOfAppointment(TypeOfAppointment.Dermatologist_appointment);
-        dermatologistAppointment.setAppointmentPrice(price);
         return dermatologistAppointment;
     }
 }

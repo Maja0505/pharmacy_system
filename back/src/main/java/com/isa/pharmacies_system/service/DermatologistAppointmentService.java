@@ -2,6 +2,7 @@ package com.isa.pharmacies_system.service;
 
 import com.isa.pharmacies_system.DTO.AppointmentScheduleByStaffDTO;
 import com.isa.pharmacies_system.DTO.PatientAppointmentInfoDTO;
+import com.isa.pharmacies_system.DTO.PriceListForAppointmentDTO;
 import com.isa.pharmacies_system.domain.pharmacy.Pharmacy;
 import com.isa.pharmacies_system.domain.schedule.DermatologistAppointment;
 import com.isa.pharmacies_system.domain.schedule.PharmacistAppointment;
@@ -31,13 +32,15 @@ public class DermatologistAppointmentService implements IDermatologistAppointmen
     private IDermatologistRepository dermatologistRepository;
     private IPharmacyRepository pharmacyRepository;
     private UtilityMethods utilityMethods;
+    private IPriceListRepository priceListRepository;
 
     @Autowired
-    public DermatologistAppointmentService(IDermatologistAppointmentRepository dermatologistAppointmentRepository, IPatientRepository patientRepository, IDermatologistRepository dermatologistRepository, IPharmacyRepository pharmacyRepository) {
+    public DermatologistAppointmentService(IDermatologistAppointmentRepository dermatologistAppointmentRepository, IPatientRepository patientRepository, IDermatologistRepository dermatologistRepository, IPharmacyRepository pharmacyRepository, IPriceListRepository priceListRepository) {
         this.dermatologistAppointmentRepository = dermatologistAppointmentRepository;
         this.patientRepository = patientRepository;
         this.dermatologistRepository = dermatologistRepository;
         this.pharmacyRepository = pharmacyRepository;
+        this.priceListRepository = priceListRepository;
         this.utilityMethods = new UtilityMethods();
     }
 
@@ -192,22 +195,38 @@ public class DermatologistAppointmentService implements IDermatologistAppointmen
     //Nemanja
     @Override
     public Boolean bookDermatologistAppointmentByDermatologist(AppointmentScheduleByStaffDTO appointmentScheduleByStaffDTO, DermatologistAppointment dermatologistAppointment) {
+
         if(!isDermatologistAppointmentInsideDermatologistWorkTime(appointmentScheduleByStaffDTO)
             || !utilityMethods.isTimeBeforeOtherTime(appointmentScheduleByStaffDTO.getAppointmentStartTime(),appointmentScheduleByStaffDTO.getAppointmentEndTime())){
             return false;
         }
+
         Patient patient = patientRepository.findById(appointmentScheduleByStaffDTO.getPatientId()).orElse(null);
         Dermatologist dermatologist = dermatologistRepository.findById(appointmentScheduleByStaffDTO.getStaffId()).orElse(null);
+
         if(!doesPatientHaveAnotherAppointmentInSameTime(patient,dermatologistAppointment)
             && !doesDermatologistHaveAppointmentInSameTime(dermatologist,dermatologistAppointment)){
+
             Pharmacy pharmacy = pharmacyRepository.findById(appointmentScheduleByStaffDTO.getPharmacyId()).orElse(null);
-            dermatologistAppointment.setDermatologistForAppointment(dermatologist);
-            dermatologistAppointment.setPharmacyForDermatologistAppointment(pharmacy);
-            dermatologistAppointment.setPatientWithDermatologistAppointment(patient);
+            fillDermatologistAppointmentWithPatientPharmacyAndDermatologist(patient,dermatologist,pharmacy,dermatologistAppointment);
+            fillDermatologistAppointmentWithPrice(dermatologistAppointment);
             dermatologistAppointmentRepository.save(dermatologistAppointment);
             return true;
         }
         return false;
+    }
+
+    //Nemanja
+    private void fillDermatologistAppointmentWithPrice(DermatologistAppointment dermatologistAppointment) {
+        PriceListForAppointmentDTO priceListForAppointmentDTO = priceListRepository.getPriceListForAppointmentByPharmacyId(dermatologistAppointment.getPharmacyForDermatologistAppointment().getId());
+        dermatologistAppointment.setAppointmentPrice(priceListForAppointmentDTO.getDermatologistAppointmentPricePerHour());
+    }
+
+    //Nemanja
+    private void fillDermatologistAppointmentWithPatientPharmacyAndDermatologist(Patient patient,Dermatologist dermatologist,Pharmacy pharmacy,DermatologistAppointment dermatologistAppointment){
+        dermatologistAppointment.setDermatologistForAppointment(dermatologist);
+        dermatologistAppointment.setPharmacyForDermatologistAppointment(pharmacy);
+        dermatologistAppointment.setPatientWithDermatologistAppointment(patient);
     }
 
     //Nemanja
@@ -216,6 +235,9 @@ public class DermatologistAppointmentService implements IDermatologistAppointmen
         LocalDateTime appointmentEndTime = appointmentScheduleByStaffDTO.getAppointmentEndTime();
         LocalDateTime workStartTime = appointmentScheduleByStaffDTO.getStaffWorkStartTime();
         LocalDateTime workEndTime = appointmentScheduleByStaffDTO.getStaffWorkEndTime();
+        if(workStartTime == null || workEndTime == null){
+            return false;
+        }
         return utilityMethods.isTimeIntervalOutsideSecondTimeInterval(workStartTime,workEndTime,appointmentStartTime,appointmentEndTime);
     }
 

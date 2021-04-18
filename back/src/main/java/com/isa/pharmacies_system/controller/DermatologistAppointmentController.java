@@ -138,12 +138,11 @@ public class DermatologistAppointmentController {
         }
     }
 
-    //Nemanja (potrebno je dodati logiku za dobijanje cene dermatologistAppointmenta za odrdjenu apteku)
+    //Nemanja
     @PostMapping(value = "/bookByDermatologist",consumes = "application/json")
     public ResponseEntity<Boolean> bookDermatologistAppointmentByDermatologist(@RequestBody AppointmentScheduleByStaffDTO appointmentScheduleByStaffDTO){
         try {
-            Double priceOfAppointment = 40.0;
-            DermatologistAppointment dermatologistAppointment = dermatologistAppointmentConverter.convertAppointmentScheduleByStaffDTOToDermatologistAppointment(appointmentScheduleByStaffDTO,priceOfAppointment);
+            DermatologistAppointment dermatologistAppointment = dermatologistAppointmentConverter.convertAppointmentScheduleByStaffDTOToDermatologistAppointment(appointmentScheduleByStaffDTO);
             if(dermatologistAppointmentService.bookDermatologistAppointmentByDermatologist(appointmentScheduleByStaffDTO,dermatologistAppointment)){
                 emailService.sendNotificationForSuccessBookAppointment(appointmentScheduleByStaffDTO.getPatientId());
                 return new ResponseEntity<>(HttpStatus.CREATED);
