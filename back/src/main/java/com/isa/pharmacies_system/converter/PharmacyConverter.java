@@ -6,6 +6,7 @@ import java.util.List;
 
 import com.isa.pharmacies_system.DTO.PharmacyDTO;
 import com.isa.pharmacies_system.DTO.PharmacyNewDTO;
+import com.isa.pharmacies_system.DTO.PharmacyWithMedicinePriceDTO;
 import com.isa.pharmacies_system.domain.complaint.PharmacyComplaint;
 import com.isa.pharmacies_system.domain.medicine.MedicineReservation;
 import com.isa.pharmacies_system.domain.pharmacy.Pharmacy;
@@ -13,6 +14,7 @@ import com.isa.pharmacies_system.domain.pharmacy.Promotions;
 import com.isa.pharmacies_system.domain.rating.PharmacyRating;
 import com.isa.pharmacies_system.domain.schedule.DermatologistAppointment;
 import com.isa.pharmacies_system.domain.schedule.WorkerSchedule;
+import com.isa.pharmacies_system.domain.storage.PharmacyStorageItem;
 import com.isa.pharmacies_system.domain.user.Dermatologist;
 import com.isa.pharmacies_system.domain.user.Pharmacist;
 
@@ -62,5 +64,23 @@ public class PharmacyConverter {
 		pharmacyNewDTO.setPharmacyDescription(pharmacy.getPharmacyDescription());
 		pharmacyNewDTO.setPharmacyName(pharmacy.getPharmacyName());
 		return pharmacyNewDTO;
+	}
+
+	public PharmacyWithMedicinePriceDTO convertPharmacyStorageItemToPharmacyWithMedicinePriceDTO(PharmacyStorageItem pharmacyStorageItem){
+		PharmacyWithMedicinePriceDTO pharmacyWithMedicinePriceDTO = new PharmacyWithMedicinePriceDTO();
+		pharmacyWithMedicinePriceDTO.setId(pharmacyStorageItem.getPharmacyStorageWithItem().getPharmacy().getId());
+		pharmacyWithMedicinePriceDTO.setPharmacyName(pharmacyStorageItem.getPharmacyStorageWithItem().getPharmacy().getPharmacyName());
+		pharmacyWithMedicinePriceDTO.setPharmacyAddress(pharmacyStorageItem.getPharmacyStorageWithItem().getPharmacy().getPharmacyAddress());
+		pharmacyWithMedicinePriceDTO.setPharmacyAverageRating(pharmacyStorageItem.getPharmacyStorageWithItem().getPharmacy().getPharmacyAverageRating());
+		return pharmacyWithMedicinePriceDTO;
+	}
+
+	public List<PharmacyWithMedicinePriceDTO> convertListPharmacyStorageItemsToPharmacyWithMedicinePriceDTOS(List<PharmacyStorageItem> pharmacyStorageItems){
+		List<PharmacyWithMedicinePriceDTO> pharmacyWithMedicinePriceDTOList  = new ArrayList<>();
+		for (PharmacyStorageItem pharmacyStorageItem: pharmacyStorageItems) {
+			PharmacyWithMedicinePriceDTO pharmacyWithMedicinePriceDTO = convertPharmacyStorageItemToPharmacyWithMedicinePriceDTO(pharmacyStorageItem);
+			pharmacyWithMedicinePriceDTOList.add(pharmacyWithMedicinePriceDTO);
+		}
+		return pharmacyWithMedicinePriceDTOList;
 	}
 }

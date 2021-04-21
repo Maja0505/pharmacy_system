@@ -107,3 +107,14 @@ insert into medicine_reservations(id,patient_for_medicine_reservation_id,date_of
 insert into medicine_reservations(id,patient_for_medicine_reservation_id,date_of_taking_medicine,pharmacy_for_medicine_reservation_id,status_of_medicine_reservation,reserved_medicine_id) values (nextval('my_seq_gen_medicine_reservation'),1,'2021-02-10',1,2,2);
 insert into medicine_reservations(id,patient_for_medicine_reservation_id,date_of_taking_medicine,pharmacy_for_medicine_reservation_id,status_of_medicine_reservation,reserved_medicine_id) values (nextval('my_seq_gen_medicine_reservation'),1,'2022-02-03',1,2,3);
 insert into medicine_reservations(id,patient_for_medicine_reservation_id,date_of_taking_medicine,pharmacy_for_medicine_reservation_id,status_of_medicine_reservation,reserved_medicine_id) values (nextval('my_seq_gen_medicine_reservation'),1,'2023-02-03',1,2,4);
+
+
+insert into storages(id,type_of_storage) values (nextval('my_seq_storage'),1);
+
+insert into pharmacy_storages(id,pharmacy_id) values (1,1);
+
+insert into items(id,medicine_amount,type_of_item,medicine_item_id) values (nextval('my_seq_item'),30,4,1);
+
+insert into pharmacy_storage_items(id,pharmacy_storage_with_item_id) values (1,1);
+
+insert into medicine_price(id,medicine_price,medicine_with_prices_id,price_list_for_medicine_id) values (nextval('my_seq_medicine_price'),200,1,1);
