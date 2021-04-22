@@ -12,5 +12,7 @@ public interface IPharmacistAppointmentService{
     Page<PharmacistAppointment> getAllPastPharmacistAppointmentByPharmacist(Long id,int page);
     List<PatientAppointmentInfoDTO> sortByAppointmentDuration(List<PatientAppointmentInfoDTO> patientAppointmentInfoDTOList,Boolean asc);
     Boolean bookPharmacistAppointment(Long patientId, Long pharmacistId, PharmacistAppointmentTimeDTO timeDTO);
+    List<PharmacistAppointment> getFutureReservedAppointment(Long patientId);
+    Boolean cancelPharmacistAppointment(Long appointmentId);
 
 }

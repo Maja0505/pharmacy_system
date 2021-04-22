@@ -74,7 +74,7 @@ public class DermatologistAppointmentService implements IDermatologistAppointmen
     @Override
     public Boolean cancelDermatologistAppointment(DermatologistAppointment dermatologistAppointment){
 
-        if(isCancellationPossible(dermatologistAppointment.getDermatologistAppointmentStartTime()) && isAppointmentReserved(dermatologistAppointment)){
+        if(utilityMethods.isCancellationPossible(dermatologistAppointment.getDermatologistAppointmentStartTime()) && isAppointmentReserved(dermatologistAppointment)){
             dermatologistAppointment.setStatusOfAppointment(StatusOfAppointment.Open);
             dermatologistAppointment.setPatientWithDermatologistAppointment(null);
             dermatologistAppointmentRepository.save(dermatologistAppointment);
@@ -91,12 +91,6 @@ public class DermatologistAppointmentService implements IDermatologistAppointmen
         return dermatologistAppointment.getStatusOfAppointment().equals(StatusOfAppointment.Open);
     }
 
-    public Boolean isCancellationPossible(LocalDateTime start){
-
-        LocalDateTime now = LocalDateTime.now();
-        Duration duration = Duration.between(now,start);
-        return duration.toHours() >= 24;
-    }
 
     //Nemanja
     private Boolean doesPatientHaveAnotherAppointmentInSameTime(Patient patient,DermatologistAppointment dermatologistAppointment){

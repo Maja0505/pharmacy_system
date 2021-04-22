@@ -1,6 +1,7 @@
 package com.isa.pharmacies_system.controller;
 
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -69,6 +70,9 @@ public class PharmacyController {
 	public ResponseEntity<List<PharmacyDTO>> getAllPharmacyWithFreePharmacistByDate(@RequestBody PharmacistAppointmentTimeDTO timeDTO){
 
 		try {
+			if(!timeDTO.getStartTime().isAfter(LocalDateTime.now()) || timeDTO.getDuration() < 10){
+				return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+			}
 			List<Pharmacy> pharmacies = iPharmacyService.getAllPharmacyWithFreePharmacistByDate(timeDTO);
 			List<PharmacyDTO> pharmacyDTOS = new ArrayList<>();
 			for (Pharmacy pharmacy: pharmacies) {

@@ -1,8 +1,10 @@
 package com.isa.pharmacies_system.controller;
 
 import com.isa.pharmacies_system.DTO.PatientAppointmentInfoDTO;
+import com.isa.pharmacies_system.DTO.PharmacistAppointmentDTO;
 import com.isa.pharmacies_system.DTO.PharmacistAppointmentTimeDTO;
 import com.isa.pharmacies_system.converter.PatientConverter;
+import com.isa.pharmacies_system.converter.PharmacistAppointmentConverter;
 import com.isa.pharmacies_system.domain.schedule.PharmacistAppointment;
 import com.isa.pharmacies_system.service.EmailService;
 import com.isa.pharmacies_system.service.iService.IPharmacistAppointmentService;
@@ -13,6 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Controller
@@ -22,12 +25,14 @@ public class PharmacistAppointmentController {
     private IPharmacistAppointmentService pharmacistAppointmentService;
     private PatientConverter patientConverter;
     private EmailService emailService;
+    private PharmacistAppointmentConverter pharmacistAppointmentConverter;
 
     @Autowired
     public PharmacistAppointmentController(IPharmacistAppointmentService pharmacistAppointmentService, EmailService emailService) {
         this.pharmacistAppointmentService = pharmacistAppointmentService;
         this.emailService = emailService;
         this.patientConverter = new PatientConverter();
+        this.pharmacistAppointmentConverter = new PharmacistAppointmentConverter();
     }
 
     @GetMapping("/allPastAppointment/{pharmacistId}/{page}")
@@ -60,9 +65,12 @@ public class PharmacistAppointmentController {
     public ResponseEntity<Boolean> bookPharmacistAppointment(@PathVariable Long patientId,@PathVariable Long pharmacistId,@RequestBody PharmacistAppointmentTimeDTO timeDTO){
 
         try {
+            if(!timeDTO.getStartTime().isAfter(LocalDateTime.now()) || timeDTO.getDuration() < 10){
+                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            }
             if(pharmacistAppointmentService.bookPharmacistAppointment(patientId,pharmacistId,timeDTO)){
+                emailService.sendNotificationForSuccessBookAppointment(patientId);
                 return new ResponseEntity<>(HttpStatus.OK);
-                //emailService.sendNotificationForSuccessBookAppointment(patientId);
             }
             return new ResponseEntity<>(HttpStatus.NOT_MODIFIED);
         }catch (Exception e){
@@ -71,5 +79,27 @@ public class PharmacistAppointmentController {
         }
     }
 
+    //#1[3.18]
+    @GetMapping(value = "/all/reserved/{patientId}")
+    public ResponseEntity<List<PharmacistAppointmentDTO>> getAllFutureReservedPharmacistAppointmentForPatient(@PathVariable Long patientId){
+        try {
+           List<PharmacistAppointment> pharmacistAppointments =  pharmacistAppointmentService.getFutureReservedAppointment(patientId);
+           List<PharmacistAppointmentDTO> pharmacistAppointmentDTOS =pharmacistAppointmentConverter.convertPharmacistAppointmentsListToDTOS(pharmacistAppointments);
+           return new ResponseEntity<>(pharmacistAppointmentDTOS,HttpStatus.OK);
+        }catch (Exception e){
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
+
+
+    //#1[3.18]
+    @PutMapping(value = "/cancel/{appointmentId}")
+    public ResponseEntity<Boolean> cancelPharmacistAppointment(@PathVariable Long appointmentId){
+        try {
+            return new ResponseEntity<>(pharmacistAppointmentService.cancelPharmacistAppointment(appointmentId),HttpStatus.OK);
+        }catch (Exception e){
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
 
 }

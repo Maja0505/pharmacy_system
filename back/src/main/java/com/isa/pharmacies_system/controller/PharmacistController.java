@@ -15,6 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Controller
@@ -72,6 +73,9 @@ public class PharmacistController {
     public ResponseEntity<List<PharmacistInfoDTO>> getAllPharmacistsWithOpenAppointmentsByPharmacyId(@PathVariable Long pharmacyId, @RequestBody PharmacistAppointmentTimeDTO timeDTO) {
 
         try {
+            if(!timeDTO.getStartTime().isAfter(LocalDateTime.now()) || timeDTO.getDuration() < 10){
+                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            }
             List<Pharmacist> pharmacists = pharmacistService.getAllPharmacistsWithOpenAppointmentsByPharmacyId(pharmacyId, timeDTO);
             List<PharmacistInfoDTO> pharmacistInfoDTOS = pharmacistConverter.convertPharmacistListToPharmacistInfoDTOList(pharmacists);
             return new ResponseEntity<>(pharmacistInfoDTOS, HttpStatus.OK);

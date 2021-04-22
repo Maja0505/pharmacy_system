@@ -13,9 +13,13 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class PharmacistAppointmentService implements IPharmacistAppointmentService {
@@ -57,8 +61,11 @@ public class PharmacistAppointmentService implements IPharmacistAppointmentServi
     public Boolean bookPharmacistAppointment(Long patientId, Long pharmacistId, PharmacistAppointmentTimeDTO timeDTO){
         Patient patient = patientRepository.findById(patientId).orElse(null);
         Pharmacist pharmacist = pharmacistRepository.findById(pharmacistId).orElse(null);
-        if(patient != null && pharmacist != null && doesPharmacistWorkInSelectedDate(timeDTO, pharmacist)
+        if(patient != null && pharmacist != null
+                && timeDTO.getStartTime().isAfter(LocalDateTime.now())
+                && doesPharmacistWorkInSelectedDate(timeDTO, pharmacist)
                 && (doesPharmacistHaveOpenSelectedAppointment(timeDTO, pharmacist))){
+
             pharmacistAppointmentRepository.save(createNewPharmacistAppointment(patient, pharmacist, timeDTO));
             return true;
         }else{
@@ -92,6 +99,32 @@ public class PharmacistAppointmentService implements IPharmacistAppointmentServi
         return pharmacistAppointment;
 
     }
+
+    //#1[3.18]
+    @Override
+    public List<PharmacistAppointment> getFutureReservedAppointment(Long patientId){
+        Patient patient = patientRepository.findById(patientId).orElse(null);
+        if(patient != null){
+                return patient.getPharmacistAppointments().stream().filter(pharmacistAppointment -> pharmacistAppointment.getPharmacistAppointmentStartTime().isAfter(LocalDateTime.now()) && pharmacistAppointment.getStatusOfAppointment().equals(StatusOfAppointment.Reserved)).collect(Collectors.toList());
+        }
+        return new ArrayList<>();
+    }
+
+    //#1[3.18]
+    @Override
+    public Boolean cancelPharmacistAppointment(Long appointmentId){
+        PharmacistAppointment appointment = pharmacistAppointmentRepository.findById(appointmentId).orElse(null);
+        if(appointment != null && utilityMethods.isCancellationPossible(appointment.getPharmacistAppointmentStartTime())){
+            appointment.setPatientWithPharmacistAppointment(null);
+            appointment.setPharmacistForAppointment(null);
+            appointment.setStatusOfAppointment(StatusOfAppointment.Cancel);
+            pharmacistAppointmentRepository.save(appointment);
+            return true;
+        }
+        return false;
+    }
+
+
 
 
 
