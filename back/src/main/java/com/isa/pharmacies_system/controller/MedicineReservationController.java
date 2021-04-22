@@ -55,6 +55,7 @@ public class MedicineReservationController {
             }
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }catch (Exception e){
+            Thread.currentThread().interrupt();
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }

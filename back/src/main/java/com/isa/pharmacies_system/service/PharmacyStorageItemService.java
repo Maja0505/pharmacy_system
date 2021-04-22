@@ -36,6 +36,6 @@ public class PharmacyStorageItemService implements IPharmacyStorageItemService {
 
     private Boolean doesPatientHaveAllergiesOnMedicine(Long medicineId, Long patientId){
         Patient patient = patientRepository.findById(patientId).orElse(null);
-        return patient.getMedicineAllergies().stream().filter(medicine -> medicine.getId() == medicineId).count() == 0;
+        return patient != null && patient.getMedicineAllergies().stream().filter(medicine -> medicine.getId() == medicineId).count() == 0;
     }
 }
