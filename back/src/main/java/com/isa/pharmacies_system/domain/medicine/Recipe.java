@@ -7,6 +7,7 @@ import com.isa.pharmacies_system.domain.user.Patient;
 
 import javax.persistence.*;
 import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -23,8 +24,8 @@ public class Recipe {
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Patient patientForRecipe;
 
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
-    private Instant creationDate;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern ="yyyy-MM-dd HH:mm", timezone = "UTC")
+    private LocalDateTime creationDate;
 
     //spisak lekova sa kolicinama
     @JsonManagedReference
@@ -35,42 +36,35 @@ public class Recipe {
 
     }
 
-    public void setId(long id) {
-        this.id = id;
-    }
-
-    public void setPatientForRecipe(Patient patientForRecipe) {
-        this.patientForRecipe = patientForRecipe;
-    }
-
-    public void setCreationDate(Instant creationDate) {
-        this.creationDate = creationDate;
-    }
-
-    public void setRecipeItems(Set<RecipeItem> recipeItems) {
-        this.recipeItems = recipeItems;
-    }
-
     public long getId() {
         return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
     }
 
     public Patient getPatientForRecipe() {
         return patientForRecipe;
     }
 
-    public Instant getCreationDate() {
+    public void setPatientForRecipe(Patient patientForRecipe) {
+        this.patientForRecipe = patientForRecipe;
+    }
+
+    public LocalDateTime getCreationDate() {
         return creationDate;
+    }
+
+    public void setCreationDate(LocalDateTime creationDate) {
+        this.creationDate = creationDate;
     }
 
     public Set<RecipeItem> getRecipeItems() {
         return recipeItems;
     }
 
-    public Recipe(long id, Patient patientForRecipe, Instant creationDate, Set<RecipeItem> recipeItems) {
-        this.id = id;
-        this.patientForRecipe = patientForRecipe;
-        this.creationDate = creationDate;
+    public void setRecipeItems(Set<RecipeItem> recipeItems) {
         this.recipeItems = recipeItems;
     }
 }
