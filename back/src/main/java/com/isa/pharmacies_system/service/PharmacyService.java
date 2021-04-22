@@ -116,4 +116,5 @@ public class PharmacyService implements IPharmacyService {
 		return pharmacist.getPharmacistAppointments().stream().filter(pharmacistAppointment -> utilityMethods.isSelectedDateReserved(timeDTO,pharmacistAppointment)).count() == 0;
 	}
 
+
 }
