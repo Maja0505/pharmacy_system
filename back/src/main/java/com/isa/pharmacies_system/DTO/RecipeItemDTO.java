@@ -2,11 +2,20 @@ package com.isa.pharmacies_system.DTO;
 
 public class RecipeItemDTO {
 
+    private Long pharmacyItemId;
     private Long medicineItemId;
     private Long medicineAmount;
     private String recommendedDailyIntake;
 
     public RecipeItemDTO() {
+    }
+
+    public Long getPharmacyItemId() {
+        return pharmacyItemId;
+    }
+
+    public void setPharmacyItemId(Long pharmacyItemId) {
+        this.pharmacyItemId = pharmacyItemId;
     }
 
     public Long getMedicineItemId() {

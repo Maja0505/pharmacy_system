@@ -1,5 +1,7 @@
 package com.isa.pharmacies_system.domain.medicine;
 
+import com.isa.pharmacies_system.domain.pharmacy.Pharmacy;
+
 import java.util.HashSet;
 import java.util.Set;
 
@@ -28,29 +30,18 @@ public class MedicineRequest {
 	
 	@Enumerated(EnumType.ORDINAL)
 	private StateOfMedicineRequest stateOfMedicineRequest;
-	
-	//treba poslati svim administratorima te apoteke
-	
+
+	@OneToOne(cascade = CascadeType.ALL)
+	private Pharmacy pharmacy;
 	
 	public MedicineRequest() {
 		
 	}
 
-	public MedicineRequest(long id, MedicineRequestItem medicineRequestItem,
-		StateOfMedicineRequest stateOfMedicineRequest) {
-	super();
-	this.id = id;
-	this.medicineRequestItem = medicineRequestItem;
-	this.stateOfMedicineRequest = stateOfMedicineRequest;
-	
-	
-	}
-	
-
 	public long getId() {
 		return id;
 	}
-	
+
 	public void setId(long id) {
 		this.id = id;
 	}
@@ -70,11 +61,12 @@ public class MedicineRequest {
 	public void setStateOfMedicineRequest(StateOfMedicineRequest stateOfMedicineRequest) {
 		this.stateOfMedicineRequest = stateOfMedicineRequest;
 	}
-	
-	
-	
-	
-	
-	
 
+	public Pharmacy getPharmacy() {
+		return pharmacy;
+	}
+
+	public void setPharmacy(Pharmacy pharmacy) {
+		this.pharmacy = pharmacy;
+	}
 }
