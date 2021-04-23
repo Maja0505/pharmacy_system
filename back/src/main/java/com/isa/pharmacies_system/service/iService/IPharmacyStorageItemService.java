@@ -15,4 +15,6 @@ public interface IPharmacyStorageItemService {
     void updateMedicineAmountForPharmacyStorageItem(Long id,Long medicineAmount);
     void subtractPharmacyStorageItemMedicineAmountForEveryRecipeItem(Set<RecipeItemDTO> recipeItemsDTO);
     PharmacyStorageItem findOne(Long id);
+    Boolean checkHavePatientAllergiesOnMedicine(Long itemId,Long patientId);
+    List<PharmacyStorageItem> getAllAlternativePharmacyStorageItemsInPharmacyWithEnoughAmount(Long itemId,Long medicineAmount);
 }

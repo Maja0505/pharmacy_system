@@ -67,6 +67,17 @@ insert into medicine (medicine_average_rating, id) values (5.0,3);
 insert into medicine (medicine_average_rating, id) values (4.9,4);
 
 
+insert into medicine_infos_alternative_medicines (medicine_info_id,alternative_medicines_id) values (1,2);
+insert into medicine_infos_alternative_medicines (medicine_info_id,alternative_medicines_id) values (1,3);
+insert into medicine_infos_alternative_medicines (medicine_info_id,alternative_medicines_id) values (2,1);
+insert into medicine_infos_alternative_medicines (medicine_info_id,alternative_medicines_id) values (2,3);
+insert into medicine_infos_alternative_medicines (medicine_info_id,alternative_medicines_id) values (2,4);
+insert into medicine_infos_alternative_medicines (medicine_info_id,alternative_medicines_id) values (3,4);
+
+
+insert into patient_medicine_allergies (patient_id,medicine_allergies_id) values (1,1);
+
+
 insert into suppliers (id) values (10);
 insert into suppliers (id) values (11);
 

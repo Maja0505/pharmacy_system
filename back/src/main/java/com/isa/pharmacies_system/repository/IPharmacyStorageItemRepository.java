@@ -17,4 +17,5 @@ public interface IPharmacyStorageItemRepository extends JpaRepository<PharmacySt
     //Nemanja
     @Query("select p from PharmacyStorageItem p where p.pharmacyStorageWithItem.pharmacy.id=?1 and p.medicineAmount > 0")
     List<PharmacyStorageItem> findAllPharmacyStorageItemsByPharmacyId(Long pharmacyId);
+
 }

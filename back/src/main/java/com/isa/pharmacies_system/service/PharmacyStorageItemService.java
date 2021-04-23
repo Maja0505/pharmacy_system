@@ -11,6 +11,7 @@ import com.isa.pharmacies_system.repository.IPharmacyStorageItemRepository;
 import com.isa.pharmacies_system.service.iService.IPharmacyStorageItemService;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -74,22 +75,6 @@ public class PharmacyStorageItemService implements IPharmacyStorageItemService {
     }
 
     //Nemanja
-    private void createMedicineRequestForMissingItem(RecipeItemDTO recipeItem) {
-        MedicineRequest medicineRequest = new MedicineRequest();
-        MedicineRequestItem medicineRequestItem = new MedicineRequestItem();
-        PharmacyStorageItem item = pharmacyStorageItemRepository.findById(recipeItem.getPharmacyItemId()).orElse(null);
-        if(item != null){
-            medicineRequestItem.setMedicineItem(item.getMedicineItem());
-            medicineRequestItem.setTypeOfItem(TypeOfItem.Medicine_request_item);
-            medicineRequestItem.setMedicineAmount(100);
-            medicineRequest.setPharmacy(item.getPharmacyStorageWithItem().getPharmacy());
-            medicineRequest.setStateOfMedicineRequest(StateOfMedicineRequest.Unavailable_Medicine);
-            medicineRequest.setMedicineRequestItem(medicineRequestItem);
-            medicineRequestRepository.save(medicineRequest);
-        }
-    }
-
-    //Nemanja
     @Override
     public void updateMedicineAmountForPharmacyStorageItem(Long id, Long medicineAmount) {
         PharmacyStorageItem item = pharmacyStorageItemRepository.findById(id).orElse(null);
@@ -113,5 +98,47 @@ public class PharmacyStorageItemService implements IPharmacyStorageItemService {
     public PharmacyStorageItem findOne(Long id) {
         return pharmacyStorageItemRepository.findById(id).orElse(null);
     }
+
+    //Nemanja
+    @Override
+    public Boolean checkHavePatientAllergiesOnMedicine(Long itemId,Long patientId) {
+        PharmacyStorageItem pharmacyStorageItem = pharmacyStorageItemRepository.findById(itemId).orElse(null);
+        Patient patient = patientRepository.findById(patientId).orElse(null);
+        if(patient != null && pharmacyStorageItem != null){
+            return patient.getMedicineAllergies().stream()
+                    .filter(medicine -> medicine.getId() == pharmacyStorageItem.getMedicineItem().getId()).count() > 0;
+        }
+        return false;
+
+    }
+
+    //Nemanja
+    @Override
+    public List<PharmacyStorageItem> getAllAlternativePharmacyStorageItemsInPharmacyWithEnoughAmount(Long itemId,Long medicineAmount) {
+        PharmacyStorageItem pharmacyStorageItem = pharmacyStorageItemRepository.findById(itemId).orElse(null);
+        if(pharmacyStorageItem != null){
+            Set<MedicineInfo> pharmacyStorageItemMedicineAlternativeItems = pharmacyStorageItem.getMedicineItem().getAlternativeMedicines();
+            List<PharmacyStorageItem> allItemsInPharmacy = getAllPharmacyStorageItemsInPharmacy(pharmacyStorageItem.getPharmacyStorageWithItem().getPharmacy().getId());
+            return getAlternativePharmacyItems(pharmacyStorageItemMedicineAlternativeItems,allItemsInPharmacy,medicineAmount);
+        }
+        return null;
+    }
+
+    //Nemanja
+    private List<PharmacyStorageItem> getAlternativePharmacyItems(Set<MedicineInfo> pharmacyStorageItemMedicineAlternativeItems, List<PharmacyStorageItem> allItemsInPharmacy, Long medicineAmount) {
+        List<PharmacyStorageItem> alternativePharmacyItems = new ArrayList<>();
+        for (MedicineInfo medicine:
+                pharmacyStorageItemMedicineAlternativeItems) {
+            for (PharmacyStorageItem item:
+                    allItemsInPharmacy) {
+                if(medicine.getId() == item.getMedicineItem().getId() && item.getMedicineAmount() >= medicineAmount){
+                    alternativePharmacyItems.add(item);
+                    break;
+                }
+            }
+        }
+        return alternativePharmacyItems;
+    }
+
 
 }

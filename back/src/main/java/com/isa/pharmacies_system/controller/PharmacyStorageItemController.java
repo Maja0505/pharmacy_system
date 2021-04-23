@@ -69,21 +69,26 @@ public class PharmacyStorageItemController {
     }
 
     //Nemanja
-    @GetMapping("/check/{itemId}/{medicineAmount}")
-    public ResponseEntity<Boolean> haveEnoughMedicineAmountForPharmacyStorageItem(@PathVariable Long itemId,@PathVariable Long medicineAmount){
+    @GetMapping("/check/{itemId}/{medicineAmount}/{patientId}")
+    public ResponseEntity<List<MedicineForRecipeDTO>> haveEnoughMedicineAmountForPharmacyStorageItem(@PathVariable Long itemId,@PathVariable Long medicineAmount,@PathVariable Long patientId){
         try {
-            if(pharmacyStorageItemService.haveEnoughMedicineAmountForPharmacyStorageItem(itemId,medicineAmount)){
-                return new ResponseEntity<>(HttpStatus.OK);
+            Boolean haveEnoughMedicine = pharmacyStorageItemService.haveEnoughMedicineAmountForPharmacyStorageItem(itemId,medicineAmount);
+            if(haveEnoughMedicine && !pharmacyStorageItemService.checkHavePatientAllergiesOnMedicine(itemId,patientId)){
+                return new ResponseEntity<>(null,HttpStatus.OK);
             }else{
-                PharmacyStorageItem pharmacyStorageItem = pharmacyStorageItemService.findOne(itemId);
-                if(pharmacyStorageItem != null){
-                    MedicineRequest medicineRequest = medicineRequestConverter.convertPharmacyStorageItemToMedicineRequest(pharmacyStorageItem);
-                    medicineRequestService.createMedicineRequest(medicineRequest);
+                if(!haveEnoughMedicine){
+                    PharmacyStorageItem pharmacyStorageItem = pharmacyStorageItemService.findOne(itemId);
+                    if(pharmacyStorageItem != null){
+                        MedicineRequest medicineRequest = medicineRequestConverter.convertPharmacyStorageItemToMedicineRequest(pharmacyStorageItem);
+                        medicineRequestService.createMedicineRequest(medicineRequest);
+                    }
                 }
-                return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+                List<PharmacyStorageItem> alternativePharmacyStorageItems = pharmacyStorageItemService.getAllAlternativePharmacyStorageItemsInPharmacyWithEnoughAmount(itemId,medicineAmount);
+                List<MedicineForRecipeDTO> alternativeMedicine = medicineConverter.convertPharmacyStorageItemsToMedicineForRecipeDTO(alternativePharmacyStorageItems);
+                return new ResponseEntity<>(alternativeMedicine,HttpStatus.FORBIDDEN);
             }
         }catch (Exception e){
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(null,HttpStatus.BAD_REQUEST);
         }
     }
 }
