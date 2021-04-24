@@ -1,8 +1,11 @@
 package com.isa.pharmacies_system.converter;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
+import com.isa.pharmacies_system.DTO.MedicineForRecipeDTO;
 import com.isa.pharmacies_system.DTO.MedicineNewDTO;
 import com.isa.pharmacies_system.domain.medicine.Item;
 import com.isa.pharmacies_system.domain.medicine.Medicine;
@@ -10,6 +13,7 @@ import com.isa.pharmacies_system.domain.medicine.MedicinePrice;
 import com.isa.pharmacies_system.domain.medicine.MedicineReservation;
 import com.isa.pharmacies_system.domain.medicine.PrescriptionRegime;
 import com.isa.pharmacies_system.domain.rating.MedicineRating;
+import com.isa.pharmacies_system.domain.storage.PharmacyStorageItem;
 
 public class MedicineConverter {
 	
@@ -48,5 +52,28 @@ public class MedicineConverter {
 		medicineNewDTO.setNotes(medicine.getNotes());
 		medicineNewDTO.setType(medicine.getTypeOfMedicine());
 		return medicineNewDTO;
+	}
+
+	//Nemanja
+	public List<MedicineForRecipeDTO> convertPharmacyStorageItemsToMedicineForRecipeDTO(List<PharmacyStorageItem> pharmacyStorageItems){
+		List<MedicineForRecipeDTO> medicineForRecipeDTOs = new ArrayList<>();
+		for (PharmacyStorageItem p:
+			 pharmacyStorageItems) {
+			medicineForRecipeDTOs.add(convertOnePharmacyStorageItemToMedicineForRecipe(p));
+		}
+		return medicineForRecipeDTOs;
+	}
+
+	//Nemanja
+	private MedicineForRecipeDTO convertOnePharmacyStorageItemToMedicineForRecipe(PharmacyStorageItem p) {
+		MedicineForRecipeDTO medicineForRecipeDTO = new MedicineForRecipeDTO();
+		medicineForRecipeDTO.setItemId(p.getId());
+		medicineForRecipeDTO.setMedicineId(p.getMedicineItem().getId());
+		medicineForRecipeDTO.setMedicineName(p.getMedicineItem().getMedicineName());
+		medicineForRecipeDTO.setManufacturerOfMedicine(p.getMedicineItem().getManufacturerOfMedicine());
+		medicineForRecipeDTO.setIngredients(p.getMedicineItem().getIngredients());
+		medicineForRecipeDTO.setNotes(p.getMedicineItem().getNotes());
+		medicineForRecipeDTO.setMedicineAmount(p.getMedicineAmount());
+		return medicineForRecipeDTO;
 	}
 }

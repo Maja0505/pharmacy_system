@@ -91,7 +91,6 @@ public class DermatologistAppointmentService implements IDermatologistAppointmen
         return dermatologistAppointment.getStatusOfAppointment().equals(StatusOfAppointment.Open);
     }
 
-
     //Nemanja
     private Boolean doesPatientHaveAnotherAppointmentInSameTime(Patient patient,DermatologistAppointment dermatologistAppointment){
         List<DermatologistAppointment> dermatologistAppointmentList = getAllFutureReservedDermatologistAppointmentByPatient(patient);
@@ -254,4 +253,20 @@ public class DermatologistAppointmentService implements IDermatologistAppointmen
                 .collect(Collectors.toList());
     }
 
+    //Nemanja
+    @Override
+    public Boolean changeDermatologistAppointmentStatusToMissed(DermatologistAppointment dermatologistAppointment) {
+        if(dermatologistAppointment.getStatusOfAppointment().equals(StatusOfAppointment.Reserved)){
+            dermatologistAppointment.setStatusOfAppointment(StatusOfAppointment.Missed);
+            addPatientPoint(dermatologistAppointment.getPatientWithDermatologistAppointment());
+            dermatologistAppointmentRepository.save(dermatologistAppointment);
+            return true;
+        }
+        return false;
+    }
+
+    //Nemanja
+    private void addPatientPoint(Patient patient) {
+        patient.setPatientPoints(patient.getPatientPoints() + 1);
+    }
 }
