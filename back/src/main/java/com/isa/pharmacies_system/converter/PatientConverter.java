@@ -20,6 +20,12 @@ public class PatientConverter{
     public PatientAdditionalInfoDTO convertPatientAdditionalInfoToDTO(Patient patient){
 
         PatientAdditionalInfoDTO patientAdditionalInfoDTO = new PatientAdditionalInfoDTO();
+        patientAdditionalInfoDTO.setFirstName(patient.getFirstName());
+        patientAdditionalInfoDTO.setLastName(patient.getLastName());
+        patientAdditionalInfoDTO.setAddress(patient.getUserAddress());
+        patientAdditionalInfoDTO.setId(patient.getId());
+        patientAdditionalInfoDTO.setPhoneNumber(patient.getPhoneNumber());
+        patientAdditionalInfoDTO.setEmail(patient.getEmail());
         patientAdditionalInfoDTO.setPatientPoints(patient.getPatientPoints());
         patientAdditionalInfoDTO.setCategoryOfPatient(patient.getCategoryOfPatient());
         return patientAdditionalInfoDTO;

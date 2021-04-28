@@ -22,6 +22,7 @@ import java.util.List;
 import java.util.Set;
 
 @Controller
+@CrossOrigin(origins="http://localhost:3000")
 @RequestMapping(value = "/api/patient", produces = MediaType.APPLICATION_JSON_VALUE)
 public class PatientController {
 
@@ -80,8 +81,13 @@ public class PatientController {
 
         try{
             Patient patient = patientService.findOne(userPersonalInfoDTO.getId());
-            patientService.savePatient(userConverter.convertDTOToPatientPersonalInfo(userPersonalInfoDTO,patient));
-            return new ResponseEntity<>(HttpStatus.OK);
+            if(patient.getEmail().equals(userPersonalInfoDTO.getEmail())){
+                patientService.savePatient(userConverter.convertDTOToPatientPersonalInfo(userPersonalInfoDTO,patient));
+                return new ResponseEntity<>(HttpStatus.OK);
+            }else{
+                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            }
+
         }catch (Exception e){
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
@@ -102,7 +108,7 @@ public class PatientController {
     }
 
     //#1
-    @GetMapping(value = "/{id}/additionalInfo", consumes = "application/json")
+    @GetMapping(value = "/{id}/additionalInfo")
     public ResponseEntity<PatientAdditionalInfoDTO> getPatientAdditionalInfo(@PathVariable Long id){
 
         try{

@@ -1,5 +1,7 @@
 import './App.css';
 import './components/css/Button.css';
+import './components/css/Header.css';
+
 import {BrowserRouter as Router,Route, Switch} from 'react-router-dom'
 import Login from './components/other/LoginPage'
 import PatientHomePage from './components/patient/HomePage'
@@ -13,18 +15,21 @@ import SystemAdminHomePage from './components/systemAdmin/HomePage'
 
 function App() {
   return (
-    <Router>
-      <Switch>
+    <div>
+      <Router>
         <div className="App">
-          <Route exact path="/" component={Login}></Route>
-          <Route  path="/patient" component={PatientHomePage}></Route>
-          <Route  path="/dermatologist" component={DermatologistHomePage}></Route>
-          <Route  path="/pharmacist" component={PharmacistHomePage}></Route>
-          <Route  path="/supplier" component={SupplierHomePage}></Route>
-          <Route  path="/system-admin" component={SystemAdminHomePage}></Route>
+          <Switch>
+              <Route exact path="/" component={Login}></Route>
+              <Route  path="/patient" component={PatientHomePage}></Route>
+              <Route  path="/dermatologist" component={DermatologistHomePage}></Route>
+              <Route  path="/pharmacist" component={PharmacistHomePage}></Route>
+              <Route  path="/supplier" component={SupplierHomePage}></Route>
+              <Route  path="/system-admin" component={SystemAdminHomePage}></Route>
+          </Switch>
         </div>
-      </Switch>
-    </Router>
+      </Router>
+    </div>
+
        
       );
 }
