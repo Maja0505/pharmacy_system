@@ -33,6 +33,12 @@ public class AppointmentService implements IAppointmentService {
     }
 
     @Override
+    public List<PatientAppointmentInfoDTO> sortByPatientEmail(List<PatientAppointmentInfoDTO> patientAppointmentInfoDTOList, Boolean asc) {
+        doSort(patientAppointmentInfoDTOList,Comparator.comparing(PatientAppointmentInfoDTO::getPatientEmail),asc);
+        return patientAppointmentInfoDTOList;
+    }
+
+    @Override
     public List<PatientAppointmentInfoDTO> sortByAppointmentStartTime(List<PatientAppointmentInfoDTO> patientAppointmentInfoDTOList, Boolean asc) {
         doSort(patientAppointmentInfoDTOList,Comparator.comparing(PatientAppointmentInfoDTO::getAppointmentStartTime),asc);
         return patientAppointmentInfoDTOList;

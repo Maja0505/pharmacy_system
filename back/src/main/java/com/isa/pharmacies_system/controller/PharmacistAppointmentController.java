@@ -20,6 +20,7 @@ import java.util.List;
 
 @Controller
 @RequestMapping("/api/pharmacistAppointment")
+@CrossOrigin(origins="http://localhost:3000")
 public class PharmacistAppointmentController {
 
     private IPharmacistAppointmentService pharmacistAppointmentService;
@@ -46,7 +47,7 @@ public class PharmacistAppointmentController {
     }
 
 
-    @GetMapping(value = "/sortByAppointmentDuration/{asc}",consumes = "application/json")
+    @PutMapping(value = "/sortByAppointmentDuration/{asc}",consumes = "application/json")
     public ResponseEntity<List<PatientAppointmentInfoDTO>> getSortedPastPharmacistAppointmentByAppointmentDuration(@RequestBody List<PatientAppointmentInfoDTO> patientAppointmentInfoDTOList, @PathVariable String asc){
         try {
             if(asc.equals("asc")){
