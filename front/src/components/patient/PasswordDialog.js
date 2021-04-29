@@ -33,6 +33,7 @@ const PasswordDialog = ({openDialog,id,setOpenAlert,setOpenDialog,setAlertText})
       };
     
     const changePassword = (passwordDTO) => {
+       setError('')
         axios.put('http://localhost:8080/api/patient/changePassword',passwordDTO)
         .then((res) => {
             setAlertText('Success change passowrd!')

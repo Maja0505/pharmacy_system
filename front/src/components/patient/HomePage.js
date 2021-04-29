@@ -9,14 +9,19 @@ import { makeStyles } from '@material-ui/core/styles';
 import PasswordDialog from './PasswordDialog'
 
 import axios from "axios";
+import { white } from "material-ui/styles/colors";
 
 
 const useStyles = makeStyles((theme) => ({ //style za paper deo
     paper: {
       padding: theme.spacing(2),
-      margin: 'auto',
+      margin: theme.spacing('5%','20%'),
       maxWidth: 500,
-      backgroundColor : '#D3D3D3'
+      backgroundColor : 'white'
+    },
+    h2:{
+        fontFamily:  "Lucida Console"
+    
     },
   
   }));
@@ -176,7 +181,7 @@ const HomePage = () => {
     <>
     <div className={classes.root}>
         <Paper className={classes.paper}>
-        <h2>PROFILE</h2>
+        <h2 className={classes.h2}>PROFILE</h2>
         <Grid container spacing={4} >
                 <Grid item xs={12} >
                     <Grid container justify="center" spacing={10} >
