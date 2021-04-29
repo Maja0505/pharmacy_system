@@ -63,8 +63,18 @@ public class PatientService implements IPatientService {
         return patient.getDermatologistAppointment();
     }
 
+
     private Boolean checkPassword(String first, String second){
         return first.equals(second);
     }
+
+
+    //Nemanja
+    @Override
+    public Boolean checkIsPatientAllergiesOnSomeMedicine(Long patientId,Medicine medicine){
+        Patient patient = findOne(patientId);
+        return  patient.getMedicineAllergies().stream().anyMatch(medicineAllergies -> medicineAllergies.equals(medicine));
+    }
+
 
 }

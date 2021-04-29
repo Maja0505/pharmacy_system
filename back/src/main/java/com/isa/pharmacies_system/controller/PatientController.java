@@ -120,7 +120,7 @@ public class PatientController {
     }
 
     //#1
-    @PutMapping(value = "/{patientId}/addMedicineAllergie/{medicineId}", consumes = "application/json")
+    @PutMapping(value = "/{patientId}/addMedicineAllergies/{medicineId}")
     public ResponseEntity<Boolean> addMedicineAllergies(@PathVariable Long patientId, @PathVariable Long medicineId){
 
         try {

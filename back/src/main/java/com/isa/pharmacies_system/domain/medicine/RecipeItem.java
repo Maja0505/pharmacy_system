@@ -12,8 +12,19 @@ public class RecipeItem extends Item{
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Recipe recipe;
 
+    @Column
+    private String recommendedDailyIntake;
+
     public RecipeItem() {
 
+    }
+
+    public String getRecommendedDailyIntake() {
+        return recommendedDailyIntake;
+    }
+
+    public void setRecommendedDailyIntake(String recommendedDailyIntake) {
+        this.recommendedDailyIntake = recommendedDailyIntake;
     }
 
     public void setRecipe(Recipe recipe) {

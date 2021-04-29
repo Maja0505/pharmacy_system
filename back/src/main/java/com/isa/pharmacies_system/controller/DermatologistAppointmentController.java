@@ -155,4 +155,18 @@ public class DermatologistAppointmentController {
         }
     }
 
+    //Nemanja
+    @PutMapping("/changeStatusToMissed/{id}")
+    public ResponseEntity<Boolean> changeDermatologistAppointmentStatusToMissed(@PathVariable Long id){
+        try {
+            DermatologistAppointment dermatologistAppointment = dermatologistAppointmentService.findOne(id);
+            if(dermatologistAppointmentService.changeDermatologistAppointmentStatusToMissed(dermatologistAppointment)){
+                return new ResponseEntity<>(HttpStatus.OK);
+            }
+                return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+        }catch (Exception e){
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
+
 }

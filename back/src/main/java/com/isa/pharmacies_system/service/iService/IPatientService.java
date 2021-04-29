@@ -20,4 +20,6 @@ public interface IPatientService {
     Boolean changePassword(UserPasswordDTO userPasswordDTO);
     void addMedicineAllergies(Patient patient, Medicine medicine);
     Set<DermatologistAppointment> getDermatologistAppointmentForPatient(Long id);
+    Boolean checkIsPatientAllergiesOnSomeMedicine(Long patientId,Medicine medicine);
+
 }

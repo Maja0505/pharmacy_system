@@ -1,5 +1,6 @@
 package com.isa.pharmacies_system.service;
 
+import com.isa.pharmacies_system.domain.medicine.MedicineReservation;
 import com.isa.pharmacies_system.domain.schedule.DermatologistAppointment;
 import com.isa.pharmacies_system.domain.user.Patient;
 import com.isa.pharmacies_system.domain.user.Users;
@@ -41,6 +42,19 @@ public class EmailService {
         }else{
             mail.setText("Pozdrav !!!!");
         }
+        javaMailSender.send(mail);
+    }
+
+    @Async
+    public void sendNotificationForSuccessMedicineReservation(MedicineReservation medicineReservation) throws MailException, InterruptedException {
+
+        String firstName = medicineReservation.getPatientForMedicineReservation().getFirstName();
+        SimpleMailMessage mail = new SimpleMailMessage();
+        mail.setTo("isa2020.team36@gmail.com");
+        mail.setFrom(env.getProperty("spring.mail.username"));
+        mail.setSubject("Zakazivanje pregleda");
+        mail.setText("Pozdrav " + firstName + ",\n\nUspesno ste izvrsili rezervaciju leka.\nBroj vase rezervacije je: " + medicineReservation.getId());
+
         javaMailSender.send(mail);
     }
 
