@@ -5,6 +5,7 @@ import {
   TableHead,
   TableRow,
   Grid,
+  TextField,
 } from "@material-ui/core";
 import {
   ArrowDropDown,
@@ -37,6 +38,8 @@ const Appointment = () => {
 
   const [rows, setRows] = useState([]);
 
+  const [copyRows, setCopyRows] = useState({});
+
   const [currPage, setCurrPage] = useState(1);
 
   useEffect(() => {
@@ -48,6 +51,7 @@ const Appointment = () => {
       )
       .then((res) => {
         setRows(res.data);
+        setCopyRows(res.data);
       });
   }, []);
 
@@ -207,6 +211,21 @@ const Appointment = () => {
       });
   };
 
+  const serchPatient = (e) => {
+    e = e.trim();
+    setRows(
+      copyRows.filter(
+        (row) =>
+          row.patientFirstName.toLowerCase().includes(e.toLowerCase()) ||
+          row.patientLastName.toLowerCase().includes(e.toLowerCase()) ||
+          row.patientEmail.toLowerCase().includes(e.toLowerCase()) ||
+          e.toLowerCase().includes(row.patientFirstName.toLowerCase()) ||
+          e.toLowerCase().includes(row.patientLastName.toLowerCase()) ||
+          e.toLowerCase().includes(row.patientEmail.toLowerCase())
+      )
+    );
+  };
+
   const [haveNextPage, setHaveNextPage] = useState(true);
 
   const nextPage = () => {
@@ -278,32 +297,55 @@ const Appointment = () => {
     </TableHead>
   );
 
+  const TableContent = (
+    <TableBody>
+      {rows.map((row, index) => (
+        <TableRow key={index}>
+          <TableCell>{row.patientFirstName}</TableCell>
+          <TableCell>{row.patientLastName}</TableCell>
+          <TableCell>{row.patientEmail}</TableCell>
+          <TableCell>
+            {row.appointmentStartTime.split("T")[0] +
+              " " +
+              row.appointmentStartTime.split("T")[1].split(":")[0] +
+              ":" +
+              row.appointmentStartTime.split("T")[1].split(":")[1]}
+          </TableCell>
+          <TableCell>{row.appointmentDuration}</TableCell>
+          <TableCell>{row.appointmentPrice}</TableCell>
+        </TableRow>
+      ))}
+    </TableBody>
+  );
+
+  const SearchPart = (
+    <Grid container spacing={1} className={classes.table}>
+      <Grid item xs={2} />
+      <Grid item xs={8} style={{ margin: "auto", textAlign: "right" }}>
+        <TextField
+          id="outlined-search"
+          label="Search patient"
+          type="search"
+          size="small"
+          variant="outlined"
+          style={{ width: "60%" }}
+          onChange={(e) => serchPatient(e.target.value)}
+        />
+      </Grid>
+      <Grid item xs={2}></Grid>
+      <Grid item xs={2} />
+    </Grid>
+  );
+
   return (
     <div>
-      <Grid container spacing={1} className={classes.table}>
+      {SearchPart}
+      <Grid container spacing={1}>
         <Grid item xs={2} />
         <Grid item xs={8}>
           <Table>
             {TableHeader}
-
-            <TableBody>
-              {rows.map((row, index) => (
-                <TableRow key={index}>
-                  <TableCell>{row.patientFirstName}</TableCell>
-                  <TableCell>{row.patientLastName}</TableCell>
-                  <TableCell>{row.patientEmail}</TableCell>
-                  <TableCell>
-                    {row.appointmentStartTime.split("T")[0] +
-                      " " +
-                      row.appointmentStartTime.split("T")[1].split(":")[0] +
-                      ":" +
-                      row.appointmentStartTime.split("T")[1].split(":")[1]}
-                  </TableCell>
-                  <TableCell>{row.appointmentDuration}</TableCell>
-                  <TableCell>{row.appointmentPrice}</TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
+            {TableContent}
           </Table>
         </Grid>
         <Grid item xs={2}></Grid>
