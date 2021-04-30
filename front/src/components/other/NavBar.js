@@ -13,7 +13,7 @@ const NavBar = ({ user }) => {
           <Grid item xs={3}>
             <Typography>
               <a
-                href="/pharmacist/appointment"
+                href="/pharmacist/editProfile"
                 style={{ color: "#fafafa", textDecoration: "none" }}
               >
                 Profile
