@@ -2,7 +2,7 @@ package com.isa.pharmacies_system.DTO;
 
 import com.isa.pharmacies_system.domain.user.CategoryOfPatient;
 
-public class PatientAdditionalInfoDTO {
+public class PatientAdditionalInfoDTO extends UserPersonalInfoDTO{
 
     private double patientPoints;
     private CategoryOfPatient categoryOfPatient;
