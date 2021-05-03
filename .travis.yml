@@ -7,8 +7,6 @@ jobs:
         directories:
           - node_modules
       script:
-        on:
-            branch: master OR develop
         - cd front
         - npm install
         - npm run build || true
@@ -26,13 +24,9 @@ jobs:
       services:
         - postgresql
       before_install:
-        on:
-            branch: master OR develop
         - cd back
         - chmod +x mvnw
       addons:
-        on:
-            branch: master OR develop
         sonarcloud:
         organization: nemanja0505
         token: $SONAR_TOKEN
