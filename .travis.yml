@@ -1,6 +1,7 @@
 jobs:
   include:
     - language: node_js
+
       node_js:
         - "stable"
       cache:
@@ -19,6 +20,7 @@ jobs:
         app: pharmacies-system
 
     - language: java
+
       sudo: required
       jdk: oraclejdk11
       services:
