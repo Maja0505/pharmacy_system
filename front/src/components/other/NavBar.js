@@ -9,7 +9,16 @@ const NavBar = ({ user }) => {
         </Grid>
         <Grid item xs={6} container spacing={1} style={{ textAlign: "right" }}>
           <Grid item xs={3}></Grid>
-          <Grid item xs={3}></Grid>
+          <Grid item xs={3}>
+            <Typography>
+              <a
+                href="/pharmacist/vacationRequest"
+                style={{ color: "#fafafa", textDecoration: "none" }}
+              >
+                Vacation Request
+              </a>
+            </Typography>
+          </Grid>
           <Grid item xs={3}>
             <Typography>
               <a
