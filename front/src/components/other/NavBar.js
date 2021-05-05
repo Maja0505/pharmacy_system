@@ -1,4 +1,5 @@
 import { AppBar, Typography, Toolbar, Grid } from "@material-ui/core";
+import { Link } from "react-router-dom";
 
 const NavBar = ({ user }) => {
   const NavBarForPharmacist = (
@@ -49,15 +50,24 @@ const NavBar = ({ user }) => {
         </Grid>
         <Grid item xs={6} container spacing={1} style={{ textAlign: "right" }}>
           <Grid item xs={3}></Grid>
-          <Grid item xs={3}></Grid>
           <Grid item xs={3}>
             <Typography>
-              <a
-                href="/dermatologist/editProfile"
+              <Link
+                to="/dermatologist/vacationRequest"
+                style={{ color: "#fafafa", textDecoration: "none" }}
+              >
+                Vacation request
+              </Link>
+            </Typography>
+          </Grid>
+          <Grid item xs={3}>
+            <Typography>
+              <Link
+                to="/dermatologist/editProfile"
                 style={{ color: "#fafafa", textDecoration: "none" }}
               >
                 Profile
-              </a>
+              </Link>
             </Typography>
           </Grid>
           <Grid item xs={3}>

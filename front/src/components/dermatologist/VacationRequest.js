@@ -26,7 +26,7 @@ const VacationRequest = () => {
 
   const getDisabledDates = async () => {
     const res = await axios.get(
-      "http://localhost:8080/api/pharmacist/futureVacationRequest/6"
+      "http://localhost:8080/api/dermatologist/futureVacationRequest/8"
     );
     res.data.map((vacationRequest) => createDisableDates(vacationRequest));
   };
@@ -136,12 +136,12 @@ const VacationRequest = () => {
       vacationEndDate: end,
       vacationRequestNotes: notes,
       typeOfVacation: typeOfVacation,
-      staffId: 6,
+      staffId: 8,
     };
 
     axios
       .post(
-        "http://localhost:8080/api/pharmacistVacationRequest/create",
+        "http://localhost:8080/api/dermatologistVacationRequest/create",
         vacationRequest
       )
       .then((res) => {
@@ -229,6 +229,7 @@ const VacationRequest = () => {
         </Grid>
         <Grid item xs={2} />
       </Grid>
+
       <Snackbar
         open={openAlertSuccsess}
         autoHideDuration={1500}
