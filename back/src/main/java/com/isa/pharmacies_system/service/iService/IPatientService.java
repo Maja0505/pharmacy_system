@@ -18,7 +18,7 @@ public interface IPatientService {
     List<Patient> findAll();
     void savePatient(Patient patient);
     Boolean changePassword(UserPasswordDTO userPasswordDTO);
-    void addMedicineAllergies(Patient patient, Medicine medicine);
+    Boolean addMedicineAllergies(Long patientId, Long medicineId);
     Set<DermatologistAppointment> getDermatologistAppointmentForPatient(Long id);
     Boolean checkIsPatientAllergiesOnSomeMedicine(Long patientId,Medicine medicine);
 

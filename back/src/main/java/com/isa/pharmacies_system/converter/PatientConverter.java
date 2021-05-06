@@ -1,7 +1,9 @@
 package com.isa.pharmacies_system.converter;
 
+import com.isa.pharmacies_system.DTO.MedicineForAllergiesDTO;
 import com.isa.pharmacies_system.DTO.PatientAdditionalInfoDTO;
 import com.isa.pharmacies_system.DTO.PatientAppointmentInfoDTO;
+import com.isa.pharmacies_system.domain.medicine.Medicine;
 import com.isa.pharmacies_system.domain.schedule.DermatologistAppointment;
 import com.isa.pharmacies_system.domain.schedule.PharmacistAppointment;
 import com.isa.pharmacies_system.domain.user.Patient;
@@ -28,6 +30,15 @@ public class PatientConverter{
         patientAdditionalInfoDTO.setEmail(patient.getEmail());
         patientAdditionalInfoDTO.setPatientPoints(patient.getPatientPoints());
         patientAdditionalInfoDTO.setCategoryOfPatient(patient.getCategoryOfPatient());
+
+        List<MedicineForAllergiesDTO> medicineForAllergiesDTOList = new ArrayList<>();
+        for (Medicine medicine: patient.getMedicineAllergies()) {
+            MedicineForAllergiesDTO medicineForAllergiesDTO = new MedicineForAllergiesDTO();
+            medicineForAllergiesDTO.setMedicineId(medicine.getId());
+            medicineForAllergiesDTO.setMedicineName(medicine.getMedicineName());
+            medicineForAllergiesDTOList.add(medicineForAllergiesDTO);
+        }
+        patientAdditionalInfoDTO.setMedicineForAllergiesDTO(medicineForAllergiesDTOList);
         return patientAdditionalInfoDTO;
     }
 
