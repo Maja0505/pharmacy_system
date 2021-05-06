@@ -121,6 +121,8 @@ const EditProfile = () => {
       axios
         .put("http://localhost:8080/api/dermatologist/update", updateUser)
         .then((res) => {
+          setUserCopy({id : updateUser.id,firstName : updateUser.firstName, lastName : updateUser.lastName, address : updateUser.address, phoneNumber : updateUser.phoneNumber, email : updateUser.email})
+          setAddress({streetName: updateUser.address.streetName, streetNumber: updateUser.address.streetNumber, city: updateUser.address.city, country: updateUser.address.country, longitude : updateUser.address.longitude, latitude : updateUser.address.latitude })
           setAlertText("Success update!");
           setOpenAlert(true);
         })

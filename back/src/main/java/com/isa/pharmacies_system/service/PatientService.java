@@ -4,6 +4,7 @@ import com.isa.pharmacies_system.DTO.UserPasswordDTO;
 import com.isa.pharmacies_system.domain.medicine.Medicine;
 import com.isa.pharmacies_system.domain.schedule.DermatologistAppointment;
 import com.isa.pharmacies_system.domain.user.Patient;
+import com.isa.pharmacies_system.repository.IMedicineRepository;
 import com.isa.pharmacies_system.repository.IPatientRepository;
 import com.isa.pharmacies_system.service.iService.IPatientService;
 import org.springframework.stereotype.Service;
@@ -15,10 +16,12 @@ import java.util.Set;
 public class PatientService implements IPatientService {
 
     private IPatientRepository patientRepository;
+    private IMedicineRepository medicineRepository;
 
-    public PatientService(IPatientRepository patientRepository) {
+    public PatientService(IPatientRepository patientRepository, IMedicineRepository medicineRepository) {
 
         this.patientRepository = patientRepository;
+        this.medicineRepository = medicineRepository;
     }
 
     @Override
@@ -50,9 +53,21 @@ public class PatientService implements IPatientService {
 
     //#1
     @Override
-    public void addMedicineAllergies(Patient patient, Medicine medicine){
-        patient.getMedicineAllergies().add(medicine);
-        savePatient(patient);
+    public Boolean addMedicineAllergies(Long patientId, Long medicineId){
+            Patient patient = patientRepository.findById(patientId).orElse(null);
+            Medicine medicine = medicineRepository.findById(medicineId).orElse(null);
+            if(patient!=null && medicine!=null && !doesMedicineExistInAllergies(patient,medicine)){
+                patient.getMedicineAllergies().add(medicine);
+                savePatient(patient);
+                return true;
+            }
+            return false;
+
+    }
+
+    //#1
+    private Boolean doesMedicineExistInAllergies(Patient patient,Medicine medicine){
+        return patient.getMedicineAllergies().stream().filter(m -> m.getId() == medicine.getId()).count()>0;
     }
 
     //#1

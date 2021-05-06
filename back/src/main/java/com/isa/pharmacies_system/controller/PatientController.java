@@ -124,10 +124,7 @@ public class PatientController {
     public ResponseEntity<Boolean> addMedicineAllergies(@PathVariable Long patientId, @PathVariable Long medicineId){
 
         try {
-            Medicine medicine = medicineService.findOne(medicineId);
-            Patient patient = patientService.findOne(patientId);
-            patientService.addMedicineAllergies(patient,medicine);
-            return new ResponseEntity<>(HttpStatus.OK);
+            return new ResponseEntity<>(patientService.addMedicineAllergies(patientId,medicineId),HttpStatus.OK);
         }catch (Exception e){
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
