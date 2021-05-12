@@ -2,30 +2,31 @@ package com.isa.pharmacies_system.controller;
 
 import java.util.List;
 
+import com.isa.pharmacies_system.DTO.MedicineForAllergiesDTO;
+import com.isa.pharmacies_system.converter.MedicineConverter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import com.isa.pharmacies_system.DTO.MedicineNewDTO;
 import com.isa.pharmacies_system.domain.medicine.Medicine;
 import com.isa.pharmacies_system.service.iService.IMedicineService;
 
 @Controller
+@CrossOrigin(origins="http://localhost:3000")
 @RequestMapping(value = "api/medicine", produces = MediaType.APPLICATION_JSON_VALUE)
 public class MedicineController {
 
     private IMedicineService medicineService;
+    private MedicineConverter medicineConverter;
 
     @Autowired
     public MedicineController(IMedicineService medicineService) {
         this.medicineService = medicineService;
+        this.medicineConverter = new MedicineConverter();
     }
     
     @GetMapping(value = "/{id}")
@@ -51,6 +52,10 @@ public class MedicineController {
 	@GetMapping(value = "/all")
 	public ResponseEntity<List<Medicine>> getAllMedicines() {
 		return new ResponseEntity<>(medicineService.getAll(), HttpStatus.OK);
+	}
+	@GetMapping(value = "/all/short")
+	public ResponseEntity<List<MedicineForAllergiesDTO>> getAllMedicinesShortVersion() {
+		return new ResponseEntity<>(medicineConverter.convertMedicineListToMedicineForAllergiesDTOList(medicineService.getAll()), HttpStatus.OK);
 	}
 
 	@PostMapping(value = "/create", consumes = "application/json")

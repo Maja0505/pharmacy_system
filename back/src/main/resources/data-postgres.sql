@@ -76,7 +76,7 @@ insert into medicine_infos_alternative_medicines (medicine_info_id,alternative_m
 
 
 insert into patient_medicine_allergies (patient_id,medicine_allergies_id) values (1,1);
-
+insert into patient_medicine_allergies (patient_id,medicine_allergies_id) values (1,2);
 
 insert into suppliers (id) values (10);
 insert into suppliers (id) values (11);

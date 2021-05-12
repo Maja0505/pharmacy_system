@@ -6,17 +6,16 @@ import TextField from "@material-ui/core/TextField";
 import Snackbar from "@material-ui/core/Snackbar";
 import Alert from "@material-ui/lab/Alert";
 import { makeStyles } from '@material-ui/core/styles';
+import Allergies from './Allergies'
 import PasswordDialog from './PasswordDialog'
-
 import axios from "axios";
-import { white } from "material-ui/styles/colors";
 
 
 const useStyles = makeStyles((theme) => ({ //style za paper deo
     paper: {
       padding: theme.spacing(2),
       margin: theme.spacing('5%','20%'),
-      maxWidth: 500,
+      maxWidth: 1000,
       backgroundColor : 'white'
     },
     h2:{
@@ -36,7 +35,8 @@ const HomePage = () => {
         phoneNumber : '',
         email : '',
         patientPoints : '',
-        categoryOfPatient : ''
+        categoryOfPatient : '',
+        allergies : {}
 
     })
 
@@ -65,6 +65,7 @@ const HomePage = () => {
         longitude : '',
         latitude : ''
     })
+    const [allergies, setAllergies] = useState([])
     const [validateInput, setValidateInput] = useState({
         firstName : true,
         lastName : true,
@@ -83,9 +84,11 @@ const HomePage = () => {
     const getUser = async () => {
         const res = await axios.get('http://localhost:8080/api/patient/1/additionalInfo')
         let patient = res.data
-        setUser({id : patient.id,firstName : patient.firstName, lastName : patient.lastName, address : patient.address, phoneNumber : patient.phoneNumber, email : patient.email, patientPoints : patient.patientPoints, categoryOfPatient : patient.categoryOfPatient})
+        setUser({id : patient.id,firstName : patient.firstName, lastName : patient.lastName, address : patient.address, phoneNumber : patient.phoneNumber, email : patient.email, patientPoints : patient.patientPoints, categoryOfPatient : patient.categoryOfPatient, allergies : patient.allergies})
         setUserCopy({id : patient.id,firstName : patient.firstName, lastName : patient.lastName, address : patient.address, phoneNumber : patient.phoneNumber, email : patient.email, patientPoints : patient.patientPoints, categoryOfPatient : patient.categoryOfPatient})
         setAddress({streetName: patient.address.streetName, streetNumber: patient.address.streetNumber, city: patient.address.city, country: patient.address.country, longitude : patient.address.longitude, latitude : patient.address.latitude })
+        setAllergies(patient.medicineForAllergiesDTO)
+        console.log(patient.medicineForAllergiesDTO)
     }
 
     const handleEditButton = () => {
@@ -111,6 +114,8 @@ const HomePage = () => {
         if(validate(updateUser)){
             axios.put("http://localhost:8080/api/patient/update", updateUser)
             .then((res) => {
+                setUserCopy({id : updateUser.id,firstName : updateUser.firstName, lastName : updateUser.lastName, address : updateUser.address, phoneNumber : updateUser.phoneNumber, email : updateUser.email, patientPoints : updateUser.patientPoints, categoryOfPatient : updateUser.categoryOfPatient})
+                setAddress({streetName: updateUser.address.streetName, streetNumber: updateUser.address.streetNumber, city: updateUser.address.city, country: updateUser.address.country, longitude : updateUser.address.longitude, latitude : updateUser.address.latitude })
                 setAlertText('Success update!')
                 setOpenAlert(true)
 
@@ -177,17 +182,16 @@ const HomePage = () => {
         setOpenAlert(false);
       };
 
+
     return (
     <>
     <div className={classes.root}>
         <Paper className={classes.paper}>
-        <h2 className={classes.h2}>PROFILE</h2>
-        <Grid container spacing={4} >
-                <Grid item xs={12} >
-                    <Grid container justify="center" spacing={10} >
-                   
-                        <Grid  item>
-                            <table>
+            <h2 className={classes.h2}>PROFILE</h2>
+            <Grid container spacing={1} >
+                <Grid container justify="center" spacing={10} >
+                    <Grid  item xs={4}>
+                        <table>
                             <tbody>
                             <tr><th>Personal info</th></tr>
                             <tr>
@@ -265,26 +269,23 @@ const HomePage = () => {
                                     : null
                                     }
                                 </td>
-
                             </tr>
-                    
                             </tbody>
-                            
-                            </table>
-                        </Grid>
-                        <Grid item>
-                            <table>
+                        </table>
+                        <br></br>
+                        <table>
                             <tbody>
-                            <tr>
-                                <td>
-                                    <Button onClick={handleChangePasswordButton} variant="contained" color="primary" disabled = {editState}>Change password</Button>
-                                    
-                                </td>
-                            </tr>      
+                                <tr>
+                                    <td>
+                                        <Button onClick={handleChangePasswordButton} variant="contained" color="primary" disabled = {editState}>Change password</Button>
+                                        
+                                    </td>
+                                </tr>      
                             </tbody>
-                            
-                            </table>
-                        </Grid>
+                        </table>
+                    </Grid>
+                    <Grid item>
+                       <Allergies allergies={allergies} setAllergies={setAllergies} patientId = {user.id}></Allergies>
                     </Grid>
                 </Grid>
             </Grid>
