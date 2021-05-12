@@ -49,7 +49,16 @@ const NavBar = ({ user }) => {
           <Typography>Hay {user}</Typography>
         </Grid>
         <Grid item xs={6} container spacing={1} style={{ textAlign: "right" }}>
-          <Grid item xs={3}></Grid>
+          <Grid item xs={3}>
+            <Typography>
+              <Link
+                to="/dermatologist/workCalendar"
+                style={{ color: "#fafafa", textDecoration: "none" }}
+              >
+                Work calendar
+              </Link>
+            </Typography>
+          </Grid>
           <Grid item xs={3}>
             <Typography>
               <Link
