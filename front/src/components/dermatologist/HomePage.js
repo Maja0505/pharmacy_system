@@ -2,14 +2,24 @@ import NavBar from "../other/NavBar.js";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import EditProfile from "./EditProfile.js";
 import VacationRequest from "./VacationRequest.js";
+import WorkCalendar from "./WorkCalendar.js";
+import WriteReport from "./WriteReport.js";
+
+import { useState } from "react";
 
 const HomePage = () => {
+  const [patientForReport, setPatientForReport] = useState({
+    Id: -1,
+    FirstName: "",
+    LastName: "",
+    AppointmentId: "",
+  });
+
   return (
     <Router>
       <Switch>
         <div>
           <NavBar user={"dermatologist"} />
-          <h1>Dermatologist</h1>
           <Route
             path="/dermatologist/editProfile"
             component={EditProfile}
@@ -18,6 +28,12 @@ const HomePage = () => {
             path="/dermatologist/vacationRequest"
             component={VacationRequest}
           ></Route>
+          <Route path="/dermatologist/workCalendar">
+            <WorkCalendar setPatient={setPatientForReport}></WorkCalendar>
+          </Route>
+          <Route path="/dermatologist/writeReport">
+            <WriteReport patient={patientForReport}></WriteReport>
+          </Route>
         </div>
       </Switch>
     </Router>

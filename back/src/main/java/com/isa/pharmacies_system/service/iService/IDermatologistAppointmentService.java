@@ -20,6 +20,10 @@ public interface IDermatologistAppointmentService{
     Boolean cancelDermatologistAppointment(DermatologistAppointment dermatologistAppointment);
     List<DermatologistAppointment> getAllFutureOpenDermatologistAppointmentForDermatologistInPharmacy(Long dermatologistId,Long pharmacyId);
     List<DermatologistAppointment> findAllFutureReservedDermatologistAppointmentByDermatologistAndPharmacy(Long dermatologistId,Long pharmacyId);
+    List<DermatologistAppointment> getAllMissedDermatologistAppointmentByDermatologistAndPharmacyId(Long dermatologistId, Long pharmacyId);
+    List<DermatologistAppointment> getAllExpiredDermatologistAppointmentByDermatologistAndPharmacyId(Long dermatologistId, Long pharmacyId);
+    List<DermatologistAppointment> getAllReservedDermatologistAppointmentByDermatologistAndPharmacyId(Long dermatologistId, Long pharmacyId);
     Boolean bookDermatologistAppointmentByDermatologist(AppointmentScheduleByStaffDTO appointmentScheduleByStaffDTO,DermatologistAppointment dermatologistAppointment);
     Boolean changeDermatologistAppointmentStatusToMissed(DermatologistAppointment dermatologistAppointment);
+
 }
