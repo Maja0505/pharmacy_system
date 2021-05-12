@@ -45,11 +45,23 @@ const NavBar = ({ user }) => {
   const NavBarForDermatologist = (
     <Toolbar>
       <Grid container spacing={1}>
-        <Grid item xs={6}>
+        <Grid item xs={3}>
           <Typography>Hay {user}</Typography>
         </Grid>
+        <Grid item xs={3}></Grid>
         <Grid item xs={6} container spacing={1} style={{ textAlign: "right" }}>
-          <Grid item xs={3}>
+          <Grid item xs={2} />
+          <Grid item xs={2}>
+            <Typography>
+              <Link
+                to="/dermatologist/examinedPatients"
+                style={{ color: "#fafafa", textDecoration: "none" }}
+              >
+                Examined patients
+              </Link>
+            </Typography>
+          </Grid>
+          <Grid item xs={2}>
             <Typography>
               <Link
                 to="/dermatologist/workCalendar"
@@ -59,7 +71,7 @@ const NavBar = ({ user }) => {
               </Link>
             </Typography>
           </Grid>
-          <Grid item xs={3}>
+          <Grid item xs={2}>
             <Typography>
               <Link
                 to="/dermatologist/vacationRequest"
@@ -69,7 +81,7 @@ const NavBar = ({ user }) => {
               </Link>
             </Typography>
           </Grid>
-          <Grid item xs={3}>
+          <Grid item xs={2}>
             <Typography>
               <Link
                 to="/dermatologist/editProfile"
@@ -79,7 +91,7 @@ const NavBar = ({ user }) => {
               </Link>
             </Typography>
           </Grid>
-          <Grid item xs={3}>
+          <Grid item xs={2}>
             <Typography>
               <a href="/" style={{ color: "#fafafa", textDecoration: "none" }}>
                 Sing out

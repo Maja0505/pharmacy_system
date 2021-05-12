@@ -4,6 +4,7 @@ import EditProfile from "./EditProfile.js";
 import VacationRequest from "./VacationRequest.js";
 import WorkCalendar from "./WorkCalendar.js";
 import WriteReport from "./WriteReport.js";
+import ExaminedPatients from "./ExaminedPatients.js";
 
 import { useState } from "react";
 
@@ -33,6 +34,9 @@ const HomePage = () => {
           </Route>
           <Route path="/dermatologist/writeReport">
             <WriteReport patient={patientForReport}></WriteReport>
+          </Route>
+          <Route path="/dermatologist/examinedPatients">
+            <ExaminedPatients />
           </Route>
         </div>
       </Switch>
