@@ -82,8 +82,8 @@ insert into suppliers (id) values (10);
 insert into suppliers (id) values (11);
 
 /*pharmacist appointment*/
-insert into appointments (id,appointment_points,appointment_price,status_of_appointment,type_of_appointment) values (nextval('my_seq_appointment'),5,13,1,1);
-insert into appointments (id,appointment_points,appointment_price,status_of_appointment,type_of_appointment) values (nextval('my_seq_appointment'),5,40,1,1);
+insert into appointments (id,appointment_points,appointment_price,status_of_appointment,type_of_appointment) values (nextval('my_seq_appointment'),5,13,2,1);
+insert into appointments (id,appointment_points,appointment_price,status_of_appointment,type_of_appointment) values (nextval('my_seq_appointment'),5,40,3,1);
 insert into appointments (id,appointment_points,appointment_price,status_of_appointment,type_of_appointment) values (nextval('my_seq_appointment'),5,50,1,1);
 
 /*dermatologist missed appointment*/

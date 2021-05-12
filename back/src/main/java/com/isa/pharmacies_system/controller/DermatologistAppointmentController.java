@@ -104,7 +104,7 @@ public class DermatologistAppointmentController {
     }
 
     //Nemanja
-    @GetMapping(value = "/sortByAppointmentEndTime/{asc}",consumes = "application/json")
+    @PutMapping(value = "/sortByAppointmentEndTime/{asc}",consumes = "application/json")
     public ResponseEntity<List<PatientAppointmentInfoDTO>> getSortedPastDermatologistAppointmentByAppointmentEndTime(@RequestBody List<PatientAppointmentInfoDTO> patientAppointmentInfoDTOList,@PathVariable String asc){
         try {
             if(asc.equals("asc")){

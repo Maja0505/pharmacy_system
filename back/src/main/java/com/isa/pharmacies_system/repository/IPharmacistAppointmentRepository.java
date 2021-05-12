@@ -9,7 +9,7 @@ import org.springframework.data.jpa.repository.Query;
 
 public interface IPharmacistAppointmentRepository extends JpaRepository<PharmacistAppointment,Long> {
 
-    @Query("SELECT a FROM PharmacistAppointment a WHERE a.pharmacistForAppointment.id = ?1 AND a.pharmacistAppointmentStartTime < CURRENT_TIMESTAMP ")
+    @Query("SELECT a FROM PharmacistAppointment a WHERE a.pharmacistForAppointment.id = ?1 and (a.statusOfAppointment = 2 or a.statusOfAppointment = 3) AND a.pharmacistAppointmentStartTime < CURRENT_TIMESTAMP ")
     Page<PharmacistAppointment> findAllPastPharmacistAppointment(Long id, Pageable pageable);
 
 }
