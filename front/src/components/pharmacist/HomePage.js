@@ -1,29 +1,41 @@
 import NavBar from "../other/NavBar.js";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
-import Appointment from "./Appointment.js";
+import ExaminedPatients from "./ExaminedPatients.js";
 import EditProfile from "./EditProfile.js";
 import VacationRequest from "./VacationRequest.js";
+import WorkCalendar from "./WorkCalendar.js";
+import WriteReport from "./WriteReport.js";
+
+import { useState } from "react";
 
 const HomePage = () => {
-  const currentURL = window.location.href.split("/");
+  const [patientForReport, setPatientForReport] = useState({
+    Id: -1,
+    FirstName: "",
+    LastName: "",
+    AppointmentId: "",
+  });
 
   return (
     <Router>
       <Switch>
         <div>
           <NavBar user={"pharmacist"} />
-          {currentURL.length < 5 && (
-            <a href="/pharmacist/appointment">
-              <button>View all appointments</button>
-            </a>
-          )}
-
-          <Route path="/pharmacist/appointment" component={Appointment}></Route>
+          <Route
+            path="/pharmacist/examinedPatients"
+            component={ExaminedPatients}
+          ></Route>
           <Route path="/pharmacist/editProfile" component={EditProfile}></Route>
           <Route
             path="/pharmacist/vacationRequest"
             component={VacationRequest}
           ></Route>
+          <Route path="/pharmacist/workCalendar">
+            <WorkCalendar setPatient={setPatientForReport}></WorkCalendar>
+          </Route>
+          <Route path="/pharmacist/writeReport">
+            <WriteReport patient={patientForReport}></WriteReport>
+          </Route>
         </div>
       </Switch>
     </Router>

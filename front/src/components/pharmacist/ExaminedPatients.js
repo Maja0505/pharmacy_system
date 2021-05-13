@@ -33,7 +33,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Appointment = () => {
+const ExaminedPatients = () => {
   const classes = useStyles();
 
   const [rows, setRows] = useState([]);
@@ -381,4 +381,4 @@ const Appointment = () => {
   );
 };
 
-export default Appointment;
+export default ExaminedPatients;

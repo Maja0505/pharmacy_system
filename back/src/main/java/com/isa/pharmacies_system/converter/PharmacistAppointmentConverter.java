@@ -1,8 +1,6 @@
 package com.isa.pharmacies_system.converter;
 
 import com.isa.pharmacies_system.DTO.PharmacistAppointmentDTO;
-import com.isa.pharmacies_system.DTO.PharmacyDTO;
-import com.isa.pharmacies_system.DTO.UserPersonalInfoDTO;
 import com.isa.pharmacies_system.domain.schedule.PharmacistAppointment;
 
 import java.util.ArrayList;
@@ -26,6 +24,17 @@ public class PharmacistAppointmentConverter {
         pharmacistAppointmentDTO.setPharmacistAppointmentDuration(pharmacistAppointment.getPharmacistAppointmentDuration());
         pharmacistAppointmentDTO.setPharmacistForAppointment(userConverter.convertPharmacistPersonalInfoToDTO(pharmacistAppointment.getPharmacistForAppointment()));
         pharmacistAppointmentDTO.setPharmacyForDermatologistAppointment(pharmacyConverter.convertPharmacyToPharmacyDTO(pharmacistAppointment.getPharmacistForAppointment().getPharmacyForPharmacist()));
+
+        pharmacistAppointmentDTO.setPharmacistAppointmentEndTime(pharmacistAppointment.getPharmacistAppointmentStartTime().plusMinutes(pharmacistAppointment.getPharmacistAppointmentDuration()));
+
+        if(pharmacistAppointment.getPatientWithPharmacistAppointment() != null) {
+            pharmacistAppointmentDTO.setPatientId(pharmacistAppointment.getPatientWithPharmacistAppointment().getId());
+            pharmacistAppointmentDTO.setPatientFirstName(pharmacistAppointment.getPatientWithPharmacistAppointment().getFirstName());
+            pharmacistAppointmentDTO.setPatientLastName(pharmacistAppointment.getPatientWithPharmacistAppointment().getLastName());
+            pharmacistAppointmentDTO.setPatientEmail(pharmacistAppointment.getPatientWithPharmacistAppointment().getEmail());
+            pharmacistAppointmentDTO.setPatientPhoneNumber(pharmacistAppointment.getPatientWithPharmacistAppointment().getPhoneNumber());
+        }
+
         return pharmacistAppointmentDTO;
 
     }

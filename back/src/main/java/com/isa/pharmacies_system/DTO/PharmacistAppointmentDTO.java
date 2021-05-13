@@ -7,9 +7,15 @@ public class PharmacistAppointmentDTO {
     private long id;
     private double appointmentPrice;
     private LocalDateTime pharmacistAppointmentStartTime;
+    private LocalDateTime pharmacistAppointmentEndTime;
     private long pharmacistAppointmentDuration;
     private UserPersonalInfoDTO pharmacistForAppointment;
     private PharmacyDTO pharmacyForDermatologistAppointment;
+    private Long patientId;
+    private String patientFirstName;
+    private String patientLastName;
+    private String patientEmail;
+    private String patientPhoneNumber;
 
     public PharmacistAppointmentDTO() {
     }
@@ -60,5 +66,53 @@ public class PharmacistAppointmentDTO {
 
     public void setPharmacyForDermatologistAppointment(PharmacyDTO pharmacyForDermatologistAppointment) {
         this.pharmacyForDermatologistAppointment = pharmacyForDermatologistAppointment;
+    }
+
+    public Long getPatientId() {
+        return patientId;
+    }
+
+    public void setPatientId(Long patientId) {
+        this.patientId = patientId;
+    }
+
+    public String getPatientFirstName() {
+        return patientFirstName;
+    }
+
+    public void setPatientFirstName(String patientFirstName) {
+        this.patientFirstName = patientFirstName;
+    }
+
+    public String getPatientLastName() {
+        return patientLastName;
+    }
+
+    public void setPatientLastName(String patientLastName) {
+        this.patientLastName = patientLastName;
+    }
+
+    public String getPatientEmail() {
+        return patientEmail;
+    }
+
+    public void setPatientEmail(String patientEmail) {
+        this.patientEmail = patientEmail;
+    }
+
+    public String getPatientPhoneNumber() {
+        return patientPhoneNumber;
+    }
+
+    public void setPatientPhoneNumber(String patientPhoneNumber) {
+        this.patientPhoneNumber = patientPhoneNumber;
+    }
+
+    public LocalDateTime getPharmacistAppointmentEndTime() {
+        return pharmacistAppointmentEndTime;
+    }
+
+    public void setPharmacistAppointmentEndTime(LocalDateTime pharmacistAppointmentEndTime) {
+        this.pharmacistAppointmentEndTime = pharmacistAppointmentEndTime;
     }
 }
