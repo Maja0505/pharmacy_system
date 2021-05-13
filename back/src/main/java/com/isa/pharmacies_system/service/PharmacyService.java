@@ -1,14 +1,16 @@
 package com.isa.pharmacies_system.service;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
+import com.isa.pharmacies_system.DTO.PatientAppointmentInfoDTO;
 import com.isa.pharmacies_system.DTO.PharmacistAppointmentTimeDTO;
+import com.isa.pharmacies_system.DTO.PharmacyDTO;
 import com.isa.pharmacies_system.domain.user.Pharmacist;
 import com.isa.pharmacies_system.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import com.isa.pharmacies_system.DTO.PharmacyNewDTO;
@@ -74,8 +76,8 @@ public class PharmacyService implements IPharmacyService {
 	}
 
 	@Override
-	public List<Pharmacy> getAll() {
-		return iPharmacyRepository.findAll();
+	public Page<Pharmacy> getAll(int page) {
+		return iPharmacyRepository.findAll(PageRequest.of(page,10));
 	}
 
 	@Override
@@ -114,6 +116,26 @@ public class PharmacyService implements IPharmacyService {
 	//da li je selektovan datum slobodan kod odredjenog farmaceuta
 	private Boolean doesPharmacistHaveOpenSelectedAppointment(PharmacistAppointmentTimeDTO timeDTO, Pharmacist pharmacist){
 		return pharmacist.getPharmacistAppointments().stream().filter(pharmacistAppointment -> utilityMethods.isSelectedDateReserved(timeDTO,pharmacistAppointment)).count() == 0;
+	}
+
+	@Override
+	public List<PharmacyDTO> sortByPharmacyName(List<PharmacyDTO> pharmacies, Boolean asc) {
+		if(asc){
+			Collections.sort(pharmacies, Comparator.comparing(PharmacyDTO::getPharmacyName));
+		}else{
+			Collections.sort(pharmacies, Comparator.comparing(PharmacyDTO::getPharmacyName).reversed());
+		}
+		return pharmacies;
+	}
+
+	@Override
+	public List<PharmacyDTO> sortByPharmacyRating(List<PharmacyDTO> pharmacies, Boolean asc) {
+		if(asc){
+			Collections.sort(pharmacies, Comparator.comparing(PharmacyDTO::getPharmacyAverageRating));
+		}else{
+			Collections.sort(pharmacies, Comparator.comparing(PharmacyDTO::getPharmacyAverageRating).reversed());
+		}
+		return pharmacies;
 	}
 
 

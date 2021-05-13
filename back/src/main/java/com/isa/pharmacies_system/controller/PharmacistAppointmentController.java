@@ -8,6 +8,7 @@ import com.isa.pharmacies_system.converter.PharmacistAppointmentConverter;
 import com.isa.pharmacies_system.domain.schedule.PharmacistAppointment;
 import com.isa.pharmacies_system.service.EmailService;
 import com.isa.pharmacies_system.service.iService.IPharmacistAppointmentService;
+import com.isa.pharmacies_system.service.iService.IPriceListService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;

@@ -1,308 +1,159 @@
-import React, { useEffect, useState } from "react";
-import Button from "@material-ui/core/Button";
+import React from 'react'
+import Button from '@material-ui/core/Button';
+import ButtonGroup from '@material-ui/core/ButtonGroup';
 import Grid from '@material-ui/core/Grid';
-import Paper from "@material-ui/core/Paper";
-import TextField from "@material-ui/core/TextField";
-import Snackbar from "@material-ui/core/Snackbar";
-import Alert from "@material-ui/lab/Alert";
+import Paper from '@material-ui/core/Paper';
 import { makeStyles } from '@material-ui/core/styles';
-import Allergies from './Allergies'
-import PasswordDialog from './PasswordDialog'
-import axios from "axios";
+import Pharmacies from './Pharmacies'
+import DermatologistAppointment from './DermatologistAppointmentHistory'
+import DermatologistReservaedAppointment from './DermatologistReservaedAppointment'
+import PharmacistReservedAppointment from './PharmacistReservedAppointment'
+import MedicineReservations from './MedicineReservations'
 
 
-const useStyles = makeStyles((theme) => ({ //style za paper deo
+import { BrowserRouter as Router, Route, Link } from "react-router-dom";
+
+
+
+const useStyles = makeStyles((theme) => ({
+    root: {
+      flexGrow: 1,
+    },
     paper: {
+      height: 700,
+      width: 1200,
+    },
+    control: {
       padding: theme.spacing(2),
-      margin: theme.spacing('5%','20%'),
-      maxWidth: 1000,
-      backgroundColor : 'white'
     },
-    h2:{
-        fontFamily:  "Lucida Console"
-    
-    },
-  
   }));
 
 const HomePage = () => {
 
-    const [user, setUser] = useState ({
-        id : -1,
-        firstName : '',
-        lastName : '',
-        address : {},
-        phoneNumber : '',
-        email : '',
-        patientPoints : '',
-        categoryOfPatient : '',
-        allergies : {}
+    const [spacing, setSpacing] = React.useState(10);
+    const classes = useStyles();
+    const [button1, setButton1] = React.useState(false);
+    const [button2, setButton2] = React.useState(false);
+    const [button4, setButton4] = React.useState(false);
+    const [button5, setButton5] = React.useState(false);
+    const [button7, setButton7] = React.useState(false);
 
-    })
+ 
+   const HandleButton1 = () => {
+     setButton2(false)
+     setButton4(false)
+     setButton5(false)
+     setButton7(false)
 
-    const [userCopy, setUserCopy] = useState ({
-        id : -1,
-        firstName : '',
-        lastName : '',
-        address : {},
-        phoneNumber : '',
-        email : '',
-        patientPoints : '',
-        categoryOfPatient : ''
+     if(!button1){
+       setButton1(true)
+     }
+   }
 
-    })
-
-    const classes = useStyles()
-    const [editState, setEditState ] = useState(false)
-    const [openAlert, setOpenAlert] = useState(false) //alert za uspesno sacuvanu lozinku
-    const [openDialog, setOpenDialog] = useState(false) //dialog za promenu lozinke
-    const [alertText, setAlertText] = useState('')
-    const [address, setAddress] = useState({
-        streetName : '',
-        streetNumber : '',
-        city : '',
-        country : '',
-        longitude : '',
-        latitude : ''
-    })
-    const [allergies, setAllergies] = useState([])
-    const [validateInput, setValidateInput] = useState({
-        firstName : true,
-        lastName : true,
-        phoneNumber : true,
-        streetName : true,
-        city : true,
-        country : true,
-    })
+   const HandleButton2 = () => {
+    setButton1(false)
+    setButton4(false)
+    setButton5(false)
+    setButton7(false)
 
 
-    useEffect(() => {
-        getUser()
-    },[])
 
-  
-    const getUser = async () => {
-        const res = await axios.get('http://localhost:8080/api/patient/1/additionalInfo')
-        let patient = res.data
-        setUser({id : patient.id,firstName : patient.firstName, lastName : patient.lastName, address : patient.address, phoneNumber : patient.phoneNumber, email : patient.email, patientPoints : patient.patientPoints, categoryOfPatient : patient.categoryOfPatient, allergies : patient.allergies})
-        setUserCopy({id : patient.id,firstName : patient.firstName, lastName : patient.lastName, address : patient.address, phoneNumber : patient.phoneNumber, email : patient.email, patientPoints : patient.patientPoints, categoryOfPatient : patient.categoryOfPatient})
-        setAddress({streetName: patient.address.streetName, streetNumber: patient.address.streetNumber, city: patient.address.city, country: patient.address.country, longitude : patient.address.longitude, latitude : patient.address.latitude })
-        setAllergies(patient.medicineForAllergiesDTO)
-        console.log(patient.medicineForAllergiesDTO)
+    if(!button2){
+      setButton2(true)
     }
+  }
 
-    const handleEditButton = () => {
-        setEditState(true)
+  const HandleButton4 = () => {
+    setButton1(false)
+    setButton2(false)
+    setButton5(false)
+    setButton7(false)
+
+
+
+    if(!button4){
+      setButton4(true)
     }
+  }
 
-    const handleChangePasswordButton = () => {
-        setOpenDialog(true)
+  const HandleButton5 = () => {
+    setButton1(false)
+    setButton2(false)
+    setButton4(false)
+    setButton7(false)
+
+
+
+    if(!button5){
+      setButton5(true)
     }
+  }
 
-    const handleSaveButton =  () => {
-        var updateUser = {
-            id : user.id,
-            firstName : user.firstName,
-            lastName : user.lastName,
-            address : address,
-            phoneNumber : user.phoneNumber,
-            email : user.email,
-            patientPoints : user.patientPoints,
-            categoryOfPatient : user.categoryOfPatient
-        }
-         
-        if(validate(updateUser)){
-            axios.put("http://localhost:8080/api/patient/update", updateUser)
-            .then((res) => {
-                setUserCopy({id : updateUser.id,firstName : updateUser.firstName, lastName : updateUser.lastName, address : updateUser.address, phoneNumber : updateUser.phoneNumber, email : updateUser.email, patientPoints : updateUser.patientPoints, categoryOfPatient : updateUser.categoryOfPatient})
-                setAddress({streetName: updateUser.address.streetName, streetNumber: updateUser.address.streetNumber, city: updateUser.address.city, country: updateUser.address.country, longitude : updateUser.address.longitude, latitude : updateUser.address.latitude })
-                setAlertText('Success update!')
-                setOpenAlert(true)
+  const HandleButton7 = () => {
+    setButton1(false)
+    setButton2(false)
+    setButton4(false)
+    setButton5(false)
 
-            })
-            .catch((err) => {
-                console.log(err);
-            });
-            setEditState(false)
-        }
-      
-       
-        
+
+
+    if(!button7){
+      setButton7(true)
     }
+  }
 
-    const validate = (updateUser) => {
-        var firstName = true
-        var lastName = true
-        var phoneNumber = true
-        var streetName = true
-        var city = true
-        var country = true
-        if(updateUser.firstName === ''){
-            firstName = false
-        }
-        if(updateUser.lastName === ''){
-            lastName = false
-        }
-        if(updateUser.phoneNumber === ''){
-             phoneNumber = false
-        }
-        if(updateUser.address.streetName === ''){
-            streetName = false
-        }
-        if(updateUser.address.city === ''){
-           city = false
+    return (  
 
-        }
-        if(updateUser.address.country === ''){
-           country = false
+  <Router>
+    <div>     
+      <Grid container className={classes.root} spacing={2}>
+        <Grid item xs={12}>
+          <Grid container justify="center" spacing={spacing}>
+            <Grid  item>
+              <ButtonGroup
+                orientation="vertical"
+                color="primary"
+                aria-label="vertical outlined primary button group"
+                style={{
+                top: 80,
+                left: 0,
+                width: "20%",
+                height: "100%",
+                position:'absolute'}}
+                >
+                <Button component={Link} style={{backgroundColor:button1 ? "white" : '#4051bf',color:button1 ? 'black' : 'white'}} to="/patient/HomePage/pharmacies" onClick={HandleButton1}>Pharmacies</Button>
+                <Button component={Link} style={{backgroundColor:button2 ? "white" : '#4051bf',color:button2 ? 'black' : 'white'}} to="/patient/HomePage/dermatologistAppointment" onClick={HandleButton2}>History of dermatologist appointment</Button>
+                <Button component={Link} style={{backgroundColor:button1 ? "white" : '#4051bf',color:button1 ? 'black' : 'white'}}>History of pharmacist appointment</Button>
+                <Button component={Link} style={{backgroundColor:button4 ? "white" : '#4051bf',color:button4 ? 'black' : 'white'}}  to="/patient/HomePage/dermatologistReservedAppointment" onClick={HandleButton4}>Dermatologist reserved appointments</Button>
+                <Button component={Link} style={{backgroundColor:button5 ? "white" : '#4051bf',color:button5 ? 'black' : 'white'}}  to="/patient/HomePage/pharmacistReservedAppointment" onClick={HandleButton5}>Pharmacist reserved appointments</Button>
+                <Button component={Link} style={{backgroundColor:button1 ? "white" : '#4051bf',color:button1 ? 'black' : 'white'}}>E-recipe</Button>
+                <Button component={Link} style={{backgroundColor:button1 ? "white" : '#4051bf',color:button1 ? 'black' : 'white'}} to="/patient/HomePage/medicineReservations" onClick={HandleButton7} >Reserved medicines</Button>
+                <Button component={Link} style={{backgroundColor:button1 ? "white" : '#4051bf',color:button1 ? 'black' : 'white'}}>Penals</Button>
+                <Button component={Link} style={{backgroundColor:button1 ? "white" : '#4051bf',color:button1 ? 'black' : 'white'}}>Medicines from ERecipe</Button>
+                <Button component={Link}  style={{backgroundColor:button1 ? "white" : '#4051bf',color:button1 ? 'black' : 'white'}}>Followed pharmaciest</Button>
+                <Button component={Link} style={{backgroundColor:button1 ? "white" : '#4051bf',color:button1 ? 'black' : 'white'}}>Pisanje Zalbe</Button>
+                <Button component={Link} style={{backgroundColor:button1 ? "white" : '#4051bf',color:button1 ? 'black' : 'white'}}>Preuzimanje leka</Button>
+                <Button component={Link} style={{backgroundColor:button1 ? "white" : '#4051bf',color:button1 ? 'black' : 'white'}}>Zakazivanje kod farmacueuta</Button>
+                <Button component={Link} style={{backgroundColor:button1 ? "white" : '#4051bf',color:button1 ? 'black' : 'white'}}>Zakazivanje kod dermatologa</Button>
+              </ButtonGroup>
+              </Grid>
+              <Grid  item>
+                <Paper className={classes.paper}>
+                  <Route path='/patient/HomePage/pharmacies' component={Pharmacies}></Route>
+                  <Route path='/patient/HomePage/dermatologistAppointment' component={DermatologistAppointment}></Route>
+                  <Route path='/patient/HomePage/dermatologistReservedAppointment' component={DermatologistReservaedAppointment}></Route>
+                  <Route path='/patient/HomePage/pharmacistReservedAppointment' component={PharmacistReservedAppointment}></Route>
+                  <Route path='/patient/HomePage/medicineReservations' component={MedicineReservations}></Route>
 
-        }
-
-        setErrorInput(firstName, lastName, phoneNumber, streetName, city, country)
-
-        return firstName && lastName && phoneNumber && streetName && city && country
-         
-    }
-
-    const setErrorInput = (firstName, lastName, phoneNumber, streetName, city, country) => {
-        setValidateInput({firstName: firstName, lastName: lastName,phoneNumber: phoneNumber,streetName: streetName,city: city,country: country})
-    }
-
-    const handleCancelButton = () => {
-        setUser({...user, firstName: userCopy.firstName, lastName: userCopy.lastName, phoneNumber: userCopy.phoneNumber})
-        setAddress({...address, streetName: userCopy.address.streetName, streetNumber: userCopy.address.streetNumber, city: userCopy.address.city, country: userCopy.address.country})
-        setErrorInput(true,true,true,true,true,true,true)
-        setEditState(false)
-    }
-
-    const handleCloseAlert = (event, reason) => {
-        if (reason === 'clickaway') {
-          return;
-        }
-        setOpenAlert(false);
-      };
-
-
-    return (
-    <>
-    <div className={classes.root}>
-        <Paper className={classes.paper}>
-            <h2 className={classes.h2}>PROFILE</h2>
-            <Grid container spacing={1} >
-                <Grid container justify="center" spacing={10} >
-                    <Grid  item xs={4}>
-                        <table>
-                            <tbody>
-                            <tr><th>Personal info</th></tr>
-                            <tr>
-                                <td>Frist name: </td>
-                                <td><TextField error = {!validateInput.firstName} value={user.firstName} disabled = {!editState} onChange= {(e) => setUser({...user, firstName: e.target.value})}></TextField></td>
-                            </tr>
-
-                            <tr>
-                                <td>Last name: </td>
-                                <td><TextField error = {!validateInput.lastName} value={user.lastName} disabled = {!editState } onChange= {(e) => setUser({...user, lastName: e.target.value})}></TextField></td>
-                            </tr>
-
-                            <tr>
-                                <td>Email: </td>
-                                <td><TextField value={user.email} readOnly disabled = {true}></TextField></td>
-                            </tr>
-
-                            <tr>
-                                <td>Phone number: </td>
-                                <td><TextField error = {!validateInput.phoneNumber} value={user.phoneNumber} disabled = {!editState} onChange= {(e) => setUser({...user, phoneNumber: e.target.value})}></TextField></td>
-                            </tr>
-
-                            <tr><th>Address</th></tr>
-                            <tr>
-                                <td>Street name: </td>
-                                <td><TextField  error = {!validateInput.streetName} value={address.streetName} disabled = {!editState} onChange= {(e) => setAddress({...address, streetName: e.target.value})}></TextField></td>
-
-                            </tr>
-                            <tr>
-                                <td>Street number: </td>
-                                <td><TextField  value={address.streetNumber} disabled = {!editState} onChange= {(e) => setAddress({...address, streetNumber: e.target.value})}></TextField></td>
-
-                            </tr>
-                            <tr>
-                                <td>City: </td>
-                                <td><TextField error = {!validateInput.city} value={address.city} disabled = {!editState} onChange= {(e) => setAddress({...address, city: e.target.value})}></TextField></td>
-
-                            </tr>
-                            <tr>
-                                <td>Country: </td>
-                                <td><TextField error = {!validateInput.country} value={address.country} disabled = {!editState} onChange= {(e) => setAddress({...address, country: e.target.value})}></TextField></td>
-
-                            </tr>
-                            <tr><th>Addittional info</th></tr>
-                            <tr>
-                                <td>Points: </td>
-                                <td>{user.patientPoints}</td>
-
-                            </tr>
-                            <tr>
-                                <td>Category: </td>
-                                <td>{user.categoryOfPatient}</td>
-
-                            </tr>
-
-                            <tr>
-                                <td>
-                                    {!editState ?
-                                    (<Button onClick={handleEditButton} variant="contained" color="primary">Edit</Button>)
-                                    : null}
-                                    
-                                </td>
-                            </tr>
-                            <tr>
-                                
-                                <td>
-                                    {editState ?
-                                    (<Button onClick={handleSaveButton} variant="contained" color="primary">Save</Button>)
-                                    : null
-                                }
-                                </td>
-                                <td>
-                                    {editState ?
-                                    (<Button onClick={handleCancelButton} variant="contained" color="primary">Cancel</Button>)
-                                    : null
-                                    }
-                                </td>
-                            </tr>
-                            </tbody>
-                        </table>
-                        <br></br>
-                        <table>
-                            <tbody>
-                                <tr>
-                                    <td>
-                                        <Button onClick={handleChangePasswordButton} variant="contained" color="primary" disabled = {editState}>Change password</Button>
-                                        
-                                    </td>
-                                </tr>      
-                            </tbody>
-                        </table>
-                    </Grid>
-                    <Grid item>
-                       <Allergies allergies={allergies} setAllergies={setAllergies} patientId = {user.id}></Allergies>
-                    </Grid>
-                </Grid>
-            </Grid>
-        </Paper>
-        <PasswordDialog openDialog={openDialog}  id={user.id} setOpenAlert={setOpenAlert} setOpenDialog = {setOpenDialog} setAlertText = {setAlertText}></PasswordDialog>
+                </Paper>
+              </Grid>
+          </Grid>
+        </Grid>
+      </Grid>
     </div>
 
-    
-    <Snackbar open={openAlert} autoHideDuration={1500} onClose={handleCloseAlert}>
-      <Alert severity="success">
-        {alertText}
-      </Alert>
-    </Snackbar>
-    </>
+  </Router>
 
-        
-        
     )
 }
 

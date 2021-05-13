@@ -6,6 +6,7 @@ import com.isa.pharmacies_system.DTO.UserPersonalInfoDTO;
 import com.isa.pharmacies_system.domain.schedule.DermatologistAppointment;
 import com.isa.pharmacies_system.domain.schedule.StatusOfAppointment;
 import com.isa.pharmacies_system.domain.schedule.TypeOfAppointment;
+import com.isa.pharmacies_system.service.iService.IPriceListService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,10 +15,16 @@ public class DermatologistAppointmentConverter {
 
     private UserConverter userConverter;
     private PharmacyConverter pharmacyConverter;
+    private IPriceListService priceListService;
 
     public DermatologistAppointmentConverter() {
         this.userConverter = new UserConverter();
         this.pharmacyConverter = new PharmacyConverter();
+    }
+    public DermatologistAppointmentConverter(IPriceListService priceListService) {
+        this.userConverter = new UserConverter();
+        this.priceListService =  priceListService;
+        this.pharmacyConverter = new PharmacyConverter(priceListService);
     }
 
     public DermatologistAppointmentDTO convertDermatologistAppointmentToDermatologistAppointmentDTO(DermatologistAppointment dermatologistAppointment){

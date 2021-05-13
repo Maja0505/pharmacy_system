@@ -7,9 +7,11 @@ import java.util.List;
 import com.isa.pharmacies_system.DTO.PharmacyDTO;
 import com.isa.pharmacies_system.DTO.PharmacyNewDTO;
 import com.isa.pharmacies_system.DTO.PharmacyWithMedicinePriceDTO;
+import com.isa.pharmacies_system.DTO.PriceListForAppointmentDTO;
 import com.isa.pharmacies_system.domain.complaint.PharmacyComplaint;
 import com.isa.pharmacies_system.domain.medicine.MedicineReservation;
 import com.isa.pharmacies_system.domain.pharmacy.Pharmacy;
+import com.isa.pharmacies_system.domain.pharmacy.PriceList;
 import com.isa.pharmacies_system.domain.pharmacy.Promotions;
 import com.isa.pharmacies_system.domain.rating.PharmacyRating;
 import com.isa.pharmacies_system.domain.schedule.DermatologistAppointment;
@@ -17,9 +19,17 @@ import com.isa.pharmacies_system.domain.schedule.WorkerSchedule;
 import com.isa.pharmacies_system.domain.storage.PharmacyStorageItem;
 import com.isa.pharmacies_system.domain.user.Dermatologist;
 import com.isa.pharmacies_system.domain.user.Pharmacist;
+import com.isa.pharmacies_system.service.PriceListService;
+import com.isa.pharmacies_system.service.iService.IPriceListService;
+import org.springframework.data.domain.Page;
 
 public class PharmacyConverter {
 
+	private IPriceListService priceListService;
+
+	public PharmacyConverter(IPriceListService priceListService) {
+		this.priceListService = priceListService;
+	}
 	public PharmacyConverter() {
 	}
 
@@ -30,10 +40,12 @@ public class PharmacyConverter {
 		pharmacyDTO.setPharmacyName(pharmacy.getPharmacyName());
 		pharmacyDTO.setPharmacyAddress(pharmacy.getPharmacyAddress());
 		pharmacyDTO.setPharmacyAverageRating(pharmacy.getPharmacyAverageRating());
+		PriceListForAppointmentDTO priceList = priceListService.findPriceListByPharmacyId(pharmacyDTO.getId());
+		pharmacyDTO.setPriceListForAppointmentDTO(priceList);
 		return pharmacyDTO;
 	}
 
-	public List<PharmacyDTO> convertPharmacyListToPharmacyDTOList(List<Pharmacy> pharmacies){
+	public List<PharmacyDTO> convertPharmacyListToPharmacyDTOList(Page<Pharmacy> pharmacies){
 		List<PharmacyDTO> pharmacyDTOS = new ArrayList<>();
 		for (Pharmacy pharmacy: pharmacies) {
 			pharmacyDTOS.add(convertPharmacyToPharmacyDTO(pharmacy));
