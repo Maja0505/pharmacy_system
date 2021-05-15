@@ -7,6 +7,7 @@ import com.isa.pharmacies_system.repository.IDermatologistAppointmentRepository;
 import com.isa.pharmacies_system.repository.IDermatologistReportRepository;
 import com.isa.pharmacies_system.service.iService.IDermatologistReportService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -41,5 +42,11 @@ public class DermatologistReportService implements IDermatologistReportService {
             return true;
         }
         return false;
+    }
+
+    //#1
+    @Override
+    public List<DermatologistReport> findAllDermatologistReportForPatient(Long id, int page) {
+        return dermatologistReportRepository.getAllDermatologistReportForPatient(id, PageRequest.of(page,10));
     }
 }

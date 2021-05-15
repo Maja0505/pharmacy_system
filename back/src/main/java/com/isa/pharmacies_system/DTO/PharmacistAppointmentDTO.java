@@ -10,7 +10,7 @@ public class PharmacistAppointmentDTO {
     private LocalDateTime pharmacistAppointmentEndTime;
     private long pharmacistAppointmentDuration;
     private UserPersonalInfoDTO pharmacistForAppointment;
-    private PharmacyDTO pharmacyForDermatologistAppointment;
+    private PharmacyDTO pharmacyForPharmacistAppointment;
     private Long patientId;
     private String patientFirstName;
     private String patientLastName;
@@ -60,12 +60,12 @@ public class PharmacistAppointmentDTO {
         this.pharmacistForAppointment = pharmacistForAppointment;
     }
 
-    public PharmacyDTO getPharmacyForDermatologistAppointment() {
-        return pharmacyForDermatologistAppointment;
+    public PharmacyDTO getPharmacyForPharmacistAppointment() {
+        return pharmacyForPharmacistAppointment;
     }
 
-    public void setPharmacyForDermatologistAppointment(PharmacyDTO pharmacyForDermatologistAppointment) {
-        this.pharmacyForDermatologistAppointment = pharmacyForDermatologistAppointment;
+    public void setPharmacyForPharmacistAppointment(PharmacyDTO pharmacyForDermatologistAppointment) {
+        this.pharmacyForPharmacistAppointment = pharmacyForDermatologistAppointment;
     }
 
     public Long getPatientId() {

@@ -1,7 +1,9 @@
 package com.isa.pharmacies_system.controller;
 
+import com.isa.pharmacies_system.DTO.DermatologistReportDTO;
 import com.isa.pharmacies_system.DTO.RecipeItemDTO;
 import com.isa.pharmacies_system.DTO.ReportForPatientDTO;
+import com.isa.pharmacies_system.converter.DermatologistReportConverter;
 import com.isa.pharmacies_system.converter.MedicineRequestConverter;
 import com.isa.pharmacies_system.converter.ReportConverter;
 import com.isa.pharmacies_system.domain.medicine.MedicineRequest;
@@ -16,14 +18,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @Controller
+@CrossOrigin(origins="http://localhost:3000")
 @RequestMapping("api/dermatologistReport")
 public class DermatologistReportController {
 
@@ -33,6 +33,7 @@ public class DermatologistReportController {
     private IPharmacyStorageItemService pharmacyStorageItemService;
     private IMedicineRequestService medicineRequestService;
     private MedicineRequestConverter medicineRequestConverter;
+    private DermatologistReportConverter dermatologistReportConverter;
 
     @Autowired
     public DermatologistReportController(IDermatologistReportService dermatologistReportService, IMedicineService medicineService, IPharmacyStorageItemService pharmacyStorageItemService, IMedicineRequestService medicineRequestService) {
@@ -42,6 +43,7 @@ public class DermatologistReportController {
         this.medicineRequestService = medicineRequestService;
         this.reportConverter = new ReportConverter();
         this.medicineRequestConverter = new MedicineRequestConverter();
+        this.dermatologistReportConverter = new DermatologistReportConverter();
     }
 
     @GetMapping("/all")
@@ -68,6 +70,18 @@ public class DermatologistReportController {
             return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
         }catch (Exception e){
             return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+        }
+
+    }
+
+    //#1
+    @GetMapping("/all/patient/{idPatient}/{page}")
+    public ResponseEntity<List<DermatologistReportDTO>> findAllForPatient(@PathVariable Long idPatient,@PathVariable int page){
+        try{
+            List<DermatologistReportDTO> dermatologistReportDTOS = dermatologistReportConverter.convertDermatologistReportToDermatologistReportDTOS(dermatologistReportService.findAllDermatologistReportForPatient(idPatient,page));
+            return new ResponseEntity<>(dermatologistReportDTOS, HttpStatus.OK);
+        }catch (Exception e){
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
     }

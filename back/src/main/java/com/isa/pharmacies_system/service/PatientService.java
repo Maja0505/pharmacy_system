@@ -2,15 +2,21 @@ package com.isa.pharmacies_system.service;
 
 import com.isa.pharmacies_system.DTO.UserPasswordDTO;
 import com.isa.pharmacies_system.domain.medicine.Medicine;
+import com.isa.pharmacies_system.domain.medicine.MedicineReservation;
 import com.isa.pharmacies_system.domain.schedule.DermatologistAppointment;
+import com.isa.pharmacies_system.domain.schedule.PharmacistAppointment;
+import com.isa.pharmacies_system.domain.schedule.StatusOfAppointment;
 import com.isa.pharmacies_system.domain.user.Patient;
 import com.isa.pharmacies_system.repository.IMedicineRepository;
 import com.isa.pharmacies_system.repository.IPatientRepository;
 import com.isa.pharmacies_system.service.iService.IPatientService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 public class PatientService implements IPatientService {
@@ -76,6 +82,21 @@ public class PatientService implements IPatientService {
 
         Patient patient = findOne(id);
         return patient.getDermatologistAppointment();
+    }
+
+    @Override
+    public Set<DermatologistAppointment> getAllReservedDermatologistAppointmentsForPatient(Long id,int page){
+        return patientRepository.getAllByDermatologistAppointment(id, PageRequest.of(page,10)).stream().filter(dermatologistAppointment -> dermatologistAppointment.getStatusOfAppointment().equals(StatusOfAppointment.Reserved)).collect(Collectors.toSet());
+    }
+
+    @Override
+    public Set<PharmacistAppointment> getAllReservedPharmacistAppointmentsForPatient(Long id, int page){
+        return patientRepository.getAllByPharmacistAppointment(id, PageRequest.of(page,10)).stream().filter(dermatologistAppointment -> dermatologistAppointment.getStatusOfAppointment().equals(StatusOfAppointment.Reserved)).collect(Collectors.toSet());
+    }
+
+    @Override
+    public Page<MedicineReservation> getAllMedicineReservationsForPatient(Long id, int page){
+        return patientRepository.getAllByMedicineReservations(id, PageRequest.of(page,10));
     }
 
 

@@ -2,6 +2,7 @@ package com.isa.pharmacies_system.converter;
 
 import com.isa.pharmacies_system.DTO.PharmacistAppointmentDTO;
 import com.isa.pharmacies_system.domain.schedule.PharmacistAppointment;
+import com.isa.pharmacies_system.service.iService.IPriceListService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,6 +17,11 @@ public class PharmacistAppointmentConverter {
         this.pharmacyConverter = new PharmacyConverter();
     }
 
+    public PharmacistAppointmentConverter(IPriceListService priceListService) {
+        this.userConverter = new UserConverter();
+        this.pharmacyConverter = new PharmacyConverter(priceListService);
+    }
+
     public PharmacistAppointmentDTO convertPharmacistAppointmentToDTO(PharmacistAppointment pharmacistAppointment){
         PharmacistAppointmentDTO pharmacistAppointmentDTO = new PharmacistAppointmentDTO();
         pharmacistAppointmentDTO.setId(pharmacistAppointment.getId());
@@ -23,8 +29,7 @@ public class PharmacistAppointmentConverter {
         pharmacistAppointmentDTO.setPharmacistAppointmentStartTime(pharmacistAppointment.getPharmacistAppointmentStartTime());
         pharmacistAppointmentDTO.setPharmacistAppointmentDuration(pharmacistAppointment.getPharmacistAppointmentDuration());
         pharmacistAppointmentDTO.setPharmacistForAppointment(userConverter.convertPharmacistPersonalInfoToDTO(pharmacistAppointment.getPharmacistForAppointment()));
-        pharmacistAppointmentDTO.setPharmacyForDermatologistAppointment(pharmacyConverter.convertPharmacyToPharmacyDTO(pharmacistAppointment.getPharmacistForAppointment().getPharmacyForPharmacist()));
-
+        pharmacistAppointmentDTO.setPharmacyForPharmacistAppointment(pharmacyConverter.convertPharmacyToPharmacyDTO(pharmacistAppointment.getPharmacistForAppointment().getPharmacyForPharmacist()));
         pharmacistAppointmentDTO.setPharmacistAppointmentEndTime(pharmacistAppointment.getPharmacistAppointmentStartTime().plusMinutes(pharmacistAppointment.getPharmacistAppointmentDuration()));
 
         if(pharmacistAppointment.getPatientWithPharmacistAppointment() != null) {

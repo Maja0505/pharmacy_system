@@ -8,4 +8,5 @@ public interface IDermatologistReportService {
 
     List<DermatologistReport> findAll();
     Boolean createDermatologistReport(DermatologistReport dermatologistReport,Long appointmentId);
+    List<DermatologistReport> findAllDermatologistReportForPatient(Long id,int page);
 }
