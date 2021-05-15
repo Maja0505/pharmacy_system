@@ -111,9 +111,9 @@ insert into dermatologist_appointment (dermatologist_appointment_start_time,derm
 
 
 
-insert into pharmacist_appointment (pharmacist_appointment_duration,pharmacist_appointment_start_time,id,pharmacist_for_appointment_id,patient_with_pharmacist_appointment_id) values (16,'2021-06-17 19:05',3,6,1);
+insert into pharmacist_appointment (pharmacist_appointment_duration,pharmacist_appointment_start_time,id,pharmacist_for_appointment_id,patient_with_pharmacist_appointment_id) values (16,'2021-04-17 19:05',3,6,1);
 insert into pharmacist_appointment (pharmacist_appointment_duration,pharmacist_appointment_start_time,id,pharmacist_for_appointment_id,patient_with_pharmacist_appointment_id) values (20,'2021-04-15 19:20',4,6,2);
-insert into pharmacist_appointment (pharmacist_appointment_duration,pharmacist_appointment_start_time,id,pharmacist_for_appointment_id,patient_with_pharmacist_appointment_id) values (45,'2021-06-15 19:35',5,6,1);
+insert into pharmacist_appointment (pharmacist_appointment_duration,pharmacist_appointment_start_time,id,pharmacist_for_appointment_id,patient_with_pharmacist_appointment_id) values (45,'2021-03-15 19:35',5,6,1);
 
 
 insert into medicine_reservations(id,patient_for_medicine_reservation_id,date_of_taking_medicine,pharmacy_for_medicine_reservation_id,status_of_medicine_reservation,reserved_medicine_id) values (nextval('my_seq_gen_medicine_reservation'),1,'2020-02-04',1,2,1);
@@ -138,3 +138,9 @@ insert into pharmacy_storage_items(id,pharmacy_storage_with_item_id) values (4,1
 
 
 insert into medicine_price(id,medicine_price,medicine_with_prices_id,price_list_for_medicine_id) values (nextval('my_seq_medicine_price'),200,1,1);
+
+insert into dermatologist_reports(id,report_infos,dermatologist_appointment_id,recipe_for_dermatologist_report_id) values (nextval('my_seq_dermatologist_report'),'tralala',7,null);
+insert into dermatologist_reports(id,report_infos,dermatologist_appointment_id,recipe_for_dermatologist_report_id) values (nextval('my_seq_dermatologist_report'),'caocao',8,null);
+
+insert into pharmacist_reports(id,report_infos,pharmacist_appointment_id,recipe_for_pharmacist_report_id) values (nextval('my_seq_pharmacist_report'),'ttttt',3,null);
+insert into pharmacist_reports(id,report_infos,pharmacist_appointment_id,recipe_for_pharmacist_report_id) values (nextval('my_seq_pharmacist_report'),'ccc',5,null);

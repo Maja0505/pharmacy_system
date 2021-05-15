@@ -11,10 +11,11 @@ import org.springframework.data.domain.Page;
 public interface IPharmacyService {
 	
 	Pharmacy create(PharmacyNewDTO pharmacyNewDTO) throws Exception;
-	Page<Pharmacy> getAll(int page);
+	Page<Pharmacy> getAllWithPages(int page);
 	Pharmacy getById(Long id) throws Exception;
 	List<Pharmacy> getAllPharmacyWithFreePharmacistByDate(PharmacistAppointmentTimeDTO timeDTO);
 	List<PharmacyDTO> sortByPharmacyName(List<PharmacyDTO> pharmacies, Boolean asc);
 	List<PharmacyDTO> sortByPharmacyRating(List<PharmacyDTO> pharmacies, Boolean asc);
+	List<Pharmacy> getAll();
 
 }

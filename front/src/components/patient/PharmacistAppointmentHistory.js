@@ -86,7 +86,7 @@ import { withStyles } from '@material-ui/core/styles';
     },
   }))(MuiDialogActions);
     
-  const DermatologistAppointmentHistory = () => {
+  const PharmacistAppointmentHistory = () => {
 
 
     const classes = useStyles();
@@ -98,13 +98,13 @@ import { withStyles } from '@material-ui/core/styles';
     const [currPage, setCurrPage] = useState(1);
 
     const [openPharmacyDialog, setOpenPharmacyDialog] = useState(false);
-    const [openDermatologistDialog, setOpenDermatologistDialog] = useState(false);
+    const [openPharmacistDialog, setOpenPharmacistDialog] = useState(false);
     const [openReportDialog, setOpenReportDialog] = useState(false);
   
     useEffect(() => {
       axios
         .get(
-          "http://localhost:8080/api/dermatologistReport/all/patient/1/" +
+          "http://localhost:8080/api/pharmacistReport/all/patient/1/" +
           (currPage - 1).toString() +
           ""
            
@@ -116,15 +116,15 @@ import { withStyles } from '@material-ui/core/styles';
         });
     }, []);
   
-    const searchDermatologistAppointment = (e) => {
+    const searchPharmacistAppointment = (e) => {
       e = e.trim();
       setRows(
         copyRows.filter(
           (row) =>
             row.appointmentPrice.toString().toLowerCase().includes(e.toLowerCase()) ||
-            row.dermatologistForAppointment.firstName.toLowerCase().includes(e.toLowerCase()) ||
-            row.dermatologistForAppointment.lastName.toLowerCase().includes(e.toLowerCase()) ||
-            row.pharmacyForDermatologistAppointment.pharmacyName.toLowerCase().includes(e.toLowerCase())
+            row.pharmacistForAppointment.firstName.toLowerCase().includes(e.toLowerCase()) ||
+            row.pharmacistForAppointment.lastName.toLowerCase().includes(e.toLowerCase()) ||
+            row.pharmacyForPharmacistAppointment.pharmacyName.toLowerCase().includes(e.toLowerCase())
         )
       );
     };
@@ -165,7 +165,7 @@ import { withStyles } from '@material-ui/core/styles';
     };
 
     const [pharmacy,setPharmacy] = useState({})
-    const [dermatologist,setDermatologist] = useState({})
+    const [pharmacist,setPharmacist] = useState({})
     const [report,setReport] = useState({})
 
     const handleClickOpenPharmacyDialog = (pharmacyId) => {
@@ -181,17 +181,17 @@ import { withStyles } from '@material-ui/core/styles';
         setOpenPharmacyDialog(false);
     };
 
-    const handleClickOpenDermatologistDialog = (dermatologistId) => {
+    const handleClickOpenPharmacistDialog = (pharmacistId) => {
         
-        axios.get( "http://localhost:8080/api/dermatologist/" + dermatologistId).then(
+        axios.get( "http://localhost:8080/api/pharmacist/" + pharmacistId).then(
             (res)=>{
-                setDermatologist(res.data)
-                setOpenDermatologistDialog(true)
+                setPharmacist(res.data)
+                setOpenPharmacistDialog(true)
             }
         )
     };
-    const handleCloseDermatologistDialog = () => {
-        setOpenDermatologistDialog(false);
+    const handleClosePharmacistDialog = () => {
+        setOpenPharmacistDialog(false);
     };
 
     const handleClickOpenViewReport = (report) => {
@@ -211,13 +211,13 @@ import { withStyles } from '@material-ui/core/styles';
            Pharmacy
           </TableCell>
           <TableCell className={classes.hederCell} >
-          Dermatologist
+          pharmacist
           </TableCell>
           <TableCell className={classes.hederCell} >
           Start time
           </TableCell>
           <TableCell className={classes.hederCell} >
-         End time
+         Duration
           </TableCell>
           <TableCell className={classes.hederCell} >
           Points
@@ -234,18 +234,14 @@ import { withStyles } from '@material-ui/core/styles';
         {rows.map((row, index) => (
           <TableRow key={index}>
             <TableCell onClick = {() => handleClickOpenPharmacyDialog(row.pharmacyId)}><Link>{row.pharmacyName}</Link></TableCell>
-            <TableCell onClick = {() => handleClickOpenDermatologistDialog(row.dermatologistId)}><Link>{row.dermatologistFirstName} {row.dermatologistLastName}</Link></TableCell>
+            <TableCell onClick = {() => handleClickOpenPharmacistDialog(row.pharmacistId)}><Link>{row.pharmacistFirstName} {row.pharmacistLastName}</Link></TableCell>
          
-            <TableCell> {row.dermatologistAppointmentStartTime.split("T")[0] +
+            <TableCell> {row.pharmacistAppointmentStartTime.split("T")[0] +
               " " +
-              row.dermatologistAppointmentStartTime.split("T")[1].split(":")[0] +
+              row.pharmacistAppointmentStartTime.split("T")[1].split(":")[0] +
               ":" +
-              row.dermatologistAppointmentStartTime.split("T")[1].split(":")[1]}</TableCell>
-            <TableCell> {row.dermatologistAppointmentEndTime.split("T")[0] +
-              " " +
-              row.dermatologistAppointmentEndTime.split("T")[1].split(":")[0] +
-              ":" +
-              row.dermatologistAppointmentEndTime.split("T")[1].split(":")[1]}</TableCell>
+              row.pharmacistAppointmentStartTime.split("T")[1].split(":")[1]}</TableCell>
+           <TableCell>{row.duration}</TableCell>
             <TableCell> {row.appointmentPoints}</TableCell>
             <TableCell> <Button style={{backgroundColor:'gray',color:'white'}} onClick={() => handleClickOpenViewReport(row.reportInfo)}>View</Button></TableCell>
           </TableRow>
@@ -260,12 +256,12 @@ import { withStyles } from '@material-ui/core/styles';
         <Grid item xs={8} style={{ margin: "auto", textAlign: "right" }}>
           <TextField
             id="outlined-search"
-            label="Search dermatologist appointment"
+            label="Search pharmacist appointment"
             type="search"
             size="small"
             variant="outlined"
             style={{ width: "60%" }}
-            onChange={(e) => searchDermatologistAppointment(e.target.value)}
+            onChange={(e) => searchPharmacistAppointment(e.target.value)}
           />
         </Grid>
         <Grid item xs={2}></Grid>
@@ -304,26 +300,26 @@ import { withStyles } from '@material-ui/core/styles';
         </div>
     )
 
-    const CreateDermatologistDialog = (
+    const CreatePharmacistDialog = (
         <div>
-            <Dialog onClose={handleCloseDermatologistDialog} aria-labelledby="customized-dialog-title" open={openDermatologistDialog} fullWidth='true'
+            <Dialog onClose={handleClosePharmacistDialog} aria-labelledby="customized-dialog-title" open={openPharmacistDialog} fullWidth='true'
         maxWidth='sm'>
-            <DialogTitle id="customized-dialog-title" onClose={handleCloseDermatologistDialog}>
-               Dermatologist
+            <DialogTitle id="customized-dialog-title" onClose={handleClosePharmacistDialog}>
+               pharmacist
             </DialogTitle>
             <DialogContent dividers>
                 <Typography gutterBottom>
-                name: {dermatologist.firstName} {dermatologist.lastName}
+                name: {pharmacist.firstName} {pharmacist.lastName}
                 </Typography>
                 <Typography gutterBottom>
-                phoneNumber : {dermatologist.phoneNumber}
+                phoneNumber : {pharmacist.phoneNumber}
                 </Typography>
                 <Typography gutterBottom>
-                phoneNumber : {dermatologist.email}
+                phoneNumber : {pharmacist.email}
                 </Typography>
             </DialogContent>
             <DialogActions>
-                <Button  onClick={handleCloseDermatologistDialog} autoFocus color="primary">
+                <Button  onClick={handleClosePharmacistDialog} autoFocus color="primary">
                 Close
                 </Button>
             </DialogActions>
@@ -395,10 +391,10 @@ import { withStyles } from '@material-ui/core/styles';
           <Grid item xs={2} />
         </Grid>
         {CreatePharmacyDialog}
-        {CreateDermatologistDialog}
+        {CreatePharmacistDialog}
         {CreateReportDialog}
       </div>
     );
   };
   
-  export default DermatologistAppointmentHistory;
+  export default PharmacistAppointmentHistory;

@@ -9,16 +9,32 @@ import {
     TableRow,
     Grid,
     TextField,
+    Button,
   } from "@material-ui/core";
   import {
-    ArrowDropDown,
-    ArrowDropUp,
     NavigateNext,
     NavigateBefore,
   } from "@material-ui/icons";
-  import { useState, useEffect } from "react";
-  import { makeStyles } from "@material-ui/core/styles";
-  import axios from "axios";
+import { useState, useEffect } from "react";
+import { makeStyles } from "@material-ui/core/styles";
+import React from 'react';
+import { withStyles } from '@material-ui/core/styles';
+import Dialog from '@material-ui/core/Dialog';
+import MuiDialogTitle from '@material-ui/core/DialogTitle';
+import MuiDialogContent from '@material-ui/core/DialogContent';
+import MuiDialogActions from '@material-ui/core/DialogActions';
+import IconButton from '@material-ui/core/IconButton';
+import CloseIcon from '@material-ui/icons/Close';
+import Typography from '@material-ui/core/Typography';
+import Autocomplete from '@material-ui/lab/Autocomplete';
+import DateFnsUtils from '@date-io/date-fns';
+import {
+    MuiPickersUtilsProvider,
+    KeyboardDatePicker,
+  } from '@material-ui/pickers';
+
+import axios from "axios";
+import moment from "moment";
   
   const useStyles = makeStyles((theme) => ({
     table: {
@@ -35,16 +51,108 @@ import {
       cursor: "pointer",
     },
   }));
+
+  const styles = (theme) => ({
+    root: {
+      margin: 0,
+      padding: theme.spacing(2),
+    },
+    closeButton: {
+      position: 'absolute',
+      right: theme.spacing(1),
+      top: theme.spacing(1),
+      color: theme.palette.grey[500],
+      
+    },
+  });
+  
+  const DialogTitle = withStyles(styles)((props) => {
+    const { children, classes, onClose, ...other } = props;
+    return (
+      <MuiDialogTitle disableTypography className={classes.root} {...other}>
+        <Typography variant="h6">{children}</Typography>
+        {onClose ? (
+          <IconButton aria-label="close" className={classes.closeButton} onClick={onClose}>
+            <CloseIcon />
+          </IconButton>
+        ) : null}
+      </MuiDialogTitle>
+    );
+  });
+  
+  const DialogContent = withStyles((theme) => ({
+    root: {
+      padding: theme.spacing(2),
+    },
+  }))(MuiDialogContent);
+  
+  const DialogActions = withStyles((theme) => ({
+    root: {
+      margin: 0,
+      padding: theme.spacing(1),
+    },
+  }))(MuiDialogActions);
   
   const MedicineReservations = () => {
+
+
     const classes = useStyles();
-  
     const [rows, setRows] = useState([]);
-  
     const [copyRows, setCopyRows] = useState({});
-  
+    const [medicines, setMedicines] = useState([])
+    const [pharmacies, setPharmacies] = useState([])
+    const [selectedMedicine, setSelectedMedicine] = useState(null)
+    const [selectedPharmacy, setSelectedPharmacy] = useState(null)
     const [currPage, setCurrPage] = useState(1);
-  
+    const [open, setOpen] = React.useState(false);
+    const [selectedDate, setSelectedDate] = React.useState();
+
+
+    const handleDateChange = (date) => {
+      setSelectedDate(date);
+    };
+
+    const handleSaveNewReservation = () => {
+        var medicine = selectedMedicine.medicineId
+        var pharmacy = selectedPharmacy.id
+        var date = moment(selectedDate).format('YYYY-MM-DD')
+        axios.post("http://localhost:8080/api/medicineReservation/create/1/" + medicine +"/" + pharmacy,{ dateOfTakingMedicine: date }).
+        then((res) => {
+            if(res.data){
+                axios
+                .get(
+                  "http://localhost:8080/api/patient/1/medicineReservation/" +
+                  (currPage - 1).toString() +
+                  ""
+                   
+                )
+                .then((res) => {
+                  setRows(res.data);
+                  setCopyRows(res.data);
+                  handleClose()
+                })
+                }else{
+                    console.log('nema ga')
+                }
+            }
+        )
+    }
+
+    const HandleCancelReservation = (row) => {
+
+        axios.put('http://localhost:8080/api/medicineReservation/cancel', row).then(
+            (res)=> {
+                if(res.data){
+                    console.log('jej')
+                    row.statusOfMedicineReservation = 'CANCELED'
+                    setRows(rows.map(el=> (el.reservationId === row.reservationId ? Object.assign({}, el, {row}) : el)))
+                }else{
+                    console.log('njeeee')
+                }
+            }
+        )
+    }
+
     useEffect(() => {
       axios
         .get(
@@ -54,164 +162,32 @@ import {
            
         )
         .then((res) => {
-            console.log(res)
-
           setRows(res.data);
           setCopyRows(res.data);
         });
     }, []);
-  
-    const [pharmacyNameAsc, setPharmacyNameAsc] = useState({
-      counter: -1,
-      asc: true,
-    });
-  
-    const [ratingAsc, setRatingAsc] = useState({
-      counter: -1,
-      asc: true,
-    });
-  
-    const [emailAsc, setEmail] = useState({
-      counter: -1,
-      asc: true,
-    });
-  
-    const [startTimeAsc, setStartTime] = useState({
-      counter: -1,
-      asc: true,
-    });
-  
-    const [durationAsc, setDuration] = useState({
-      counter: -1,
-      asc: true,
-    });
-  
-    const [priceAsc, setPrice] = useState({
-      counter: -1,
-      asc: true,
-    });
-  
-    const sortByPharmacyName = () => {
-      setRatingAsc({ asc: true, counter: -1 });
-      setEmail({ asc: true, counter: -1 });
-      setStartTime({ asc: true, counter: -1 });
-      setDuration({ asc: true, counter: -1 });
-      setPrice({ asc: true, counter: -1 });
-  
-      if (pharmacyNameAsc.asc === true) setPharmacyNameAsc({ counter: 0, asc: false });
-      else setPharmacyNameAsc({ counter: 0, asc: true });
-  
-      axios
-        .put(
-          "http://localhost:8080/api/pharmacy/sortByName/" +
-            (pharmacyNameAsc.asc ? "asc" : "desc"),
-          rows
+
+    const handleClickOpen = () => {
+        setOpen(true);
+        axios
+        .get(
+          "http://localhost:8080/api/medicine/all/short"
         )
         .then((res) => {
-          setRows(res.data);
+          setMedicines(res.data)
         });
-    };
-  
-    const sortByRating = () => {
-      setPharmacyNameAsc({ asc: true, counter: -1 });
-      setEmail({ asc: true, counter: -1 });
-      setStartTime({ asc: true, counter: -1 });
-      setDuration({ asc: true, counter: -1 });
-      setPrice({ asc: true, counter: -1 });
-  
-      if (ratingAsc.asc === true) setRatingAsc({ counter: 0, asc: false });
-      else setRatingAsc({ counter: 0, asc: true });
-  
-      axios
-        .put(
-          "http://localhost:8080/api/pharmacy/sortByRating/" +
-            (ratingAsc.asc ? "asc" : "desc"),
-          rows
+        axios
+        .get(
+          "http://localhost:8080/api/pharmacy/all"
         )
         .then((res) => {
-          setRows(res.data);
+            setPharmacies(res.data)
         });
     };
-  
-    const sortByEmail = () => {
-      setRatingAsc({ asc: true, counter: -1 });
-      setStartTime({ asc: true, counter: -1 });
-      setDuration({ asc: true, counter: -1 });
-      setPrice({ asc: true, counter: -1 });
-  
-      if (emailAsc.asc === true) setEmail({ counter: 0, asc: false });
-      else setEmail({ counter: 0, asc: true });
-  
-      axios
-        .put(
-          "http://localhost:8080/api/appointment/sortByPatientEmail/" +
-            (emailAsc.asc ? "asc" : "desc"),
-          rows
-        )
-        .then((res) => {
-          setRows(res.data);
-        });
+    const handleClose = () => {
+        setOpen(false);
     };
   
-    const sortByStartTime = () => {
-      setRatingAsc({ asc: true, counter: -1 });
-      setEmail({ asc: true, counter: -1 });
-      setDuration({ asc: true, counter: -1 });
-      setPrice({ asc: true, counter: -1 });
-  
-      if (startTimeAsc.asc === true) setStartTime({ counter: 0, asc: false });
-      else setStartTime({ counter: 0, asc: true });
-  
-      axios
-        .put(
-          "http://localhost:8080/api/appointment/sortByAppointmentStartTime/" +
-            (startTimeAsc.asc ? "asc" : "desc"),
-          rows
-        )
-        .then((res) => {
-          setRows(res.data);
-        });
-    };
-  
-    const sortByDuration = () => {
-      setRatingAsc({ asc: true, counter: -1 });
-      setEmail({ asc: true, counter: -1 });
-      setStartTime({ asc: true, counter: -1 });
-      setPrice({ asc: true, counter: -1 });
-  
-      if (durationAsc.asc === true) setDuration({ counter: 0, asc: false });
-      else setDuration({ counter: 0, asc: true });
-  
-      axios
-        .put(
-          "http://localhost:8080/api/pharmacistAppointment/sortByAppointmentDuration/" +
-            (durationAsc.asc ? "asc" : "desc"),
-          rows
-        )
-        .then((res) => {
-          setRows(res.data);
-        });
-    };
-  
-    const sortByPrice = () => {
-      setRatingAsc({ asc: true, counter: -1 });
-      setEmail({ asc: true, counter: -1 });
-      setStartTime({ asc: true, counter: -1 });
-      setDuration({ asc: true, counter: -1 });
-  
-      if (priceAsc.asc === true) setPrice({ counter: 0, asc: false });
-      else setPrice({ counter: 0, asc: true });
-  
-      axios
-        .put(
-          "http://localhost:8080/api/appointment/sortByAppointmentPrice/" +
-            (priceAsc.asc ? "asc" : "desc"),
-          rows
-        )
-        .then((res) => {
-          setRows(res.data);
-        });
-    };
   
     const searchReservedMedicines = (e) => {
       e = e.trim();
@@ -279,6 +255,9 @@ import {
           <TableCell className={classes.hederCell} >
           Status
           </TableCell>
+          <TableCell className={classes.hederCell} >
+          Cancel reservation
+          </TableCell>
         </TableRow>
       </TableHead>
     );
@@ -292,6 +271,7 @@ import {
             <TableCell> {row.medicineName}</TableCell>
             <TableCell>{row.pharmacyName}</TableCell>
             <TableCell style={{color: row.statusOfMedicineReservation === 'CREATED' ? 'green' : 'black'}}>{row.statusOfMedicineReservation}</TableCell>
+            <TableCell><Button style={{backgroundColor:'red', visibility: row.statusOfMedicineReservation != 'CREATED' ? 'hidden' : 'visible'}} onClick={() => HandleCancelReservation(row)}>Cancel</Button></TableCell>
           </TableRow>
         ))}
       </TableBody>
@@ -315,10 +295,76 @@ import {
         <Grid item xs={2} />
       </Grid>
     );
+
+    const CreateReservationDialog = (
+        <div>
+            <Dialog onClose={handleClose} aria-labelledby="customized-dialog-title" open={open} fullWidth='true'
+        maxWidth='sm'>
+            <DialogTitle id="customized-dialog-title" onClose={handleClose}>
+                Medicine reservation
+            </DialogTitle>
+            <DialogContent dividers>
+                <Typography gutterBottom>
+                Choose medicine:
+                </Typography>
+                <Autocomplete
+                  className = "autocoplete"
+                  id="combo-box-demo"
+                  options={medicines}
+                  getOptionLabel={(option) => option.medicineName}
+                  style={{ width: 200}}
+                  renderInput={(params) => <TextField value={selectedMedicine} {...params} label="add medicine" variant="outlined" />}
+                  onChange={(event, value) => setSelectedMedicine(value)}
+                 />
+                <Typography gutterBottom>
+                Choose pharmacy:
+                </Typography>
+                <Autocomplete
+                  className = "autocoplete"
+                  id="combo-box-demo"
+                  options={pharmacies}
+                  getOptionLabel={(option) => option.pharmacyName}
+                  style={{ width: 200}}
+                  renderInput={(params) => <TextField value={selectedPharmacy} {...params} label="add pharmacy" variant="outlined" />}
+                  onChange={(event, value) => setSelectedPharmacy(value)}
+                 />
+                <Typography gutterBottom>
+                Choose taking date:
+                </Typography>
+                <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                    <KeyboardDatePicker
+                      disablePast
+                      disableToolbar
+                      variant="inline"
+                      format="MM/dd/yyyy"
+                      margin="normal"
+                      id="date-picker-inline"
+                      label="Date picker inline"
+                      value={selectedDate}
+                      onChange={handleDateChange}
+                      KeyboardButtonProps={{
+                          'aria-label': 'change date',
+                        }}
+                    />
+                </MuiPickersUtilsProvider>
+               
+            </DialogContent>
+            <DialogActions>
+                <Button autoFocus onClick={handleSaveNewReservation} color="primary">
+                Save changes
+                </Button>
+            </DialogActions>
+            </Dialog>
+           
+        </div>
+    )
   
     return (
       <div>
           {SearchPart}
+        <Button variant="outlined" color="primary" onClick={handleClickOpen}>
+       CREATE RESERVATION
+      </Button>
         <Grid container spacing={1}>
           <Grid item xs={2} />
           <Grid item xs={8}>
@@ -356,6 +402,7 @@ import {
           </Grid>
           <Grid item xs={2} />
         </Grid>
+        {CreateReservationDialog}
       </div>
     );
   };

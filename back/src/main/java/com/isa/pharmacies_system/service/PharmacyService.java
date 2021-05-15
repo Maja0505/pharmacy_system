@@ -76,8 +76,13 @@ public class PharmacyService implements IPharmacyService {
 	}
 
 	@Override
-	public Page<Pharmacy> getAll(int page) {
+	public Page<Pharmacy> getAllWithPages(int page) {
 		return iPharmacyRepository.findAll(PageRequest.of(page,10));
+	}
+
+	@Override
+	public List<Pharmacy> getAll() {
+		return iPharmacyRepository.findAll();
 	}
 
 	@Override

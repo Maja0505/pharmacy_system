@@ -45,7 +45,7 @@ public class PharmacyConverter {
 		return pharmacyDTO;
 	}
 
-	public List<PharmacyDTO> convertPharmacyListToPharmacyDTOList(Page<Pharmacy> pharmacies){
+	public List<PharmacyDTO> convertPharmacyListToPharmacyDTOList(List<Pharmacy> pharmacies){
 		List<PharmacyDTO> pharmacyDTOS = new ArrayList<>();
 		for (Pharmacy pharmacy: pharmacies) {
 			pharmacyDTOS.add(convertPharmacyToPharmacyDTO(pharmacy));

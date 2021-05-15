@@ -25,22 +25,20 @@ import com.isa.pharmacies_system.service.iService.IPharmacyService;
 @CrossOrigin(origins="http://localhost:3000")
 @RequestMapping(value = "api/pharmacy")
 public class PharmacyController {
-	private IPharmacyService iPharmacyService;
-	private PharmacyConverter pharmacyConverter;
-	private IPriceListService priceListService;
+	private final IPharmacyService iPharmacyService;
+	private final PharmacyConverter pharmacyConverter;
 
 	@Autowired
 	public PharmacyController(IPharmacyService iPharmacyService,IPriceListService priceListService)
 	{
 		this.iPharmacyService = iPharmacyService;
-		this.priceListService = priceListService;
 		this.pharmacyConverter = new PharmacyConverter(priceListService);
 	}
 
 	@GetMapping(value = "/{id}")
-	public ResponseEntity<Pharmacy> findOneForPharmacyAdmin(@PathVariable Long id) {
+	public ResponseEntity<PharmacyDTO> findOneForPharmacyAdmin(@PathVariable Long id) {
 		try {
-			return new ResponseEntity<>(iPharmacyService.getById(id), HttpStatus.OK);
+			return new ResponseEntity<>(pharmacyConverter.convertPharmacyToPharmacyDTO(iPharmacyService.getById(id)), HttpStatus.OK);
 		} catch (Exception e) {
 			return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
 		}
@@ -48,8 +46,13 @@ public class PharmacyController {
 	}
 
 	@GetMapping(value = "/all/{page}")
-	public ResponseEntity<List<PharmacyDTO>> getAllPharmacies(@PathVariable int page) {
-		return new ResponseEntity<>(pharmacyConverter.convertPharmacyListToPharmacyDTOList(iPharmacyService.getAll(page)), HttpStatus.OK);
+	public ResponseEntity<List<PharmacyDTO>> getAllPharmaciesWithPages(@PathVariable int page) {
+		return new ResponseEntity<>(pharmacyConverter.convertPharmacyListToPharmacyDTOList(iPharmacyService.getAllWithPages(page).toList()), HttpStatus.OK);
+	}
+
+	@GetMapping(value = "/all")
+	public ResponseEntity<List<PharmacyDTO>> getAllPharmacies() {
+		return new ResponseEntity<>(pharmacyConverter.convertPharmacyListToPharmacyDTOList(iPharmacyService.getAll()), HttpStatus.OK);
 	}
 
 	@PostMapping(value = "/create", consumes = "application/json")
@@ -72,7 +75,7 @@ public class PharmacyController {
 				return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 			}
 			List<Pharmacy> pharmacies = iPharmacyService.getAllPharmacyWithFreePharmacistByDate(timeDTO);
-			return new ResponseEntity<>(pharmacyConverter.convertPharmacyListToPharmacyDTOList((Page<Pharmacy>) pharmacies),HttpStatus.OK);
+			return new ResponseEntity<>(pharmacyConverter.convertPharmacyListToPharmacyDTOList(pharmacies),HttpStatus.OK);
 		}catch (Exception e){
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}

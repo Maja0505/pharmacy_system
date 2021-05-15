@@ -2,6 +2,7 @@ package com.isa.pharmacies_system.controller;
 
 
 import com.isa.pharmacies_system.DTO.MedicineReservationDTO;
+import com.isa.pharmacies_system.DTO.MedicineReservationInfoDTO;
 import com.isa.pharmacies_system.converter.MedicineReservationConverter;
 import com.isa.pharmacies_system.domain.medicine.Medicine;
 import com.isa.pharmacies_system.domain.medicine.MedicineReservation;
@@ -21,6 +22,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Controller
+@CrossOrigin(origins="http://localhost:3000")
 @RequestMapping(value = "api/medicineReservation")
 public class MedicineReservationController {
 
@@ -41,7 +43,7 @@ public class MedicineReservationController {
     }
 
     //#1[3.19]
-    @PostMapping(value = "/create/{patientId}/{medicineId}/{pharmacyId}")
+    @PostMapping(value = "/create/{patientId}/{medicineId}/{pharmacyId}", consumes = "application/json")
     public ResponseEntity<Boolean> createMedicineReservation(@PathVariable Long patientId, @PathVariable Long medicineId, @PathVariable Long pharmacyId, @RequestBody MedicineReservationDTO medicineReservationDTO){
         try {
             if(medicineReservationDTO.getDateOfTakingMedicine().isAfter(LocalDate.now()) || (medicineReservationDTO.getDateOfTakingMedicine().isEqual(LocalDate.now()) && LocalDateTime.now().isBefore(medicineReservationDTO.getDateOfTakingMedicine().atTime(20,00)))){
@@ -49,11 +51,28 @@ public class MedicineReservationController {
                 Medicine medicine = medicineService.findOne(medicineId);
                 Pharmacy pharmacy = pharmacyService.getById(pharmacyId);
                 MedicineReservation medicineReservation = medicineReservationConverter.convertMedicineReservationDTOToMedicineReservarvation(medicineReservationDTO,patient,medicine,pharmacy);
-                medicineReservationService.createMedicineReservation(medicineReservation);
-                emailService.sendNotificationForSuccessMedicineReservation(medicineReservation);
-                return new ResponseEntity<>(HttpStatus.OK);
+                if(medicineReservationService.createMedicineReservation(medicineReservation)){
+                    emailService.sendNotificationForSuccessMedicineReservation(medicineReservation);
+                    return new ResponseEntity<>(true,HttpStatus.OK);
+                }
+                return new ResponseEntity<>(false,HttpStatus.OK);
             }
+            return new ResponseEntity<>(false,HttpStatus.OK);
+        }catch (Exception e){
+            Thread.currentThread().interrupt();
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    //#1[3.19]
+    @PutMapping(value = "/cancel", consumes = "application/json")
+    public ResponseEntity<Boolean> createMedicineReservation(@RequestBody MedicineReservationInfoDTO medicineReservationInfoDTO){
+        try {
+          if(medicineReservationService.cancelMedicineReservation(medicineReservationInfoDTO)){
+              return new ResponseEntity<>(true,HttpStatus.OK);
+          }
+            return new ResponseEntity<>(false,HttpStatus.OK);
+
         }catch (Exception e){
             Thread.currentThread().interrupt();
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
