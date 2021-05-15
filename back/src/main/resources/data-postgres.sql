@@ -152,4 +152,4 @@ insert into dermatologist_reports(id,report_infos,dermatologist_appointment_id,r
 insert into dermatologist_reports(id,report_infos,dermatologist_appointment_id,recipe_for_dermatologist_report_id) values (nextval('my_seq_dermatologist_report'),'caocao',8,null);
 
 insert into pharmacist_reports(id,report_infos,pharmacist_appointment_id,recipe_for_pharmacist_report_id) values (nextval('my_seq_pharmacist_report'),'ttttt',3,null);
-insert into pharmacist_reports(id,report_infos,pharmacist_appointment_id,recipe_for_pharmacist_report_id) values (nextval('my_seq_pharmacist_report'),'ccc',5,null);
+insert into pharmacist_reports(id,report_infos,pharmacist_appointment_id,recipe_for_pharmacist_report_id) values (nextval('my_seq_pharmacist_report'),'ccc',1,null);
