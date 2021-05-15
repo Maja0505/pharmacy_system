@@ -121,8 +121,8 @@ public class DermatologistAppointmentService implements IDermatologistAppointmen
     private Boolean checkDoesHaveAnyOtherDermatologistAppointmentWithSameTime(DermatologistAppointment dermatologistAppointment,List<DermatologistAppointment> list){
         LocalDateTime startTime = dermatologistAppointment.getDermatologistAppointmentStartTime();
         LocalDateTime endTime = dermatologistAppointment.getDermatologistAppointmentEndTime();
-
-        for (DermatologistAppointment a: list
+        return utilityMethods.checkDoesHaveAnyOtherDermatologistAppointmentWithSameTime(list,startTime,endTime);
+        /*for (DermatologistAppointment a: list
         ) {
             if( utilityMethods.isTimeBetweenTwoOtherTime(startTime,a.getDermatologistAppointmentStartTime(),a.getDermatologistAppointmentEndTime())
                 || utilityMethods.isTimeBetweenTwoOtherTime(endTime,a.getDermatologistAppointmentStartTime(),a.getDermatologistAppointmentEndTime())
@@ -132,15 +132,16 @@ public class DermatologistAppointmentService implements IDermatologistAppointmen
                 return true;
             }
         }
-        return false;
+        return false;*/
     }
 
     //Nemanja
     private Boolean checkDoesPatientHavePharmacistAppointmentWithSameTime(DermatologistAppointment dermatologistAppointment,List<PharmacistAppointment> list){
         LocalDateTime firstStartTime = dermatologistAppointment.getDermatologistAppointmentStartTime();
         LocalDateTime firstEndTime = dermatologistAppointment.getDermatologistAppointmentEndTime();
+        return utilityMethods.checkDoesPatientHavePharmacistAppointmentWithSameTime(list,firstStartTime,firstEndTime);
 
-        for (PharmacistAppointment a: list
+        /*for (PharmacistAppointment a: list
         ) {
             LocalDateTime secondStartTime = a.getPharmacistAppointmentStartTime();
             LocalDateTime secondEndTime = secondStartTime.plusMinutes(a.getPharmacistAppointmentDuration());
@@ -153,7 +154,7 @@ public class DermatologistAppointmentService implements IDermatologistAppointmen
             }
         }
 
-        return false;
+        return false;*/
     }
 
     //Nemanja

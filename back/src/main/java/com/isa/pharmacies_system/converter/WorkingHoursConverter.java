@@ -27,8 +27,12 @@ public class WorkingHoursConverter {
         WorkingHoursDTO workingHourDTO = new WorkingHoursDTO();
         workingHourDTO.setWorkingStartTime(workingHour.getWorkingStartTime());
         workingHourDTO.setWorkingEndTime(workingHour.getWorkingEndTime());
+        if(workingHour.getWorkerSchedule().getDermatologist() != null){
+            workingHourDTO.setStaffId(workingHour.getWorkerSchedule().getDermatologist().getId());
+        }else{
+            workingHourDTO.setStaffId(workingHour.getWorkerSchedule().getPharmacist().getId());
+        }
         workingHourDTO.setId(workingHour.getId());
-        workingHourDTO.setStaffId(workingHour.getWorkerSchedule().getDermatologist().getId());
         return workingHourDTO;
     }
 

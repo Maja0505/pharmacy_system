@@ -50,8 +50,18 @@ INSERT INTO working_hours (id, status_of_working_hours,working_end_time,working_
 INSERT INTO working_hours (id, status_of_working_hours,working_end_time,working_start_time,worker_schedule_id) VALUES (13,1,'2021-05-16 19:00','2021-05-16 14:50',2);
 INSERT INTO working_hours (id, status_of_working_hours,working_end_time,working_start_time,worker_schedule_id) VALUES (14,1,'2021-05-17 18:00','2021-05-17 10:50',2);
 
-INSERT INTO working_hours (id, status_of_working_hours,working_end_time,working_start_time,worker_schedule_id) VALUES (15,1,'2021-05-15 20:00','2021-05-15 10:50',3);
-INSERT INTO working_hours (id, status_of_working_hours,working_end_time,working_start_time,worker_schedule_id) VALUES (16,1,'2021-05-15 20:00','2021-05-15 10:50',4);
+INSERT INTO working_hours (id, status_of_working_hours,working_end_time,working_start_time,worker_schedule_id) VALUES (15,1,'2021-05-15 23:00','2021-05-15 09:50',3);
+INSERT INTO working_hours (id, status_of_working_hours,working_end_time,working_start_time,worker_schedule_id) VALUES (16,1,'2021-05-16 21:00','2021-05-16 11:50',3);
+INSERT INTO working_hours (id, status_of_working_hours,working_end_time,working_start_time,worker_schedule_id) VALUES (17,1,'2021-05-17 20:00','2021-05-17 10:50',3);
+INSERT INTO working_hours (id, status_of_working_hours,working_end_time,working_start_time,worker_schedule_id) VALUES (18,1,'2021-05-18 18:00','2021-05-18 08:50',3);
+INSERT INTO working_hours (id, status_of_working_hours,working_end_time,working_start_time,worker_schedule_id) VALUES (19,1,'2021-05-19 15:00','2021-05-19 07:50',3);
+INSERT INTO working_hours (id, status_of_working_hours,working_end_time,working_start_time,worker_schedule_id) VALUES (20,1,'2021-05-20 23:00','2021-05-20 12:50',3);
+INSERT INTO working_hours (id, status_of_working_hours,working_end_time,working_start_time,worker_schedule_id) VALUES (21,1,'2021-05-21 23:00','2021-05-21 13:50',3);
+INSERT INTO working_hours (id, status_of_working_hours,working_end_time,working_start_time,worker_schedule_id) VALUES (22,1,'2021-05-22 18:00','2021-05-22 15:50',3);
+INSERT INTO working_hours (id, status_of_working_hours,working_end_time,working_start_time,worker_schedule_id) VALUES (23,1,'2021-05-23 22:00','2021-05-23 10:50',3);
+
+
+INSERT INTO working_hours (id, status_of_working_hours,working_end_time,working_start_time,worker_schedule_id) VALUES (24,1,'2021-05-15 23:00','2021-05-15 10:50',4);
 
 
 INSERT INTO patient (id, category_of_patient, patient_points) VALUES (1, 0, 0.0);
@@ -105,6 +115,12 @@ insert into appointments (id,appointment_points,appointment_price,status_of_appo
 insert into appointments (id,appointment_points,appointment_price,status_of_appointment,type_of_appointment) values (nextval('my_seq_appointment'),5,10,0,0);
 insert into appointments (id,appointment_points,appointment_price,status_of_appointment,type_of_appointment) values (nextval('my_seq_appointment'),5,54,0,0);
 
+/*pharmacist reserved appointment*/
+insert into appointments (id,appointment_points,appointment_price,status_of_appointment,type_of_appointment) values (nextval('my_seq_appointment'),5,13,1,1);
+insert into appointments (id,appointment_points,appointment_price,status_of_appointment,type_of_appointment) values (nextval('my_seq_appointment'),5,40,1,1);
+insert into appointments (id,appointment_points,appointment_price,status_of_appointment,type_of_appointment) values (nextval('my_seq_appointment'),5,50,1,1);
+
+
 
 
 insert into dermatologist_appointment (dermatologist_appointment_start_time,dermatologist_appointment_end_time,id,dermatologist_for_appointment_id,patient_with_dermatologist_appointment_id,pharmacy_for_dermatologist_appointment_id) values('2021-05-11 15:00','2021-05-11 15:30',4,8,1,1);
@@ -122,7 +138,11 @@ insert into dermatologist_appointment (dermatologist_appointment_start_time,derm
 
 insert into pharmacist_appointment (pharmacist_appointment_duration,pharmacist_appointment_start_time,id,pharmacist_for_appointment_id,patient_with_pharmacist_appointment_id) values (16,'2021-04-17 19:05',1,6,1);
 insert into pharmacist_appointment (pharmacist_appointment_duration,pharmacist_appointment_start_time,id,pharmacist_for_appointment_id,patient_with_pharmacist_appointment_id) values (20,'2021-04-15 19:20',2,6,2);
-insert into pharmacist_appointment (pharmacist_appointment_duration,pharmacist_appointment_start_time,id,pharmacist_for_appointment_id,patient_with_pharmacist_appointment_id) values (45,'2021-04-15 19:35',3,6,1);
+insert into pharmacist_appointment (pharmacist_appointment_duration,pharmacist_appointment_start_time,id,pharmacist_for_appointment_id,patient_with_pharmacist_appointment_id) values (45,'2021-05-16 14:35',3,7,1);
+
+insert into pharmacist_appointment (pharmacist_appointment_duration,pharmacist_appointment_start_time,id,pharmacist_for_appointment_id,patient_with_pharmacist_appointment_id) values (40,'2021-05-19 19:05',13,6,1);
+insert into pharmacist_appointment (pharmacist_appointment_duration,pharmacist_appointment_start_time,id,pharmacist_for_appointment_id,patient_with_pharmacist_appointment_id) values (50,'2021-05-18 19:20',14,6,2);
+insert into pharmacist_appointment (pharmacist_appointment_duration,pharmacist_appointment_start_time,id,pharmacist_for_appointment_id,patient_with_pharmacist_appointment_id) values (75,'2021-05-17 14:35',15,6,1);
 
 
 insert into medicine_reservations(id,patient_for_medicine_reservation_id,date_of_taking_medicine,pharmacy_for_medicine_reservation_id,status_of_medicine_reservation,reserved_medicine_id) values (nextval('my_seq_gen_medicine_reservation'),1,'2020-02-04',1,2,1);

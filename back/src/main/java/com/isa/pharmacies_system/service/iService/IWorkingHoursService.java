@@ -8,4 +8,5 @@ public interface IWorkingHoursService {
 
     WorkingHours getWorkingHoursById(Long id);
     List<WorkingHours> getAllFutureWorkingHoursForDermatologistInPharmacy(Long dermatologistId,Long pharmacyId);
+    List<WorkingHours> getAllFutureWorkingHoursForPharmacist(Long pharmacistId);
 }
