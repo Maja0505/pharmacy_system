@@ -51,10 +51,12 @@ public class PharmacistAppointmentService implements IPharmacistAppointmentServi
     public Boolean bookPharmacistAppointment(Long patientId, Long pharmacistId, PharmacistAppointmentTimeDTO timeDTO){
         Patient patient = patientRepository.findById(patientId).orElse(null);
         Pharmacist pharmacist = pharmacistRepository.findById(pharmacistId).orElse(null);
+        PharmacistAppointment pharmacistAppointment;
         if(patient == null && pharmacist == null){
             return false;
+        }else{
+            pharmacistAppointment = createNewPharmacistAppointment(patient, pharmacist, timeDTO);
         }
-        PharmacistAppointment pharmacistAppointment = createNewPharmacistAppointment(patient, pharmacist, timeDTO);
         if(timeDTO.getStartTime().isAfter(LocalDateTime.now())
                 && doesPharmacistWorkInSelectedDate(timeDTO, pharmacist)
                 && doesPharmacistHaveOpenSelectedAppointment(timeDTO, pharmacist)
