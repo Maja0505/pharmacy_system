@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -33,10 +34,10 @@ public class DermatologistAppointmentController {
     private EmailService emailService;
 
     @Autowired
-    public DermatologistAppointmentController(IDermatologistAppointmentService dermatologistAppointmentService, EmailService emailService) {
+    public DermatologistAppointmentController(IDermatologistAppointmentService dermatologistAppointmentService, EmailService emailService, PasswordEncoder passwordEncoder) {
         this.dermatologistAppointmentService = dermatologistAppointmentService;
         this.emailService = emailService;
-        this.patientConverter = new PatientConverter();
+        this.patientConverter = new PatientConverter(passwordEncoder);
         this.dermatologistAppointmentConverter = new DermatologistAppointmentConverter();
 
     }

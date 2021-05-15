@@ -1,27 +1,36 @@
 package com.isa.pharmacies_system.service;
 
+import java.util.List;
+import java.util.Set;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.MailException;
+import org.springframework.stereotype.Service;
+
 import com.isa.pharmacies_system.DTO.UserPasswordDTO;
 import com.isa.pharmacies_system.domain.medicine.Medicine;
 import com.isa.pharmacies_system.domain.schedule.DermatologistAppointment;
+import com.isa.pharmacies_system.domain.user.ConfirmationToken;
 import com.isa.pharmacies_system.domain.user.Patient;
+import com.isa.pharmacies_system.domain.user.Users;
 import com.isa.pharmacies_system.repository.IMedicineRepository;
 import com.isa.pharmacies_system.repository.IPatientRepository;
 import com.isa.pharmacies_system.service.iService.IPatientService;
-import org.springframework.stereotype.Service;
-
-import java.util.List;
-import java.util.Set;
 
 @Service
 public class PatientService implements IPatientService {
 
     private IPatientRepository patientRepository;
     private IMedicineRepository medicineRepository;
+    private ConfirmationTokenService confirmationTokenService;
+    private EmailService emailService;
 
-    public PatientService(IPatientRepository patientRepository, IMedicineRepository medicineRepository) {
-
+    @Autowired
+    public PatientService(IPatientRepository patientRepository, IMedicineRepository medicineRepository, ConfirmationTokenService confirmationTokenService,EmailService emailService) {
+    	this.confirmationTokenService = confirmationTokenService;
         this.patientRepository = patientRepository;
         this.medicineRepository = medicineRepository;
+        this.emailService = emailService;
     }
 
     @Override
@@ -36,10 +45,19 @@ public class PatientService implements IPatientService {
 
     @Override
     public void savePatient(Patient patient){
-        patientRepository.save(patient);
+        Patient patientNew = patientRepository.save(patient);
+        
     }
-
-    //#1
+    
+    @Override
+	public void createPatient(Patient patient) throws MailException, InterruptedException {
+    	Patient patientNew = patientRepository.save(patient);
+    	ConfirmationToken confirmationToken = confirmationTokenService.save((Users)patientNew);
+		emailService.sendConfirmationMail(patientNew.getEmail(), confirmationToken.getConfirmationToken());
+	}
+    
+    
+	//#1
     @Override
     public Boolean changePassword(UserPasswordDTO userPasswordDTO){
         Patient patient = findOne(userPasswordDTO.getId());
@@ -90,6 +108,8 @@ public class PatientService implements IPatientService {
         Patient patient = findOne(patientId);
         return  patient.getMedicineAllergies().stream().anyMatch(medicineAllergies -> medicineAllergies.equals(medicine));
     }
+
+	
 
 
 }

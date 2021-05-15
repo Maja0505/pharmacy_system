@@ -1,22 +1,42 @@
 package com.isa.pharmacies_system.converter;
 
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+
+import org.springframework.data.domain.Page;
+import org.springframework.security.crypto.password.PasswordEncoder;
+
 import com.isa.pharmacies_system.DTO.MedicineForAllergiesDTO;
 import com.isa.pharmacies_system.DTO.PatientAdditionalInfoDTO;
 import com.isa.pharmacies_system.DTO.PatientAppointmentInfoDTO;
+import com.isa.pharmacies_system.DTO.PatientNewDTO;
+import com.isa.pharmacies_system.domain.complaint.Complaint;
+import com.isa.pharmacies_system.domain.medicine.EPrescription;
 import com.isa.pharmacies_system.domain.medicine.Medicine;
+import com.isa.pharmacies_system.domain.medicine.MedicineReservation;
+import com.isa.pharmacies_system.domain.medicine.Recipe;
+import com.isa.pharmacies_system.domain.pharmacy.Pharmacy;
+import com.isa.pharmacies_system.domain.rating.Rating;
 import com.isa.pharmacies_system.domain.schedule.DermatologistAppointment;
 import com.isa.pharmacies_system.domain.schedule.PharmacistAppointment;
+import com.isa.pharmacies_system.domain.user.CategoryOfPatient;
 import com.isa.pharmacies_system.domain.user.Patient;
-import org.springframework.data.domain.Page;
-import java.util.ArrayList;
-import java.util.List;
+import com.isa.pharmacies_system.domain.user.TypeOfUser;
 
 public class PatientConverter{
 
     private  DermatologistAppointmentConverter dermatologistAppointmentConverter;
-
+    
+    private PasswordEncoder passwordEncoder;
+    
     public PatientConverter() {
+		// TODO Auto-generated constructor stub
+	}
+    
+    public PatientConverter(PasswordEncoder passwordEncoder) {
         dermatologistAppointmentConverter = new DermatologistAppointmentConverter();
+        this.passwordEncoder = passwordEncoder;
     }
 
     public PatientAdditionalInfoDTO convertPatientAdditionalInfoToDTO(Patient patient){
@@ -85,6 +105,35 @@ public class PatientConverter{
         patientAppointmentInfoDTO.setPatientEmail(patient.getEmail());
         patientAppointmentInfoDTO.setPatientFirstName(patient.getFirstName());
         patientAppointmentInfoDTO.setPatientLastName(patient.getLastName());
+    }
+    
+    public Patient convertPatientNewDTOToPatient(PatientNewDTO patientNewDTO) throws Exception {
+    	Patient patient = new Patient();
+    	System.out.println("Da li je patientNew null" + patientNewDTO.getPassword());
+    	patient.setCategoryOfPatient(CategoryOfPatient.Regular);
+    	patient.setDermatologistAppointment(new HashSet<DermatologistAppointment>());
+    	patient.setEmail(patientNewDTO.getEmail());
+    	patient.setEnabled(false);
+    	patient.setFirstLogin(true);
+    	patient.setFirstName(patientNewDTO.getFirstName());
+    	patient.setLastName(patientNewDTO.getLastName());
+    	if (!patientNewDTO.getPassword().equals(patientNewDTO.getConfirmPassword())){
+    		throw new Exception("Password and confirm password aren't equal!");
+    	}
+    	patient.setPassword(passwordEncoder.encode(patientNewDTO.getPassword()));
+    	patient.setMedicineAllergies(new HashSet<Medicine>());
+    	patient.setPatientComplaints(new HashSet<Complaint>());
+    	patient.setPatientEPrescriptions(new HashSet<EPrescription>());
+    	patient.setPatientMedicineReservations(new HashSet<MedicineReservation>());
+    	patient.setPatientPoints(0);
+    	patient.setPatientRatings(new HashSet<Rating>());
+    	patient.setPatientRecipe(new HashSet<Recipe>());
+    	patient.setPharmaciesSubscription(new HashSet<Pharmacy>());
+    	patient.setPharmacistAppointments(new HashSet<PharmacistAppointment>());
+    	patient.setPhoneNumber(patientNewDTO.getPhoneNumber());
+    	patient.setTypeOfUser(TypeOfUser.Patient);
+    	patient.setUserAddress(patientNewDTO.getResidentialAddress());
+    	return patient;
     }
 
 }
