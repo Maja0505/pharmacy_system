@@ -1,17 +1,19 @@
 package com.isa.pharmacies_system.controller;
 
 import com.isa.pharmacies_system.DTO.*;
-import com.isa.pharmacies_system.converter.DermatologistAppointmentConverter;
-import com.isa.pharmacies_system.converter.PatientConverter;
-import com.isa.pharmacies_system.converter.UserConverter;
-import com.isa.pharmacies_system.domain.medicine.Medicine;
+import com.isa.pharmacies_system.converter.*;
+import com.isa.pharmacies_system.domain.medicine.MedicineReservation;
 import com.isa.pharmacies_system.domain.schedule.DermatologistAppointment;
 import com.isa.pharmacies_system.domain.user.Patient;
+import com.isa.pharmacies_system.repository.IMedicineRepository;
 import com.isa.pharmacies_system.service.DermatologistAppointmentService;
 import com.isa.pharmacies_system.service.MedicineService;
+import com.isa.pharmacies_system.service.iService.IMedicineReservationService;
 import com.isa.pharmacies_system.service.iService.IMedicineService;
 import com.isa.pharmacies_system.service.iService.IPatientService;
+import com.isa.pharmacies_system.service.iService.IPriceListService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -30,19 +32,23 @@ public class PatientController {
     private IPatientService patientService;
     private UserConverter userConverter;
     private PatientConverter patientConverter;
-    private DermatologistAppointmentService dermatologistAppointmentService;
     private DermatologistAppointmentConverter dermatologistAppointmentConverter;
+    private PharmacistAppointmentConverter pharmacistAppointmentConverter;
     private IMedicineService medicineService;
+    private IPriceListService priceListService;
+    private MedicineReservationConverter medicineReservationConverter;
 
     @Autowired
-    public PatientController(IPatientService patientService, DermatologistAppointmentService dermatologistAppointmentService, MedicineService medicineService) {
+    public PatientController(IPatientService patientService, DermatologistAppointmentService dermatologistAppointmentService, MedicineService medicineService, IPriceListService priceListService) {
 
         this.patientService = patientService;
+        this.priceListService = priceListService;
         this.userConverter = new UserConverter();
         this.patientConverter = new PatientConverter();
-        this.dermatologistAppointmentConverter = new DermatologistAppointmentConverter();
-        this.dermatologistAppointmentService = dermatologistAppointmentService;
+        this.dermatologistAppointmentConverter = new DermatologistAppointmentConverter(priceListService);
+        this.pharmacistAppointmentConverter = new PharmacistAppointmentConverter(priceListService);
         this.medicineService = medicineService;
+        this.medicineReservationConverter = new MedicineReservationConverter();
 
     }
 
@@ -139,6 +145,42 @@ public class PatientController {
             Set<DermatologistAppointment> dermatologistAppointments = patientService.getDermatologistAppointmentForPatient(id);
             List<DermatologistAppointmentDTO> dermatologistAppointmentDTOS = dermatologistAppointmentConverter.convertListOfDermatologistAppointmentToDermatologistAppointmentDTOS(List.copyOf(dermatologistAppointments));
             return new ResponseEntity<>(dermatologistAppointmentDTOS,HttpStatus.OK);
+        }catch (Exception e){
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    //#1
+    @GetMapping(value = "/{id}/dermatologistAppointment/all/reserved/{page}")
+    public ResponseEntity<List<DermatologistAppointmentDTO>> getAllReservedDermatologistAppointmentsForPatient(@PathVariable Long id,@PathVariable int page){
+
+        try {
+            List<DermatologistAppointmentDTO> dermatologistAppointmentDTOS = dermatologistAppointmentConverter.convertListOfDermatologistAppointmentToDermatologistAppointmentDTOS(List.copyOf(patientService.getAllReservedDermatologistAppointmentsForPatient(id,page)));
+            return new ResponseEntity<>(dermatologistAppointmentDTOS,HttpStatus.OK);
+        }catch (Exception e){
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    //#1
+    @GetMapping(value = "/{id}/pharmacistAppointment/all/reserved/{page}")
+    public ResponseEntity<List<PharmacistAppointmentDTO>> getAllReservedPharmacistAppointmentsForPatient(@PathVariable Long id,@PathVariable int page){
+
+        try {
+            List<PharmacistAppointmentDTO> pharmacistAppointmentDTOS = pharmacistAppointmentConverter.convertPharmacistAppointmentsListToDTOS(List.copyOf(patientService.getAllReservedPharmacistAppointmentsForPatient(id,page)));
+            return new ResponseEntity<>(pharmacistAppointmentDTOS,HttpStatus.OK);
+        }catch (Exception e){
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    //#1
+    @GetMapping(value = "/{id}/medicineReservation/{page}")
+    public ResponseEntity<List<MedicineReservationInfoDTO>> getAllMedicineReservationsForPatient(@PathVariable Long id, @PathVariable int page){
+
+        try {
+            Page<MedicineReservation> medicineReservations = patientService.getAllMedicineReservationsForPatient(id,page);
+            return new ResponseEntity<>(medicineReservationConverter.convertMedicineReservationListToMedicineReservationInfoDTOS(medicineReservations),HttpStatus.OK);
         }catch (Exception e){
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }

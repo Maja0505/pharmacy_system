@@ -4,7 +4,7 @@ import "./components/css/Header.css";
 
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import Login from "./components/other/LoginPage";
-import PatientHomePage from "./components/patient/HomePage";
+import PatientHomePage from "./components/patient/BasicPage";
 import DermatologistHomePage from "./components/dermatologist/HomePage";
 import PharmacistHomePage from "./components/pharmacist/HomePage";
 import SupplierHomePage from "./components/supplier/HomePage";
