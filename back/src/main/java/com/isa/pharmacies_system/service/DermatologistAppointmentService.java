@@ -193,6 +193,24 @@ public class DermatologistAppointmentService implements IDermatologistAppointmen
 
     //Nemanja
     @Override
+    public List<DermatologistAppointment> getAllMissedDermatologistAppointmentByDermatologistAndPharmacyId(Long dermatologistId, Long pharmacyId) {
+        return dermatologistAppointmentRepository.findAllMissedDermatologistAppointmentByDermatologistAndPharmacy(dermatologistId,pharmacyId);
+    }
+
+    //Nemanja
+    @Override
+    public List<DermatologistAppointment> getAllExpiredDermatologistAppointmentByDermatologistAndPharmacyId(Long dermatologistId, Long pharmacyId) {
+        return dermatologistAppointmentRepository.findAllExpiredDermatologistAppointmentByDermatologistAndPharmacy(dermatologistId,pharmacyId);
+    }
+
+    //Nemanja
+    @Override
+    public List<DermatologistAppointment> getAllReservedDermatologistAppointmentByDermatologistAndPharmacyId(Long dermatologistId, Long pharmacyId) {
+        return dermatologistAppointmentRepository.findAllReservedDermatologistAppointmentByDermatologistAndPharmacy(dermatologistId,pharmacyId);
+    }
+
+    //Nemanja
+    @Override
     public Boolean bookDermatologistAppointmentByDermatologist(AppointmentScheduleByStaffDTO appointmentScheduleByStaffDTO, DermatologistAppointment dermatologistAppointment) {
 
         if(!isDermatologistAppointmentInsideDermatologistWorkTime(appointmentScheduleByStaffDTO)
@@ -256,7 +274,7 @@ public class DermatologistAppointmentService implements IDermatologistAppointmen
     //Nemanja
     @Override
     public Boolean changeDermatologistAppointmentStatusToMissed(DermatologistAppointment dermatologistAppointment) {
-        if(dermatologistAppointment.getStatusOfAppointment().equals(StatusOfAppointment.Reserved)){
+        if(dermatologistAppointment.getStatusOfAppointment().equals(StatusOfAppointment.Reserved) && dermatologistAppointment.getDermatologistAppointmentStartTime().isBefore(LocalDateTime.now())){
             dermatologistAppointment.setStatusOfAppointment(StatusOfAppointment.Missed);
             addPatientPoint(dermatologistAppointment.getPatientWithDermatologistAppointment());
             dermatologistAppointmentRepository.save(dermatologistAppointment);

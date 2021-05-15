@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @Controller
+@CrossOrigin(origins="http://localhost:3000")
 @RequestMapping("api/dermatologistAppointment")
 public class DermatologistAppointmentController {
 
@@ -103,7 +104,7 @@ public class DermatologistAppointmentController {
     }
 
     //Nemanja
-    @GetMapping(value = "/sortByAppointmentEndTime/{asc}",consumes = "application/json")
+    @PutMapping(value = "/sortByAppointmentEndTime/{asc}",consumes = "application/json")
     public ResponseEntity<List<PatientAppointmentInfoDTO>> getSortedPastDermatologistAppointmentByAppointmentEndTime(@RequestBody List<PatientAppointmentInfoDTO> patientAppointmentInfoDTOList,@PathVariable String asc){
         try {
             if(asc.equals("asc")){
@@ -132,6 +133,39 @@ public class DermatologistAppointmentController {
     public ResponseEntity<List<DermatologistAppointmentDTO>> getAllFutureReservedDermatologistAppointmentByDermatologistInPharmacy(@PathVariable Long dermatologistId,@PathVariable Long pharmacyId){
         try {
             List<DermatologistAppointment> dermatologistAppointmentList = dermatologistAppointmentService.findAllFutureReservedDermatologistAppointmentByDermatologistAndPharmacy(dermatologistId,pharmacyId);
+            return new ResponseEntity<>(dermatologistAppointmentConverter.convertListOfDermatologistAppointmentToDermatologistAppointmentDTOS(dermatologistAppointmentList),HttpStatus.OK);
+        }catch (Exception e){
+            return new ResponseEntity<>(null,HttpStatus.NOT_FOUND);
+        }
+    }
+
+    //Nemanja
+    @GetMapping("/allMissed/{dermatologistId}/{pharmacyId}")
+    public ResponseEntity<List<DermatologistAppointmentDTO>> getAllMissedDermatologistAppointmentByDermatologistInPharmacy(@PathVariable Long dermatologistId,@PathVariable Long pharmacyId){
+        try {
+            List<DermatologistAppointment> dermatologistAppointmentList = dermatologistAppointmentService.getAllMissedDermatologistAppointmentByDermatologistAndPharmacyId(dermatologistId,pharmacyId);
+            return new ResponseEntity<>(dermatologistAppointmentConverter.convertListOfDermatologistAppointmentToDermatologistAppointmentDTOS(dermatologistAppointmentList),HttpStatus.OK);
+        }catch (Exception e){
+            return new ResponseEntity<>(null,HttpStatus.NOT_FOUND);
+        }
+    }
+
+    //Nemanja
+    @GetMapping("/allExpired/{dermatologistId}/{pharmacyId}")
+    public ResponseEntity<List<DermatologistAppointmentDTO>> getAllExpiredDermatologistAppointmentByDermatologistInPharmacy(@PathVariable Long dermatologistId,@PathVariable Long pharmacyId){
+        try {
+            List<DermatologistAppointment> dermatologistAppointmentList = dermatologistAppointmentService.getAllExpiredDermatologistAppointmentByDermatologistAndPharmacyId(dermatologistId,pharmacyId);
+            return new ResponseEntity<>(dermatologistAppointmentConverter.convertListOfDermatologistAppointmentToDermatologistAppointmentDTOS(dermatologistAppointmentList),HttpStatus.OK);
+        }catch (Exception e){
+            return new ResponseEntity<>(null,HttpStatus.NOT_FOUND);
+        }
+    }
+
+    //Nemanja
+    @GetMapping("/allReserved/{dermatologistId}/{pharmacyId}")
+    public ResponseEntity<List<DermatologistAppointmentDTO>> getAllReservedDermatologistAppointmentByDermatologistInPharmacy(@PathVariable Long dermatologistId,@PathVariable Long pharmacyId){
+        try {
+            List<DermatologistAppointment> dermatologistAppointmentList = dermatologistAppointmentService.getAllReservedDermatologistAppointmentByDermatologistAndPharmacyId(dermatologistId,pharmacyId);
             return new ResponseEntity<>(dermatologistAppointmentConverter.convertListOfDermatologistAppointmentToDermatologistAppointmentDTOS(dermatologistAppointmentList),HttpStatus.OK);
         }catch (Exception e){
             return new ResponseEntity<>(null,HttpStatus.NOT_FOUND);
@@ -168,5 +202,7 @@ public class DermatologistAppointmentController {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
+
+
 
 }

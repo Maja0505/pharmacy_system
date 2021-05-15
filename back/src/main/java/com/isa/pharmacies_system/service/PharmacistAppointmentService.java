@@ -13,7 +13,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
-import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -42,19 +41,10 @@ public class PharmacistAppointmentService implements IPharmacistAppointmentServi
     }
 
     @Override
-    public Page<PharmacistAppointment> getAllPastPharmacistAppointmentByPharmacist(Long id,int page) {
-        return pharmacistAppointmentRepository.findAllPastPharmacistAppointment(id,PageRequest.of(page,10));
+    public PharmacistAppointment findOne(Long id) {
+        return pharmacistAppointmentRepository.findById(id).orElse(null);
     }
 
-    @Override
-    public List<PatientAppointmentInfoDTO> sortByAppointmentDuration(List<PatientAppointmentInfoDTO> patientAppointmentInfoDTOList, Boolean asc) {
-        if(asc){
-            Collections.sort(patientAppointmentInfoDTOList, Comparator.comparing(PatientAppointmentInfoDTO::getAppointmentDuration));
-        }else{
-            Collections.sort(patientAppointmentInfoDTOList, Comparator.comparing(PatientAppointmentInfoDTO::getAppointmentDuration).reversed());
-        }
-        return patientAppointmentInfoDTOList;
-    }
 
     //#1[3.16]Korak3
     @Override
@@ -124,9 +114,55 @@ public class PharmacistAppointmentService implements IPharmacistAppointmentServi
         return false;
     }
 
+    //Nemanja
+    @Override
+    public Page<PharmacistAppointment> getAllPastPharmacistAppointmentByPharmacist(Long id,int page) {
+        return pharmacistAppointmentRepository.findAllPastPharmacistAppointment(id,PageRequest.of(page,10));
+    }
 
+    //Nemanja
+    @Override
+    public List<PatientAppointmentInfoDTO> sortByAppointmentDuration(List<PatientAppointmentInfoDTO> patientAppointmentInfoDTOList, Boolean asc) {
+        if(asc){
+            Collections.sort(patientAppointmentInfoDTOList, Comparator.comparing(PatientAppointmentInfoDTO::getAppointmentDuration));
+        }else{
+            Collections.sort(patientAppointmentInfoDTOList, Comparator.comparing(PatientAppointmentInfoDTO::getAppointmentDuration).reversed());
+        }
+        return patientAppointmentInfoDTOList;
+    }
 
+    //Nemanja
+    @Override
+    public List<PharmacistAppointment> getAllMissedPharmacistAppointmentByPharmacist(Long pharmacistId) {
+        return pharmacistAppointmentRepository.findAllMissedPharmacistAppointmentByPharmacist(pharmacistId);
+    }
 
+    //Nemanja
+    @Override
+    public List<PharmacistAppointment> getAllExpiredPharmacistAppointmentByPharmacist(Long pharmacistId) {
+        return pharmacistAppointmentRepository.findAllExpiredPharmacistAppointmentByPharmacist(pharmacistId);
+    }
 
+    //Nemanja
+    @Override
+    public List<PharmacistAppointment> getAllReservedPharmacistAppointmentByPharmacist(Long pharmacistId) {
+        return pharmacistAppointmentRepository.findAllReservedPharmacistAppointmentByPharmacist(pharmacistId);
+    }
 
+    //Nemanja
+    @Override
+    public Boolean changePharmacistAppointmentStatusToMissed(PharmacistAppointment pharmacistAppointment) {
+        if(pharmacistAppointment.getStatusOfAppointment().equals(StatusOfAppointment.Reserved) && pharmacistAppointment.getPharmacistAppointmentStartTime().isBefore(LocalDateTime.now())){
+            pharmacistAppointment.setStatusOfAppointment(StatusOfAppointment.Missed);
+            addPatientPoint(pharmacistAppointment.getPatientWithPharmacistAppointment());
+            pharmacistAppointmentRepository.save(pharmacistAppointment);
+            return true;
+        }
+        return false;
+    }
+
+    //Nemanja
+    private void addPatientPoint(Patient patient) {
+        patient.setPatientPoints(patient.getPatientPoints() + 1);
+    }
 }

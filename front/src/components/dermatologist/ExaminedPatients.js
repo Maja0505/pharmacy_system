@@ -33,7 +33,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Appointment = () => {
+const ExaminedPatients = () => {
   const classes = useStyles();
 
   const [rows, setRows] = useState([]);
@@ -45,7 +45,7 @@ const Appointment = () => {
   useEffect(() => {
     axios
       .get(
-        "http://localhost:8080/api/pharmacistAppointment/allPastAppointment/6/" +
+        "http://localhost:8080/api/dermatologistAppointment/allPastAppointmentByDermatologistAndPharmacy/8/1/" +
           (currPage - 1).toString() +
           ""
       )
@@ -75,7 +75,7 @@ const Appointment = () => {
     asc: true,
   });
 
-  const [durationAsc, setDuration] = useState({
+  const [endTimeAsc, setEndTimeAsc] = useState({
     counter: -1,
     asc: true,
   });
@@ -89,7 +89,7 @@ const Appointment = () => {
     setLastNameAsc({ asc: true, counter: -1 });
     setEmail({ asc: true, counter: -1 });
     setStartTime({ asc: true, counter: -1 });
-    setDuration({ asc: true, counter: -1 });
+    setEndTimeAsc({ asc: true, counter: -1 });
     setPrice({ asc: true, counter: -1 });
 
     if (firstNameAsc.asc === true) setFirstNameAsc({ counter: 0, asc: false });
@@ -110,7 +110,7 @@ const Appointment = () => {
     setFirstNameAsc({ asc: true, counter: -1 });
     setEmail({ asc: true, counter: -1 });
     setStartTime({ asc: true, counter: -1 });
-    setDuration({ asc: true, counter: -1 });
+    setEndTimeAsc({ asc: true, counter: -1 });
     setPrice({ asc: true, counter: -1 });
 
     if (lastNameAsc.asc === true) setLastNameAsc({ counter: 0, asc: false });
@@ -131,7 +131,7 @@ const Appointment = () => {
     setFirstNameAsc({ asc: true, counter: -1 });
     setLastNameAsc({ asc: true, counter: -1 });
     setStartTime({ asc: true, counter: -1 });
-    setDuration({ asc: true, counter: -1 });
+    setEndTimeAsc({ asc: true, counter: -1 });
     setPrice({ asc: true, counter: -1 });
 
     if (emailAsc.asc === true) setEmail({ counter: 0, asc: false });
@@ -152,7 +152,7 @@ const Appointment = () => {
     setFirstNameAsc({ asc: true, counter: -1 });
     setLastNameAsc({ asc: true, counter: -1 });
     setEmail({ asc: true, counter: -1 });
-    setDuration({ asc: true, counter: -1 });
+    setEndTimeAsc({ asc: true, counter: -1 });
     setPrice({ asc: true, counter: -1 });
 
     if (startTimeAsc.asc === true) setStartTime({ counter: 0, asc: false });
@@ -169,20 +169,20 @@ const Appointment = () => {
       });
   };
 
-  const sortByDuration = () => {
+  const sortByEndTime = () => {
     setFirstNameAsc({ asc: true, counter: -1 });
     setLastNameAsc({ asc: true, counter: -1 });
     setEmail({ asc: true, counter: -1 });
     setStartTime({ asc: true, counter: -1 });
     setPrice({ asc: true, counter: -1 });
 
-    if (durationAsc.asc === true) setDuration({ counter: 0, asc: false });
-    else setDuration({ counter: 0, asc: true });
+    if (endTimeAsc.asc === true) setEndTimeAsc({ counter: 0, asc: false });
+    else setEndTimeAsc({ counter: 0, asc: true });
 
     axios
       .put(
-        "http://localhost:8080/api/pharmacistAppointment/sortByAppointmentDuration/" +
-          (durationAsc.asc ? "asc" : "desc"),
+        "http://localhost:8080/api/dermatologistAppointment/sortByAppointmentEndTime/" +
+          (endTimeAsc.asc ? "asc" : "desc"),
         rows
       )
       .then((res) => {
@@ -195,7 +195,7 @@ const Appointment = () => {
     setLastNameAsc({ asc: true, counter: -1 });
     setEmail({ asc: true, counter: -1 });
     setStartTime({ asc: true, counter: -1 });
-    setDuration({ asc: true, counter: -1 });
+    setEndTimeAsc({ asc: true, counter: -1 });
 
     if (priceAsc.asc === true) setPrice({ counter: 0, asc: false });
     else setPrice({ counter: 0, asc: true });
@@ -231,7 +231,7 @@ const Appointment = () => {
   const nextPage = () => {
     axios
       .get(
-        "http://localhost:8080/api/pharmacistAppointment/allPastAppointment/6/" +
+        "http://localhost:8080/api/dermatologistAppointment/allPastAppointmentByDermatologistAndPharmacy/8/1/" +
           currPage.toString() +
           ""
       )
@@ -248,7 +248,7 @@ const Appointment = () => {
   const beforePage = () => {
     axios
       .get(
-        "http://localhost:8080/api/pharmacistAppointment/allPastAppointment/6/" +
+        "http://localhost:8080/api/dermatologistAppointment/allPastAppointmentByDermatologistAndPharmacy/8/1/" +
           (currPage - 2).toString() +
           ""
       )
@@ -283,10 +283,10 @@ const Appointment = () => {
           {startTimeAsc.asc && startTimeAsc.counter !== -1 && <ArrowDropDown />}{" "}
           {!startTimeAsc.asc && startTimeAsc.counter !== -1 && <ArrowDropUp />}
         </TableCell>
-        <TableCell className={classes.hederCell} onClick={sortByDuration}>
-          Duration (min){" "}
-          {durationAsc.asc && durationAsc.counter !== -1 && <ArrowDropDown />}{" "}
-          {!durationAsc.asc && durationAsc.counter !== -1 && <ArrowDropUp />}
+        <TableCell className={classes.hederCell} onClick={sortByEndTime}>
+          End Time{" "}
+          {endTimeAsc.asc && endTimeAsc.counter !== -1 && <ArrowDropDown />}{" "}
+          {!endTimeAsc.asc && endTimeAsc.counter !== -1 && <ArrowDropUp />}
         </TableCell>
         <TableCell className={classes.hederCell} onClick={sortByPrice}>
           Price ($)
@@ -311,7 +311,13 @@ const Appointment = () => {
               ":" +
               row.appointmentStartTime.split("T")[1].split(":")[1]}
           </TableCell>
-          <TableCell>{row.appointmentDuration}</TableCell>
+          <TableCell>
+            {row.appointmentEndTime.split("T")[0] +
+              " " +
+              row.appointmentEndTime.split("T")[1].split(":")[0] +
+              ":" +
+              row.appointmentEndTime.split("T")[1].split(":")[1]}
+          </TableCell>
           <TableCell>{row.appointmentPrice}</TableCell>
         </TableRow>
       ))}
@@ -381,4 +387,4 @@ const Appointment = () => {
   );
 };
 
-export default Appointment;
+export default ExaminedPatients;

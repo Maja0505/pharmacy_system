@@ -5,6 +5,7 @@ import com.isa.pharmacies_system.DTO.PharmacistAppointmentDTO;
 import com.isa.pharmacies_system.DTO.PharmacistAppointmentTimeDTO;
 import com.isa.pharmacies_system.converter.PatientConverter;
 import com.isa.pharmacies_system.converter.PharmacistAppointmentConverter;
+import com.isa.pharmacies_system.domain.schedule.DermatologistAppointment;
 import com.isa.pharmacies_system.domain.schedule.PharmacistAppointment;
 import com.isa.pharmacies_system.service.EmailService;
 import com.isa.pharmacies_system.service.iService.IPharmacistAppointmentService;
@@ -37,30 +38,6 @@ public class PharmacistAppointmentController {
         this.pharmacistAppointmentConverter = new PharmacistAppointmentConverter();
     }
 
-    @GetMapping("/allPastAppointment/{pharmacistId}/{page}")
-    public ResponseEntity<List<PatientAppointmentInfoDTO>> getAllPastPharmacistAppointment(@PathVariable("pharmacistId") Long id,@PathVariable int page){
-        try {
-            Page<PharmacistAppointment> pharmacistAppointmentList = pharmacistAppointmentService.getAllPastPharmacistAppointmentByPharmacist(id,page);
-            return new ResponseEntity<>(patientConverter.convertPatientPharmacistAppointmentInfoToDTO(pharmacistAppointmentList), HttpStatus.OK);
-        }catch (Exception e){
-            return new ResponseEntity<>(null,HttpStatus.NOT_FOUND);
-        }
-    }
-
-
-    @PutMapping(value = "/sortByAppointmentDuration/{asc}",consumes = "application/json")
-    public ResponseEntity<List<PatientAppointmentInfoDTO>> getSortedPastPharmacistAppointmentByAppointmentDuration(@RequestBody List<PatientAppointmentInfoDTO> patientAppointmentInfoDTOList, @PathVariable String asc){
-        try {
-            if(asc.equals("asc")){
-                return new ResponseEntity<>(pharmacistAppointmentService.sortByAppointmentDuration(patientAppointmentInfoDTOList,true),HttpStatus.OK);
-            }else{
-                return new ResponseEntity<>(pharmacistAppointmentService.sortByAppointmentDuration(patientAppointmentInfoDTOList,false),HttpStatus.OK);
-            }
-        }catch (Exception e){
-            return new ResponseEntity<>(null,HttpStatus.BAD_REQUEST);
-        }
-
-    }
 
     //#1[3.16]Korak3
     @PostMapping(value = "/book/{pharmacistId}/{patientId}", consumes = "application/json")
@@ -99,6 +76,79 @@ public class PharmacistAppointmentController {
     public ResponseEntity<Boolean> cancelPharmacistAppointment(@PathVariable Long appointmentId){
         try {
             return new ResponseEntity<>(pharmacistAppointmentService.cancelPharmacistAppointment(appointmentId),HttpStatus.OK);
+        }catch (Exception e){
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    //Nemanja
+    @GetMapping("/allPastAppointment/{pharmacistId}/{page}")
+    public ResponseEntity<List<PatientAppointmentInfoDTO>> getAllPastPharmacistAppointment(@PathVariable("pharmacistId") Long id,@PathVariable int page){
+        try {
+            Page<PharmacistAppointment> pharmacistAppointmentList = pharmacistAppointmentService.getAllPastPharmacistAppointmentByPharmacist(id,page);
+            return new ResponseEntity<>(patientConverter.convertPatientPharmacistAppointmentInfoToDTO(pharmacistAppointmentList), HttpStatus.OK);
+        }catch (Exception e){
+            return new ResponseEntity<>(null,HttpStatus.NOT_FOUND);
+        }
+    }
+
+    //Nemanja
+    @PutMapping(value = "/sortByAppointmentDuration/{asc}",consumes = "application/json")
+    public ResponseEntity<List<PatientAppointmentInfoDTO>> getSortedPastPharmacistAppointmentByAppointmentDuration(@RequestBody List<PatientAppointmentInfoDTO> patientAppointmentInfoDTOList, @PathVariable String asc){
+        try {
+            if(asc.equals("asc")){
+                return new ResponseEntity<>(pharmacistAppointmentService.sortByAppointmentDuration(patientAppointmentInfoDTOList,true),HttpStatus.OK);
+            }else{
+                return new ResponseEntity<>(pharmacistAppointmentService.sortByAppointmentDuration(patientAppointmentInfoDTOList,false),HttpStatus.OK);
+            }
+        }catch (Exception e){
+            return new ResponseEntity<>(null,HttpStatus.BAD_REQUEST);
+        }
+
+    }
+
+    //Nemanja
+    @GetMapping("/allMissed/{pharmacistId}")
+    public ResponseEntity<List<PharmacistAppointmentDTO>> getAllMissedPharmacistAppointmentByPharmacist(@PathVariable Long pharmacistId){
+        try {
+            List<PharmacistAppointment> pharmacistAppointmentList = pharmacistAppointmentService.getAllMissedPharmacistAppointmentByPharmacist(pharmacistId);
+            return new ResponseEntity<>(pharmacistAppointmentConverter.convertPharmacistAppointmentsListToDTOS(pharmacistAppointmentList),HttpStatus.OK);
+        }catch (Exception e){
+            return new ResponseEntity<>(null,HttpStatus.NOT_FOUND);
+        }
+    }
+
+    //Nemanja
+    @GetMapping("/allExpired/{pharmacistId}")
+    public ResponseEntity<List<PharmacistAppointmentDTO>> getAllExpiredPharmacistAppointmentByPharmacist(@PathVariable Long pharmacistId){
+        try {
+            List<PharmacistAppointment> pharmacistAppointmentList = pharmacistAppointmentService.getAllExpiredPharmacistAppointmentByPharmacist(pharmacistId);
+            return new ResponseEntity<>(pharmacistAppointmentConverter.convertPharmacistAppointmentsListToDTOS(pharmacistAppointmentList),HttpStatus.OK);
+        }catch (Exception e){
+            return new ResponseEntity<>(null,HttpStatus.NOT_FOUND);
+        }
+    }
+
+    //Nemanja
+    @GetMapping("/allReserved/{pharmacistId}")
+    public ResponseEntity<List<PharmacistAppointmentDTO>> getAllReservedPharmacistAppointmentByPharmacist(@PathVariable Long pharmacistId){
+        try {
+            List<PharmacistAppointment> pharmacistAppointmentList = pharmacistAppointmentService.getAllReservedPharmacistAppointmentByPharmacist(pharmacistId);
+            return new ResponseEntity<>(pharmacistAppointmentConverter.convertPharmacistAppointmentsListToDTOS(pharmacistAppointmentList),HttpStatus.OK);
+        }catch (Exception e){
+            return new ResponseEntity<>(null,HttpStatus.NOT_FOUND);
+        }
+    }
+
+    //Nemanja
+    @PutMapping("/changeStatusToMissed/{id}")
+    public ResponseEntity<Boolean> changePharmacistAppointmentStatusToMissed(@PathVariable Long id){
+        try {
+            PharmacistAppointment pharmacistAppointment = pharmacistAppointmentService.findOne(id);
+            if(pharmacistAppointmentService.changePharmacistAppointmentStatusToMissed(pharmacistAppointment)){
+                return new ResponseEntity<>(HttpStatus.OK);
+            }
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }catch (Exception e){
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }

@@ -36,6 +36,15 @@ public class DermatologistAppointmentConverter {
         dermatologistAppointmentDTO.setDermatologistAppointmentEndTime(dermatologistAppointment.getDermatologistAppointmentEndTime());
         dermatologistAppointmentDTO.setDermatologistForAppointment(userConverter.convertDermatologistPersonalInfoToDTO(dermatologistAppointment.getDermatologistForAppointment()));
         dermatologistAppointmentDTO.setPharmacyForDermatologistAppointment(pharmacyConverter.convertPharmacyToPharmacyDTO(dermatologistAppointment.getPharmacyForDermatologistAppointment()));
+
+        if(dermatologistAppointment.getPatientWithDermatologistAppointment() != null) {
+            dermatologistAppointmentDTO.setPatientId(dermatologistAppointment.getPatientWithDermatologistAppointment().getId());
+            dermatologistAppointmentDTO.setPatientFirstName(dermatologistAppointment.getPatientWithDermatologistAppointment().getFirstName());
+            dermatologistAppointmentDTO.setPatientLastName(dermatologistAppointment.getPatientWithDermatologistAppointment().getLastName());
+            dermatologistAppointmentDTO.setPatientEmail(dermatologistAppointment.getPatientWithDermatologistAppointment().getEmail());
+            dermatologistAppointmentDTO.setPatientPhoneNumber(dermatologistAppointment.getPatientWithDermatologistAppointment().getPhoneNumber());
+        }
+
         return  dermatologistAppointmentDTO;
     }
 
