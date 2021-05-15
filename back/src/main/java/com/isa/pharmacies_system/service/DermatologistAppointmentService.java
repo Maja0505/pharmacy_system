@@ -213,9 +213,13 @@ public class DermatologistAppointmentService implements IDermatologistAppointmen
     @Override
     public Boolean bookDermatologistAppointmentByDermatologist(AppointmentScheduleByStaffDTO appointmentScheduleByStaffDTO, DermatologistAppointment dermatologistAppointment) {
 
+
         if(!isDermatologistAppointmentInsideDermatologistWorkTime(appointmentScheduleByStaffDTO)
             || !utilityMethods.isTimeBeforeOtherTime(appointmentScheduleByStaffDTO.getAppointmentStartTime(),appointmentScheduleByStaffDTO.getAppointmentEndTime())){
-            return false;
+            if(!(appointmentScheduleByStaffDTO.getAppointmentStartTime().equals(appointmentScheduleByStaffDTO.getStaffWorkStartTime())
+                || appointmentScheduleByStaffDTO.getAppointmentEndTime().equals(appointmentScheduleByStaffDTO.getStaffWorkEndTime()))){
+                return false;
+            }
         }
 
         Patient patient = patientRepository.findById(appointmentScheduleByStaffDTO.getPatientId()).orElse(null);
