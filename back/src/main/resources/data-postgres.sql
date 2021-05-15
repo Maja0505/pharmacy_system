@@ -129,7 +129,7 @@ insert into pharmacy_storages(id,pharmacy_id) values (1,1);
 insert into items(id,medicine_amount,type_of_item,medicine_item_id) values (nextval('my_seq_item'),30,4,1);
 insert into items(id,medicine_amount,type_of_item,medicine_item_id) values (nextval('my_seq_item'),10,4,2);
 insert into items(id,medicine_amount,type_of_item,medicine_item_id) values (nextval('my_seq_item'),45,4,3);
-insert into items(id,medicine_amount,type_of_item,medicine_item_id) values (nextval('my_seq_item'),0,4,4);
+insert into items(id,medicine_amount,type_of_item,medicine_item_id) values (nextval('my_seq_item'),5,4,4);
 
 insert into pharmacy_storage_items(id,pharmacy_storage_with_item_id) values (1,1);
 insert into pharmacy_storage_items(id,pharmacy_storage_with_item_id) values (2,1);

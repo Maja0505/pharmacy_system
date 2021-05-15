@@ -180,7 +180,6 @@ const HomePage = () => {
                   <Route path='/patient/HomePage/dermatologistReservedAppointment' component={DermatologistReservaedAppointment}></Route>
                   <Route path='/patient/HomePage/pharmacistReservedAppointment' component={PharmacistReservedAppointment}></Route>
                   <Route path='/patient/HomePage/medicineReservations' component={MedicineReservations}></Route>
-
                 </Paper>
               </Grid>
           </Grid>

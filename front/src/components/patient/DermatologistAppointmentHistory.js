@@ -7,7 +7,6 @@ import {
     TableHead,
     TableRow,
     Grid,
-    TextField,
     Button,
     Link
   } from "@material-ui/core";
@@ -15,11 +14,10 @@ import {
     NavigateNext,
     NavigateBefore,
   } from "@material-ui/icons";
-   
-  import { useState, useEffect } from "react";
-  import { makeStyles } from "@material-ui/core/styles";
-  import axios from "axios";
-  import Dialog from '@material-ui/core/Dialog';
+import { useState, useEffect } from "react";
+import { makeStyles } from "@material-ui/core/styles";
+import axios from "axios";
+import Dialog from '@material-ui/core/Dialog';
 import MuiDialogTitle from '@material-ui/core/DialogTitle';
 import MuiDialogContent from '@material-ui/core/DialogContent';
 import MuiDialogActions from '@material-ui/core/DialogActions';
@@ -88,19 +86,18 @@ import { withStyles } from '@material-ui/core/styles';
     
   const DermatologistAppointmentHistory = () => {
 
-
     const classes = useStyles();
-  
     const [rows, setRows] = useState([]);
-  
     const [copyRows, setCopyRows] = useState({});
-  
     const [currPage, setCurrPage] = useState(1);
-
     const [openPharmacyDialog, setOpenPharmacyDialog] = useState(false);
     const [openDermatologistDialog, setOpenDermatologistDialog] = useState(false);
     const [openReportDialog, setOpenReportDialog] = useState(false);
-  
+    const [pharmacy,setPharmacy] = useState({})
+    const [dermatologist,setDermatologist] = useState({})
+    const [report,setReport] = useState({})
+
+
     useEffect(() => {
       axios
         .get(
@@ -115,19 +112,6 @@ import { withStyles } from '@material-ui/core/styles';
           console.log(res)
         });
     }, []);
-  
-    const searchDermatologistAppointment = (e) => {
-      e = e.trim();
-      setRows(
-        copyRows.filter(
-          (row) =>
-            row.appointmentPrice.toString().toLowerCase().includes(e.toLowerCase()) ||
-            row.dermatologistForAppointment.firstName.toLowerCase().includes(e.toLowerCase()) ||
-            row.dermatologistForAppointment.lastName.toLowerCase().includes(e.toLowerCase()) ||
-            row.pharmacyForDermatologistAppointment.pharmacyName.toLowerCase().includes(e.toLowerCase())
-        )
-      );
-    };
   
     const [haveNextPage, setHaveNextPage] = useState(true);
   
@@ -164,9 +148,7 @@ import { withStyles } from '@material-ui/core/styles';
         });
     };
 
-    const [pharmacy,setPharmacy] = useState({})
-    const [dermatologist,setDermatologist] = useState({})
-    const [report,setReport] = useState({})
+  
 
     const handleClickOpenPharmacyDialog = (pharmacyId) => {
         
@@ -254,51 +236,31 @@ import { withStyles } from '@material-ui/core/styles';
       </TableBody>
     );
   
-    const SearchPart = (
-      <Grid container spacing={1} className={classes.table}>
-        <Grid item xs={2} />
-        <Grid item xs={8} style={{ margin: "auto", textAlign: "right" }}>
-          <TextField
-            id="outlined-search"
-            label="Search dermatologist appointment"
-            type="search"
-            size="small"
-            variant="outlined"
-            style={{ width: "60%" }}
-            onChange={(e) => searchDermatologistAppointment(e.target.value)}
-          />
-        </Grid>
-        <Grid item xs={2}></Grid>
-        <Grid item xs={2} />
-      </Grid>
-    );
-   
-
     const CreatePharmacyDialog = (
         <div>
             <Dialog onClose={handleClosePharmacyDialog} aria-labelledby="customized-dialog-title" open={openPharmacyDialog} fullWidth='true'
-        maxWidth='sm'>
-            <DialogTitle id="customized-dialog-title" onClose={handleClosePharmacyDialog}>
-               Pharmacy
-            </DialogTitle>
-            <DialogContent dividers>
-                <Typography gutterBottom>
-                name: {pharmacy.pharmacyName}
-                </Typography>
-                <Typography gutterBottom>
-                    
-                </Typography>
+          maxWidth='sm'>
+              <DialogTitle id="customized-dialog-title" onClose={handleClosePharmacyDialog}>
+                Pharmacy
+              </DialogTitle>
+              <DialogContent dividers>
+                  <Typography gutterBottom>
+                  name: {pharmacy.pharmacyName}
+                  </Typography>
+                  <Typography gutterBottom>
+                      
+                  </Typography>
+                  
+                  <Typography gutterBottom>
+                rating: {pharmacy.pharmacyAverageRating}
+                  </Typography>
                 
-                <Typography gutterBottom>
-               rating: {pharmacy.pharmacyAverageRating}
-                </Typography>
-               
-            </DialogContent>
-            <DialogActions>
-                <Button onClick={handleClosePharmacyDialog} autoFocus color="primary">
-                Close
-                </Button>
-            </DialogActions>
+              </DialogContent>
+              <DialogActions>
+                  <Button onClick={handleClosePharmacyDialog} autoFocus color="primary">
+                  Close
+                  </Button>
+              </DialogActions>
             </Dialog>
            
         </div>
@@ -307,26 +269,26 @@ import { withStyles } from '@material-ui/core/styles';
     const CreateDermatologistDialog = (
         <div>
             <Dialog onClose={handleCloseDermatologistDialog} aria-labelledby="customized-dialog-title" open={openDermatologistDialog} fullWidth='true'
-        maxWidth='sm'>
-            <DialogTitle id="customized-dialog-title" onClose={handleCloseDermatologistDialog}>
-               Dermatologist
-            </DialogTitle>
-            <DialogContent dividers>
-                <Typography gutterBottom>
-                name: {dermatologist.firstName} {dermatologist.lastName}
-                </Typography>
-                <Typography gutterBottom>
-                phoneNumber : {dermatologist.phoneNumber}
-                </Typography>
-                <Typography gutterBottom>
-                phoneNumber : {dermatologist.email}
-                </Typography>
-            </DialogContent>
-            <DialogActions>
-                <Button  onClick={handleCloseDermatologistDialog} autoFocus color="primary">
-                Close
-                </Button>
-            </DialogActions>
+          maxWidth='sm'>
+              <DialogTitle id="customized-dialog-title" onClose={handleCloseDermatologistDialog}>
+                Dermatologist
+              </DialogTitle>
+              <DialogContent dividers>
+                  <Typography gutterBottom>
+                  name: {dermatologist.firstName} {dermatologist.lastName}
+                  </Typography>
+                  <Typography gutterBottom>
+                  phoneNumber : {dermatologist.phoneNumber}
+                  </Typography>
+                  <Typography gutterBottom>
+                  phoneNumber : {dermatologist.email}
+                  </Typography>
+              </DialogContent>
+              <DialogActions>
+                  <Button  onClick={handleCloseDermatologistDialog} autoFocus color="primary">
+                  Close
+                  </Button>
+              </DialogActions>
             </Dialog>
            
         </div>
@@ -336,27 +298,25 @@ import { withStyles } from '@material-ui/core/styles';
     const CreateReportDialog = (
         <div>
             <Dialog onClose={handleClickCloseViewReport} aria-labelledby="customized-dialog-title" open={openReportDialog} fullWidth='true'
-        maxWidth='sm'>
-            <DialogTitle id="customized-dialog-title" onClose={handleClickCloseViewReport}>
-               Report
-            </DialogTitle>
-            <DialogContent dividers>
-                <Typography gutterBottom>
-                    {report}
-                </Typography>
-            </DialogContent>
-            <DialogActions>
-                <Button onClick={handleClickCloseViewReport} autoFocus color="primary">
-                Close
-                </Button>
-            </DialogActions>
+          maxWidth='sm'>
+              <DialogTitle id="customized-dialog-title" onClose={handleClickCloseViewReport}>
+                Report
+              </DialogTitle>
+              <DialogContent dividers>
+                  <Typography gutterBottom>
+                      {report}
+                  </Typography>
+              </DialogContent>
+              <DialogActions>
+                  <Button onClick={handleClickCloseViewReport} autoFocus color="primary">
+                  Close
+                  </Button>
+              </DialogActions>
             </Dialog>
-           
         </div>
     )
     return (
       <div>
-        
         <Grid container spacing={1}>
           <Grid item xs={2} />
           <Grid item xs={8}>
