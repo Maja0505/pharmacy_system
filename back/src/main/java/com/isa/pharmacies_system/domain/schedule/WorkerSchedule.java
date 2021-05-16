@@ -75,4 +75,20 @@ public class WorkerSchedule {
 	public void setDermatologist(Dermatologist dermatologist) {
 		this.dermatologist = dermatologist;
 	}
+
+	public Pharmacist getPharmacist() {
+		return pharmacist;
+	}
+
+	public void setPharmacist(Pharmacist pharmacist) {
+		this.pharmacist = pharmacist;
+	}
+
+	public TypeOfWorkerSchedule getTypeOfWorkerSchedule() {
+		return typeOfWorkerSchedule;
+	}
+
+	public void setTypeOfWorkerSchedule(TypeOfWorkerSchedule typeOfWorkerSchedule) {
+		this.typeOfWorkerSchedule = typeOfWorkerSchedule;
+	}
 }

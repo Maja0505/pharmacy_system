@@ -1,11 +1,13 @@
 package com.isa.pharmacies_system.service;
 
 import com.isa.pharmacies_system.DTO.PharmacistAppointmentTimeDTO;
+import com.isa.pharmacies_system.domain.schedule.DermatologistAppointment;
 import com.isa.pharmacies_system.domain.schedule.PharmacistAppointment;
 import com.isa.pharmacies_system.domain.schedule.StatusOfAppointment;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
+import java.util.List;
 
 public class UtilityMethods {
 
@@ -65,5 +67,37 @@ public class UtilityMethods {
         LocalDateTime now = LocalDateTime.now();
         Duration duration = Duration.between(now,start);
         return duration.toHours() >= 24;
+    }
+
+    public Boolean checkDoesHaveAnyOtherDermatologistAppointmentWithSameTime(List<DermatologistAppointment> list, LocalDateTime startTime, LocalDateTime endTime) {
+        for (DermatologistAppointment a: list
+        ) {
+            if( isTimeBetweenTwoOtherTime(startTime,a.getDermatologistAppointmentStartTime(),a.getDermatologistAppointmentEndTime())
+                    || isTimeBetweenTwoOtherTime(endTime,a.getDermatologistAppointmentStartTime(),a.getDermatologistAppointmentEndTime())
+                    || isTimeIntervalOutsideSecondTimeInterval(startTime,endTime,a.getDermatologistAppointmentStartTime(),a.getDermatologistAppointmentEndTime())
+                    || isTimeIntervalEqualsWithSecondTimeInterval(startTime,endTime,a.getDermatologistAppointmentStartTime(),a.getDermatologistAppointmentEndTime())){
+
+                return true;
+            }
+        }
+        return false;
+
+    }
+
+    public Boolean checkDoesPatientHavePharmacistAppointmentWithSameTime(List<PharmacistAppointment> list, LocalDateTime firstStartTime, LocalDateTime firstEndTime) {
+        for (PharmacistAppointment a: list
+        ) {
+            LocalDateTime secondStartTime = a.getPharmacistAppointmentStartTime();
+            LocalDateTime secondEndTime = secondStartTime.plusMinutes(a.getPharmacistAppointmentDuration());
+            if(isTimeBetweenTwoOtherTime(firstStartTime,secondStartTime,secondEndTime)
+                    || isTimeBetweenTwoOtherTime(firstEndTime,secondStartTime,secondEndTime)
+                    || isTimeIntervalOutsideSecondTimeInterval(firstStartTime,firstEndTime,secondStartTime,secondEndTime)
+                    || isTimeIntervalEqualsWithSecondTimeInterval(firstStartTime,firstEndTime,secondStartTime,secondEndTime)){
+
+                return true;
+            }
+        }
+
+        return false;
     }
 }

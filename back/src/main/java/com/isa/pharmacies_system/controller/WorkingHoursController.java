@@ -39,4 +39,15 @@ public class WorkingHoursController {
             return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
         }
     }
+
+    //Nemanja
+    @GetMapping("/allPharmacistWorkingHours/{pharmacistId}")
+    public ResponseEntity<List<WorkingHoursDTO>> getAllFutureWorkingHoursByPharmacist(@PathVariable Long pharmacistId){
+        try {
+            List<WorkingHours> workingHoursList = workingHoursService.getAllFutureWorkingHoursForPharmacist(pharmacistId);
+            return new ResponseEntity<>(workingHoursConverter.convertWorkingHoursListToWorkingHoursDTOList(workingHoursList),HttpStatus.OK);
+        }catch (Exception e){
+            return new ResponseEntity<>(null,HttpStatus.BAD_REQUEST);
+        }
+    }
 }
