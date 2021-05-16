@@ -14,7 +14,7 @@ import {
 import axios from "axios";
 import { useEffect, useState } from "react";
 
-const WorkCalendar = ({ setPatient }) => {
+const WorkCalendar = () => {
   const [data, setData] = useState([]);
 
   const resourceDataSource = [
@@ -53,11 +53,11 @@ const WorkCalendar = ({ setPatient }) => {
           Id: a.id,
           Subject: a.patientFirstName + " " + a.patientLastName,
           Location:
-            a.pharmacyForDermatologistAppointment.pharmacyAddress.city +
+            a.pharmacyForPharmacistAppointment.pharmacyAddress.city +
             ", " +
-            a.pharmacyForDermatologistAppointment.pharmacyAddress.streetName +
+            a.pharmacyForPharmacistAppointment.pharmacyAddress.streetName +
             " " +
-            a.pharmacyForDermatologistAppointment.pharmacyAddress.streetNumber,
+            a.pharmacyForPharmacistAppointment.pharmacyAddress.streetNumber,
           StartTime: a.pharmacistAppointmentStartTime,
           EndTime: a.pharmacistAppointmentEndTime,
           ColorID: colorId,
@@ -67,7 +67,7 @@ const WorkCalendar = ({ setPatient }) => {
           PatientLastName: a.patientLastName,
           PatientPhoneNumber: a.patientPhoneNumber,
           AppointmentPrice: a.appointmentPrice,
-          PharmacyName: a.pharmacyForDermatologistAppointment.pharmacyName,
+          PharmacyName: a.pharmacyForPharmacistAppointment.pharmacyName,
         },
       ])
     );
@@ -130,7 +130,6 @@ const WorkCalendar = ({ setPatient }) => {
         setOpenDialog={setOpenDialog}
         appointment={appointmentInfo}
         changeAppointmentToMissed={changeAppointmentToMissed}
-        setPatient={setPatient}
       ></AppointmentInfoDialog>
     </div>
   );

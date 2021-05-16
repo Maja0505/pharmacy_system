@@ -17,7 +17,7 @@ const AppointmentInfoDialog = ({
 
   const writeReport = () => {
     localStorage.setItem(
-      "PatientForReport",
+      "PatientForDermatologistReport",
       JSON.stringify({
         Id: appointment.PatientId,
         FirstName: appointment.Subject.split(" ")[0],

@@ -14,7 +14,7 @@ import {
 import axios from "axios";
 import { useEffect, useState } from "react";
 
-const WorkCalendar = ({ setPatient }) => {
+const WorkCalendar = () => {
   const [data, setData] = useState([]);
 
   const resourceDataSource = [
@@ -130,7 +130,6 @@ const WorkCalendar = ({ setPatient }) => {
         setOpenDialog={setOpenDialog}
         appointment={appointmentInfo}
         changeAppointmentToMissed={changeAppointmentToMissed}
-        setPatient={setPatient}
       ></AppointmentInfoDialog>
     </div>
   );

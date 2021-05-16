@@ -10,19 +10,23 @@ const AppointmentInfoDialog = ({
   setOpenDialog,
   appointment,
   changeAppointmentToMissed,
-  setPatient,
 }) => {
   const closeDialog = () => {
     setOpenDialog(false);
   };
 
   const writeReport = () => {
-    setPatient({
-      Id: appointment.PatientID,
-      FirstName: appointment.Subject.split(" ")[0],
-      LastName: appointment.Subject.split(" ")[1],
-      AppointmentId: appointment.Id,
-    });
+    localStorage.setItem(
+      "PatientForPharmacistReport",
+      JSON.stringify({
+        Id: appointment.PatientId,
+        FirstName: appointment.Subject.split(" ")[0],
+        LastName: appointment.Subject.split(" ")[1],
+        AppointmentId: appointment.Id,
+        Email: appointment.PatientEmail,
+        PhoneNumber: appointment.PatientPhoneNumber,
+      })
+    );
   };
 
   const now = new Date();
@@ -66,10 +70,6 @@ const AppointmentInfoDialog = ({
             {appointment.EndTime !== undefined && (
               <td>{appointment.EndTime.toString().split(" ")[4]}</td>
             )}
-          </tr>
-          <tr>
-            <td>Price :</td>
-            <td>{appointment.AppointmentPrice + "  $"}</td>
           </tr>
           <tr>
             <td>Pharmacy :</td>

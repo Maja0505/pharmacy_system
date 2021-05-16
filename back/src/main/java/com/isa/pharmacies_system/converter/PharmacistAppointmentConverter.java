@@ -16,11 +16,6 @@ public class PharmacistAppointmentConverter {
     private UserConverter userConverter;
     private PharmacyConverter pharmacyConverter;
 
-    public PharmacistAppointmentConverter() {
-        this.userConverter = new UserConverter();
-        this.pharmacyConverter = new PharmacyConverter();
-    }
-
     public PharmacistAppointmentConverter(IPriceListService priceListService) {
         this.userConverter = new UserConverter();
         this.pharmacyConverter = new PharmacyConverter(priceListService);
