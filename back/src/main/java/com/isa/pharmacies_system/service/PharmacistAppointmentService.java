@@ -52,7 +52,7 @@ public class PharmacistAppointmentService implements IPharmacistAppointmentServi
         Patient patient = patientRepository.findById(patientId).orElse(null);
         Pharmacist pharmacist = pharmacistRepository.findById(pharmacistId).orElse(null);
         PharmacistAppointment pharmacistAppointment;
-        if(patient == null && pharmacist == null){
+        if(patient == null || pharmacist == null){
             return false;
         }else{
             pharmacistAppointment = createNewPharmacistAppointment(patient, pharmacist, timeDTO);
