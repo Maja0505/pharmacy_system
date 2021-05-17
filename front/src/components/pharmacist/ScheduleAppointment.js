@@ -14,8 +14,6 @@ import {
   Inject,
   ViewsDirective,
   ViewDirective,
-  ResourcesDirective,
-  ResourceDirective,
 } from "@syncfusion/ej2-react-schedule";
 
 import Alert from "@material-ui/lab/Alert";
@@ -37,15 +35,11 @@ const useStyles = makeStyles({
   },
 });
 
-const SheduleAppointment = ({ pharmacyInfo }) => {
+const ScheduleAppointment = ({ pharmacyInfo }) => {
   const [data, setData] = useState([]);
-  const resourceDataSource = [{ Id: 4, Color: "#8c9290", Name: "open" }];
-
-  const schedule = true;
 
   const [openCreateDialog, setOpenCreateDialog] = useState(false);
   const [openInfoDialog, setOpenInfoDialog] = useState(false);
-  const [predefinedAppointment, setPredefinedAppointment] = useState(false);
   const [openAlertSuccsess, setOpenAlertSuccsess] = useState(false);
   const [openAlertUnsuccsess, setOpenAlertUnsuccses] = useState(false);
   const alertTextSuccsess = useState("Success create appointent!");
@@ -58,6 +52,8 @@ const SheduleAppointment = ({ pharmacyInfo }) => {
   const [appointmentInfo, setAppointmentInfo] = useState({});
   const [patientInfo, setPatientInfo] = useState({ Id: -1 });
 
+  const schedule = true;
+
   const handleCloseAlert = (event, reason) => {
     if (reason === "clickaway") {
       return;
@@ -68,54 +64,45 @@ const SheduleAppointment = ({ pharmacyInfo }) => {
 
   const onPopupOpen = (args) => {
     args.cancel = true;
-    if (args.data.startTime > new Date()) {
+    if (
+      args.data.startTime > new Date() &&
+      args.data.patientEmail === undefined
+    ) {
       setAppointment({
-        StartTime: new Date(args.data.startTime),
-        EndTime: new Date(args.data.endTime),
+        startTime: new Date(args.data.startTime),
+        endTime: new Date(args.data.endTime),
       });
       setOpenCreateDialog(true);
-      setPredefinedAppointment(false);
     }
   };
 
   const appointmentInfoClick = (e) => {
-    if (e.event.patientEmail !== null) {
-      setOpenInfoDialog(true);
-      setAppointmentInfo(e.event);
-    } else {
-      setAppointment(e.event);
-      setOpenCreateDialog(true);
-      setPredefinedAppointment(true);
-    }
+    setOpenInfoDialog(true);
+    setAppointmentInfo(e.event);
   };
 
   useEffect(() => {
     setPatientInfo(
-      JSON.parse(localStorage.getItem("PatientForDermatologistReport"))
+      JSON.parse(localStorage.getItem("PatientForPharmacistReport"))
     );
 
     if (
-      JSON.parse(localStorage.getItem("PatientForDermatologistReport")) === null
+      JSON.parse(localStorage.getItem("PatientForPharmacistReport")) === null
     ) {
       return;
     }
-    axios.get("http://localhost:8080/api/workingHours/all/8/1").then((res) => {
-      res.data.map((workDay) => {
-        addToWorkingDates(workDay);
-      });
-    });
 
     axios
-      .get(
-        "http://localhost:8080/api/dermatologistAppointment/allFutureOpen/8/1"
-      )
+      .get("http://localhost:8080/api/workingHours/allPharmacistWorkingHours/6")
       .then((res) => {
-        addAppointmentsToData(res.data);
+        res.data.map((workDay) => {
+          addToWorkingDates(workDay);
+        });
       });
 
     axios
       .get(
-        "http://localhost:8080/api/dermatologistAppointment/allFutureReserved/8/1"
+        "http://localhost:8080/api/pharmacistAppointment/allFutureReserved/6"
       )
       .then((res) => {
         addAppointmentsToData(res.data);
@@ -162,7 +149,7 @@ const SheduleAppointment = ({ pharmacyInfo }) => {
 
   const classes = useStyles();
 
-  const dermatologistWorkTimeCard = (
+  const pharmacistWorkTimeCard = (
     <>
       {workingHoursForDate !== null &&
         haveWorkingHoursForSelectedDate === true && (
@@ -170,7 +157,7 @@ const SheduleAppointment = ({ pharmacyInfo }) => {
             <Card className={classes.cart}>
               <CardContent>
                 <Typography>
-                  <b>Dermatologist work time for</b>
+                  <b>Pharmacist work time for</b>
                 </Typography>
                 <Typography style={{ marginTop: "3%" }}>
                   <b>
@@ -199,7 +186,7 @@ const SheduleAppointment = ({ pharmacyInfo }) => {
             <Card className={classes.cart}>
               <CardContent>
                 <Typography>
-                  <b>Dermatologist doesn't work</b>
+                  <b>Pharmacist doesn't work</b>
                 </Typography>
                 <Typography>
                   <b>
@@ -219,13 +206,10 @@ const SheduleAppointment = ({ pharmacyInfo }) => {
           <Card className={classes.cart}>
             <CardContent>
               <Typography>
-                <b>Pick some of open appointment</b>
+                <b>Click on some cell in calendad</b>
               </Typography>
               <Typography>
-                <b>or create manually appointment</b>
-              </Typography>
-              <Typography>
-                <b>clicking on some cell in calendar</b>
+                <b>to create appointment</b>
               </Typography>
             </CardContent>
           </Card>
@@ -262,9 +246,9 @@ const SheduleAppointment = ({ pharmacyInfo }) => {
 
   return (
     <>
-      {JSON.parse(localStorage.getItem("PatientForDermatologistReport")) ===
-        null && <Redirect to="/dermatologist" />}
-      {JSON.parse(localStorage.getItem("PatientForDermatologistReport")) !==
+      {JSON.parse(localStorage.getItem("PatientForPharmacistReport")) ===
+        null && <Redirect to="/pharmacist" />}
+      {JSON.parse(localStorage.getItem("PatientForPharmacistReport")) !==
         null && (
         <div>
           <Grid container spacing={0} style={{ marginTop: "3%" }}>
@@ -274,15 +258,15 @@ const SheduleAppointment = ({ pharmacyInfo }) => {
                 eventSettings={{
                   dataSource: data,
                   fields: {
-                    subject: { name: "subject", title: "Subject" },
-                    startTime: {
-                      name: "dermatologistAppointmentStartTime",
-                      title: "Start Duration",
+                    id: "id",
+                    subject: { name: "subject", title: "Event Name" },
+                    location: { name: "location", title: "Event Location" },
+                    description: {
+                      name: "description",
+                      title: "Event Description",
                     },
-                    endTime: {
-                      name: "dermatologistAppointmentEndTime",
-                      title: "End Duration",
-                    },
+                    startTime: { name: "startTime", title: "Start Duration" },
+                    endTime: { name: "endTime", title: "End Duration" },
                   },
                 }}
                 timeFormat="HH:mm"
@@ -297,19 +281,9 @@ const SheduleAppointment = ({ pharmacyInfo }) => {
                   <ViewDirective option="Week" />
                   <ViewDirective option="WorkWeek" />
                 </ViewsDirective>
-                <ResourcesDirective>
-                  <ResourceDirective
-                    field="colorId"
-                    idField="Id"
-                    colorField="Color"
-                    textField="Name"
-                    dataSource={resourceDataSource}
-                  ></ResourceDirective>
-                </ResourcesDirective>
                 <Inject services={[Day, Week, WorkWeek]} />
               </ScheduleComponent>
-              {(haveWorkingHoursForSelectedDate === true ||
-                predefinedAppointment === true) && (
+              {haveWorkingHoursForSelectedDate === true && (
                 <AppointmentCreateDialog
                   openDialog={openCreateDialog}
                   setOpenDialog={setOpenCreateDialog}
@@ -319,7 +293,6 @@ const SheduleAppointment = ({ pharmacyInfo }) => {
                   setAppointment={setAppointment}
                   patient={patientInfo}
                   pharmacy={pharmacyInfo}
-                  predefinedAppointment={predefinedAppointment}
                   workingHoursForDate={workingHoursForDate}
                   setOpenAlertSuccsess={setOpenAlertSuccsess}
                   setOpenAlertUnsuccses={setOpenAlertUnsuccses}
@@ -329,12 +302,11 @@ const SheduleAppointment = ({ pharmacyInfo }) => {
                 openDialog={openInfoDialog}
                 setOpenDialog={setOpenInfoDialog}
                 appointment={appointmentInfo}
-                schedule={schedule}
               />
             </Grid>
             <Grid item xs={2}>
               <div>
-                {dermatologistWorkTimeCard}
+                {pharmacistWorkTimeCard}
                 <div style={{ marginTop: "20%" }}>
                   {patientPersonalInfoCard}
                 </div>
@@ -352,6 +324,7 @@ const SheduleAppointment = ({ pharmacyInfo }) => {
             open={openAlertUnsuccsess}
             autoHideDuration={1500}
             onClose={handleCloseAlert}
+            schedule={schedule}
           >
             <Alert severity="error">{alertTextUnsuccsess}</Alert>
           </Snackbar>
@@ -361,4 +334,4 @@ const SheduleAppointment = ({ pharmacyInfo }) => {
   );
 };
 
-export default SheduleAppointment;
+export default ScheduleAppointment;

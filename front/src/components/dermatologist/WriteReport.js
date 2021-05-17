@@ -1,11 +1,13 @@
 import { Link } from "react-router-dom";
 
 const finishdWritingReport = () => {
-  localStorage.setItem("PatientForReport", JSON.stringify(null));
+  localStorage.setItem("PatientForDermatologistReport", JSON.stringify(null));
 };
 
 const getItem = () => {
-  console.log(JSON.parse(localStorage.getItem("PatientForReport")));
+  console.log(
+    JSON.parse(localStorage.getItem("PatientForDermatologistReport"))
+  );
 };
 
 const WriteReport = () => {
