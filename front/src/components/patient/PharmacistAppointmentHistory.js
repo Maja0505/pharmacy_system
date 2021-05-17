@@ -16,10 +16,10 @@ import {
     NavigateBefore,
   } from "@material-ui/icons";
    
-  import { useState, useEffect } from "react";
-  import { makeStyles } from "@material-ui/core/styles";
-  import axios from "axios";
-  import Dialog from '@material-ui/core/Dialog';
+import { useState, useEffect } from "react";
+import { makeStyles } from "@material-ui/core/styles";
+import axios from "axios";
+import Dialog from '@material-ui/core/Dialog';
 import MuiDialogTitle from '@material-ui/core/DialogTitle';
 import MuiDialogContent from '@material-ui/core/DialogContent';
 import MuiDialogActions from '@material-ui/core/DialogActions';

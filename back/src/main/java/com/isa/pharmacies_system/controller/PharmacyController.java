@@ -2,16 +2,12 @@ package com.isa.pharmacies_system.controller;
 
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
-
-import com.isa.pharmacies_system.DTO.PatientAppointmentInfoDTO;
 import com.isa.pharmacies_system.DTO.PharmacistAppointmentTimeDTO;
 import com.isa.pharmacies_system.DTO.PharmacyDTO;
 import com.isa.pharmacies_system.converter.PharmacyConverter;
 import com.isa.pharmacies_system.service.iService.IPriceListService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -67,7 +63,7 @@ public class PharmacyController {
 	}
 
 	//#1[3.16]-korak1
-	@GetMapping(value = "/free", consumes = "application/json")
+	@PutMapping(value = "/free", consumes = "application/json")
 	public ResponseEntity<List<PharmacyDTO>> getAllPharmacyWithFreePharmacistByDate(@RequestBody PharmacistAppointmentTimeDTO timeDTO){
 
 		try {
