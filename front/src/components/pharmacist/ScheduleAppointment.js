@@ -52,6 +52,8 @@ const ScheduleAppointment = ({ pharmacyInfo }) => {
   const [appointmentInfo, setAppointmentInfo] = useState({});
   const [patientInfo, setPatientInfo] = useState({ Id: -1 });
 
+  const schedule = true;
+
   const handleCloseAlert = (event, reason) => {
     if (reason === "clickaway") {
       return;
@@ -62,10 +64,13 @@ const ScheduleAppointment = ({ pharmacyInfo }) => {
 
   const onPopupOpen = (args) => {
     args.cancel = true;
-    if (args.data.startTime > new Date()) {
+    if (
+      args.data.startTime > new Date() &&
+      args.data.patientEmail === undefined
+    ) {
       setAppointment({
-        StartTime: new Date(args.data.StartTime),
-        EndTime: new Date(args.data.EndTime),
+        startTime: new Date(args.data.startTime),
+        endTime: new Date(args.data.endTime),
       });
       setOpenCreateDialog(true);
     }
@@ -105,30 +110,7 @@ const ScheduleAppointment = ({ pharmacyInfo }) => {
   }, []);
 
   const addAppointmentsToData = (appointments) => {
-    appointments.map((a) =>
-      setData((oldDatas) => [
-        ...oldDatas,
-        {
-          Id: a.id,
-          Subject: a.patientFirstName + " " + a.patientLastName,
-          Location:
-            a.pharmacyForPharmacistAppointment.pharmacyAddress.city +
-            ", " +
-            a.pharmacyForPharmacistAppointment.pharmacyAddress.streetName +
-            " " +
-            a.pharmacyForPharmacistAppointment.pharmacyAddress.streetNumber,
-          StartTime: a.pharmacistAppointmentStartTime,
-          EndTime: a.pharmacistAppointmentEndTime,
-          PatientEmail: a.patientEmail,
-          PatientFirstName: a.patientFirstName,
-          PatientId: a.patientId,
-          PatientLastName: a.patientLastName,
-          PatientPhoneNumber: a.patientPhoneNumber,
-          AppointmentPrice: a.appointmentPrice,
-          PharmacyName: a.pharmacyForPharmacistAppointment.pharmacyName,
-        },
-      ])
-    );
+    setData((previousState) => [...previousState, ...appointments]);
   };
 
   const addToWorkingDates = async (workDay) => {
@@ -273,7 +255,20 @@ const ScheduleAppointment = ({ pharmacyInfo }) => {
             <Grid item xs={1} />
             <Grid item xs={8}>
               <ScheduleComponent
-                eventSettings={{ dataSource: data }}
+                eventSettings={{
+                  dataSource: data,
+                  fields: {
+                    id: "id",
+                    subject: { name: "subject", title: "Event Name" },
+                    location: { name: "location", title: "Event Location" },
+                    description: {
+                      name: "description",
+                      title: "Event Description",
+                    },
+                    startTime: { name: "startTime", title: "Start Duration" },
+                    endTime: { name: "endTime", title: "End Duration" },
+                  },
+                }}
                 timeFormat="HH:mm"
                 height="500px"
                 width="90%"
@@ -329,6 +324,7 @@ const ScheduleAppointment = ({ pharmacyInfo }) => {
             open={openAlertUnsuccsess}
             autoHideDuration={1500}
             onClose={handleCloseAlert}
+            schedule={schedule}
           >
             <Alert severity="error">{alertTextUnsuccsess}</Alert>
           </Snackbar>

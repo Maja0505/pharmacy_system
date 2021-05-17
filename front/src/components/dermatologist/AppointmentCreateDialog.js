@@ -108,7 +108,7 @@ const AppointmentCreateDialog = ({
         axios
           .put(
             "http://localhost:8080/api/dermatologistAppointment/book/" +
-              a.Id +
+              a.id +
               "/" +
               patient.Id
           )
@@ -128,27 +128,28 @@ const AppointmentCreateDialog = ({
     setData((oldData) => [
       ...oldData,
       {
-        Subject: patient.FirstName + " " + patient.LastName,
-        PatientEmail: patient.Email,
-        PatientPhoneNumber: patient.PhoneNumber,
-        StartTime: a.StartTime,
-        EndTime: a.EndTime,
-        PharmacyName: pharmacy !== undefined ? pharmacy.name : "DODATI APOTEKU",
-        Location: pharmacy !== undefined ? pharmacy.address : "DODATI ADRESU",
+        subject: patient.FirstName + " " + patient.LastName,
+        patientEmail: patient.Email,
+        patientPhoneNumber: patient.PhoneNumber,
+        dermatologistAppointmentStartTime: a.StartTime,
+        dermatologistAppointmentEndTime: a.EndTime,
+        pharmacyName: pharmacy !== undefined ? pharmacy.name : "DODATI APOTEKU",
+        location: pharmacy !== undefined ? pharmacy.address : "DODATI ADRESU",
       },
     ]);
   };
 
   const createPredefinedApppointment = (a) => {
+    console.log(data);
     setData(
       data.map((d) =>
-        d.Id === a.Id
+        d.id === a.id
           ? {
               ...d,
-              Subject: patient.FirstName + " " + patient.LastName,
-              PatientEmail: patient.Email,
-              PatientPhoneNumber: patient.PhoneNumber,
-              ColorID: 5,
+              subject: patient.FirstName + " " + patient.LastName,
+              patientEmail: patient.Email,
+              patientPhoneNumber: patient.PhoneNumber,
+              colorId: 5,
             }
           : d
       )
@@ -210,26 +211,44 @@ const AppointmentCreateDialog = ({
         <tbody>
           <tr>
             <td>Date :</td>
-            {appointment.StartTime !== undefined && (
+            {appointment.dermatologistAppointmentStartTime !== undefined && (
               <td>
-                {appointment.StartTime.toString().split(" ")[1] +
+                {appointment.dermatologistAppointmentStartTime
+                  .toString()
+                  .split(" ")[1] +
                   " " +
-                  appointment.StartTime.toString().split(" ")[2] +
+                  appointment.dermatologistAppointmentStartTime
+                    .toString()
+                    .split(" ")[2] +
                   " " +
-                  appointment.StartTime.toString().split(" ")[3]}
+                  appointment.dermatologistAppointmentStartTime
+                    .toString()
+                    .split(" ")[3]}
               </td>
             )}
           </tr>
           <tr>
             <td>Start Time :</td>
-            {appointment.StartTime !== undefined && (
-              <td>{appointment.StartTime.toString().split(" ")[4]}</td>
+            {appointment.dermatologistAppointmentStartTime !== undefined && (
+              <td>
+                {
+                  appointment.dermatologistAppointmentStartTime
+                    .toString()
+                    .split(" ")[4]
+                }
+              </td>
             )}
           </tr>
           <tr>
             <td>End Time :</td>
-            {appointment.EndTime !== undefined && (
-              <td>{appointment.EndTime.toString().split(" ")[4]}</td>
+            {appointment.dermatologistAppointmentEndTime !== undefined && (
+              <td>
+                {
+                  appointment.dermatologistAppointmentEndTime
+                    .toString()
+                    .split(" ")[4]
+                }
+              </td>
             )}
           </tr>
         </tbody>

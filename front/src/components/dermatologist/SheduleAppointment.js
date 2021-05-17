@@ -41,6 +41,8 @@ const SheduleAppointment = ({ pharmacyInfo }) => {
   const [data, setData] = useState([]);
   const resourceDataSource = [{ Id: 4, Color: "#8c9290", Name: "open" }];
 
+  const schedule = true;
+
   const [openCreateDialog, setOpenCreateDialog] = useState(false);
   const [openInfoDialog, setOpenInfoDialog] = useState(false);
   const [predefinedAppointment, setPredefinedAppointment] = useState(false);
@@ -68,8 +70,8 @@ const SheduleAppointment = ({ pharmacyInfo }) => {
     args.cancel = true;
     if (args.data.startTime > new Date()) {
       setAppointment({
-        StartTime: new Date(args.data.StartTime),
-        EndTime: new Date(args.data.EndTime),
+        StartTime: new Date(args.data.startTime),
+        EndTime: new Date(args.data.endTime),
       });
       setOpenCreateDialog(true);
       setPredefinedAppointment(false);
@@ -77,7 +79,7 @@ const SheduleAppointment = ({ pharmacyInfo }) => {
   };
 
   const appointmentInfoClick = (e) => {
-    if (e.event.PatientEmail !== null) {
+    if (e.event.patientEmail !== null) {
       setOpenInfoDialog(true);
       setAppointmentInfo(e.event);
     } else {
@@ -108,7 +110,7 @@ const SheduleAppointment = ({ pharmacyInfo }) => {
         "http://localhost:8080/api/dermatologistAppointment/allFutureOpen/8/1"
       )
       .then((res) => {
-        addAppointmentsToData(res.data, 4);
+        addAppointmentsToData(res.data);
       });
 
     axios
@@ -116,61 +118,12 @@ const SheduleAppointment = ({ pharmacyInfo }) => {
         "http://localhost:8080/api/dermatologistAppointment/allFutureReserved/8/1"
       )
       .then((res) => {
-        addAppointmentsToData(res.data, 5);
+        addAppointmentsToData(res.data);
       });
   }, []);
 
-  const addAppointmentsToData = (appointments, colorId) => {
-    appointments.map((a) =>
-      setData((oldDatas) => [
-        ...oldDatas,
-        a.patientFirstName !== null
-          ? {
-              Id: a.id,
-              Subject: a.patientFirstName + " " + a.patientLastName,
-              Location:
-                a.pharmacyForDermatologistAppointment.pharmacyAddress.city +
-                ", " +
-                a.pharmacyForDermatologistAppointment.pharmacyAddress
-                  .streetName +
-                " " +
-                a.pharmacyForDermatologistAppointment.pharmacyAddress
-                  .streetNumber,
-              StartTime: a.dermatologistAppointmentStartTime,
-              EndTime: a.dermatologistAppointmentEndTime,
-              ColorID: colorId,
-              PatientEmail: a.patientEmail,
-              PatientFirstName: a.patientFirstName,
-              PatientId: a.patientId,
-              PatientLastName: a.patientLastName,
-              PatientPhoneNumber: a.patientPhoneNumber,
-              AppointmentPrice: a.appointmentPrice,
-              PharmacyName: a.pharmacyForDermatologistAppointment.pharmacyName,
-            }
-          : {
-              Id: a.id,
-              Subject: "Open appointment",
-              Location:
-                a.pharmacyForDermatologistAppointment.pharmacyAddress.city +
-                ", " +
-                a.pharmacyForDermatologistAppointment.pharmacyAddress
-                  .streetName +
-                " " +
-                a.pharmacyForDermatologistAppointment.pharmacyAddress
-                  .streetNumber,
-              StartTime: a.dermatologistAppointmentStartTime,
-              EndTime: a.dermatologistAppointmentEndTime,
-              ColorID: colorId,
-              PatientEmail: a.patientEmail,
-              PatientFirstName: a.patientFirstName,
-              PatientId: a.patientId,
-              PatientLastName: a.patientLastName,
-              PatientPhoneNumber: a.patientPhoneNumber,
-              AppointmentPrice: a.appointmentPrice,
-              PharmacyName: a.pharmacyForDermatologistAppointment.pharmacyName,
-            },
-      ])
-    );
+  const addAppointmentsToData = (appointments) => {
+    setData((previousState) => [...previousState, ...appointments]);
   };
 
   const addToWorkingDates = async (workDay) => {
@@ -318,7 +271,20 @@ const SheduleAppointment = ({ pharmacyInfo }) => {
             <Grid item xs={1} />
             <Grid item xs={8}>
               <ScheduleComponent
-                eventSettings={{ dataSource: data }}
+                eventSettings={{
+                  dataSource: data,
+                  fields: {
+                    subject: { name: "subject", title: "Subject" },
+                    startTime: {
+                      name: "dermatologistAppointmentStartTime",
+                      title: "Start Duration",
+                    },
+                    endTime: {
+                      name: "dermatologistAppointmentEndTime",
+                      title: "End Duration",
+                    },
+                  },
+                }}
                 timeFormat="HH:mm"
                 height="500px"
                 width="90%"
@@ -333,7 +299,7 @@ const SheduleAppointment = ({ pharmacyInfo }) => {
                 </ViewsDirective>
                 <ResourcesDirective>
                   <ResourceDirective
-                    field="ColorID"
+                    field="colorId"
                     idField="Id"
                     colorField="Color"
                     textField="Name"
@@ -363,6 +329,7 @@ const SheduleAppointment = ({ pharmacyInfo }) => {
                 openDialog={openInfoDialog}
                 setOpenDialog={setOpenInfoDialog}
                 appointment={appointmentInfo}
+                schedule={schedule}
               />
             </Grid>
             <Grid item xs={2}>

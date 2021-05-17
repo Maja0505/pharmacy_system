@@ -3,9 +3,12 @@ package com.isa.pharmacies_system.converter;
 import com.isa.pharmacies_system.DTO.AppointmentScheduleByStaffDTO;
 import com.isa.pharmacies_system.DTO.PharmacistAppointmentDTO;
 import com.isa.pharmacies_system.DTO.PharmacistAppointmentTimeDTO;
+import com.isa.pharmacies_system.DTO.PharmacyDTO;
 import com.isa.pharmacies_system.domain.schedule.PharmacistAppointment;
 import com.isa.pharmacies_system.domain.schedule.StatusOfAppointment;
 import com.isa.pharmacies_system.domain.schedule.TypeOfAppointment;
+import com.isa.pharmacies_system.domain.user.Patient;
+import com.isa.pharmacies_system.service.UtilityMethods;
 import com.isa.pharmacies_system.service.iService.IPriceListService;
 
 import java.util.ArrayList;
@@ -15,10 +18,12 @@ public class PharmacistAppointmentConverter {
 
     private UserConverter userConverter;
     private PharmacyConverter pharmacyConverter;
+    private UtilityMethods utilityMethods;
 
     public PharmacistAppointmentConverter(IPriceListService priceListService) {
         this.userConverter = new UserConverter();
         this.pharmacyConverter = new PharmacyConverter(priceListService);
+        this.utilityMethods = new UtilityMethods();
     }
 
     public PharmacistAppointmentDTO convertPharmacistAppointmentToDTO(PharmacistAppointment pharmacistAppointment){
@@ -28,18 +33,19 @@ public class PharmacistAppointmentConverter {
         pharmacistAppointmentDTO.setPharmacistAppointmentStartTime(pharmacistAppointment.getPharmacistAppointmentStartTime());
         pharmacistAppointmentDTO.setPharmacistAppointmentDuration(pharmacistAppointment.getPharmacistAppointmentDuration());
         pharmacistAppointmentDTO.setPharmacistForAppointment(userConverter.convertPharmacistPersonalInfoToDTO(pharmacistAppointment.getPharmacistForAppointment()));
+        pharmacistAppointmentDTO.setStartTime(pharmacistAppointment.getPharmacistAppointmentStartTime());
+        pharmacistAppointmentDTO.setEndTime(pharmacistAppointment.getPharmacistAppointmentStartTime().plusMinutes(pharmacistAppointment.getPharmacistAppointmentDuration()));
         try{
-            pharmacistAppointmentDTO.setPharmacyForPharmacistAppointment(pharmacyConverter.convertPharmacyToPharmacyDTO(pharmacistAppointment.getPharmacistForAppointment().getPharmacyForPharmacist()));
+            PharmacyDTO pharmacyDTO = pharmacyConverter.convertPharmacyToPharmacyDTO(pharmacistAppointment.getPharmacistForAppointment().getPharmacyForPharmacist());
+            pharmacistAppointmentDTO.setPharmacyForPharmacistAppointment(pharmacyDTO);
+            pharmacistAppointmentDTO.setPharmacyName(pharmacyDTO.getPharmacyName());
+            pharmacistAppointmentDTO.setLocation(pharmacyDTO.getPharmacyAddress().getCity() + ", " + pharmacyDTO.getPharmacyAddress().getStreetName() + " " + pharmacyDTO.getPharmacyAddress().getStreetNumber());
         }catch (Exception e){
         }
         pharmacistAppointmentDTO.setPharmacistAppointmentEndTime(pharmacistAppointment.getPharmacistAppointmentStartTime().plusMinutes(pharmacistAppointment.getPharmacistAppointmentDuration()));
-        if(pharmacistAppointment.getPatientWithPharmacistAppointment() != null) {
-            pharmacistAppointmentDTO.setPatientId(pharmacistAppointment.getPatientWithPharmacistAppointment().getId());
-            pharmacistAppointmentDTO.setPatientFirstName(pharmacistAppointment.getPatientWithPharmacistAppointment().getFirstName());
-            pharmacistAppointmentDTO.setPatientLastName(pharmacistAppointment.getPatientWithPharmacistAppointment().getLastName());
-            pharmacistAppointmentDTO.setPatientEmail(pharmacistAppointment.getPatientWithPharmacistAppointment().getEmail());
-            pharmacistAppointmentDTO.setPatientPhoneNumber(pharmacistAppointment.getPatientWithPharmacistAppointment().getPhoneNumber());
-        }
+        Patient patient = pharmacistAppointment.getPatientWithPharmacistAppointment();
+        utilityMethods.fillPatientInfoForPharmacistAppointment(patient,pharmacistAppointmentDTO);
+        utilityMethods.setColorIdPharmacistAppointment(pharmacistAppointment,pharmacistAppointmentDTO);
 
         return pharmacistAppointmentDTO;
 

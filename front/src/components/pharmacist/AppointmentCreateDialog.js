@@ -85,7 +85,7 @@ const AppointmentCreateDialog = ({
             staffId: 6,
             pharmacyId: 1,
             patientId: patient.Id,
-            appointmentStartTime: makeDate(a.StartTime),
+            appointmentStartTime: makeDate(a.startTime),
             appointmentEndTime: null,
             appointmentDuration: appointmentDuration,
             staffWorkStartTime: null,
@@ -107,17 +107,17 @@ const AppointmentCreateDialog = ({
     setData((oldData) => [
       ...oldData,
       {
-        Subject: patient.FirstName + " " + patient.LastName,
-        PatientEmail: patient.Email,
-        PatientPhoneNumber: patient.PhoneNumber,
-        StartTime: a.StartTime,
-        EndTime: new Date(
-          new Date(a.StartTime).setMinutes(
-            new Date(a.StartTime).getMinutes() + appointmentDuration
+        subject: patient.FirstName + " " + patient.LastName,
+        patientEmail: patient.Email,
+        patientPhoneNumber: patient.PhoneNumber,
+        startTime: a.startTime,
+        endTime: new Date(
+          new Date(a.startTime).setMinutes(
+            new Date(a.startTime).getMinutes() + appointmentDuration
           )
         ),
-        PharmacyName: pharmacy !== undefined ? pharmacy.name : "DODATI APOTEKU",
-        Location: pharmacy !== undefined ? pharmacy.address : "DODATI ADRESU",
+        pharmacyName: pharmacy !== undefined ? pharmacy.name : "DODATI APOTEKU",
+        location: pharmacy !== undefined ? pharmacy.address : "DODATI ADRESU",
       },
     ]);
   };
@@ -132,20 +132,20 @@ const AppointmentCreateDialog = ({
         <tbody>
           <tr>
             <td>Date :</td>
-            {appointment.StartTime !== undefined && (
+            {appointment.startTime !== undefined && (
               <td>
-                {appointment.StartTime.toString().split(" ")[1] +
+                {appointment.startTime.toString().split(" ")[1] +
                   " " +
-                  appointment.StartTime.toString().split(" ")[2] +
+                  appointment.startTime.toString().split(" ")[2] +
                   " " +
-                  appointment.StartTime.toString().split(" ")[3]}
+                  appointment.startTime.toString().split(" ")[3]}
               </td>
             )}
           </tr>
           <tr>
             <td>Start Time :</td>
-            {appointment.StartTime !== undefined && (
-              <td>{appointment.StartTime.toString().split(" ")[4]}</td>
+            {appointment.startTime !== undefined && (
+              <td>{appointment.startTime.toString().split(" ")[4]}</td>
             )}
           </tr>
           <tr>

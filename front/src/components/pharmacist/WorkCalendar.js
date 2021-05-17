@@ -23,54 +23,32 @@ const WorkCalendar = () => {
     { Id: 3, Color: "#ff9800", Name: "expired" },
   ];
 
+  const schedule = false;
+
   const onPopupOpen = (args) => {
     args.cancel = true;
   };
 
-  useEffect(() => {
+  useEffect(async () => {
     axios
       .get("http://localhost:8080/api/pharmacistAppointment/allMissed/6")
       .then((res) => {
-        addAppointmentsToData(res.data, 1);
+        addAppointmentsToData(res.data);
       });
     axios
       .get("http://localhost:8080/api/pharmacistAppointment/allExpired/6")
       .then((res) => {
-        addAppointmentsToData(res.data, 3);
+        addAppointmentsToData(res.data);
       });
     axios
       .get("http://localhost:8080/api/pharmacistAppointment/allReserved/6")
       .then((res) => {
-        addAppointmentsToData(res.data, 2);
+        addAppointmentsToData(res.data);
       });
   }, []);
 
-  const addAppointmentsToData = (appointments, colorId) => {
-    appointments.map((a) =>
-      setData((oldDatas) => [
-        ...oldDatas,
-        {
-          Id: a.id,
-          Subject: a.patientFirstName + " " + a.patientLastName,
-          Location:
-            a.pharmacyForPharmacistAppointment.pharmacyAddress.city +
-            ", " +
-            a.pharmacyForPharmacistAppointment.pharmacyAddress.streetName +
-            " " +
-            a.pharmacyForPharmacistAppointment.pharmacyAddress.streetNumber,
-          StartTime: a.pharmacistAppointmentStartTime,
-          EndTime: a.pharmacistAppointmentEndTime,
-          ColorID: colorId,
-          PatientEmail: a.patientEmail,
-          PatientFirstName: a.patientFirstName,
-          PatientId: a.patientId,
-          PatientLastName: a.patientLastName,
-          PatientPhoneNumber: a.patientPhoneNumber,
-          AppointmentPrice: a.appointmentPrice,
-          PharmacyName: a.pharmacyForPharmacistAppointment.pharmacyName,
-        },
-      ])
-    );
+  const addAppointmentsToData = (appointments) => {
+    setData((previousState) => [...previousState, ...appointments]);
   };
 
   const [appointmentInfo, setAppointmentInfo] = useState({});
@@ -107,7 +85,21 @@ const WorkCalendar = () => {
     <div style={{ marginLeft: "15%", marginTop: "3%" }}>
       <h1 style={{ width: "80%" }}>Work calendar</h1>
       <ScheduleComponent
-        eventSettings={{ dataSource: data }}
+        eventSettings={{
+          dataSource: data,
+          fields: {
+            id: "id",
+            subject: { name: "subject", title: "Event Name" },
+            location: { name: "location", title: "Event Location" },
+            description: {
+              name: "description",
+              title: "Event Description",
+            },
+            startTime: { name: "startTime", title: "Start Duration" },
+            endTime: { name: "endTime", title: "End Duration" },
+            colorId: { name: "colorId", title: "Color Id" },
+          },
+        }}
         popupOpen={onPopupOpen}
         timeFormat="HH:mm"
         height="500px"
@@ -116,7 +108,7 @@ const WorkCalendar = () => {
       >
         <ResourcesDirective>
           <ResourceDirective
-            field="ColorID"
+            field="colorId"
             idField="Id"
             colorField="Color"
             textField="Name"
@@ -130,6 +122,7 @@ const WorkCalendar = () => {
         setOpenDialog={setOpenDialog}
         appointment={appointmentInfo}
         changeAppointmentToMissed={changeAppointmentToMissed}
+        schedule={schedule}
       ></AppointmentInfoDialog>
     </div>
   );
