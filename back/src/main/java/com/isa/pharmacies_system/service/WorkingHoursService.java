@@ -29,4 +29,10 @@ public class WorkingHoursService implements IWorkingHoursService {
     public List<WorkingHours> getAllFutureWorkingHoursForDermatologistInPharmacy(Long dermatologistId, Long pharmacyId) {
         return workingHoursRepository.findAllFutureWorkingHoursForDermatologistInPharmacy(dermatologistId,pharmacyId);
     }
+
+    //Nemanja
+    @Override
+    public List<WorkingHours> getAllFutureWorkingHoursForPharmacist(Long pharmacistId) {
+        return workingHoursRepository.findAllFutureWorkingHoursForPharmacist(pharmacistId);
+    }
 }

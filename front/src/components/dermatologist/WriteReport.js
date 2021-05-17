@@ -1,5 +1,24 @@
-const WriteReport = ({ patient }) => {
-  return <div>WRITING REPORT FOR PATIENT {patient.FirstName}</div>;
+import { Link } from "react-router-dom";
+
+const finishdWritingReport = () => {
+  localStorage.setItem("PatientForDermatologistReport", JSON.stringify(null));
+};
+
+const getItem = () => {
+  console.log(
+    JSON.parse(localStorage.getItem("PatientForDermatologistReport"))
+  );
+};
+
+const WriteReport = () => {
+  return (
+    <div>
+      WRITING REPORT FOR PATIENT
+      <Link to="/dermatologist/scheduleAppointment">Schedule appointnet</Link>
+      <button onClick={finishdWritingReport}>FINISH</button>
+      <button onClick={getItem}>GET</button>
+    </div>
+  );
 };
 
 export default WriteReport;

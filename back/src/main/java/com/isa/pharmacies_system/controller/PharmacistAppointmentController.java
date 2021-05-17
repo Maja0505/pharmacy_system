@@ -1,11 +1,11 @@
 package com.isa.pharmacies_system.controller;
 
+import com.isa.pharmacies_system.DTO.AppointmentScheduleByStaffDTO;
 import com.isa.pharmacies_system.DTO.PatientAppointmentInfoDTO;
 import com.isa.pharmacies_system.DTO.PharmacistAppointmentDTO;
 import com.isa.pharmacies_system.DTO.PharmacistAppointmentTimeDTO;
 import com.isa.pharmacies_system.converter.PatientConverter;
 import com.isa.pharmacies_system.converter.PharmacistAppointmentConverter;
-import com.isa.pharmacies_system.domain.schedule.DermatologistAppointment;
 import com.isa.pharmacies_system.domain.schedule.PharmacistAppointment;
 import com.isa.pharmacies_system.service.EmailService;
 import com.isa.pharmacies_system.service.iService.IPharmacistAppointmentService;
@@ -29,13 +29,15 @@ public class PharmacistAppointmentController {
     private PatientConverter patientConverter;
     private EmailService emailService;
     private PharmacistAppointmentConverter pharmacistAppointmentConverter;
+    private IPriceListService priceListService;
 
     @Autowired
-    public PharmacistAppointmentController(IPharmacistAppointmentService pharmacistAppointmentService, EmailService emailService) {
+    public PharmacistAppointmentController(IPharmacistAppointmentService pharmacistAppointmentService, EmailService emailService, IPriceListService priceListService) {
         this.pharmacistAppointmentService = pharmacistAppointmentService;
         this.emailService = emailService;
+        this.priceListService = priceListService;
         this.patientConverter = new PatientConverter();
-        this.pharmacistAppointmentConverter = new PharmacistAppointmentConverter();
+        this.pharmacistAppointmentConverter = new PharmacistAppointmentConverter(priceListService);
     }
 
 
@@ -154,4 +156,31 @@ public class PharmacistAppointmentController {
         }
     }
 
+    //Nemanja
+    @GetMapping("/allFutureReserved/{pharmacistId}")
+    public ResponseEntity<List<PharmacistAppointmentDTO>> getAllFutureReservedAppointmentByPharmacist(@PathVariable Long pharmacistId){
+        try {
+            List<PharmacistAppointment> pharmacistAppointmentList = pharmacistAppointmentService.getAllFutureReservedAppointmentByPharmacist(pharmacistId);
+            return new ResponseEntity<>(pharmacistAppointmentConverter.convertPharmacistAppointmentsListToDTOS(pharmacistAppointmentList),HttpStatus.OK);
+        }catch (Exception e){
+            return new ResponseEntity<>(null,HttpStatus.NOT_FOUND);
+        }
+    }
+
+    //Nemanja
+    @PostMapping(value = "/bookByPharmacist",consumes = "application/json")
+    public ResponseEntity<Boolean> bookPharmacistAppointmentByPharmacist(@RequestBody AppointmentScheduleByStaffDTO appointmentScheduleByStaffDTO){
+        try {
+            PharmacistAppointmentTimeDTO pharmacistAppointmentTimeDTO = pharmacistAppointmentConverter.convertAppointmentScheduleByStaffDTOToPharmacistAppointmentTimeDTO(appointmentScheduleByStaffDTO);
+            if(pharmacistAppointmentService.bookPharmacistAppointment(appointmentScheduleByStaffDTO.getPatientId(), appointmentScheduleByStaffDTO.getStaffId(),pharmacistAppointmentTimeDTO )){
+                emailService.sendNotificationForSuccessBookAppointment(appointmentScheduleByStaffDTO.getPatientId());
+                return new ResponseEntity<>(HttpStatus.CREATED);
+            }else{
+                return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
+            }
+        }catch (Exception e){
+            Thread.currentThread().interrupt();
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
 }

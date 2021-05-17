@@ -5,17 +5,9 @@ import EditProfile from "./EditProfile.js";
 import VacationRequest from "./VacationRequest.js";
 import WorkCalendar from "./WorkCalendar.js";
 import WriteReport from "./WriteReport.js";
-
-import { useState } from "react";
+import ScheduleAppointment from "./ScheduleAppointment.js";
 
 const HomePage = () => {
-  const [patientForReport, setPatientForReport] = useState({
-    Id: -1,
-    FirstName: "",
-    LastName: "",
-    AppointmentId: "",
-  });
-
   return (
     <Router>
       <Switch>
@@ -31,10 +23,13 @@ const HomePage = () => {
             component={VacationRequest}
           ></Route>
           <Route path="/pharmacist/workCalendar">
-            <WorkCalendar setPatient={setPatientForReport}></WorkCalendar>
+            <WorkCalendar />
           </Route>
           <Route path="/pharmacist/writeReport">
-            <WriteReport patient={patientForReport}></WriteReport>
+            <WriteReport />
+          </Route>
+          <Route path="/pharmacist/scheduleAppointment">
+            <ScheduleAppointment />
           </Route>
         </div>
       </Switch>

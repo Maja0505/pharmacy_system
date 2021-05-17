@@ -18,7 +18,10 @@ public class DermatologistAppointmentDTO {
     private String patientLastName;
     private String patientEmail;
     private String patientPhoneNumber;
-
+    private String location;
+    private String subject;
+    private String pharmacyName;
+    private int colorId;
 
     public DermatologistAppointmentDTO() {
     }
@@ -109,5 +112,37 @@ public class DermatologistAppointmentDTO {
 
     public void setPatientPhoneNumber(String patientPhoneNumber) {
         this.patientPhoneNumber = patientPhoneNumber;
+    }
+
+    public String getLocation() {
+        return location;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
+    }
+
+    public String getSubject() {
+        return subject;
+    }
+
+    public void setSubject(String subject) {
+        this.subject = subject;
+    }
+
+    public int getColorId() {
+        return colorId;
+    }
+
+    public void setColorId(int colorId) {
+        this.colorId = colorId;
+    }
+
+    public String getPharmacyName() {
+        return pharmacyName;
+    }
+
+    public void setPharmacyName(String pharmacyName) {
+        this.pharmacyName = pharmacyName;
     }
 }

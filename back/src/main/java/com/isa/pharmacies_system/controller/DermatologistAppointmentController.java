@@ -32,11 +32,13 @@ public class DermatologistAppointmentController {
     private PatientConverter patientConverter;
     private DermatologistAppointmentConverter dermatologistAppointmentConverter;
     private EmailService emailService;
+    private IPriceListService priceListService;
 
     @Autowired
     public DermatologistAppointmentController(IDermatologistAppointmentService dermatologistAppointmentService, EmailService emailService, IPriceListService priceListService) {
         this.dermatologistAppointmentService = dermatologistAppointmentService;
         this.emailService = emailService;
+        this.priceListService = priceListService;
         this.patientConverter = new PatientConverter();
         this.dermatologistAppointmentConverter = new DermatologistAppointmentConverter(priceListService);
 

@@ -14,7 +14,12 @@ public interface IWorkingHoursRepository extends JpaRepository<WorkingHours,Long
     Set<WorkingHours> getWorkingHourByDate(Long pharmacistId, LocalDateTime start, LocalDateTime end);
 
     //Nemanja
-    @Query("select wh from WorkingHours wh where wh.workerSchedule.dermatologist.id = ?1 and wh.workerSchedule.pharmacy.id = ?2 and wh.statusOfWorkingHours = 1 and wh.workingStartTime > CURRENT_TIMESTAMP")
+    @Query("select wh from WorkingHours wh where wh.workerSchedule.dermatologist.id = ?1 and wh.workerSchedule.pharmacy.id = ?2 and wh.statusOfWorkingHours = 1 and wh.workingEndTime > CURRENT_TIMESTAMP")
     List<WorkingHours> findAllFutureWorkingHoursForDermatologistInPharmacy(Long dermatologistId,Long pharmacyId);
+
+    //Nemanja
+    @Query("select wh from WorkingHours wh where wh.workerSchedule.pharmacist.id = ?1  and wh.statusOfWorkingHours = 1 and wh.workingEndTime > CURRENT_TIMESTAMP")
+    List<WorkingHours> findAllFutureWorkingHoursForPharmacist(Long pharmacistId);
+
 
 }

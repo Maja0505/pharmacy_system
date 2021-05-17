@@ -1,5 +1,6 @@
 package com.isa.pharmacies_system.service.iService;
 
+import com.isa.pharmacies_system.DTO.AppointmentScheduleByStaffDTO;
 import com.isa.pharmacies_system.DTO.PatientAppointmentInfoDTO;
 import com.isa.pharmacies_system.DTO.PharmacistAppointmentTimeDTO;
 import com.isa.pharmacies_system.domain.schedule.PharmacistAppointment;
@@ -17,10 +18,9 @@ public interface IPharmacistAppointmentService{
     List<PharmacistAppointment> getAllMissedPharmacistAppointmentByPharmacist(Long pharmacistId);
     List<PharmacistAppointment> getAllExpiredPharmacistAppointmentByPharmacist(Long pharmacistId);
     List<PharmacistAppointment> getAllReservedPharmacistAppointmentByPharmacist(Long pharmacistId);
+    List<PharmacistAppointment> getAllFutureReservedAppointmentByPharmacist(Long pharmacistId);
 
     Boolean cancelPharmacistAppointment(Long appointmentId);
-
     Boolean changePharmacistAppointmentStatusToMissed(PharmacistAppointment pharmacistAppointment);
-
 
 }
