@@ -21,8 +21,8 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Controller
-@RequestMapping("/api/pharmacistAppointment")
 @CrossOrigin(origins="http://localhost:3000")
+@RequestMapping("/api/pharmacistAppointment")
 public class PharmacistAppointmentController {
 
     private IPharmacistAppointmentService pharmacistAppointmentService;

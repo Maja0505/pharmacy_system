@@ -1,8 +1,10 @@
 package com.isa.pharmacies_system.service;
 
 import com.isa.pharmacies_system.DTO.UserPasswordDTO;
+import com.isa.pharmacies_system.domain.medicine.EPrescription;
 import com.isa.pharmacies_system.domain.medicine.Medicine;
 import com.isa.pharmacies_system.domain.medicine.MedicineReservation;
+import com.isa.pharmacies_system.domain.pharmacy.Pharmacy;
 import com.isa.pharmacies_system.domain.schedule.DermatologistAppointment;
 import com.isa.pharmacies_system.domain.schedule.PharmacistAppointment;
 import com.isa.pharmacies_system.domain.schedule.StatusOfAppointment;
@@ -99,6 +101,11 @@ public class PatientService implements IPatientService {
         return patientRepository.getAllByMedicineReservations(id, PageRequest.of(page,10));
     }
 
+    @Override
+    public List<EPrescription> getAllEPrescriptionsForPatient(Long id) {
+        return patientRepository.getAllEPrescriptionsForPatient(id);
+    }
+
 
     private Boolean checkPassword(String first, String second){
         return first.equals(second);
@@ -110,6 +117,11 @@ public class PatientService implements IPatientService {
     public Boolean checkIsPatientAllergiesOnSomeMedicine(Long patientId,Medicine medicine){
         Patient patient = findOne(patientId);
         return  patient.getMedicineAllergies().stream().anyMatch(medicineAllergies -> medicineAllergies.equals(medicine));
+    }
+
+    @Override
+    public List<Pharmacy> getSubscriptionPharmaciesForPatient(Long id){
+        return List.copyOf(findOne(id).getPharmaciesSubscription());
     }
 
 

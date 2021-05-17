@@ -11,7 +11,10 @@ import PharmacistAppointmentHistory from './PharmacistAppointmentHistory'
 import DermatologistReservaedAppointment from './DermatologistReservaedAppointment'
 import PharmacistReservedAppointment from './PharmacistReservedAppointment'
 import MedicineReservations from './MedicineReservations'
-
+import PharmacyProfilePage from './PharmacyProfilePage'
+import SchedulePharmacistAppointment from './SchedulePharmacistAppointment'
+import EPrescriptionList from './EPrescriptionList'
+import SubscriptionPharmacy from './SubscriptionPharmacy'
 
 import { BrowserRouter as Router, Route, Link } from "react-router-dom";
 
@@ -60,7 +63,11 @@ const HomePage = () => {
      setButton3(false)
      setButton4(false)
      setButton5(false)
+     setButton6(false)
      setButton7(false)
+     setButton10(false)
+     setButton13(false)
+     setButton14(false)
 
      if(!button1){
        setButton1(true)
@@ -72,7 +79,11 @@ const HomePage = () => {
     setButton3(false)
     setButton4(false)
     setButton5(false)
+    setButton6(false)
     setButton7(false)
+    setButton10(false)
+    setButton13(false)
+    setButton14(false)
 
 
 
@@ -86,7 +97,12 @@ const HomePage = () => {
     setButton2(false)
     setButton4(false)
     setButton5(false)
+    setButton6(false)
     setButton7(false)
+    setButton10(false)
+    setButton13(false)
+    setButton14(false)
+
 
 
 
@@ -100,7 +116,12 @@ const HomePage = () => {
     setButton2(false)
     setButton3(false)
     setButton5(false)
+    setButton6(false)
     setButton7(false)
+    setButton10(false)
+    setButton13(false)
+    setButton14(false)
+
 
 
 
@@ -114,12 +135,36 @@ const HomePage = () => {
     setButton2(false)
     setButton3(false)
     setButton4(false)
+    setButton6(false)
     setButton7(false)
+    setButton10(false)
+    setButton13(false)
+    setButton14(false)
+
 
 
 
     if(!button5){
       setButton5(true)
+    }
+  }
+
+  const HandleButton6 = () => {
+    setButton1(false)
+    setButton2(false)
+    setButton3(false)
+    setButton4(false)
+    setButton5(false)
+    setButton7(false)
+    setButton10(false)
+    setButton13(false)
+    setButton14(false)
+
+
+
+
+    if(!button6){
+      setButton6(true)
     }
   }
 
@@ -129,11 +174,76 @@ const HomePage = () => {
     setButton3(false)
     setButton4(false)
     setButton5(false)
+    setButton6(false)
+    setButton10(false)
+    setButton13(false)
+    setButton14(false)
+
 
 
 
     if(!button7){
       setButton7(true)
+    }
+  }
+
+  const HandleButton10 = () => {
+    setButton1(false)
+    setButton2(false)
+    setButton3(false)
+    setButton4(false)
+    setButton5(false)
+    setButton6(false)
+    setButton7(false)
+    setButton13(false)
+    setButton14(false)
+
+
+
+
+    if(!button10){
+      setButton10(true)
+    }
+  }
+
+  const HandleButton13 = () => {
+    setButton1(false)
+    setButton2(false)
+    setButton3(false)
+    setButton4(false)
+    setButton5(false)
+    setButton6(false)
+    setButton7(false)
+    setButton10(false)
+    setButton14(false)
+
+
+
+
+    if(!button13){
+      setButton13(true)
+    }
+  }
+
+ 
+
+  const HandleButton14 = () => {
+    setButton1(false)
+    setButton2(false)
+    setButton3(false)
+    setButton4(false)
+    setButton5(false)
+    setButton6(false)
+    setButton7(false)
+    setButton10(false)
+    setButton13(false)
+
+
+
+
+
+    if(!button14){
+      setButton14(true)
     }
   }
 
@@ -161,15 +271,15 @@ const HomePage = () => {
                 <Button component={Link} style={{backgroundColor:button3 ? "white" : '#4051bf',color:button3 ? 'black' : 'white'}}  to="/patient/HomePage/pharmacistAppointment" onClick={HandleButton3}>History of pharmacist appointment</Button>
                 <Button component={Link} style={{backgroundColor:button4 ? "white" : '#4051bf',color:button4 ? 'black' : 'white'}}  to="/patient/HomePage/dermatologistReservedAppointment" onClick={HandleButton4}>Dermatologist reserved appointments</Button>
                 <Button component={Link} style={{backgroundColor:button5 ? "white" : '#4051bf',color:button5 ? 'black' : 'white'}}  to="/patient/HomePage/pharmacistReservedAppointment" onClick={HandleButton5}>Pharmacist reserved appointments</Button>
-                <Button component={Link} style={{backgroundColor:button6 ? "white" : '#4051bf',color:button6 ? 'black' : 'white'}}>E-recipe</Button>
+                <Button component={Link} style={{backgroundColor:button6 ? "white" : '#4051bf',color:button6 ? 'black' : 'white'}} to="/patient/HomePage/ePrescriptionList" onClick={HandleButton6}>E-Prescriptions</Button>
                 <Button component={Link} style={{backgroundColor:button7 ? "white" : '#4051bf',color:button7 ? 'black' : 'white'}} to="/patient/HomePage/medicineReservations" onClick={HandleButton7} >Reserved medicines</Button>
                 <Button component={Link} style={{backgroundColor:button8 ? "white" : '#4051bf',color:button8 ? 'black' : 'white'}}>Penals</Button>
                 <Button component={Link} style={{backgroundColor:button9 ? "white" : '#4051bf',color:button9 ? 'black' : 'white'}}>Medicines from ERecipe</Button>
-                <Button component={Link}  style={{backgroundColor:button10 ? "white" : '#4051bf',color:button10 ? 'black' : 'white'}}>Followed pharmaciest</Button>
+                <Button component={Link}  style={{backgroundColor:button10 ? "white" : '#4051bf',color:button10 ? 'black' : 'white'}} to="/patient/HomePage/subscriptionPharmacy" onClick={HandleButton10}>Followed pharmaciest</Button>
                 <Button component={Link} style={{backgroundColor:button11 ? "white" : '#4051bf',color:button11 ? 'black' : 'white'}}>Pisanje Zalbe</Button>
                 <Button component={Link} style={{backgroundColor:button12 ? "white" : '#4051bf',color:button12 ? 'black' : 'white'}}>Preuzimanje leka</Button>
-                <Button component={Link} style={{backgroundColor:button13 ? "white" : '#4051bf',color:button13 ? 'black' : 'white'}}>Zakazivanje kod farmacueuta</Button>
-                <Button component={Link} style={{backgroundColor:button14 ? "white" : '#4051bf',color:button14 ? 'black' : 'white'}}>Zakazivanje kod dermatologa</Button>
+                <Button component={Link} style={{backgroundColor:button13 ? "white" : '#4051bf',color:button13 ? 'black' : 'white'}} to="/patient/HomePage/schedulePharmacistAppointment"  onClick={HandleButton13}>Schedule pharmacist appointment</Button>
+                <Button component={Link} style={{backgroundColor:button14 ? "white" : '#4051bf',color:button14 ? 'black' : 'white'}} to="/patient/HomePage/pharmacyProfilePage"  onClick={HandleButton14}>Schedule dermatologist appointment</Button>
               </ButtonGroup>
               </Grid>
               <Grid  item>
@@ -180,6 +290,11 @@ const HomePage = () => {
                   <Route path='/patient/HomePage/dermatologistReservedAppointment' component={DermatologistReservaedAppointment}></Route>
                   <Route path='/patient/HomePage/pharmacistReservedAppointment' component={PharmacistReservedAppointment}></Route>
                   <Route path='/patient/HomePage/medicineReservations' component={MedicineReservations}></Route>
+                  <Route path='/patient/HomePage/pharmacyProfilePage/:id' render={(props) => <PharmacyProfilePage {...props} />}></Route>
+                  <Route path='/patient/HomePage/schedulePharmacistAppointment' component={SchedulePharmacistAppointment}></Route>
+                  <Route path='/patient/HomePage/ePrescriptionList' component={EPrescriptionList}></Route>
+                  <Route path='/patient/HomePage/subscriptionPharmacy' component={SubscriptionPharmacy}></Route>
+
                 </Paper>
               </Grid>
           </Grid>

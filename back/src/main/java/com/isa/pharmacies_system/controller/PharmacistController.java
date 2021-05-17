@@ -70,7 +70,7 @@ public class PharmacistController {
     }
 
     //#1[3.16]Korak2
-    @GetMapping(value = "/free/{pharmacyId}", consumes = "application/json")
+    @PutMapping(value = "/free/{pharmacyId}", consumes = "application/json")
     public ResponseEntity<List<PharmacistInfoDTO>> getAllPharmacistsWithOpenAppointmentsByPharmacyId(@PathVariable Long pharmacyId, @RequestBody PharmacistAppointmentTimeDTO timeDTO) {
 
         try {

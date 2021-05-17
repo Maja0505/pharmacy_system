@@ -2,7 +2,6 @@ package com.isa.pharmacies_system.converter;
 
 import com.isa.pharmacies_system.DTO.AppointmentScheduleByStaffDTO;
 import com.isa.pharmacies_system.DTO.DermatologistAppointmentDTO;
-import com.isa.pharmacies_system.DTO.UserPersonalInfoDTO;
 import com.isa.pharmacies_system.domain.schedule.DermatologistAppointment;
 import com.isa.pharmacies_system.domain.schedule.StatusOfAppointment;
 import com.isa.pharmacies_system.domain.schedule.TypeOfAppointment;
@@ -35,7 +34,12 @@ public class DermatologistAppointmentConverter {
         dermatologistAppointmentDTO.setDermatologistAppointmentStartTime(dermatologistAppointment.getDermatologistAppointmentStartTime());
         dermatologistAppointmentDTO.setDermatologistAppointmentEndTime(dermatologistAppointment.getDermatologistAppointmentEndTime());
         dermatologistAppointmentDTO.setDermatologistForAppointment(userConverter.convertDermatologistPersonalInfoToDTO(dermatologistAppointment.getDermatologistForAppointment()));
-        dermatologistAppointmentDTO.setPharmacyForDermatologistAppointment(pharmacyConverter.convertPharmacyToPharmacyDTO(dermatologistAppointment.getPharmacyForDermatologistAppointment()));
+        try{
+            dermatologistAppointmentDTO.setPharmacyForDermatologistAppointment(pharmacyConverter.convertPharmacyToPharmacyDTO(dermatologistAppointment.getPharmacyForDermatologistAppointment()));
+
+        }catch (Exception e){
+
+        }
 
         if(dermatologistAppointment.getPatientWithDermatologistAppointment() != null) {
             dermatologistAppointmentDTO.setPatientId(dermatologistAppointment.getPatientWithDermatologistAppointment().getId());

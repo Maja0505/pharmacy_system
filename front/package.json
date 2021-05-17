@@ -8,6 +8,8 @@
     "@material-ui/icons": "^4.11.2",
     "@material-ui/lab": "^4.0.0-alpha.58",
     "@material-ui/pickers": "^3.3.10",
+    "@syncfusion/ej2-react-calendars": "^19.1.63",
+    "@syncfusion/ej2-react-dropdowns": "^19.1.63",
     "@syncfusion/ej2-react-schedule": "^19.1.59",
     "@testing-library/jest-dom": "^5.11.10",
     "@testing-library/react": "^11.2.6",

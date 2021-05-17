@@ -8,6 +8,7 @@ import {
     TableRow,
     Grid,
     TextField,
+    Button
   } from "@material-ui/core";
   import {
     NavigateNext,
@@ -67,6 +68,27 @@ import {
         )
       );
     };
+
+    const HandleClickCancelDermatologistAppointment = (row) => {
+      axios
+      .put(
+        "http://localhost:8080/api/dermatologistAppointment/cancel", row
+      )
+      .then((res) => {
+        axios
+        .get(
+          "http://localhost:8080/api/patient/1/dermatologistAppointment/all/reserved/" +
+          (currPage - 1).toString() +
+          ""
+           
+        )
+        .then((res) => {
+          setRows(res.data);
+          setCopyRows(res.data);
+          console.log(res)
+        });
+      });
+    }
   
     const [haveNextPage, setHaveNextPage] = useState(true);
   
@@ -124,6 +146,7 @@ import {
           <TableCell className={classes.hederCell} >
            Appointment price
           </TableCell>
+          <TableCell></TableCell>
         </TableRow>
       </TableHead>
     );
@@ -146,6 +169,7 @@ import {
             <TableCell>{row.dermatologistForAppointment.firstName} {row.dermatologistForAppointment.lastName}</TableCell>
             <TableCell>{row.pharmacyForDermatologistAppointment.pharmacyName}</TableCell>
             <TableCell>{row.appointmentPrice}</TableCell>
+            <TableCell><Button onClick={() => HandleClickCancelDermatologistAppointment(row)}>Cancel</Button></TableCell>
           </TableRow>
         ))}
       </TableBody>
