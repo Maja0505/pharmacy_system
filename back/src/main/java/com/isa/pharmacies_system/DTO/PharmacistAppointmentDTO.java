@@ -4,28 +4,34 @@ import java.time.LocalDateTime;
 
 public class PharmacistAppointmentDTO {
 
-    private long id;
+    private long Id;
     private double appointmentPrice;
+    private String Subject;
+    private String Location;
+    private LocalDateTime StartTime;
+    private LocalDateTime EndTime;
     private LocalDateTime pharmacistAppointmentStartTime;
     private LocalDateTime pharmacistAppointmentEndTime;
     private long pharmacistAppointmentDuration;
     private UserPersonalInfoDTO pharmacistForAppointment;
-    private PharmacyDTO pharmacyForDermatologistAppointment;
-    private Long patientId;
-    private String patientFirstName;
-    private String patientLastName;
-    private String patientEmail;
-    private String patientPhoneNumber;
+    private PharmacyDTO pharmacyForPharmacistAppointment;
+    private Long PatientId;
+    private String PatientFirstName;
+    private String PatientLastName;
+    private String PatientEmail;
+    private String PatientPhoneNumber;
+    private String PharmacyName;
+    private int ColorId;
 
     public PharmacistAppointmentDTO() {
     }
 
     public long getId() {
-        return id;
+        return Id;
     }
 
     public void setId(long id) {
-        this.id = id;
+        Id = id;
     }
 
     public double getAppointmentPrice() {
@@ -36,12 +42,52 @@ public class PharmacistAppointmentDTO {
         this.appointmentPrice = appointmentPrice;
     }
 
+    public String getSubject() {
+        return Subject;
+    }
+
+    public void setSubject(String subject) {
+        Subject = subject;
+    }
+
+    public String getLocation() {
+        return Location;
+    }
+
+    public void setLocation(String location) {
+        Location = location;
+    }
+
+    public LocalDateTime getStartTime() {
+        return StartTime;
+    }
+
+    public void setStartTime(LocalDateTime startTime) {
+        StartTime = startTime;
+    }
+
+    public LocalDateTime getEndTime() {
+        return EndTime;
+    }
+
+    public void setEndTime(LocalDateTime endTime) {
+        EndTime = endTime;
+    }
+
     public LocalDateTime getPharmacistAppointmentStartTime() {
         return pharmacistAppointmentStartTime;
     }
 
     public void setPharmacistAppointmentStartTime(LocalDateTime pharmacistAppointmentStartTime) {
         this.pharmacistAppointmentStartTime = pharmacistAppointmentStartTime;
+    }
+
+    public LocalDateTime getPharmacistAppointmentEndTime() {
+        return pharmacistAppointmentEndTime;
+    }
+
+    public void setPharmacistAppointmentEndTime(LocalDateTime pharmacistAppointmentEndTime) {
+        this.pharmacistAppointmentEndTime = pharmacistAppointmentEndTime;
     }
 
     public long getPharmacistAppointmentDuration() {
@@ -60,59 +106,67 @@ public class PharmacistAppointmentDTO {
         this.pharmacistForAppointment = pharmacistForAppointment;
     }
 
-    public PharmacyDTO getPharmacyForDermatologistAppointment() {
-        return pharmacyForDermatologistAppointment;
+    public PharmacyDTO getPharmacyForPharmacistAppointment() {
+        return pharmacyForPharmacistAppointment;
     }
 
-    public void setPharmacyForDermatologistAppointment(PharmacyDTO pharmacyForDermatologistAppointment) {
-        this.pharmacyForDermatologistAppointment = pharmacyForDermatologistAppointment;
+    public void setPharmacyForPharmacistAppointment(PharmacyDTO pharmacyForPharmacistAppointment) {
+        this.pharmacyForPharmacistAppointment = pharmacyForPharmacistAppointment;
     }
 
     public Long getPatientId() {
-        return patientId;
+        return PatientId;
     }
 
     public void setPatientId(Long patientId) {
-        this.patientId = patientId;
+        PatientId = patientId;
     }
 
     public String getPatientFirstName() {
-        return patientFirstName;
+        return PatientFirstName;
     }
 
     public void setPatientFirstName(String patientFirstName) {
-        this.patientFirstName = patientFirstName;
+        PatientFirstName = patientFirstName;
     }
 
     public String getPatientLastName() {
-        return patientLastName;
+        return PatientLastName;
     }
 
     public void setPatientLastName(String patientLastName) {
-        this.patientLastName = patientLastName;
+        PatientLastName = patientLastName;
     }
 
     public String getPatientEmail() {
-        return patientEmail;
+        return PatientEmail;
     }
 
     public void setPatientEmail(String patientEmail) {
-        this.patientEmail = patientEmail;
+        PatientEmail = patientEmail;
     }
 
     public String getPatientPhoneNumber() {
-        return patientPhoneNumber;
+        return PatientPhoneNumber;
     }
 
     public void setPatientPhoneNumber(String patientPhoneNumber) {
-        this.patientPhoneNumber = patientPhoneNumber;
+        PatientPhoneNumber = patientPhoneNumber;
     }
 
-    public LocalDateTime getPharmacistAppointmentEndTime() {
-        return pharmacistAppointmentEndTime;
+    public String getPharmacyName() {
+        return PharmacyName;
     }
 
-    public void setPharmacistAppointmentEndTime(LocalDateTime pharmacistAppointmentEndTime) {
-        this.pharmacistAppointmentEndTime = pharmacistAppointmentEndTime;
+    public void setPharmacyName(String pharmacyName) {
+        PharmacyName = pharmacyName;
+    }
+
+    public int getColorId() {
+        return ColorId;
+    }
+
+    public void setColorId(int colorId) {
+        ColorId = colorId;
     }
 }

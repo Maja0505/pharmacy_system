@@ -5,17 +5,9 @@ import VacationRequest from "./VacationRequest.js";
 import WorkCalendar from "./WorkCalendar.js";
 import WriteReport from "./WriteReport.js";
 import ExaminedPatients from "./ExaminedPatients.js";
-
-import { useState } from "react";
+import ScheduleAppointment from "./SheduleAppointment.js";
 
 const HomePage = () => {
-  const [patientForReport, setPatientForReport] = useState({
-    Id: -1,
-    FirstName: "",
-    LastName: "",
-    AppointmentId: "",
-  });
-
   return (
     <Router>
       <Switch>
@@ -30,13 +22,16 @@ const HomePage = () => {
             component={VacationRequest}
           ></Route>
           <Route path="/dermatologist/workCalendar">
-            <WorkCalendar setPatient={setPatientForReport}></WorkCalendar>
+            <WorkCalendar></WorkCalendar>
           </Route>
           <Route path="/dermatologist/writeReport">
-            <WriteReport patient={patientForReport}></WriteReport>
+            <WriteReport></WriteReport>
           </Route>
           <Route path="/dermatologist/examinedPatients">
             <ExaminedPatients />
+          </Route>
+          <Route path="/dermatologist/scheduleAppointment">
+            <ScheduleAppointment />
           </Route>
         </div>
       </Switch>

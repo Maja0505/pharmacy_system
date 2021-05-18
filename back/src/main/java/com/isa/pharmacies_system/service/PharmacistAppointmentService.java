@@ -51,12 +51,18 @@ public class PharmacistAppointmentService implements IPharmacistAppointmentServi
     public Boolean bookPharmacistAppointment(Long patientId, Long pharmacistId, PharmacistAppointmentTimeDTO timeDTO){
         Patient patient = patientRepository.findById(patientId).orElse(null);
         Pharmacist pharmacist = pharmacistRepository.findById(pharmacistId).orElse(null);
-        if(patient != null && pharmacist != null
-                && timeDTO.getStartTime().isAfter(LocalDateTime.now())
+        PharmacistAppointment pharmacistAppointment;
+        if(patient == null || pharmacist == null){
+            return false;
+        }else{
+            pharmacistAppointment = createNewPharmacistAppointment(patient, pharmacist, timeDTO);
+        }
+        if(timeDTO.getStartTime().isAfter(LocalDateTime.now())
                 && doesPharmacistWorkInSelectedDate(timeDTO, pharmacist)
-                && (doesPharmacistHaveOpenSelectedAppointment(timeDTO, pharmacist))){
+                && doesPharmacistHaveOpenSelectedAppointment(timeDTO, pharmacist)
+                && !doesPatientHaveAnotherAppointmentInSameTime(patient,pharmacistAppointment)){
 
-            pharmacistAppointmentRepository.save(createNewPharmacistAppointment(patient, pharmacist, timeDTO));
+            pharmacistAppointmentRepository.save(pharmacistAppointment);
             return true;
         }else{
             return false;
@@ -72,6 +78,47 @@ public class PharmacistAppointmentService implements IPharmacistAppointmentServi
     private Boolean doesPharmacistHaveOpenSelectedAppointment(PharmacistAppointmentTimeDTO timeDTO, Pharmacist pharmacist){
         return pharmacist.getPharmacistAppointments().stream().filter(pharmacistAppointment -> utilityMethods.isSelectedDateReserved(timeDTO,pharmacistAppointment)).count() == 0;
     }
+
+    //Nemanja
+    private Boolean doesPatientHaveAnotherAppointmentInSameTime(Patient patient,PharmacistAppointment pharmacistAppointment){
+        List<DermatologistAppointment> dermatologistAppointmentList = getAllFutureReservedDermatologistAppointmentByPatient(patient);
+        List<PharmacistAppointment> pharmacistAppointmentList = getAllFutureReservedPharmacistAppointmentByPatient(patient);
+
+        if(checkDoesHaveAnyOtherDermatologistAppointmentWithSameTime(pharmacistAppointment,dermatologistAppointmentList)
+                || checkDoesPatientHavePharmacistAppointmentWithSameTime(pharmacistAppointment,pharmacistAppointmentList)){
+            return true;
+        }
+        return false;
+    }
+
+    //Nemanja
+    private List<DermatologistAppointment> getAllFutureReservedDermatologistAppointmentByPatient(Patient patient) {
+        return patient.getDermatologistAppointment().stream()
+                .filter(d -> (d.getStatusOfAppointment().equals(StatusOfAppointment.Reserved) && d.getDermatologistAppointmentStartTime().isAfter(LocalDateTime.now())))
+                .collect(Collectors.toList());
+    }
+
+    //Nemanja
+    private List<PharmacistAppointment> getAllFutureReservedPharmacistAppointmentByPatient(Patient patient) {
+        return patient.getPharmacistAppointments().stream()
+                .filter(p -> (p.getStatusOfAppointment().equals(StatusOfAppointment.Reserved) && p.getPharmacistAppointmentStartTime().isAfter(LocalDateTime.now())))
+                .collect(Collectors.toList());
+    }
+
+    //Nemanja
+    private Boolean checkDoesHaveAnyOtherDermatologistAppointmentWithSameTime(PharmacistAppointment pharmacistAppointment,List<DermatologistAppointment> list){
+        LocalDateTime startTime = pharmacistAppointment.getPharmacistAppointmentStartTime();
+        LocalDateTime endTime = pharmacistAppointment.getPharmacistAppointmentStartTime().plusMinutes(pharmacistAppointment.getPharmacistAppointmentDuration());
+        return utilityMethods.checkDoesHaveAnyOtherDermatologistAppointmentWithSameTime(list, startTime, endTime);
+    }
+
+    //Nemanja
+    private Boolean checkDoesPatientHavePharmacistAppointmentWithSameTime(PharmacistAppointment pharmacistAppointment,List<PharmacistAppointment> list){
+        LocalDateTime firstStartTime = pharmacistAppointment.getPharmacistAppointmentStartTime();
+        LocalDateTime firstEndTime = pharmacistAppointment.getPharmacistAppointmentStartTime().plusMinutes(pharmacistAppointment.getPharmacistAppointmentDuration());
+        return utilityMethods.checkDoesPatientHavePharmacistAppointmentWithSameTime(list, firstStartTime, firstEndTime);
+    }
+
 
     //#1
     private PharmacistAppointment createNewPharmacistAppointment(Patient patient, Pharmacist pharmacist, PharmacistAppointmentTimeDTO timeDTO){
@@ -147,6 +194,12 @@ public class PharmacistAppointmentService implements IPharmacistAppointmentServi
     @Override
     public List<PharmacistAppointment> getAllReservedPharmacistAppointmentByPharmacist(Long pharmacistId) {
         return pharmacistAppointmentRepository.findAllReservedPharmacistAppointmentByPharmacist(pharmacistId);
+    }
+
+    //Nemanja
+    @Override
+    public List<PharmacistAppointment> getAllFutureReservedAppointmentByPharmacist(Long pharmacistId) {
+        return pharmacistAppointmentRepository.findAllFutureReservedPharmacistAppointmentByPharmacist(pharmacistId);
     }
 
     //Nemanja

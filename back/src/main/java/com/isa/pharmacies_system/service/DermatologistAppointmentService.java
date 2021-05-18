@@ -61,7 +61,8 @@ public class DermatologistAppointmentService implements IDermatologistAppointmen
 
         DermatologistAppointment dermatologistAppointment = findOne(appointmentId);
         Patient patient = patientRepository.findById(patientId).orElse(null);
-        if(isAppointmentOpen(dermatologistAppointment) && !doesPatientHaveAnotherAppointmentInSameTime(patient,dermatologistAppointment)){
+        if(isAppointmentOpen(dermatologistAppointment)
+                && !doesPatientHaveAnotherAppointmentInSameTime(patient,dermatologistAppointment)){
             dermatologistAppointment.setPatientWithDermatologistAppointment(patient);
             dermatologistAppointment.setStatusOfAppointment(StatusOfAppointment.Reserved);
             dermatologistAppointmentRepository.save(dermatologistAppointment);
@@ -121,8 +122,8 @@ public class DermatologistAppointmentService implements IDermatologistAppointmen
     private Boolean checkDoesHaveAnyOtherDermatologistAppointmentWithSameTime(DermatologistAppointment dermatologistAppointment,List<DermatologistAppointment> list){
         LocalDateTime startTime = dermatologistAppointment.getDermatologistAppointmentStartTime();
         LocalDateTime endTime = dermatologistAppointment.getDermatologistAppointmentEndTime();
-
-        for (DermatologistAppointment a: list
+        return utilityMethods.checkDoesHaveAnyOtherDermatologistAppointmentWithSameTime(list,startTime,endTime);
+        /*for (DermatologistAppointment a: list
         ) {
             if( utilityMethods.isTimeBetweenTwoOtherTime(startTime,a.getDermatologistAppointmentStartTime(),a.getDermatologistAppointmentEndTime())
                 || utilityMethods.isTimeBetweenTwoOtherTime(endTime,a.getDermatologistAppointmentStartTime(),a.getDermatologistAppointmentEndTime())
@@ -132,15 +133,16 @@ public class DermatologistAppointmentService implements IDermatologistAppointmen
                 return true;
             }
         }
-        return false;
+        return false;*/
     }
 
     //Nemanja
     private Boolean checkDoesPatientHavePharmacistAppointmentWithSameTime(DermatologistAppointment dermatologistAppointment,List<PharmacistAppointment> list){
         LocalDateTime firstStartTime = dermatologistAppointment.getDermatologistAppointmentStartTime();
         LocalDateTime firstEndTime = dermatologistAppointment.getDermatologistAppointmentEndTime();
+        return utilityMethods.checkDoesPatientHavePharmacistAppointmentWithSameTime(list,firstStartTime,firstEndTime);
 
-        for (PharmacistAppointment a: list
+        /*for (PharmacistAppointment a: list
         ) {
             LocalDateTime secondStartTime = a.getPharmacistAppointmentStartTime();
             LocalDateTime secondEndTime = secondStartTime.plusMinutes(a.getPharmacistAppointmentDuration());
@@ -153,7 +155,7 @@ public class DermatologistAppointmentService implements IDermatologistAppointmen
             }
         }
 
-        return false;
+        return false;*/
     }
 
     //Nemanja
@@ -213,9 +215,13 @@ public class DermatologistAppointmentService implements IDermatologistAppointmen
     @Override
     public Boolean bookDermatologistAppointmentByDermatologist(AppointmentScheduleByStaffDTO appointmentScheduleByStaffDTO, DermatologistAppointment dermatologistAppointment) {
 
+
         if(!isDermatologistAppointmentInsideDermatologistWorkTime(appointmentScheduleByStaffDTO)
             || !utilityMethods.isTimeBeforeOtherTime(appointmentScheduleByStaffDTO.getAppointmentStartTime(),appointmentScheduleByStaffDTO.getAppointmentEndTime())){
-            return false;
+            if(!(appointmentScheduleByStaffDTO.getAppointmentStartTime().equals(appointmentScheduleByStaffDTO.getStaffWorkStartTime())
+                || appointmentScheduleByStaffDTO.getAppointmentEndTime().equals(appointmentScheduleByStaffDTO.getStaffWorkEndTime()))){
+                return false;
+            }
         }
 
         Patient patient = patientRepository.findById(appointmentScheduleByStaffDTO.getPatientId()).orElse(null);

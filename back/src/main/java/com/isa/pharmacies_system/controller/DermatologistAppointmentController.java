@@ -6,6 +6,7 @@ import com.isa.pharmacies_system.converter.PatientConverter;
 import com.isa.pharmacies_system.domain.schedule.DermatologistAppointment;
 import com.isa.pharmacies_system.service.EmailService;
 import com.isa.pharmacies_system.service.iService.IDermatologistAppointmentService;
+import com.isa.pharmacies_system.service.iService.IPriceListService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -32,14 +33,15 @@ public class DermatologistAppointmentController {
     private PatientConverter patientConverter;
     private DermatologistAppointmentConverter dermatologistAppointmentConverter;
     private EmailService emailService;
+    private IPriceListService priceListService;
 
     @Autowired
-    public DermatologistAppointmentController(IDermatologistAppointmentService dermatologistAppointmentService, EmailService emailService, PasswordEncoder passwordEncoder) {
+    public DermatologistAppointmentController(IDermatologistAppointmentService dermatologistAppointmentService, EmailService emailService, IPriceListService priceListService, PasswordEncoder passwordEncoder) {
         this.dermatologistAppointmentService = dermatologistAppointmentService;
         this.emailService = emailService;
+        this.priceListService = priceListService;
         this.patientConverter = new PatientConverter(passwordEncoder);
-        this.dermatologistAppointmentConverter = new DermatologistAppointmentConverter();
-
+        this.dermatologistAppointmentConverter = new DermatologistAppointmentConverter(priceListService);
     }
 
     //#1[3.13]

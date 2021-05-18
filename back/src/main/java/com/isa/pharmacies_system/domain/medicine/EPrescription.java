@@ -1,6 +1,7 @@
 package com.isa.pharmacies_system.domain.medicine;
 
 import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -34,7 +35,7 @@ public class EPrescription {
 	private Patient patientForEPrescription;
 	
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm")
-	private Instant creationDate;
+	private LocalDateTime creationDate;
 	
 	//spisak lekova sa kolicinama
 	@JsonManagedReference
@@ -48,7 +49,7 @@ public class EPrescription {
 
 	
 
-	public EPrescription(long id, Patient patientForEPrescription, Instant creationDate,
+	public EPrescription(long id, Patient patientForEPrescription, LocalDateTime creationDate,
 			Set<EPrescriptionItem> ePrescriptionItems) {
 		super();
 		this.id = id;
@@ -75,11 +76,11 @@ public class EPrescription {
 		this.patientForEPrescription = patientForEPrescription;
 	}
 
-	public Instant getCreationDate() {
+	public LocalDateTime getCreationDate() {
 		return creationDate;
 	}
 
-	public void setCreationDate(Instant creationDate) {
+	public void setCreationDate(LocalDateTime creationDate) {
 		this.creationDate = creationDate;
 	}
 
