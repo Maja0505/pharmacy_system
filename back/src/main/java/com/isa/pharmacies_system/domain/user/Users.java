@@ -64,7 +64,10 @@ public class Users implements UserDetails {
 
 	@Column(name = "enabled", unique = false, nullable = false)
 	private boolean enabled;
-
+	
+	@Column(name = "enableLogin", unique = false, nullable = false)
+	private boolean enableLogin;
+	
 	@Column(name = "isFirstLogin", unique = false, nullable = false)
 	private boolean isFirstLogin;
 
@@ -214,5 +217,13 @@ public class Users implements UserDetails {
 
 	public void setLastPasswordResetDate(Timestamp lastPasswordResetDate) {
 		this.lastPasswordResetDate = lastPasswordResetDate;
+	}
+
+	public boolean isEnableLogin() {
+		return enableLogin;
+	}
+
+	public void setEnableLogin(boolean enableLogin) {
+		this.enableLogin = enableLogin;
 	}
 }

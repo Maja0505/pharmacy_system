@@ -6,19 +6,22 @@ public class UserTokenStateDTO {
 	    private String email;
 	    private String role;
 	    private Long expiresIn;
+	    private Boolean isFirstLogin;
 
 	    public UserTokenStateDTO() {
 	        this.accessToken = null;
 	        this.expiresIn = null;
 	        this.email = null;
-	        this.role = null;	        
+	        this.role = null;	  
+	        this.isFirstLogin = false;
 	    }
 
-	    public UserTokenStateDTO(String accessToken, long expiresIn,String email, String role) {
+	    public UserTokenStateDTO(String accessToken, long expiresIn,String email, String role, Boolean isFirstLogin) {
 	        this.accessToken = accessToken;
 	        this.expiresIn = expiresIn;
 	        this.email = email;
 	        this.role = role;
+	        this.isFirstLogin = isFirstLogin;
 	    }
 
 	    public String getAccessToken() {
@@ -52,5 +55,13 @@ public class UserTokenStateDTO {
 		public void setRole(String role) {
 			this.role = role;
 		}
-	
+
+		public Boolean getIsFirstLogin() {
+			return isFirstLogin;
+		}
+
+		public void setIsFirstLogin(Boolean isFirstLogin) {
+			this.isFirstLogin = isFirstLogin;
+		}
+		
 }

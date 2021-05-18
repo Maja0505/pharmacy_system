@@ -19,6 +19,8 @@ public class SystemAdminConverter {
 		systemAdmin.setPhoneNumber(systemAdminNewDTO.getPhoneNumber());
 		systemAdmin.setSystemAdminComplaintResponses(new HashSet<ComplaintResponse>());
 		systemAdmin.setTypeOfUser(TypeOfUser.System_admin);
+		systemAdmin.setFirstLogin(true);
+		systemAdmin.setEnabled(true);
 		systemAdmin.setUserAddress(systemAdminNewDTO.getResidentialAddress());
 		return systemAdmin;
 	}

@@ -113,8 +113,9 @@ public class PatientConverter{
     	patient.setCategoryOfPatient(CategoryOfPatient.Regular);
     	patient.setDermatologistAppointment(new HashSet<DermatologistAppointment>());
     	patient.setEmail(patientNewDTO.getEmail());
-    	patient.setEnabled(false);
-    	patient.setFirstLogin(true);
+    	patient.setEnabled(true);
+    	patient.setEnableLogin(false);
+    	patient.setFirstLogin(false);
     	patient.setFirstName(patientNewDTO.getFirstName());
     	patient.setLastName(patientNewDTO.getLastName());
     	if (!patientNewDTO.getPassword().equals(patientNewDTO.getConfirmPassword())){

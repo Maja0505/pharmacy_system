@@ -108,13 +108,16 @@ public class AuthenticationController {
 		String jwt = tokenUtils.generateToken(user.getUsername());
 		int expiresIn = tokenUtils.getExpiredIn();
 		
+		if (!user.isEnableLogin()) {
+			return ResponseEntity.of(null);
+		}
 		
 		//cuvanje tokena
 		//tokenService.addToken(jwt, user.getId());
 		
 		System.out.println("Uradio i ovo");
 		// Vrati token kao odgovor na uspesnu autentifikaciju
-		return ResponseEntity.ok(new UserTokenStateDTO(jwt, expiresIn, user.getEmail(), getRoleString(user.getTypeOfUser())));
+		return ResponseEntity.ok(new UserTokenStateDTO(jwt, expiresIn, user.getEmail(), getRoleString(user.getTypeOfUser()),user.isFirstLogin()));
 	}
 	
 	private String getRoleString(TypeOfUser typeOfUser) {
@@ -181,7 +184,7 @@ public class AuthenticationController {
 	
 	private void setConfirmedAccount(ConfirmationToken confirmationToken) {
 		Users users = userService.findByEmail(confirmationToken.getUsers().getEmail());
-		users.setEnabled(true);
+		users.setEnableLogin(true);
 		userService.save(users);
 	}
 
@@ -194,7 +197,7 @@ public class AuthenticationController {
 			String refreshedToken = tokenUtils.refreshToken(token);
 			int expiresIn = tokenUtils.getExpiredIn();
 
-			return ResponseEntity.ok(new UserTokenStateDTO(refreshedToken, expiresIn, user.getEmail(), getRoleString(user.getTypeOfUser())));
+			return ResponseEntity.ok(new UserTokenStateDTO(refreshedToken, expiresIn, user.getEmail(), getRoleString(user.getTypeOfUser()),user.isFirstLogin()));
 		} else {
 			UserTokenStateDTO userTokenState = new UserTokenStateDTO();
 			return ResponseEntity.badRequest().body(userTokenState);
