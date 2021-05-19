@@ -9,6 +9,7 @@ import {
     TableRow,
     Grid,
     TextField,
+    Button
   } from "@material-ui/core";
   import {
     NavigateNext,
@@ -106,6 +107,28 @@ import {
           }
         });
     };
+
+
+    const HandleClickCancelPharmacistAppointment = (row) => {
+      axios
+      .put(
+        "http://localhost:8080/api/pharmacistAppointment/cancel/" + row.id
+      )
+      .then((res) => {
+        axios
+        .get(
+          "http://localhost:8080/api/patient/1/pharmacistAppointment/all/reserved/" +
+          (currPage - 1).toString() +
+          ""
+           
+        )
+        .then((res) => {
+          setRows(res.data);
+          setCopyRows(res.data);
+          console.log(res)
+        });
+      });
+    }
   
     const TableHeader = (
       <TableHead>
@@ -128,6 +151,8 @@ import {
           <TableCell className={classes.hederCell} >
            Appointment price
           </TableCell>
+          <TableCell></TableCell>
+
         </TableRow>
       </TableHead>
     );
@@ -146,6 +171,7 @@ import {
             <TableCell>{row.pharmacistForAppointment.firstName} {row.pharmacistForAppointment.lastName}</TableCell>
             <TableCell>{row.pharmacyForPharmacistAppointment.pharmacyName}</TableCell>
             <TableCell>{row.appointmentPrice}</TableCell>
+            <TableCell><Button onClick={() => HandleClickCancelPharmacistAppointment(row)}>Cancel</Button></TableCell>
           </TableRow>
         ))}
       </TableBody>

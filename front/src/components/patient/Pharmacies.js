@@ -7,6 +7,7 @@ import {
     TableRow,
     Grid,
     TextField,
+    Button
   } from "@material-ui/core";
   import {
     ArrowDropDown,
@@ -17,6 +18,8 @@ import {
   import { useState, useEffect } from "react";
   import { makeStyles } from "@material-ui/core/styles";
   import axios from "axios";
+  import { BrowserRouter as Router, Route, Link } from "react-router-dom";
+
   
   const useStyles = makeStyles((theme) => ({
     table: {
@@ -42,6 +45,9 @@ import {
     const [copyRows, setCopyRows] = useState({});
   
     const [currPage, setCurrPage] = useState(1);
+
+   
+    
   
     useEffect(() => {
       axios
@@ -55,6 +61,7 @@ import {
           setCopyRows(res.data);
         });
     }, []);
+
   
     const [pharmacyNameAsc, setPharmacyNameAsc] = useState({
       counter: -1,
@@ -152,7 +159,11 @@ import {
           }
         });
     };
-  
+   
+    const openProfile = (row) => {
+      console.log(row)
+    }
+
     const TableHeader = (
       <TableHead>
         <TableRow className={classes.hederRow}>
@@ -175,6 +186,9 @@ import {
           <TableCell className={classes.hederCell} >
           Price for farmacist(per hour)
           </TableCell>
+          <TableCell className={classes.hederCell} >
+            Profile
+          </TableCell>
         </TableRow>
       </TableHead>
     );
@@ -182,14 +196,13 @@ import {
     const TableContent = (
       <TableBody>
         {rows.map((row, index) => (
-          <TableRow key={index}>
+          <TableRow key={index} >
             <TableCell>{row.pharmacyName}</TableCell>
             <TableCell>{row.pharmacyAddress.streetName} {row.pharmacyAddress.streetNumber},{row.pharmacyAddress.city}</TableCell>
             <TableCell>{row.pharmacyAverageRating}</TableCell>
             <TableCell>{row.priceListForAppointmentDTO.dermatologistAppointmentPricePerHour}</TableCell>
             <TableCell>{row.priceListForAppointmentDTO.pharmacistAppointmentPricePerHour}</TableCell>
-
-            
+            <TableCell><Button  component={Link}  to={"/patient/HomePage/pharmacyProfilePage/" + row.id} onClick={() => openProfile(row)}>Open</Button></TableCell>
           </TableRow>
         ))}
       </TableBody>

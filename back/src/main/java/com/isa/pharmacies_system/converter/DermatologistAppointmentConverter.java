@@ -2,8 +2,8 @@ package com.isa.pharmacies_system.converter;
 
 import com.isa.pharmacies_system.DTO.AppointmentScheduleByStaffDTO;
 import com.isa.pharmacies_system.DTO.DermatologistAppointmentDTO;
+
 import com.isa.pharmacies_system.DTO.PharmacyDTO;
-import com.isa.pharmacies_system.DTO.UserPersonalInfoDTO;
 import com.isa.pharmacies_system.domain.schedule.DermatologistAppointment;
 import com.isa.pharmacies_system.domain.schedule.StatusOfAppointment;
 import com.isa.pharmacies_system.domain.schedule.TypeOfAppointment;
@@ -41,11 +41,16 @@ public class DermatologistAppointmentConverter {
         dermatologistAppointmentDTO.setDermatologistAppointmentStartTime(dermatologistAppointment.getDermatologistAppointmentStartTime());
         dermatologistAppointmentDTO.setDermatologistAppointmentEndTime(dermatologistAppointment.getDermatologistAppointmentEndTime());
         dermatologistAppointmentDTO.setDermatologistForAppointment(userConverter.convertDermatologistPersonalInfoToDTO(dermatologistAppointment.getDermatologistForAppointment()));
+        try{
+            dermatologistAppointmentDTO.setPharmacyForDermatologistAppointment(pharmacyConverter.convertPharmacyToPharmacyDTO(dermatologistAppointment.getPharmacyForDermatologistAppointment()));
+
+        }catch (Exception e){
+
+        }
         PharmacyDTO pharmacyDTO = pharmacyConverter.convertPharmacyToPharmacyDTO(dermatologistAppointment.getPharmacyForDermatologistAppointment());
         dermatologistAppointmentDTO.setPharmacyForDermatologistAppointment(pharmacyDTO);
         dermatologistAppointmentDTO.setPharmacyName(pharmacyDTO.getPharmacyName());
         dermatologistAppointmentDTO.setLocation(pharmacyDTO.getPharmacyAddress().getCity() + ", " + pharmacyDTO.getPharmacyAddress().getStreetName() + " " + pharmacyDTO.getPharmacyAddress().getStreetNumber());
-
         Patient patient = dermatologistAppointment.getPatientWithDermatologistAppointment();
         utilityMethods.fillPatientInfoForDermatologistAppointment(patient,dermatologistAppointmentDTO);
         utilityMethods.setColorIdDermatologistAppointment(dermatologistAppointment,dermatologistAppointmentDTO);
