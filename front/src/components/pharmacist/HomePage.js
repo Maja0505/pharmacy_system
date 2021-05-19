@@ -6,6 +6,7 @@ import VacationRequest from "./VacationRequest.js";
 import WorkCalendar from "./WorkCalendar.js";
 import WriteReport from "./WriteReport.js";
 import ScheduleAppointment from "./ScheduleAppointment.js";
+import MedicineReservation from "./MedicineReservation.js";
 
 const HomePage = () => {
   return (
@@ -30,6 +31,9 @@ const HomePage = () => {
           </Route>
           <Route path="/pharmacist/scheduleAppointment">
             <ScheduleAppointment />
+          </Route>
+          <Route path="/pharmacist/medicineReservations">
+            <MedicineReservation />
           </Route>
         </div>
       </Switch>
