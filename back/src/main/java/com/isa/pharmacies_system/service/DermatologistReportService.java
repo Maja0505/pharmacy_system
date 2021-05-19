@@ -3,6 +3,7 @@ package com.isa.pharmacies_system.service;
 import com.isa.pharmacies_system.domain.medicine.Recipe;
 import com.isa.pharmacies_system.domain.report.DermatologistReport;
 import com.isa.pharmacies_system.domain.schedule.DermatologistAppointment;
+import com.isa.pharmacies_system.domain.schedule.StatusOfAppointment;
 import com.isa.pharmacies_system.repository.IDermatologistAppointmentRepository;
 import com.isa.pharmacies_system.repository.IDermatologistReportRepository;
 import com.isa.pharmacies_system.service.iService.IDermatologistReportService;
@@ -35,6 +36,7 @@ public class DermatologistReportService implements IDermatologistReportService {
     public Boolean createDermatologistReport(DermatologistReport dermatologistReport,Long appointmentId) {
         DermatologistAppointment dermatologistAppointment = dermatologistAppointmentRepository.findById(appointmentId).orElse(null);
         if(dermatologistAppointment != null){
+            dermatologistAppointment.setStatusOfAppointment(StatusOfAppointment.Expired);
             dermatologistReport.setDermatologistAppointment(dermatologistAppointment);
             Recipe recipe = dermatologistReport.getRecipeForDermatologistReport();
             recipe.setPatientForRecipe(dermatologistAppointment.getPatientWithDermatologistAppointment());

@@ -26,6 +26,10 @@ const AppointmentInfoDialog = ({
         AppointmentId: appointment.id,
         Email: appointment.patientEmail,
         PhoneNumber: appointment.patientPhoneNumber,
+        PharmacyName: appointment.pharmacyName,
+        PharamcyLocation: appointment.location,
+        AppointmentStartTime: appointment.dermatologistAppointmentStartTime,
+        AppointmentEndTime: appointment.dermatologistAppointmentEndTime,
       })
     );
   };
@@ -121,7 +125,7 @@ const AppointmentInfoDialog = ({
                         autoFocus
                         color="primary"
                         onClick={() =>
-                          changeAppointmentToMissed(appointment.Id)
+                          changeAppointmentToMissed(appointment.id)
                         }
                       >
                         Set to missed
