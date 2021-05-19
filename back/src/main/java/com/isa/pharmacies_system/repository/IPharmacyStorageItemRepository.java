@@ -15,7 +15,7 @@ public interface IPharmacyStorageItemRepository extends JpaRepository<PharmacySt
     PharmacyStorageItem getSelectedMedicineFromPharmacyStorage(Long medicineId, Long pharmacyId);
 
     //Nemanja
-    @Query("select p from PharmacyStorageItem p where p.pharmacyStorageWithItem.pharmacy.id=?1 and p.medicineAmount > 0")
+    @Query("select p from PharmacyStorageItem p where p.pharmacyStorageWithItem.pharmacy.id=?1 and p.medicineAmount > 0 and p.typeOfItem=4")
     List<PharmacyStorageItem> findAllPharmacyStorageItemsByPharmacyId(Long pharmacyId);
 
 }

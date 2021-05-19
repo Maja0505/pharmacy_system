@@ -13,6 +13,7 @@ import com.isa.pharmacies_system.service.iService.IPharmacyStorageItemService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import java.util.List;
 
 @Controller
+@CrossOrigin(origins="http://localhost:3000")
 @RequestMapping(value = "api/pharmacyStorageItem")
 public class PharmacyStorageItemController {
 
@@ -85,7 +87,7 @@ public class PharmacyStorageItemController {
                 }
                 List<PharmacyStorageItem> alternativePharmacyStorageItems = pharmacyStorageItemService.getAllAlternativePharmacyStorageItemsInPharmacyWithEnoughAmount(itemId,medicineAmount);
                 List<MedicineForRecipeDTO> alternativeMedicine = medicineConverter.convertPharmacyStorageItemsToMedicineForRecipeDTO(alternativePharmacyStorageItems);
-                return new ResponseEntity<>(alternativeMedicine,HttpStatus.FORBIDDEN);
+                return new ResponseEntity<>(alternativeMedicine,HttpStatus.ACCEPTED);
             }
         }catch (Exception e){
             return new ResponseEntity<>(null,HttpStatus.BAD_REQUEST);

@@ -68,6 +68,14 @@ INSERT INTO working_hours (id, status_of_working_hours,working_end_time,working_
 INSERT INTO patient (id, category_of_patient, patient_points) VALUES (1, 0, 0.0);
 INSERT INTO patient (id, category_of_patient, patient_points) VALUES (2, 1, 10.0);
 
+insert into ingredient (id, name_of_ingredient) values (nextval('my_seq_ingredient'),'BC34');
+insert into ingredient (id, name_of_ingredient) values (nextval('my_seq_ingredient'),'AAAA');
+insert into ingredient (id, name_of_ingredient) values (nextval('my_seq_ingredient'),'XXXXX');
+insert into ingredient (id, name_of_ingredient) values (nextval('my_seq_ingredient'),'YYYYYYYY');
+insert into ingredient (id, name_of_ingredient) values (nextval('my_seq_ingredient'),'NNNNNN');
+
+
+
 insert into medicine_infos (id, form_of_medicine, manufacturer_of_medicine, medicine_code, medicine_name, notes, prescription_regime, type_of_medicine) values (nextval('my_seq_medicine_info'),1,'Medic Pharmacy', '211233', 'Andol','Familijooo',1,1);
 insert into medicine_infos (id, form_of_medicine, manufacturer_of_medicine, medicine_code, medicine_name, notes, prescription_regime, type_of_medicine) values (nextval('my_seq_medicine_info'),0,'Medic Pharmacy', '211234', 'Apaurin','Brapoooooooo',1,1);
 insert into medicine_infos (id, form_of_medicine, manufacturer_of_medicine, medicine_code, medicine_name, notes, prescription_regime, type_of_medicine) values (nextval('my_seq_medicine_info'),1,'Medic Pharmacy', '211235', 'Brufen','Familijooo',1,1);
@@ -78,6 +86,15 @@ insert into medicine (medicine_average_rating, id) values (5.0,1);
 insert into medicine (medicine_average_rating, id) values (4.9,2);
 insert into medicine (medicine_average_rating, id) values (5.0,3);
 insert into medicine (medicine_average_rating, id) values (4.9,4);
+
+insert into medicine_infos_ingredients (medicine_info_id, ingredients_id) values (1,1);
+insert into medicine_infos_ingredients (medicine_info_id, ingredients_id) values (1,2);
+insert into medicine_infos_ingredients (medicine_info_id, ingredients_id) values (1,3);
+insert into medicine_infos_ingredients (medicine_info_id, ingredients_id) values (1,4);
+insert into medicine_infos_ingredients (medicine_info_id, ingredients_id) values (2,5);
+
+
+
 
 
 insert into medicine_infos_alternative_medicines (medicine_info_id,alternative_medicines_id) values (1,2);
