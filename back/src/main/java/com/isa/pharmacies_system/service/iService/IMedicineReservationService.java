@@ -7,4 +7,7 @@ public interface IMedicineReservationService {
 
     Boolean createMedicineReservation(MedicineReservation medicineReservation);
     Boolean cancelMedicineReservation(MedicineReservationInfoDTO medicineReservationInfoDTO);
+    MedicineReservation getMedicineReservationInPharmacy(Long medicineReservationId,Long pharmacyId);
+    void finishMedicineReservation(MedicineReservation medicineReservation);
+    MedicineReservation getMedicineReservationById(Long medicineReservationId);
 }

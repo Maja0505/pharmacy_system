@@ -10,7 +10,16 @@ const NavBar = ({ user }) => {
         </Grid>
         <Grid item xs={3}></Grid>
         <Grid item xs={6} container spacing={1} style={{ textAlign: "right" }}>
-          <Grid item xs={2} />
+          <Grid item xs={2}>
+            <Typography>
+              <Link
+                to="/pharmacist/medicineReservations"
+                style={{ color: "#fafafa", textDecoration: "none" }}
+              >
+                Medicine reservations
+              </Link>
+            </Typography>
+          </Grid>
           <Grid item xs={2}>
             <Typography>
               <Link
@@ -131,7 +140,7 @@ const NavBar = ({ user }) => {
           <Typography>Hay {user}</Typography>
         </Grid>
         <Grid item xs={6} container spacing={1} style={{ textAlign: "right" }}>
-          <Grid item xs={3}></Grid>    
+          <Grid item xs={3}></Grid>
           <Grid item xs={3}>
             <Typography>
               <a

@@ -69,13 +69,16 @@ public class MedicineConverter {
 	//Nemanja
 	private MedicineForRecipeDTO convertOnePharmacyStorageItemToMedicineForRecipe(PharmacyStorageItem p) {
 		MedicineForRecipeDTO medicineForRecipeDTO = new MedicineForRecipeDTO();
+		Medicine medicine = p.getMedicineItem();
 		medicineForRecipeDTO.setItemId(p.getId());
-		medicineForRecipeDTO.setMedicineId(p.getMedicineItem().getId());
-		medicineForRecipeDTO.setMedicineName(p.getMedicineItem().getMedicineName());
-		medicineForRecipeDTO.setManufacturerOfMedicine(p.getMedicineItem().getManufacturerOfMedicine());
-		medicineForRecipeDTO.setIngredients(p.getMedicineItem().getIngredients());
-		medicineForRecipeDTO.setNotes(p.getMedicineItem().getNotes());
+		medicineForRecipeDTO.setMedicineId(medicine.getId());
+		medicineForRecipeDTO.setMedicineName(medicine.getMedicineName());
+		medicineForRecipeDTO.setManufacturerOfMedicine(medicine.getManufacturerOfMedicine());
+		medicineForRecipeDTO.setIngredients(medicine.getIngredients());
+		medicineForRecipeDTO.setNotes(medicine.getNotes());
 		medicineForRecipeDTO.setMedicineAmount(p.getMedicineAmount());
+		medicineForRecipeDTO.setTypeOfMedicine(medicine.getTypeOfMedicine());
+		medicineForRecipeDTO.setFormOfMedicine(medicine.getFormOfMedicine());
 		return medicineForRecipeDTO;
 	}
 

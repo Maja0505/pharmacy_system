@@ -58,5 +58,18 @@ public class EmailService {
         javaMailSender.send(mail);
     }
 
+    @Async
+    public void sendNotificationForSuccessTakingMedicineReservation(MedicineReservation medicineReservation) throws MailException, InterruptedException {
+
+        String firstName = medicineReservation.getPatientForMedicineReservation().getFirstName();
+        SimpleMailMessage mail = new SimpleMailMessage();
+        mail.setTo("isa2020.team36@gmail.com");
+        mail.setFrom(env.getProperty("spring.mail.username"));
+        mail.setSubject("Preuzimanje leka");
+        mail.setText("Pozdrav " + firstName + ",\n\nPreuzeli ste lek " +medicineReservation.getReservedMedicine().getMedicineName() + " sa brojem  rezervacije: " + medicineReservation.getId());
+
+        javaMailSender.send(mail);
+    }
+
 
 }
