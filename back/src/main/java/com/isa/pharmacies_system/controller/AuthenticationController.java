@@ -85,9 +85,9 @@ public class AuthenticationController {
 			HttpServletResponse response) {
 		try {
 		if (authenticationManager == null) {
-			System.out.println("authenticationManager null");
+			return new ResponseEntity<>(null,HttpStatus.BAD_REQUEST);
 		} else if (authenticationRequest == null) {
-			System.out.println("authenticationRequest null ");
+			return new ResponseEntity<>(null,HttpStatus.BAD_REQUEST);
 		}
 		Authentication authentication = authenticationManager
 				.authenticate(new UsernamePasswordAuthenticationToken(authenticationRequest.getEmail(),
@@ -95,10 +95,10 @@ public class AuthenticationController {
 		// Ubaci korisnika u trenutni security kontekst
 		SecurityContextHolder.getContext().setAuthentication(authentication);
 		if (tokenUtils == null) {
-			System.out.println("Uradio opet");
+			return new ResponseEntity<>(null,HttpStatus.BAD_REQUEST);
 		}
 		if(SecurityContextHolder.getContext().getAuthentication() == null) {
-			System.out.println("null je i ovo");
+			return new ResponseEntity<>(null,HttpStatus.BAD_REQUEST);
 		}
 		// Kreiraj token za tog korisnika
 		Users user = (Users) authentication.getPrincipal();
@@ -106,7 +106,7 @@ public class AuthenticationController {
 		int expiresIn = tokenUtils.getExpiredIn();
 		
 		if (!user.isEnableLogin()) {
-			return ResponseEntity.of(null);
+			return new ResponseEntity<>(null,HttpStatus.BAD_REQUEST);
 		}
 		
 		//cuvanje tokena

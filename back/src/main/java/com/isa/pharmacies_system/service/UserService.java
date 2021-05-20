@@ -27,14 +27,12 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public Users findOne(long id) {
-    	try {
-    		return userRepository.findById(id).orElseGet(null);
-		} catch (NullPointerException e) {
-			return null;
-		} catch (Exception e) {
-			return null;
-		}
+    public Users findOne(long id) throws Exception {
+    	Users user = userRepository.findById(id).orElseGet(null);
+    	if (user==null) {
+    		throw new Exception("User not found!");
+    	}
+    	return user;
     }
 
 	@Override
@@ -42,7 +40,7 @@ public class UserService implements IUserService {
 		for (Users user : findAll()) {
 			if (user.getEmail().equals(email)) 
 			{
-				findOne(user.getId());
+				//findOne(user.getId());
 				return user;
 			}
 				
