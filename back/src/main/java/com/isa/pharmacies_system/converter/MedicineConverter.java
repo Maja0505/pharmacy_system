@@ -5,6 +5,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import com.isa.pharmacies_system.DTO.MedicineDTO;
 import com.isa.pharmacies_system.DTO.MedicineForAllergiesDTO;
 import com.isa.pharmacies_system.DTO.MedicineForRecipeDTO;
 import com.isa.pharmacies_system.DTO.MedicineNewDTO;
@@ -90,5 +91,12 @@ public class MedicineConverter {
 			medicineForAllergiesDTOList.add(medicineForAllergiesDTO);
 		}
 		return medicineForAllergiesDTOList;
+	}
+
+	public MedicineDTO convertMedicineToMedicineDTO(Medicine medicine){
+		MedicineDTO medicineDTO = new MedicineDTO();
+		medicineDTO.setMedicineId(medicine.getId());
+		medicineDTO.setMedicineName(medicine.getMedicineName());
+		return medicineDTO;
 	}
 }
