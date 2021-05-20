@@ -28,7 +28,7 @@ public class UserService implements IUserService {
 
     @Override
     public Users findOne(long id) throws Exception {
-    	Users user = userRepository.findById(id).orElseGet(null);
+    	Users user = userRepository.findById(id).orElse(null);
     	if (user==null) {
     		throw new Exception("User not found!");
     	}
