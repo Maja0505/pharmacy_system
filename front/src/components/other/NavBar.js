@@ -1,6 +1,14 @@
 import { AppBar, Typography, Toolbar, Grid } from "@material-ui/core";
 import { Link } from "react-router-dom";
 
+const setPharmacistPatientReport = () => {
+  localStorage.setItem("PatientForPharmacistReport", JSON.stringify(null));
+};
+
+const setDermatologistPatientReport = () => {
+  localStorage.setItem("PatientForDermatologistReport", JSON.stringify(null));
+};
+
 const NavBar = ({ user }) => {
   const NavBarForPharmacist = (
     <Toolbar>
@@ -62,7 +70,11 @@ const NavBar = ({ user }) => {
           </Grid>
           <Grid item xs={2}>
             <Typography>
-              <a href="/" style={{ color: "#fafafa", textDecoration: "none" }}>
+              <a
+                href="/"
+                style={{ color: "#fafafa", textDecoration: "none" }}
+                onClick={setPharmacistPatientReport}
+              >
                 Sing out
               </a>
             </Typography>
@@ -123,7 +135,11 @@ const NavBar = ({ user }) => {
           </Grid>
           <Grid item xs={2}>
             <Typography>
-              <a href="/" style={{ color: "#fafafa", textDecoration: "none" }}>
+              <a
+                href="/"
+                style={{ color: "#fafafa", textDecoration: "none" }}
+                onClick={setDermatologistPatientReport}
+              >
                 Sing out
               </a>
             </Typography>
