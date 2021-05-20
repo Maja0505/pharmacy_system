@@ -83,18 +83,15 @@ public class AuthenticationController {
 	@PostMapping(value="/login", consumes = "application/json")
 	public ResponseEntity<UserTokenStateDTO> createAuthenticationToken(@RequestBody JwtAuthenticationRequest authenticationRequest,
 			HttpServletResponse response) {
-		System.out.println("Uradio");
+		try {
 		if (authenticationManager == null) {
 			System.out.println("authenticationManager null");
 		} else if (authenticationRequest == null) {
 			System.out.println("authenticationRequest null ");
 		}
-		System.out.println("--- "+ authenticationRequest.getEmail() + " "+ authenticationRequest.getPassword()+" ---");
-		System.out.println("uRADIO");
 		Authentication authentication = authenticationManager
 				.authenticate(new UsernamePasswordAuthenticationToken(authenticationRequest.getEmail(),
 						authenticationRequest.getPassword()));
-		System.out.println("Uradio");
 		// Ubaci korisnika u trenutni security kontekst
 		SecurityContextHolder.getContext().setAuthentication(authentication);
 		if (tokenUtils == null) {
@@ -114,10 +111,11 @@ public class AuthenticationController {
 		
 		//cuvanje tokena
 		//tokenService.addToken(jwt, user.getId());
-		
-		System.out.println("Uradio i ovo");
 		// Vrati token kao odgovor na uspesnu autentifikaciju
 		return ResponseEntity.ok(new UserTokenStateDTO(jwt, expiresIn, user.getEmail(), getRoleString(user.getTypeOfUser()),user.isFirstLogin()));
+		} catch (Exception e) {
+			return (ResponseEntity<UserTokenStateDTO>) ResponseEntity.badRequest();
+		}
 	}
 	
 	private String getRoleString(TypeOfUser typeOfUser) {
@@ -156,7 +154,10 @@ public class AuthenticationController {
 			//HttpHeaders headers = new HttpHeaders();
 			//headers.setLocation(ucBuilder.path("/api/user/{userId}").buildAndExpand(user.getId()).toUri());
 			return new ResponseEntity<>(user, HttpStatus.CREATED);
-		} catch (Exception e) {
+		}catch (InterruptedException e) {
+		    // Restore interrupted state...
+		    Thread.currentThread().interrupt();
+		}catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);

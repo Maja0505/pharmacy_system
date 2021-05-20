@@ -23,8 +23,10 @@ public class AuthorityService implements IAuthorityService {
 	@Override
 	public List<Authority> findById(Long id) {
 		List<Authority> authorities = new ArrayList<Authority>();
-		Authority authority = iAuthorityRepository.findById(id).get();
-		authorities.add(authority);
+		Authority authority = iAuthorityRepository.findById(id).orElse(null);
+		if (authority!=null) {
+			authorities.add(authority);
+		}
 		return authorities;
 	}
 
