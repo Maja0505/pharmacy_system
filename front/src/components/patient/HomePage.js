@@ -15,6 +15,7 @@ import PharmacyProfilePage from './PharmacyProfilePage'
 import SchedulePharmacistAppointment from './SchedulePharmacistAppointment'
 import EPrescriptionList from './EPrescriptionList'
 import SubscriptionPharmacy from './SubscriptionPharmacy'
+import Rating from './Rating'
 
 import { BrowserRouter as Router, Route, Link } from "react-router-dom";
 
@@ -279,7 +280,7 @@ const HomePage = () => {
                 <Button component={Link} style={{backgroundColor:button11 ? "white" : '#4051bf',color:button11 ? 'black' : 'white'}}>Pisanje Zalbe</Button>
                 <Button component={Link} style={{backgroundColor:button12 ? "white" : '#4051bf',color:button12 ? 'black' : 'white'}}>Preuzimanje leka</Button>
                 <Button component={Link} style={{backgroundColor:button13 ? "white" : '#4051bf',color:button13 ? 'black' : 'white'}} to="/patient/HomePage/schedulePharmacistAppointment"  onClick={HandleButton13}>Schedule pharmacist appointment</Button>
-                <Button component={Link} style={{backgroundColor:button14 ? "white" : '#4051bf',color:button14 ? 'black' : 'white'}} to="/patient/HomePage/pharmacyProfilePage"  onClick={HandleButton14}>Schedule dermatologist appointment</Button>
+                <Button component={Link} style={{backgroundColor:button14 ? "white" : '#4051bf',color:button14 ? 'black' : 'white'}} to="/patient/HomePage/rating"  onClick={HandleButton14}>Rating</Button>
               </ButtonGroup>
               </Grid>
               <Grid  item>
@@ -294,6 +295,7 @@ const HomePage = () => {
                   <Route path='/patient/HomePage/schedulePharmacistAppointment' component={SchedulePharmacistAppointment}></Route>
                   <Route path='/patient/HomePage/ePrescriptionList' component={EPrescriptionList}></Route>
                   <Route path='/patient/HomePage/subscriptionPharmacy' component={SubscriptionPharmacy}></Route>
+                  <Route path='/patient/HomePage/rating' component={Rating}></Route>
 
                 </Paper>
               </Grid>

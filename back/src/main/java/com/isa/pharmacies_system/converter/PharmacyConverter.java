@@ -95,4 +95,15 @@ public class PharmacyConverter {
 		}
 		return pharmacyWithMedicinePriceDTOList;
 	}
+
+	//potrebe su samo osnovne info(bez cene)
+	public PharmacyDTO convertPharmacyInfoToPharmacyDTO(Pharmacy pharmacy){
+
+		PharmacyDTO pharmacyDTO = new PharmacyDTO();
+		pharmacyDTO.setId(pharmacy.getId());
+		pharmacyDTO.setPharmacyName(pharmacy.getPharmacyName());
+		pharmacyDTO.setPharmacyAddress(pharmacy.getPharmacyAddress());
+		pharmacyDTO.setPharmacyAverageRating(pharmacy.getPharmacyAverageRating());
+		return pharmacyDTO;
+	}
 }

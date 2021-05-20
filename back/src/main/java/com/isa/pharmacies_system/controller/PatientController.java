@@ -5,6 +5,7 @@ import com.isa.pharmacies_system.converter.*;
 import com.isa.pharmacies_system.domain.medicine.EPrescription;
 import com.isa.pharmacies_system.domain.medicine.MedicineReservation;
 import com.isa.pharmacies_system.domain.schedule.DermatologistAppointment;
+import com.isa.pharmacies_system.domain.user.Dermatologist;
 import com.isa.pharmacies_system.domain.user.Patient;
 import com.isa.pharmacies_system.service.DermatologistAppointmentService;
 import com.isa.pharmacies_system.service.MedicineService;
@@ -207,4 +208,50 @@ public class PatientController {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
+
+    //#1
+    @GetMapping("/{id}/dermatologist/expired")
+    public ResponseEntity<List<UserPersonalInfoDTO>> getAllDermatologistForPatient(@PathVariable Long id){
+        try {
+            return new ResponseEntity<>(patientService.getAllDermatologistForPatient(id),HttpStatus.OK);
+        }catch (Exception e){
+            return new ResponseEntity<>(null,HttpStatus.NOT_FOUND);
+        }
+
+    }
+
+    //#1
+    @GetMapping("/{id}/pharmacist/expired")
+    public ResponseEntity<List<UserPersonalInfoDTO>> getAllPharmacistForPatient(@PathVariable Long id){
+        try {
+            return new ResponseEntity<>(patientService.getAllPharmacistForPatient(id),HttpStatus.OK);
+        }catch (Exception e){
+            return new ResponseEntity<>(null,HttpStatus.NOT_FOUND);
+        }
+
+    }
+
+    //#1
+    @GetMapping("/{id}/medicine")
+    public ResponseEntity<List<MedicineDTO>> getAllMedicinesForPatient(@PathVariable Long id){
+        try {
+            return new ResponseEntity<>(patientService.getAllMedicinesForPatient(id),HttpStatus.OK);
+        }catch (Exception e){
+            return new ResponseEntity<>(null,HttpStatus.NOT_FOUND);
+        }
+
+    }
+
+    //#1
+    @GetMapping("/{id}/pharmacy")
+    public ResponseEntity<List<PharmacyDTO>> getAllPharmaciesForPatient(@PathVariable Long id){
+        try {
+            return new ResponseEntity<>(patientService.getAllPharmaciesForPatient(id),HttpStatus.OK);
+        }catch (Exception e){
+            return new ResponseEntity<>(null,HttpStatus.NOT_FOUND);
+        }
+
+    }
+
+
 }
