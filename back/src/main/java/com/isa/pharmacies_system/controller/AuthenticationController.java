@@ -112,9 +112,9 @@ public class AuthenticationController {
 		//cuvanje tokena
 		//tokenService.addToken(jwt, user.getId());
 		// Vrati token kao odgovor na uspesnu autentifikaciju
-		return ResponseEntity.ok(new UserTokenStateDTO(jwt, expiresIn, user.getEmail(), getRoleString(user.getTypeOfUser()),user.isFirstLogin()));
+		return new ResponseEntity<>(new UserTokenStateDTO(jwt, expiresIn, user.getEmail(), getRoleString(user.getTypeOfUser()),user.isFirstLogin()), HttpStatus.OK);
 		} catch (Exception e) {
-			return (ResponseEntity<UserTokenStateDTO>) ResponseEntity.badRequest();
+			return new ResponseEntity<>(null,HttpStatus.BAD_REQUEST);
 		}
 	}
 	
@@ -156,7 +156,8 @@ public class AuthenticationController {
 			return new ResponseEntity<>(user, HttpStatus.CREATED);
 		}catch (InterruptedException e) {
 		    // Restore interrupted state...
-		    Thread.currentThread().interrupt();
+			Thread.currentThread().interrupt();
+			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
 		}catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -198,10 +199,10 @@ public class AuthenticationController {
 			String refreshedToken = tokenUtils.refreshToken(token);
 			int expiresIn = tokenUtils.getExpiredIn();
 
-			return ResponseEntity.ok(new UserTokenStateDTO(refreshedToken, expiresIn, user.getEmail(), getRoleString(user.getTypeOfUser()),user.isFirstLogin()));
+			return new ResponseEntity<>(new UserTokenStateDTO(refreshedToken, expiresIn, user.getEmail(), getRoleString(user.getTypeOfUser()),user.isFirstLogin()), HttpStatus.OK);
 		} else {
 			UserTokenStateDTO userTokenState = new UserTokenStateDTO();
-			return ResponseEntity.badRequest().body(userTokenState);
+			return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
 		}
 	}
 	/*
