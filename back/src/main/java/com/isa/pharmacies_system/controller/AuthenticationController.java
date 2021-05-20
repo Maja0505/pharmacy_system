@@ -113,7 +113,9 @@ public class AuthenticationController {
 		//tokenService.addToken(jwt, user.getId());
 		// Vrati token kao odgovor na uspesnu autentifikaciju
 		return new ResponseEntity<>(new UserTokenStateDTO(jwt, expiresIn, user.getEmail(), getRoleString(user.getTypeOfUser()),user.isFirstLogin()), HttpStatus.OK);
-		} catch (Exception e) {
+		} catch (NullPointerException e) {
+			return new ResponseEntity<>(null,HttpStatus.BAD_REQUEST);
+		}catch (Exception e) {
 			return new ResponseEntity<>(null,HttpStatus.BAD_REQUEST);
 		}
 	}
@@ -154,6 +156,8 @@ public class AuthenticationController {
 			//HttpHeaders headers = new HttpHeaders();
 			//headers.setLocation(ucBuilder.path("/api/user/{userId}").buildAndExpand(user.getId()).toUri());
 			return new ResponseEntity<>(user, HttpStatus.CREATED);
+		}catch (NullPointerException e) {
+			return new ResponseEntity<>(null,HttpStatus.BAD_REQUEST);
 		}catch (InterruptedException e) {
 		    // Restore interrupted state...
 			Thread.currentThread().interrupt();

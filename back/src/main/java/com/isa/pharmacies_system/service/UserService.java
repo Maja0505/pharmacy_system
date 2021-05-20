@@ -28,7 +28,13 @@ public class UserService implements IUserService {
 
     @Override
     public Users findOne(long id) {
-        return userRepository.findById(id).orElseGet(null);
+    	try {
+    		return userRepository.findById(id).orElseGet(null);
+		} catch (NullPointerException e) {
+			return null;
+		} catch (Exception e) {
+			return null;
+		}
     }
 
 	@Override

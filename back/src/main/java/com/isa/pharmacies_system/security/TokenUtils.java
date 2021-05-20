@@ -80,6 +80,8 @@ public class TokenUtils {
 					.setClaims(claims)
 					.setExpiration(generateExpirationDate())
 					.signWith(SIGNATURE_ALGORITHM, SECRET).compact();
+		}catch (NullPointerException e) {
+			refreshedToken = null;
 		} catch (Exception e) {
 			refreshedToken = null;
 		}
@@ -129,6 +131,8 @@ public class TokenUtils {
 		try {
 			final Claims claims = this.getAllClaimsFromToken(token);
 			audience = claims.getAudience();
+		} catch (NullPointerException e) {
+			audience = null;
 		} catch (Exception e) {
 			audience = null;
 		}
@@ -189,7 +193,11 @@ public class TokenUtils {
 					.setSigningKey(SECRET)
 					.parseClaimsJws(token)
 					.getBody();
-		} catch (Exception e) {
+		}catch (NullPointerException e) {
+			claims = null;
+		}
+		
+		catch (Exception e) {
 			claims = null;
 		}
 		return claims;
