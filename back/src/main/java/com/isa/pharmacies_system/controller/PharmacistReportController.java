@@ -1,17 +1,20 @@
 package com.isa.pharmacies_system.controller;
 
 import com.isa.pharmacies_system.DTO.PharmacistReportDTO;
+import com.isa.pharmacies_system.DTO.RecipeItemDTO;
+import com.isa.pharmacies_system.DTO.ReportForPatientDTO;
+import com.isa.pharmacies_system.converter.MedicineRequestConverter;
 import com.isa.pharmacies_system.converter.PharmacistReportConverter;
-import com.isa.pharmacies_system.service.iService.IDermatologistReportService;
-import com.isa.pharmacies_system.service.iService.IPharmacistReportService;
+import com.isa.pharmacies_system.converter.ReportConverter;
+import com.isa.pharmacies_system.domain.medicine.MedicineRequest;
+import com.isa.pharmacies_system.domain.report.PharmacistReport;
+import com.isa.pharmacies_system.domain.storage.PharmacyStorageItem;
+import com.isa.pharmacies_system.service.iService.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -22,11 +25,22 @@ public class PharmacistReportController {
 
     private IPharmacistReportService pharmacistReportService;
     private PharmacistReportConverter pharmacistReportConverter;
+    private IPharmacyStorageItemService pharmacyStorageItemService;
+    private ReportConverter reportConverter;
+    private IMedicineService medicineService;
+    private IMedicineRequestService medicineRequestService;
+    private MedicineRequestConverter medicineRequestConverter;
 
     @Autowired
-    public PharmacistReportController(IDermatologistReportService dermatologistReportService, IPharmacistReportService pharmacistReportService) {
+    public PharmacistReportController(IDermatologistReportService dermatologistReportService, IPharmacistReportService pharmacistReportService, IPharmacyStorageItemService pharmacyStorageItemService, IMedicineService medicineService, IMedicineRequestService medicineRequestService) {
         this.pharmacistReportService = pharmacistReportService;
+        this.pharmacyStorageItemService = pharmacyStorageItemService;
+        this.medicineService = medicineService;
+        this.medicineRequestService = medicineRequestService;
         this.pharmacistReportConverter = new PharmacistReportConverter();
+        this.reportConverter = new ReportConverter();
+        this.medicineRequestConverter = new MedicineRequestConverter();
+
     }
 
     //#1
@@ -40,4 +54,28 @@ public class PharmacistReportController {
         }
 
     }
+
+    //Nemanja
+    @PostMapping(value = "/create",consumes="application/json")
+    public ResponseEntity<Boolean> createPharmacistReport(@RequestBody ReportForPatientDTO reportForPatientDTO){
+        try {
+            RecipeItemDTO recipeItemWithInsufficientQuantity = pharmacyStorageItemService.checkHaveEnoughMedicineAmountForEveryRecipeItem(reportForPatientDTO.getRecipeItemsDTO());
+            if(recipeItemWithInsufficientQuantity == null){
+                PharmacistReport pharmacistReport = reportConverter.convertReportDTOTOPharmacistReport(reportForPatientDTO,medicineService);
+                if(pharmacistReportService.createPharmacistReport(pharmacistReport,reportForPatientDTO.getAppointmentId())){
+                    pharmacyStorageItemService.subtractPharmacyStorageItemMedicineAmountForEveryRecipeItem(reportForPatientDTO.getRecipeItemsDTO());
+                    return new ResponseEntity<>(HttpStatus.CREATED);
+                }
+            }
+            assert recipeItemWithInsufficientQuantity != null;
+            PharmacyStorageItem pharmacyStorageItemWithNotEnoughAmount = pharmacyStorageItemService.findOne(recipeItemWithInsufficientQuantity.getPharmacyItemId());
+            MedicineRequest medicineRequest = medicineRequestConverter.convertPharmacyStorageItemToMedicineRequest(pharmacyStorageItemWithNotEnoughAmount);
+            medicineRequestService.createMedicineRequest(medicineRequest);
+            return new ResponseEntity<>(HttpStatus.CONFLICT);
+        }catch (Exception e){
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+        }
+    }
+
+
 }

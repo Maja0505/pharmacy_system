@@ -7,4 +7,5 @@ import java.util.List;
 public interface IPharmacistReportService {
 
     List<PharmacistReport> findAllPharmacistReportForPatient(Long id, int page);
+    Boolean createPharmacistReport(PharmacistReport pharmacistReport, Long appointmentId);
 }
