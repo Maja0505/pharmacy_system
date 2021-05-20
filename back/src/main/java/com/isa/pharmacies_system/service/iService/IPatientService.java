@@ -1,13 +1,13 @@
 package com.isa.pharmacies_system.service.iService;
 
-import com.isa.pharmacies_system.DTO.PharmacistAppointmentTimeDTO;
-import com.isa.pharmacies_system.DTO.UserPasswordDTO;
+import com.isa.pharmacies_system.DTO.*;
 import com.isa.pharmacies_system.domain.medicine.EPrescription;
 import com.isa.pharmacies_system.domain.medicine.Medicine;
 import com.isa.pharmacies_system.domain.medicine.MedicineReservation;
 import com.isa.pharmacies_system.domain.pharmacy.Pharmacy;
 import com.isa.pharmacies_system.domain.schedule.DermatologistAppointment;
 import com.isa.pharmacies_system.domain.schedule.PharmacistAppointment;
+import com.isa.pharmacies_system.domain.user.Dermatologist;
 import com.isa.pharmacies_system.domain.user.Patient;
 import org.springframework.data.domain.Page;
 
@@ -29,4 +29,8 @@ public interface IPatientService {
     Page<MedicineReservation> getAllMedicineReservationsForPatient(Long id, int page);
     List<EPrescription> getAllEPrescriptionsForPatient(Long id);
     List<Pharmacy> getSubscriptionPharmaciesForPatient(Long id);
+    List<UserPersonalInfoDTO> getAllDermatologistForPatient(Long patientId);
+    List<UserPersonalInfoDTO> getAllPharmacistForPatient(Long id);
+    List<MedicineDTO> getAllMedicinesForPatient(Long id);
+    List<PharmacyDTO> getAllPharmaciesForPatient(Long patientId);
 }
