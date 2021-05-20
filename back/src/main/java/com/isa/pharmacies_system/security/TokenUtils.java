@@ -75,6 +75,9 @@ public class TokenUtils {
 		String refreshedToken;
 		try {
 			final Claims claims = this.getAllClaimsFromToken(token);
+			if (claims==null) {
+				throw new NullPointerException();
+			}
 			claims.setIssuedAt(new Date());
 			refreshedToken = Jwts.builder()
 					.setClaims(claims)
@@ -108,6 +111,9 @@ public class TokenUtils {
 		String email;
 		try {
 			final Claims claims = this.getAllClaimsFromToken(token);
+			if (claims==null) {
+				throw new NullPointerException();
+			}
 			email = claims.getSubject();
 		} catch (Exception e) {
 			email = null;
@@ -119,6 +125,9 @@ public class TokenUtils {
 		Date issueAt;
 		try {
 			final Claims claims = this.getAllClaimsFromToken(token);
+			if (claims==null) {
+				throw new Exception();
+			}
 			issueAt = claims.getIssuedAt();
 		} catch (Exception e) {
 			issueAt = null;
@@ -130,6 +139,9 @@ public class TokenUtils {
 		String audience;
 		try {
 			final Claims claims = this.getAllClaimsFromToken(token);
+			if (claims == null){
+				throw new NullPointerException();
+			}
 			audience = claims.getAudience();
 		} catch (NullPointerException e) {
 			audience = null;
@@ -143,6 +155,9 @@ public class TokenUtils {
 		Date expiration;
 		try {
 			final Claims claims = this.getAllClaimsFromToken(token);
+			if (claims == null){
+				throw new NullPointerException();
+			}
 			expiration = claims.getExpiration();
 		} catch (Exception e) {
 			expiration = null;
@@ -189,6 +204,9 @@ public class TokenUtils {
 	private Claims getAllClaimsFromToken(String token) {
 		Claims claims;
 		try {
+			if (Jwts.parser().setSigningKey(SECRET).parseClaimsJws(token)==null) {
+				throw new NullPointerException();
+			}
 			claims = Jwts.parser()
 					.setSigningKey(SECRET)
 					.parseClaimsJws(token)
