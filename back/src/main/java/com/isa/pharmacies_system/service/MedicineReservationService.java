@@ -34,7 +34,9 @@ public class MedicineReservationService implements IMedicineReservationService {
     public Boolean createMedicineReservation(MedicineReservation medicineReservation){
         //uraditi provere
         PharmacyStorageItem pharmacyStorageItem = pharmacyStorageItemRepository.getSelectedMedicineFromPharmacyStorage(medicineReservation.getReservedMedicine().getId(),medicineReservation.getPharmacyForMedicineReservation().getId());
-        if(pharmacyStorageItem != null && doesPharmacyHaveSelectedMedicineInStorage(pharmacyStorageItem)){
+        if(pharmacyStorageItem != null
+                && doesPharmacyHaveSelectedMedicineInStorage(pharmacyStorageItem)
+                && medicineReservation.getPatientForMedicineReservation().getPenalty() < 3){
             medicineReservationRepository.save(medicineReservation);
             pharmacyStorageItem.setMedicineAmount(pharmacyStorageItem.getMedicineAmount() - 1);
             pharmacyStorageItemRepository.save(pharmacyStorageItem);

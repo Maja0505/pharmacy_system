@@ -69,7 +69,8 @@ const PharmacieTableWithFreePharmacist = ({pharmacies,setSelectedPharmacy}) => {
 
   const TableContent = (
     <TableBody>
-      {pharmacies.map((row, index) => (
+      {pharmacies != undefined && <> 
+        {pharmacies.map((row, index) => (
         <TableRow key={index} selected onClick={() => HandleClickSelectRow(row)}>
           <TableCell>{row.pharmacyName}</TableCell>
           <TableCell>{row.pharmacyAddress.streetName} {row.pharmacyAddress.streetNumber},{row.pharmacyAddress.city}</TableCell>
@@ -78,6 +79,8 @@ const PharmacieTableWithFreePharmacist = ({pharmacies,setSelectedPharmacy}) => {
           <TableCell>{row.priceListForAppointmentDTO.pharmacistAppointmentPricePerHour}</TableCell>
         </TableRow>
       ))}
+      </>}
+      
     </TableBody>
   );
 
