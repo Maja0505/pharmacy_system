@@ -74,14 +74,14 @@ public class PharmacistController {
     public ResponseEntity<List<PharmacistInfoDTO>> getAllPharmacistsWithOpenAppointmentsByPharmacyId(@PathVariable Long pharmacyId, @RequestBody PharmacistAppointmentTimeDTO timeDTO) {
 
         try {
-            if(!timeDTO.getStartTime().isAfter(LocalDateTime.now()) || timeDTO.getDuration() < 10){
-                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            if(!timeDTO.getStartTime().isAfter(LocalDateTime.now()) || timeDTO.getDuration() < 5){
+                return new ResponseEntity<>(null,HttpStatus.BAD_REQUEST);
             }
             List<Pharmacist> pharmacists = pharmacistService.getAllPharmacistsWithOpenAppointmentsByPharmacyId(pharmacyId, timeDTO);
             List<PharmacistInfoDTO> pharmacistInfoDTOS = pharmacistConverter.convertPharmacistListToPharmacistInfoDTOList(pharmacists);
             return new ResponseEntity<>(pharmacistInfoDTOS, HttpStatus.OK);
         } catch (Exception e) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(null,HttpStatus.BAD_REQUEST);
         }
     }
 

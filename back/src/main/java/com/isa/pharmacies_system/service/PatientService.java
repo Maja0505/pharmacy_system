@@ -84,6 +84,18 @@ public class PatientService implements IPatientService {
 
     }
 
+    @Override
+    public Boolean removeMedicineAllergies(Long patientId, Long medicineId) {
+        Patient patient = patientRepository.findById(patientId).orElse(null);
+        Medicine medicine = medicineRepository.findById(medicineId).orElse(null);
+        if(patient!=null && medicine!=null && doesMedicineExistInAllergies(patient,medicine)){
+            patient.getMedicineAllergies().remove(medicine);
+            savePatient(patient);
+            return true;
+        }
+        return false;
+    }
+
     //#1
     private Boolean doesMedicineExistInAllergies(Patient patient,Medicine medicine){
         return patient.getMedicineAllergies().stream().filter(m -> m.getId() == medicine.getId()).count()>0;

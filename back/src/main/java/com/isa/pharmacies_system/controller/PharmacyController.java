@@ -7,6 +7,7 @@ import java.util.List;
 import com.isa.pharmacies_system.DTO.FilteringPharmacyDTO;
 import com.isa.pharmacies_system.DTO.PharmacistAppointmentTimeDTO;
 import com.isa.pharmacies_system.DTO.PharmacyDTO;
+import com.isa.pharmacies_system.DTO.PharmacyWhereDermatologistWorkDTO;
 import com.isa.pharmacies_system.converter.PharmacyConverter;
 import com.isa.pharmacies_system.service.iService.IPriceListService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -69,13 +70,13 @@ public class PharmacyController {
 	public ResponseEntity<List<PharmacyDTO>> getAllPharmacyWithFreePharmacistByDate(@RequestBody PharmacistAppointmentTimeDTO timeDTO){
 
 		try {
-			if(!timeDTO.getStartTime().isAfter(LocalDateTime.now()) || timeDTO.getDuration() < 10){
-				return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+			if(!timeDTO.getStartTime().isAfter(LocalDateTime.now()) || timeDTO.getDuration() < 5){
+				return new ResponseEntity<>(null,HttpStatus.BAD_REQUEST);
 			}
 			List<Pharmacy> pharmacies = iPharmacyService.getAllPharmacyWithFreePharmacistByDate(timeDTO);
 			return new ResponseEntity<>(pharmacyConverter.convertPharmacyListToPharmacyDTOList(pharmacies),HttpStatus.OK);
 		}catch (Exception e){
-			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<>(null,HttpStatus.BAD_REQUEST);
 		}
 	}
 
@@ -118,11 +119,26 @@ public class PharmacyController {
 	}
 
 	@PutMapping(value = "/filter", consumes = "application/json")
-	public ResponseEntity<List<PharmacyDTO>> filterPharmacy(@RequestBody FilteringPharmacyDTO filteringPharmacyDTO){
+	public ResponseEntity<List<PharmacyDTO>> filterPharmacy(@RequestBody FilteringPharmacyDTO filteringPharmacyDTO) {
 		try {
-			return new ResponseEntity<>(iPharmacyService.filterPharmacy(filteringPharmacyDTO),HttpStatus.OK);
-		}catch (Exception e){
+			return new ResponseEntity<>(iPharmacyService.filterPharmacy(filteringPharmacyDTO), HttpStatus.OK);
+		} catch (Exception e) {
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		}
+	}
+
+	//Nemanja
+	@GetMapping("/getPharmacies/{dermatologistId}")
+	public ResponseEntity<List<PharmacyWhereDermatologistWorkDTO>> getAllPharmaciesWhereDermatologistWork(@PathVariable Long dermatologistId){
+		try {
+			List<Pharmacy> pharmaciesWhereDermatologistWork = iPharmacyService.getAllPharmacyByDermatologistId(dermatologistId);
+			if(pharmaciesWhereDermatologistWork != null){
+				List<PharmacyWhereDermatologistWorkDTO> pharmacyWhereDermatologistWorkDTOS = pharmacyConverter.convertPharmacyListToPharmacyWhereDermatologistWorkDTOList(pharmaciesWhereDermatologistWork);
+				return new ResponseEntity<>(pharmacyWhereDermatologistWorkDTOS,HttpStatus.OK);
+			}
+			return new ResponseEntity<>(null,HttpStatus.NOT_FOUND);
+		}catch (Exception e){
+			return new ResponseEntity<>(null,HttpStatus.BAD_REQUEST);
 		}
 	}
 

@@ -20,4 +20,5 @@ public interface IPharmacyService {
 	List<Pharmacy> getAll();
     List<PharmacyDTO> searchPharmacyByNameAndCity(String word, List<PharmacyDTO> pharmacyDTOS);
 	List<PharmacyDTO> filterPharmacy(FilteringPharmacyDTO filteringPharmacyDTO);
+	List<Pharmacy> getAllPharmacyByDermatologistId(Long dermatologistId);
 }

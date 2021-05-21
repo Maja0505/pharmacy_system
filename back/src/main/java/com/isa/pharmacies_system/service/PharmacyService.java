@@ -82,6 +82,8 @@ public class PharmacyService implements IPharmacyService {
 		return iPharmacyRepository.findAll();
 	}
 
+
+
 	@Override
 	public List<PharmacyDTO> searchPharmacyByNameAndCity(String word, List<PharmacyDTO> pharmacyDTOS) {
 		return pharmacyDTOS.stream().filter(pharmacyDTO -> pharmacyDTO.getPharmacyName().toLowerCase().contains(word.toLowerCase()) || pharmacyDTO.getPharmacyAddress().getCity().toLowerCase().contains(word.toLowerCase())).collect(Collectors.toList());
@@ -91,21 +93,34 @@ public class PharmacyService implements IPharmacyService {
 	public List<PharmacyDTO> filterPharmacy(FilteringPharmacyDTO filteringPharmacyDTO) {
 		List<PharmacyDTO> filterList;
 		filterList = filteringPharmacyDTO.getPharmacyDTOS().stream().filter(pharmacyDTO ->
-				(pharmacyDTO.getPharmacyAverageRating() >= 1 && pharmacyDTO.getPharmacyAverageRating() <= 2 && filteringPharmacyDTO.getFilterListForRating().get(0))
-		|| (pharmacyDTO.getPharmacyAverageRating() >= 2  && pharmacyDTO.getPharmacyAverageRating() <= 3 && filteringPharmacyDTO.getFilterListForRating().get(1))
-		|| (pharmacyDTO.getPharmacyAverageRating() >= 3  && pharmacyDTO.getPharmacyAverageRating() <= 4 && filteringPharmacyDTO.getFilterListForRating().get(2))
-		|| (pharmacyDTO.getPharmacyAverageRating() >= 4  && pharmacyDTO.getPharmacyAverageRating() <= 5 && filteringPharmacyDTO.getFilterListForRating().get(3))
-		|| (pharmacyDTO.getPriceListForAppointmentDTO().getPharmacistAppointmentPricePerHour() <10 && filteringPharmacyDTO.getFilterListForPharmacistAppointmentPricePerHour().get(0))
+				checkFilterForRating(pharmacyDTO,filteringPharmacyDTO)
+						|| checkFilterForPharmacistAppointmentPrice(pharmacyDTO,filteringPharmacyDTO)
+						|| checkFilterForDermatologistAppointmentPrice(pharmacyDTO,filteringPharmacyDTO)).collect(Collectors.toList());
+		return filterList;
+	}
+
+	private Boolean checkFilterForRating(PharmacyDTO pharmacyDTO,FilteringPharmacyDTO filteringPharmacyDTO){
+		return (pharmacyDTO.getPharmacyAverageRating() >= 1 && pharmacyDTO.getPharmacyAverageRating() <= 2 && filteringPharmacyDTO.getFilterListForRating().get(0))
+				|| (pharmacyDTO.getPharmacyAverageRating() >= 2  && pharmacyDTO.getPharmacyAverageRating() <= 3 && filteringPharmacyDTO.getFilterListForRating().get(1))
+				|| (pharmacyDTO.getPharmacyAverageRating() >= 3  && pharmacyDTO.getPharmacyAverageRating() <= 4 && filteringPharmacyDTO.getFilterListForRating().get(2))
+				|| (pharmacyDTO.getPharmacyAverageRating() >= 4  && pharmacyDTO.getPharmacyAverageRating() <= 5 && filteringPharmacyDTO.getFilterListForRating().get(3));
+	}
+
+	private Boolean checkFilterForPharmacistAppointmentPrice(PharmacyDTO pharmacyDTO,FilteringPharmacyDTO filteringPharmacyDTO){
+		 return (pharmacyDTO.getPriceListForAppointmentDTO().getPharmacistAppointmentPricePerHour() <10 && filteringPharmacyDTO.getFilterListForPharmacistAppointmentPricePerHour().get(0))
 				|| (pharmacyDTO.getPriceListForAppointmentDTO().getPharmacistAppointmentPricePerHour() >= 10 && pharmacyDTO.getPriceListForAppointmentDTO().getPharmacistAppointmentPricePerHour() <= 20 && filteringPharmacyDTO.getFilterListForPharmacistAppointmentPricePerHour().get(1))
 				|| (pharmacyDTO.getPriceListForAppointmentDTO().getPharmacistAppointmentPricePerHour() >= 20  && pharmacyDTO.getPriceListForAppointmentDTO().getPharmacistAppointmentPricePerHour() <= 30 && filteringPharmacyDTO.getFilterListForPharmacistAppointmentPricePerHour().get(2))
 				|| (pharmacyDTO.getPriceListForAppointmentDTO().getPharmacistAppointmentPricePerHour() >= 30 && pharmacyDTO.getPriceListForAppointmentDTO().getPharmacistAppointmentPricePerHour() <= 40 && filteringPharmacyDTO.getFilterListForPharmacistAppointmentPricePerHour().get(3))
-				|| (pharmacyDTO.getPriceListForAppointmentDTO().getPharmacistAppointmentPricePerHour() > 40 && filteringPharmacyDTO.getFilterListForPharmacistAppointmentPricePerHour().get(4))
-				|| (pharmacyDTO.getPriceListForAppointmentDTO().getDermatologistAppointmentPricePerHour() >= 10 && pharmacyDTO.getPriceListForAppointmentDTO().getDermatologistAppointmentPricePerHour() <= 20 && filteringPharmacyDTO.getFilterListForDermatologistAppointmentPricePerHour().get(1))
+				|| (pharmacyDTO.getPriceListForAppointmentDTO().getPharmacistAppointmentPricePerHour() > 40 && filteringPharmacyDTO.getFilterListForPharmacistAppointmentPricePerHour().get(4));
+	}
+
+	private Boolean checkFilterForDermatologistAppointmentPrice(PharmacyDTO pharmacyDTO,FilteringPharmacyDTO filteringPharmacyDTO){
+		return (pharmacyDTO.getPriceListForAppointmentDTO().getDermatologistAppointmentPricePerHour() >= 10 && pharmacyDTO.getPriceListForAppointmentDTO().getDermatologistAppointmentPricePerHour() <= 20 && filteringPharmacyDTO.getFilterListForDermatologistAppointmentPricePerHour().get(1))
 				|| (pharmacyDTO.getPriceListForAppointmentDTO().getDermatologistAppointmentPricePerHour() >= 20  && pharmacyDTO.getPriceListForAppointmentDTO().getDermatologistAppointmentPricePerHour() <= 30 && filteringPharmacyDTO.getFilterListForDermatologistAppointmentPricePerHour().get(2))
 				|| (pharmacyDTO.getPriceListForAppointmentDTO().getDermatologistAppointmentPricePerHour() >= 30 && pharmacyDTO.getPriceListForAppointmentDTO().getDermatologistAppointmentPricePerHour() <= 40 && filteringPharmacyDTO.getFilterListForDermatologistAppointmentPricePerHour().get(3))
-				|| (pharmacyDTO.getPriceListForAppointmentDTO().getDermatologistAppointmentPricePerHour() > 40 && filteringPharmacyDTO.getFilterListForDermatologistAppointmentPricePerHour().get(4))).collect(Collectors.toList());
-		return filterList;
+				|| (pharmacyDTO.getPriceListForAppointmentDTO().getDermatologistAppointmentPricePerHour() > 40 && filteringPharmacyDTO.getFilterListForDermatologistAppointmentPricePerHour().get(4));
 	}
+
 
 	@Override
 	public Pharmacy getById(Long id) throws Exception {
@@ -165,5 +180,14 @@ public class PharmacyService implements IPharmacyService {
 		return pharmacies;
 	}
 
+	//Nemanja
+	@Override
+	public List<Pharmacy> getAllPharmacyByDermatologistId(Long dermatologistId) {
+		List<Pharmacy> allPharmacy = iPharmacyRepository.findAll();
+		return allPharmacy.stream()
+				.filter(p -> p.getDermatologistsInPharmacy().stream()
+				.filter(d -> d.getId() == dermatologistId).count() > 0).collect(Collectors.toList());
+
+	}
 
 }

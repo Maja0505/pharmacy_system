@@ -2,6 +2,7 @@ package com.isa.pharmacies_system.service;
 
 import com.isa.pharmacies_system.DTO.DermatologistNewDTO;
 import com.isa.pharmacies_system.DTO.UserPasswordDTO;
+import com.isa.pharmacies_system.domain.pharmacy.Pharmacy;
 import com.isa.pharmacies_system.domain.schedule.DermatologistAppointment;
 import com.isa.pharmacies_system.domain.schedule.DermatologistVacationRequest;
 import com.isa.pharmacies_system.domain.schedule.StatusOfAppointment;
@@ -97,5 +98,4 @@ public class DermatologistService implements IDermatologistService {
 	public List<Dermatologist> getAll() {
 		return dermatologistRepository.findAll();
 	}
-
 }

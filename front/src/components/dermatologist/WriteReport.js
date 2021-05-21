@@ -54,6 +54,8 @@ const WriteReport = () => {
     "Doesn't have enough medicine in storage or pacient is alergic on them"
   );
 
+  const [recipeItems, setRecipeItems] = useState([]);
+
   const handleCloseAlert = (event, reason) => {
     if (reason === "clickaway") {
       return;
@@ -136,7 +138,11 @@ const WriteReport = () => {
 
   const handleNext = () => {
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
-    setReport({ ...report, appointmentId: appointment.AppointmentId });
+    setReport({
+      ...report,
+      appointmentId: appointment.AppointmentId,
+      recipeItemsDTO: recipeItems,
+    });
   };
 
   const handleBack = () => {
@@ -156,7 +162,7 @@ const WriteReport = () => {
       .catch((error) => {
         alert("Conflict problem with recipe items please pick again");
         setActiveStep(2);
-        setReport({ ...report, recipeItemsDTO: [] });
+        setRecipeItems([]);
       });
   };
 
@@ -177,11 +183,11 @@ const WriteReport = () => {
       )}
       {activeStep === 2 && (
         <WriteReportThirdStep
-          report={report}
-          setReport={setReport}
           appointment={appointment}
           setOpenAlertSuccsess={setOpenAlertSuccsess}
           setOpenAlertUnsuccses={setOpenAlertUnsuccses}
+          recipeItems={recipeItems}
+          setRecipeItems={setRecipeItems}
         />
       )}
       {activeStep === 3 && <ScheduleAppointment />}

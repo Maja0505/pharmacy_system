@@ -7,6 +7,7 @@ import WorkCalendar from "./WorkCalendar.js";
 import WriteReport from "./WriteReport.js";
 import ScheduleAppointment from "./ScheduleAppointment.js";
 import MedicineReservation from "./MedicineReservation.js";
+import FutureExaminations from "./FutureExaminations.js";
 
 const HomePage = () => {
   return (
@@ -34,6 +35,9 @@ const HomePage = () => {
           </Route>
           <Route path="/pharmacist/medicineReservations">
             <MedicineReservation />
+          </Route>
+          <Route path="/pharmacist/futureExaminations">
+            <FutureExaminations />
           </Route>
         </div>
       </Switch>

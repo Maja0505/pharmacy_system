@@ -32,11 +32,11 @@ const useStyles = makeStyles({
 });
 
 const WriteReportThirdStep = ({
-  report,
-  setReport,
   appointment,
   setOpenAlertSuccsess,
   setOpenAlertUnsuccses,
+  recipeItems,
+  setRecipeItems,
 }) => {
   const classes = useStyles();
 
@@ -284,12 +284,12 @@ const WriteReportThirdStep = ({
               minHeight: "62px",
             }}
           >
-            {report.recipeItemsDTO.length === 0 && (
+            {recipeItems.length === 0 && (
               <Typography style={{ marginTop: "5%" }}>
                 Add some medicine from pharmacy
               </Typography>
             )}
-            {report.recipeItemsDTO.length !== 0 && (
+            {recipeItems.length !== 0 && (
               <>
                 <table
                   style={{
@@ -301,7 +301,7 @@ const WriteReportThirdStep = ({
                     <th>Amount</th>
                   </thead>
                   <tbody>
-                    {report.recipeItemsDTO.map((reportItem, index) => (
+                    {recipeItems.map((reportItem, index) => (
                       <tr key={index}>
                         <td>{reportItem.medicineName}</td>
                         <td>{reportItem.medicineAmount}</td>
@@ -317,15 +317,14 @@ const WriteReportThirdStep = ({
       <RecipeAddItemDialog
         openDialog={openDialog}
         setOpenDialog={setOpenDialog}
-        report={report}
         selectedMedicine={selectedMedicine}
-        report={report}
-        setReport={setReport}
         setMedicinesInPharmacy={setMedicinesInPharmacy}
         setIsAlternative={setIsAlternative}
         appointment={appointment}
         setOpenAlertSuccsess={setOpenAlertSuccsess}
         setOpenAlertUnsuccses={setOpenAlertUnsuccses}
+        recipeItems={recipeItems}
+        setRecipeItems={setRecipeItems}
       />
     </div>
   );

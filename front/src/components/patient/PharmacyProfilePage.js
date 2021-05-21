@@ -294,9 +294,9 @@ import { set } from "date-fns";
         <p>Rating: {pharmacy.pharmacyAverageRating}</p>
         <p>Dermatologist price: </p>
         <p>Dermatologist price: </p>
-        <Button onClick = {HandleClickDermatologistAppointment}>Show dermatologist appointment</Button>
+        <Button style={{backgroundColor:"green"}} onClick = {HandleClickDermatologistAppointment}>Show dermatologist appointment</Button>
         <div style={{visibility: dermatologistAppointmentPart ? 'visible' : 'hidden'}}>
-          {scheduleDermatologistAppointment}
+          {dermatologistAppointment.length != 0 && scheduleDermatologistAppointment}
         </div>
 
       </div>

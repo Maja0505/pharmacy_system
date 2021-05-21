@@ -14,13 +14,13 @@ const RecipeAddItemDialog = ({
   openDialog,
   setOpenDialog,
   selectedMedicine,
-  report,
-  setReport,
   setMedicinesInPharmacy,
   setIsAlternative,
   appointment,
   setOpenAlertSuccsess,
   setOpenAlertUnsuccses,
+  recipeItems,
+  setRecipeItems,
 }) => {
   const [recomendeDailyIntake, setRecomendedDailyIntake] = useState("");
   const [medicineAmount, setMedicineAmount] = useState(1);
@@ -64,18 +64,46 @@ const RecipeAddItemDialog = ({
       });
   };
 
-  const addToRecipeItems = () => {
-    setReport({
-      ...report,
-      recipeItemsDTO: report.recipeItemsDTO.concat({
+  const addToRecipeItems = async () => {
+    if (recipeItems.length === 0) {
+      addNewItem();
+    }
+    for (var i = 0; i < recipeItems.length; i++) {
+      if (recipeItems[i].pharmacyItemId === selectedMedicine.itemId) {
+        addExistingItem();
+        break;
+      }
+      if (i === recipeItems.length - 1) {
+        addNewItem();
+      }
+    }
+    closeDialog();
+  };
+
+  const addExistingItem = () => {
+    setRecipeItems(
+      recipeItems.map((i) =>
+        i.pharmacyItemId === selectedMedicine.itemId
+          ? {
+              ...i,
+              medicineAmount: Number(i.medicineAmount) + Number(medicineAmount),
+            }
+          : i
+      )
+    );
+  };
+
+  const addNewItem = () => {
+    setRecipeItems((oldArray) => [
+      ...oldArray,
+      {
         pharmacyItemId: selectedMedicine.itemId,
         medicineItemId: selectedMedicine.medicineId,
-        medicineAmount: medicineAmount,
+        medicineAmount: Number(medicineAmount),
         recommendedDailyIntake: recomendeDailyIntake,
         medicineName: selectedMedicine.medicineName,
-      }),
-    });
-    closeDialog();
+      },
+    ]);
   };
 
   const seeAlternativesMedicine = () => {

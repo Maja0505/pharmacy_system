@@ -33,4 +33,5 @@ public interface IPatientService {
     List<UserPersonalInfoDTO> getAllPharmacistForPatient(Long id);
     List<MedicineDTO> getAllMedicinesForPatient(Long id);
     List<PharmacyDTO> getAllPharmaciesForPatient(Long patientId);
+    Boolean removeMedicineAllergies(Long patientId, Long medicineId);
 }

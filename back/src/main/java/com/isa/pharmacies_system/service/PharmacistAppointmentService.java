@@ -48,7 +48,7 @@ public class PharmacistAppointmentService implements IPharmacistAppointmentServi
 
     //#1[3.16]Korak3
     @Override
-    public Boolean bookPharmacistAppointment(Long patientId, Long pharmacistId, PharmacistAppointmentTimeDTO timeDTO){
+    public Boolean bookPharmacistAppointment(Long patientId, Long pharmacistId, PharmacistAppointmentTimeDTO timeDTO,Boolean isPatient){
         Patient patient = patientRepository.findById(patientId).orElse(null);
         Pharmacist pharmacist = pharmacistRepository.findById(pharmacistId).orElse(null);
         PharmacistAppointment pharmacistAppointment;
@@ -60,7 +60,8 @@ public class PharmacistAppointmentService implements IPharmacistAppointmentServi
         if(timeDTO.getStartTime().isAfter(LocalDateTime.now())
                 && doesPharmacistWorkInSelectedDate(timeDTO, pharmacist)
                 && doesPharmacistHaveOpenSelectedAppointment(timeDTO, pharmacist)
-                && !doesPatientHaveAnotherAppointmentInSameTime(patient,pharmacistAppointment)){
+                && !doesPatientHaveAnotherAppointmentInSameTime(patient,pharmacistAppointment)
+                && ((patient.getPenalty() < 3 && isPatient) || (!isPatient))){
 
             pharmacistAppointmentRepository.save(pharmacistAppointment);
             return true;
@@ -200,6 +201,17 @@ public class PharmacistAppointmentService implements IPharmacistAppointmentServi
     @Override
     public List<PharmacistAppointment> getAllFutureReservedAppointmentByPharmacist(Long pharmacistId) {
         return pharmacistAppointmentRepository.findAllFutureReservedPharmacistAppointmentByPharmacist(pharmacistId);
+    }
+
+    //Nemanja
+    @Override
+    public List<PharmacistAppointment> searchAllFutureReservedByPatientFirstAndLastName(Long pharmacistId, String firstName, String lastName) {
+        List<PharmacistAppointment> futurePharmacistAppointment = pharmacistAppointmentRepository.findAllFutureReservedPharmacistAppointmentByPharmacist(pharmacistId);
+        return futurePharmacistAppointment.stream()
+                .filter(p -> ( (p.getPatientWithPharmacistAppointment().getFirstName().toLowerCase().contains(firstName.toLowerCase())
+                        && p.getPatientWithPharmacistAppointment().getLastName().toLowerCase().contains(lastName.toLowerCase()))
+                        || (p.getPatientWithPharmacistAppointment().getFirstName().toLowerCase().contains(lastName.toLowerCase())
+                        && p.getPatientWithPharmacistAppointment().getLastName().toLowerCase().contains(firstName.toLowerCase())) )).collect(Collectors.toList());
     }
 
     //Nemanja

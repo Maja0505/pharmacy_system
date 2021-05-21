@@ -6,6 +6,7 @@ import WorkCalendar from "./WorkCalendar.js";
 import WriteReport from "./WriteReport.js";
 import ExaminedPatients from "./ExaminedPatients.js";
 import ScheduleAppointment from "./SheduleAppointment.js";
+import FutureExaminations from "./FutureExaminations.js";
 
 const HomePage = () => {
   return (
@@ -32,6 +33,9 @@ const HomePage = () => {
           </Route>
           <Route path="/dermatologist/scheduleAppointment">
             <ScheduleAppointment />
+          </Route>
+          <Route path="/dermatologist/futureExaminations">
+            <FutureExaminations />
           </Route>
         </div>
       </Switch>
