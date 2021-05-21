@@ -206,6 +206,30 @@ public class DermatologistAppointmentController {
         }
     }
 
+    //Nemanja
+    @GetMapping("/searchAllFutureReservedByPatient/{dermatologistId}/{firstName}/{lastName}")
+    public ResponseEntity<List<DermatologistAppointmentDTO>> searchFutureReservedAppointmentsByPatientFirstAndLastName(@PathVariable Long dermatologistId, @PathVariable String firstName,@PathVariable String lastName){
+        try {
+            List<DermatologistAppointment> dermatologistAppointmentList = dermatologistAppointmentService.searchAllFutureReservedByPatientFirstAndLastName(dermatologistId,firstName,lastName);
+            if(!dermatologistAppointmentList.isEmpty()){
+                List<DermatologistAppointmentDTO> dermatologistAppointmentDTOList = dermatologistAppointmentConverter.convertListOfDermatologistAppointmentToDermatologistAppointmentDTOS(dermatologistAppointmentList);
+                return new ResponseEntity<>(dermatologistAppointmentDTOList,HttpStatus.OK);
+            }
+            return new ResponseEntity<>(null,HttpStatus.OK);
+        }catch (Exception e){
+            return new ResponseEntity<>(null,HttpStatus.BAD_REQUEST);
+        }
+    }
 
+    //Nemanja
+    @GetMapping("/allFutureReserveByDermatologist/{dermatologistId}")
+    public ResponseEntity<List<DermatologistAppointmentDTO>> getAllFutureReservedDermatologistAppointmentByDermatologist(@PathVariable Long dermatologistId){
+        try {
+            List<DermatologistAppointment> dermatologistAppointmentList = dermatologistAppointmentService.findAllFutureReservedDermatologistAppointmentByDermatologist(dermatologistId);
+            return new ResponseEntity<>(dermatologistAppointmentConverter.convertListOfDermatologistAppointmentToDermatologistAppointmentDTOS(dermatologistAppointmentList),HttpStatus.OK);
+        }catch (Exception e){
+            return new ResponseEntity<>(null,HttpStatus.NOT_FOUND);
+        }
+    }
 
 }
