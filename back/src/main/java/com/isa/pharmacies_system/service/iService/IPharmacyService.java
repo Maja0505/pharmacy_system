@@ -17,5 +17,6 @@ public interface IPharmacyService {
 	List<PharmacyDTO> sortByPharmacyName(List<PharmacyDTO> pharmacies, Boolean asc);
 	List<PharmacyDTO> sortByPharmacyRating(List<PharmacyDTO> pharmacies, Boolean asc);
 	List<Pharmacy> getAll();
+	List<Pharmacy> getAllPharmacyByDermatologistId(Long dermatologistId);
 
 }

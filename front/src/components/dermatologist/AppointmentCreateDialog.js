@@ -133,8 +133,8 @@ const AppointmentCreateDialog = ({
         patientPhoneNumber: patient.PhoneNumber,
         dermatologistAppointmentStartTime: a.StartTime,
         dermatologistAppointmentEndTime: a.EndTime,
-        pharmacyName: pharmacy !== undefined ? pharmacy.name : "DODATI APOTEKU",
-        location: pharmacy !== undefined ? pharmacy.address : "DODATI ADRESU",
+        pharmacyName: patient.PharmacyName,
+        location: patient.PharamcyLocation,
       },
     ]);
   };

@@ -25,7 +25,7 @@ public interface IDermatologistAppointmentRepository extends JpaRepository<Derma
     List<DermatologistAppointment> getOpenDermatologistAppointment();
 
     //Nemanja
-    @Query("select a from DermatologistAppointment a where a.dermatologistForAppointment.id = ?1 and a.statusOfAppointment = 0 and a.pharmacyForDermatologistAppointment.id = ?2 and a.dermatologistAppointmentEndTime > CURRENT_TIMESTAMP")
+    @Query("select a from DermatologistAppointment a where a.dermatologistForAppointment.id = ?1 and a.statusOfAppointment = 0 and a.pharmacyForDermatologistAppointment.id = ?2 and a.dermatologistAppointmentStartTime > CURRENT_TIMESTAMP")
     List<DermatologistAppointment> findAllFutureOpenDermatologistAppointmentByDermatologistAndPharmacy(Long dermatologistId,Long pharmacyId);
 
     //Nemanja
