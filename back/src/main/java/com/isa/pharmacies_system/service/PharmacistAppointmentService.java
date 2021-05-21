@@ -205,6 +205,17 @@ public class PharmacistAppointmentService implements IPharmacistAppointmentServi
 
     //Nemanja
     @Override
+    public List<PharmacistAppointment> searchAllFutureReservedByPatientFirstAndLastName(Long pharmacistId, String firstName, String lastName) {
+        List<PharmacistAppointment> futurePharmacistAppointment = pharmacistAppointmentRepository.findAllFutureReservedPharmacistAppointmentByPharmacist(pharmacistId);
+        return futurePharmacistAppointment.stream()
+                .filter(p -> ( (p.getPatientWithPharmacistAppointment().getFirstName().toLowerCase().contains(firstName.toLowerCase())
+                        && p.getPatientWithPharmacistAppointment().getLastName().toLowerCase().contains(lastName.toLowerCase()))
+                        || (p.getPatientWithPharmacistAppointment().getFirstName().toLowerCase().contains(lastName.toLowerCase())
+                        && p.getPatientWithPharmacistAppointment().getLastName().toLowerCase().contains(firstName.toLowerCase())) )).collect(Collectors.toList());
+    }
+
+    //Nemanja
+    @Override
     public Boolean changePharmacistAppointmentStatusToMissed(PharmacistAppointment pharmacistAppointment) {
         if(pharmacistAppointment.getStatusOfAppointment().equals(StatusOfAppointment.Reserved) && pharmacistAppointment.getPharmacistAppointmentStartTime().isBefore(LocalDateTime.now())){
             pharmacistAppointment.setStatusOfAppointment(StatusOfAppointment.Missed);

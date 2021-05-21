@@ -19,7 +19,7 @@ public interface IPharmacistAppointmentService{
     List<PharmacistAppointment> getAllExpiredPharmacistAppointmentByPharmacist(Long pharmacistId);
     List<PharmacistAppointment> getAllReservedPharmacistAppointmentByPharmacist(Long pharmacistId);
     List<PharmacistAppointment> getAllFutureReservedAppointmentByPharmacist(Long pharmacistId);
-
+    List<PharmacistAppointment> searchAllFutureReservedByPatientFirstAndLastName(Long pharmacistId, String firstName, String lastName);
     Boolean cancelPharmacistAppointment(Long appointmentId);
     Boolean changePharmacistAppointmentStatusToMissed(PharmacistAppointment pharmacistAppointment);
 

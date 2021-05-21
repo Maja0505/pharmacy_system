@@ -1,11 +1,9 @@
 package com.isa.pharmacies_system.controller;
 
-import com.isa.pharmacies_system.DTO.AppointmentScheduleByStaffDTO;
-import com.isa.pharmacies_system.DTO.PatientAppointmentInfoDTO;
-import com.isa.pharmacies_system.DTO.PharmacistAppointmentDTO;
-import com.isa.pharmacies_system.DTO.PharmacistAppointmentTimeDTO;
+import com.isa.pharmacies_system.DTO.*;
 import com.isa.pharmacies_system.converter.PatientConverter;
 import com.isa.pharmacies_system.converter.PharmacistAppointmentConverter;
+import com.isa.pharmacies_system.domain.schedule.DermatologistAppointment;
 import com.isa.pharmacies_system.domain.schedule.PharmacistAppointment;
 import com.isa.pharmacies_system.service.EmailService;
 import com.isa.pharmacies_system.service.iService.IPharmacistAppointmentService;
@@ -183,4 +181,20 @@ public class PharmacistAppointmentController {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
+
+    //Nemanja
+    @GetMapping("/searchAllFutureReservedByPatient/{pharmacistId}/{firstName}/{lastName}")
+    public ResponseEntity<List<PharmacistAppointmentDTO>> searchFutureReservedAppointmentsByPatientFirstAndLastName(@PathVariable Long pharmacistId, @PathVariable String firstName,@PathVariable String lastName){
+        try {
+            List<PharmacistAppointment> pharmacistAppointmentList = pharmacistAppointmentService.searchAllFutureReservedByPatientFirstAndLastName(pharmacistId,firstName,lastName);
+            if(!pharmacistAppointmentList.isEmpty()){
+                List<PharmacistAppointmentDTO> pharmacistAppointmentDTOList = pharmacistAppointmentConverter.convertPharmacistAppointmentsListToDTOS(pharmacistAppointmentList);
+                return new ResponseEntity<>(pharmacistAppointmentDTOList,HttpStatus.OK);
+            }
+            return new ResponseEntity<>(null,HttpStatus.OK);
+        }catch (Exception e){
+            return new ResponseEntity<>(null,HttpStatus.BAD_REQUEST);
+        }
+    }
+
 }

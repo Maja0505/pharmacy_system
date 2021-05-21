@@ -12,12 +12,11 @@ const setDermatologistPatientReport = () => {
 const NavBar = ({ user }) => {
   const NavBarForPharmacist = (
     <Toolbar>
-      <Grid container spacing={1}>
+      <Grid container>
         <Grid item xs={3}>
           <Typography>Hay {user}</Typography>
         </Grid>
-        <Grid item xs={3}></Grid>
-        <Grid item xs={6} container spacing={1} style={{ textAlign: "right" }}>
+        <Grid item xs={8} container style={{ textAlign: "right" }}>
           <Grid item xs={2}>
             <Typography>
               <Link
@@ -25,6 +24,16 @@ const NavBar = ({ user }) => {
                 style={{ color: "#fafafa", textDecoration: "none" }}
               >
                 Medicine reservations
+              </Link>
+            </Typography>
+          </Grid>
+          <Grid item xs={2}>
+            <Typography>
+              <Link
+                to="/pharmacist/futureExaminations"
+                style={{ color: "#fafafa", textDecoration: "none" }}
+              >
+                Future examinations
               </Link>
             </Typography>
           </Grid>
@@ -86,13 +95,21 @@ const NavBar = ({ user }) => {
 
   const NavBarForDermatologist = (
     <Toolbar>
-      <Grid container spacing={1}>
+      <Grid container>
         <Grid item xs={3}>
           <Typography>Hay {user}</Typography>
         </Grid>
-        <Grid item xs={3}></Grid>
-        <Grid item xs={6} container spacing={1} style={{ textAlign: "right" }}>
-          <Grid item xs={2} />
+        <Grid item xs={8} container style={{ textAlign: "right" }}>
+          <Grid item xs={2}>
+            <Typography>
+              <Link
+                to="/dermatologist/futureExaminations"
+                style={{ color: "#fafafa", textDecoration: "none" }}
+              >
+                Future examinations
+              </Link>
+            </Typography>
+          </Grid>
           <Grid item xs={2}>
             <Typography>
               <Link
