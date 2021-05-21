@@ -12,6 +12,10 @@ import {
   import Autocomplete from '@material-ui/lab/Autocomplete';
   import React, { useEffect, useState ,useRef,createRef} from "react";
   import axios from "axios";
+  import CloseIcon from '@material-ui/icons/Close';
+  import IconButton from '@material-ui/core/IconButton';
+
+
 
 
 
@@ -25,7 +29,7 @@ import {
         marginTop: "5%",
       },
       hederRow: {
-        background: "#4051bf",
+        background: "#e57373",
       },
       hederCell: {
         color: "#ffffff",
@@ -66,25 +70,39 @@ const Allergies = ({allergies,setAllergies,patientId}) => {
     }
 
     const HandleAddButton = () => {
+      if(selectedMedicine != undefined && selectedMedicine != null){
         axios.put("http://localhost:8080/api/patient/" + patientId + "/addMedicineAllergies/" + selectedMedicine.medicineId)
         .then((res) => {
-        if(res.data){
-          setAllergies([...allergies,selectedMedicine])
-          setSelectedMedicine({})  
-        }
-       
-        }
-       
+            if(res.data){
+              setAllergies([...allergies,selectedMedicine])
+              setSelectedMedicine({})  
+            }
+          }
+        )
+      }
+    }
 
+    const HandleClickRemoveAllerge = (row) => {
+      axios.put("http://localhost:8080/api/patient/" + patientId + "/removeMedicineAllergies/" + row.medicineId)
+        .then((res) => {
+            if(res.data){
+              var index = allergies.indexOf(row)
+              if(index != -1){
+                allergies.splice(index,1)
+              }
+              setSelectedMedicine({})  
+            }
+          }
         )
     }
 
     const TableHeader = (
         <TableHead>
-          <TableRow>
+          <TableRow >
             <TableCell className={classes.TableCell}>
               Allergies
             </TableCell>
+            <TableCell className={classes.TableCell}> </TableCell>
           </TableRow>
         </TableHead>
       );
@@ -94,6 +112,11 @@ const Allergies = ({allergies,setAllergies,patientId}) => {
             {allergies.map((allergie, index) => (
             <TableRow key={index}>
               <TableCell >{allergie.medicineName}</TableCell>
+              <TableCell>
+                <IconButton aria-label="close" className={classes.closeButton} onClick={() => HandleClickRemoveAllerge(allergie)}>
+                <CloseIcon />
+              </IconButton>
+              </TableCell>
             </TableRow>
              ))}
         </TableBody>

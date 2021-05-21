@@ -30,7 +30,7 @@ INSERT INTO dermatologists (id,dermatologist_average_rating) VALUES (9,2.3);
 INSERT INTO pharmacists (id,pharmacist_average_rating,pharmacy_for_pharmacist_id) VALUES (6,4.3,1);
 INSERT INTO pharmacists (id,pharmacist_average_rating,pharmacy_for_pharmacist_id) VALUES (7,4.3,2);
 
-insert into worker_schedule (id,dermatologist_id,pharmacy_id,type_of_worker_schedule) values (1,8,1,0);
+insert into worker_schedule (id,dermatologist_id,pharmacy_id,type_of_worker_schedule) values (1,8,1,1);
 insert into worker_schedule (id,dermatologist_id,pharmacy_id,type_of_worker_schedule) values (2,8,2,0);
 insert into worker_schedule (id,pharmacy_id,pharmacist_id,type_of_worker_schedule) values (3,1,6,1);
 insert into worker_schedule (id,pharmacy_id,pharmacist_id,type_of_worker_schedule) values (4,2,7,1);
@@ -60,13 +60,14 @@ INSERT INTO working_hours (id, status_of_working_hours,working_end_time,working_
 INSERT INTO working_hours (id, status_of_working_hours,working_end_time,working_start_time,worker_schedule_id) VALUES (21,1,'2021-05-21 23:00','2021-05-21 13:50',3);
 INSERT INTO working_hours (id, status_of_working_hours,working_end_time,working_start_time,worker_schedule_id) VALUES (22,1,'2021-05-22 18:00','2021-05-22 15:50',3);
 INSERT INTO working_hours (id, status_of_working_hours,working_end_time,working_start_time,worker_schedule_id) VALUES (23,1,'2021-05-23 22:00','2021-05-23 10:50',3);
+INSERT INTO working_hours (id, status_of_working_hours,working_end_time,working_start_time,worker_schedule_id) VALUES (24,1,'2021-05-29 22:00','2021-05-29 10:50',3);
 
 
-INSERT INTO working_hours (id, status_of_working_hours,working_end_time,working_start_time,worker_schedule_id) VALUES (24,1,'2021-05-15 23:00','2021-05-15 10:50',4);
+INSERT INTO working_hours (id, status_of_working_hours,working_end_time,working_start_time,worker_schedule_id) VALUES (25,1,'2021-05-15 23:00','2021-05-15 10:50',4);
 
 
-INSERT INTO patient (id, category_of_patient, patient_points) VALUES (1, 0, 0.0);
-INSERT INTO patient (id, category_of_patient, patient_points) VALUES (2, 1, 10.0);
+INSERT INTO patient (id, category_of_patient, patient_points, penalty) VALUES (1, 0, 0.0, 2);
+INSERT INTO patient (id, category_of_patient, patient_points, penalty) VALUES (2, 1, 1.0, 0);
 
 insert into ingredient (id, name_of_ingredient) values (nextval('my_seq_ingredient'),'BC34');
 insert into ingredient (id, name_of_ingredient) values (nextval('my_seq_ingredient'),'AAAA');

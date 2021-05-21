@@ -18,6 +18,8 @@ import {
   import { useState, useEffect } from "react";
   import { makeStyles } from "@material-ui/core/styles";
   import axios from "axios";
+  import Alert from "@material-ui/lab/Alert";
+  import Snackbar from "@material-ui/core/Snackbar";
   
   const useStyles = makeStyles((theme) => ({
     table: {
@@ -43,6 +45,25 @@ import {
     const [copyRows, setCopyRows] = useState({});
   
     const [currPage, setCurrPage] = useState(1);
+    const [alertTextError, setAlertTextError] = useState('')
+    const [openAlertError, setOpenAlertError] = useState(false)
+    const [openAlertSuccess, setOpenAlertSuccess] = useState(false)
+    const [alertTextSuccess, setAlertTextSuccess] = useState('')
+  
+  
+    const handleCloseAlertError = (event, reason) => {
+      if (reason === 'clickaway') {
+        return;
+      }
+      setOpenAlertError(false);
+    };
+  
+    const handleCloseAlertSuccess = (event, reason) => {
+      if (reason === 'clickaway') {
+        return;
+      }
+      setOpenAlertSuccess(false);
+    };
   
     useEffect(() => {
       axios
@@ -115,19 +136,30 @@ import {
         "http://localhost:8080/api/pharmacistAppointment/cancel/" + row.id
       )
       .then((res) => {
-        axios
-        .get(
-          "http://localhost:8080/api/patient/1/pharmacistAppointment/all/reserved/" +
-          (currPage - 1).toString() +
-          ""
-           
-        )
-        .then((res) => {
-          setRows(res.data);
-          setCopyRows(res.data);
-          console.log(res)
-        });
-      });
+        if(res.data){
+          axios
+          .get(
+            "http://localhost:8080/api/patient/1/pharmacistAppointment/all/reserved/" +
+            (currPage - 1).toString() +
+            ""
+             
+          )
+          .then((res) => {
+            setRows(res.data);
+            setCopyRows(res.data);
+            console.log(res)
+          });
+          setAlertTextSuccess('Success cancel reservation')
+          setOpenAlertSuccess(true)
+        }else{
+          setAlertTextError("You cant't cancel reservation");
+          setOpenAlertError(true);
+        }
+      
+      }).catch(error => {
+        setAlertTextError("You cant't cancel reservation");
+        setOpenAlertError(true);
+      })
     }
   
     const TableHeader = (
@@ -236,6 +268,16 @@ import {
           </Grid>
           <Grid item xs={2} />
         </Grid>
+        <Snackbar open={openAlertError} autoHideDuration={1500} onClose={handleCloseAlertError}>
+        <Alert severity="error">
+          {alertTextError}
+        </Alert>
+      </Snackbar>
+      <Snackbar open={openAlertSuccess} autoHideDuration={1500} onClose={handleCloseAlertSuccess}>
+        <Alert severity="success">
+          {alertTextSuccess}
+        </Alert>
+      </Snackbar>
       </div>
     );
   };

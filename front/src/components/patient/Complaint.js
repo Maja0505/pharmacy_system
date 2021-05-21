@@ -1,6 +1,6 @@
 import React from 'react'
 import { ComboBoxComponent } from '@syncfusion/ej2-react-dropdowns';
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import axios from 'axios';
 import {
     Table,
@@ -10,7 +10,6 @@ import {
     TableRow,
     Grid,
     Button,
-    Link,
     TextField
   } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
@@ -22,14 +21,6 @@ import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
 import Typography from '@material-ui/core/Typography';
 import { withStyles } from '@material-ui/core/styles';
-import Radio from '@material-ui/core/Radio';
-import RadioGroup from '@material-ui/core/RadioGroup';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import FormControl from '@material-ui/core/FormControl';
-import FormLabel from '@material-ui/core/FormLabel';
-import Alert from "@material-ui/lab/Alert";
-import Snackbar from "@material-ui/core/Snackbar";
-
 
 
 
@@ -66,136 +57,48 @@ import Snackbar from "@material-ui/core/Snackbar";
 
 
 
-const Rating = () => {
+const Complaint = () => {
 
-    const [typeList, setTypeList] = useState(['Dermatologist_rating','Medicine_rating','Pharmacy_rating','Pharmacist_rating'])
+    const [typeList, setTypeList] = useState(['Dermatologist_complaint','Pharmacy_complaint','Pharmacist_complaint'])
     const [selectedType, setSelectedType] = useState()
     const [staffs, setStaffs] = useState([])
     const [medicines, setMedicines] = useState([])
     const [pharmacies, setPharmacies] = useState([])
-    const [openRatingDialog, setOpenRatingDialog] = useState(false)
+    const [openComplaintDialog, setOpenComplaintDialog] = useState(false)
     const [radioValue, setRadioValue] = React.useState('female');
     const [selectedRow, setSelectedRow] = useState()
     const classes = useStyles();
-    const [openAlertSuccess, setOpenAlertSuccess] = useState(false)
-    const [alertTextSuccess, setAlertTextSuccess] = useState('')
 
-    const handleClickOpenRatingDialog= (row) => {
+    const handleClickOpenComplaintDialog= (row) => {
         setSelectedRow(row)
-        setOpenRatingDialog(true)
+        setOpenComplaintDialog(true)
     }
-    const handleClickCloseRatingDialog = () => {
+    const handleClickCloseComplaintDialog = () => {
         setRadioValue()
-        setOpenRatingDialog(false);
+        setOpenComplaintDialog(false);
 
     };
-
-    const handleCloseAlertSuccess = (event, reason) => {
-      if (reason === 'clickaway') {
-        return;
-      }
-      setOpenAlertSuccess(false);
-    };
-
-    const handleClickSaveRating = () => {
+    const handleClickSaveComplaint = () => {
         
-        if(selectedType === 'Dermatologist_rating' || selectedType === 'Pharmacist_rating'){
-            var staffDTO = {
-                id:0,
-                grade:radioValue,
-                patientId:1,
-                typeOfRating:selectedType,
-                staffId:selectedRow.id,
-                staffFirstName:selectedRow.firstName,
-                staffLastName:selectedRow.lastName,
-                staffEmail:selectedRow.email
-
-
-            }
-            axios.post('http://localhost:8080/api/rating/staff',staffDTO)
-            .then((res)=> {
-                setAlertTextSuccess('Success set rating')
-                setOpenAlertSuccess(true)
-                setRadioValue()
-                setOpenRatingDialog(false);
-            }).catch(error => {
-
-            })
-            
-        }
-        if(selectedType === 'Medicine_rating'){
-            var staffDTO = {
-                id:0,
-                grade:radioValue,
-                patientId:1,
-                typeOfRating:selectedType,
-                medicineId:selectedRow.medicineId,
-                medicineName:selectedRow.medicineName
-            }
-            axios.post('http://localhost:8080/api/rating/medicine',staffDTO)
-            .then((res)=> {
-                setAlertTextSuccess('Success set rating')
-                setOpenAlertSuccess(true)
-                setRadioValue()
-                setOpenRatingDialog(false);
-            }).catch(error => {
-              
-            })
-            
-        }
-        if(selectedType === 'Pharmacy_rating'){
-            var staffDTO = {
-                id:0,
-                grade:radioValue,
-                patientId:1,
-                typeOfRating:selectedType,
-                pharmacyId:selectedRow.id,
-                pharmacyName:selectedRow.pharmacyName
-            }
-            axios.post('http://localhost:8080/api/rating/pharmacy',staffDTO)
-            .then((res)=> {
-                setAlertTextSuccess('Success set rating')
-                setOpenAlertSuccess(true)
-                setRadioValue()
-                setOpenRatingDialog(false);
-            }).catch(error => {
-              
-            })
-            
-        }
     }
 
 
-    const HandleClickRatingType = (type) => {
-        if(type == 'Dermatologist_rating'){
+    const HandleClickComplaintType = (type) => {
+        if(type == 'Dermatologist_complaint'){
             axios.get('http://localhost:8080/api/patient/1/dermatologist/expired')
             .then((res) => {
                 setStaffs(res.data)
-            }).catch(error => {
-              
             })
-        }else if(type == 'Medicine_rating'){
-            axios.get('http://localhost:8080/api/patient/1/medicine')
-            .then((res) => {
-                setMedicines(res.data)
-            }).catch(error => {
-              
-            })
-
-        }else if(type == 'Pharmacy_rating'){
+        }else if(type == 'Pharmacy_complaint'){
             axios.get('http://localhost:8080/api/patient/1/pharmacy')
             .then((res) => {
                 setPharmacies(res.data)
-            }).catch(error => {
-              
             })
 
         }else{
             axios.get('http://localhost:8080/api/patient/1/pharmacist/expired')
             .then((res) => {
                 setStaffs(res.data)
-            }).catch(error => {
-              
             })
 
         }
@@ -228,7 +131,7 @@ const Rating = () => {
               <TableCell>{row.firstName}</TableCell>
               <TableCell>{row.lastName}</TableCell>
               <TableCell>{row.email}</TableCell>
-              <TableCell><Button onClick={() => handleClickOpenRatingDialog(row)}>Set new rating</Button></TableCell>
+              <TableCell><Button onClick={() => handleClickOpenComplaintDialog(row)}>Write complaint</Button></TableCell>
 
             </TableRow>
           ))}
@@ -271,7 +174,7 @@ const Rating = () => {
             <TableRow key={index}>
               <TableCell>{row.medicineId}</TableCell>
               <TableCell>{row.medicineName}</TableCell>
-              <TableCell><Button onClick={() => handleClickOpenRatingDialog(row)}>Set new rating</Button></TableCell>
+              <TableCell><Button onClick={() => handleClickOpenComplaintDialog(row)}>Write complaint</Button></TableCell>
 
             </TableRow>
           ))}
@@ -316,8 +219,8 @@ const Rating = () => {
             <TableRow key={index}>
               <TableCell>{row.pharmacyName}</TableCell>
               <TableCell>{row.pharmacyAddress.streetName} {row.pharmacyAddress.streetNumber},{row.pharmacyAddress.city}</TableCell>
-              <TableCell>{row.pharmacyAverageRating}</TableCell>
-              <TableCell><Button onClick={() => handleClickOpenRatingDialog(row)}>Set new rating</Button></TableCell>
+              <TableCell>{row.pharmacyAverageComplaint}</TableCell>
+              <TableCell><Button onClick={() => handleClickOpenComplaintDialog(row)}>Write complaint</Button></TableCell>
             </TableRow>
           ))}
         </TableBody>
@@ -371,32 +274,34 @@ const Rating = () => {
       };
 
 
-      const CreateRatingDialog = (
+      const CreateComplaintDialog = (
         <div>
-            <Dialog onClose={handleClickCloseRatingDialog} aria-labelledby="customized-dialog-title" open={openRatingDialog} fullWidth='true'
+            <Dialog onClose={handleClickCloseComplaintDialog} aria-labelledby="customized-dialog-title" open={openComplaintDialog} fullWidth='true'
           maxWidth='sm'>
-              <DialogTitle id="customized-dialog-title" onClose={handleClickCloseRatingDialog}>
+              <DialogTitle id="customized-dialog-title" onClose={handleClickCloseComplaintDialog}>
                 
               </DialogTitle>
               <DialogContent dividers>
+             
                   <Typography gutterBottom>
-                    <FormControl component="fieldset">
-                      <FormLabel component="legend">Gender</FormLabel>
-                      <RadioGroup aria-label="gender" name="gender1" value={radioValue} onChange={handleChange}>
-                          <FormControlLabel value="One" control={<Radio />} label="One" />
-                          <FormControlLabel value="Two" control={<Radio />} label="Two" />
-                          <FormControlLabel value="Three" control={<Radio />} label="Three" />
-                          <FormControlLabel value="Four"  control={<Radio />} label="Four" />
-                          <FormControlLabel value="Five"  control={<Radio />} label="Five" />
-                      </RadioGroup>
-                      </FormControl>
+     
+                    <TextField
+                    style={{width:"70%"}}
+                      id="outlined-multiline-static"
+                      label="Complaint"
+                      multiline
+                      rows={20}
+                      variant="outlined"
+                    />
                   </Typography>
+              
+    
               </DialogContent>
               <DialogActions>
-                  <Button onClick={handleClickCloseRatingDialog} autoFocus color="primary">
+                  <Button onClick={handleClickCloseComplaintDialog} autoFocus color="primary">
                   Close
                   </Button>
-                  <Button onClick={handleClickSaveRating} autoFocus color="primary">
+                  <Button onClick={handleClickSaveComplaint} autoFocus color="primary">
                   Save
                   </Button>
               </DialogActions>
@@ -406,8 +311,8 @@ const Rating = () => {
       )
     return (
         <div>
-            <h2>Rating form</h2>
-            {CreateRatingDialog} 
+            <h2>Complaint</h2>
+            {CreateComplaintDialog} 
             <ComboBoxComponent 
                 width= "20%"
                 style={{width:"100%"}}
@@ -415,21 +320,15 @@ const Rating = () => {
                 ignoreAccent={true}
                 allowFiltering={true}
                 dataSource={typeList}
-                placeholder="Select rating type"
-                change={(e) => HandleClickRatingType(e.value)}
+                placeholder="Select complaint type"
+                change={(e) => HandleClickComplaintType(e.value)}
                   />
-               {selectedType === 'Pharmacy_rating' && TableForPharmacy}
-              {(selectedType === 'Dermatologist_rating' || selectedType === 'Pharmacist_rating')  && TableForDermatologistAndPharmacist}
-              {selectedType === 'Medicine_rating' && TableForMedicine}             
-              <Snackbar open={openAlertSuccess} autoHideDuration={1500} onClose={handleCloseAlertSuccess}>
-                <Alert severity="success">
-                  {alertTextSuccess}
-                </Alert>
-              </Snackbar>
+               {selectedType === 'Pharmacy_complaint' && TableForPharmacy}
+              {(selectedType === 'Dermatologist_complaint' || selectedType === 'Pharmacist_complaint')  && TableForDermatologistAndPharmacist}         
         </div>
     )
 
 
 }
 
-export default Rating
+export default Complaint
