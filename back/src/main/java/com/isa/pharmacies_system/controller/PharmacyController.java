@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import com.isa.pharmacies_system.DTO.PharmacistAppointmentTimeDTO;
 import com.isa.pharmacies_system.DTO.PharmacyDTO;
+import com.isa.pharmacies_system.DTO.PharmacyWhereDermatologistWorkDTO;
 import com.isa.pharmacies_system.converter.PharmacyConverter;
 import com.isa.pharmacies_system.service.iService.IPriceListService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -103,6 +104,21 @@ public class PharmacyController {
 			return new ResponseEntity<>(null,HttpStatus.BAD_REQUEST);
 		}
 
+	}
+
+	//Nemanja
+	@GetMapping("/getPharmacies/{dermatologistId}")
+	public ResponseEntity<List<PharmacyWhereDermatologistWorkDTO>> getAllPharmaciesWhereDermatologistWork(@PathVariable Long dermatologistId){
+		try {
+			List<Pharmacy> pharmaciesWhereDermatologistWork = iPharmacyService.getAllPharmacyByDermatologistId(dermatologistId);
+			if(pharmaciesWhereDermatologistWork != null){
+				List<PharmacyWhereDermatologistWorkDTO> pharmacyWhereDermatologistWorkDTOS = pharmacyConverter.convertPharmacyListToPharmacyWhereDermatologistWorkDTOList(pharmaciesWhereDermatologistWork);
+				return new ResponseEntity<>(pharmacyWhereDermatologistWorkDTOS,HttpStatus.OK);
+			}
+			return new ResponseEntity<>(null,HttpStatus.NOT_FOUND);
+		}catch (Exception e){
+			return new ResponseEntity<>(null,HttpStatus.BAD_REQUEST);
+		}
 	}
 
 }

@@ -11,11 +11,17 @@ import {
   ResourcesDirective,
   ResourceDirective,
 } from "@syncfusion/ej2-react-schedule";
+import { TextField, Grid, Typography } from "@material-ui/core";
+
+import Autocomplete from "@material-ui/lab/Autocomplete";
+
 import axios from "axios";
 import { useEffect, useState } from "react";
 
 const WorkCalendar = () => {
   const [data, setData] = useState([]);
+
+  const [pharmacies, setPharmacies] = useState([]);
 
   const resourceDataSource = [
     { Id: 1, Color: "#e51e36", Name: "missed" },
@@ -31,21 +37,39 @@ const WorkCalendar = () => {
 
   useEffect(() => {
     axios
-      .get("http://localhost:8080/api/dermatologistAppointment/allMissed/8/1")
+      .get("http://localhost:8080/api/pharmacy/getPharmacies/8")
       .then((res) => {
-        addAppointmentsToData(res.data);
-      });
-    axios
-      .get("http://localhost:8080/api/dermatologistAppointment/allExpired/8/1")
-      .then((res) => {
-        addAppointmentsToData(res.data);
-      });
-    axios
-      .get("http://localhost:8080/api/dermatologistAppointment/allReserved/8/1")
-      .then((res) => {
-        addAppointmentsToData(res.data);
+        setPharmacies(res.data);
+        addAppointmentForSelectedPharmacy(res.data[0].pharmacyId);
       });
   }, []);
+
+  const addAppointmentForSelectedPharmacy = (pharmacyId) => {
+    axios
+      .get(
+        "http://localhost:8080/api/dermatologistAppointment/allMissed/8/" +
+          pharmacyId
+      )
+      .then((res) => {
+        addAppointmentsToData(res.data);
+      });
+    axios
+      .get(
+        "http://localhost:8080/api/dermatologistAppointment/allExpired/8/" +
+          pharmacyId
+      )
+      .then((res) => {
+        addAppointmentsToData(res.data);
+      });
+    axios
+      .get(
+        "http://localhost:8080/api/dermatologistAppointment/allReserved/8/" +
+          pharmacyId
+      )
+      .then((res) => {
+        addAppointmentsToData(res.data);
+      });
+  };
 
   const addAppointmentsToData = (appointments) => {
     setData((previousState) => [...previousState, ...appointments]);
@@ -81,9 +105,36 @@ const WorkCalendar = () => {
       });
   };
 
+  const handleChangePharmacy = async (pharmacy) => {
+    setData([]);
+    addAppointmentForSelectedPharmacy(pharmacy.pharmacyId);
+  };
+
   return (
-    <div style={{ marginLeft: "15%", marginTop: "3%" }}>
-      <h1 style={{ width: "80%" }}>Work calendar</h1>
+    <div style={{ marginLeft: "15%", marginTop: "2%" }}>
+      <Grid container>
+        <Grid item xs={6}>
+          <Typography variant="h4" style={{ width: "100%" }}>
+            Work calendar
+          </Typography>
+        </Grid>
+        <Grid item xs={3}>
+          {pharmacies.length !== 0 && (
+            <Autocomplete
+              id="controllable-states-demo"
+              options={pharmacies}
+              getOptionLabel={(option) => option.pharmacyName}
+              defaultValue={pharmacies.find((v) => v.pharmacyName[0])}
+              disableClearable
+              onChange={(event, value) => handleChangePharmacy(value)}
+              renderInput={(params) => (
+                <TextField {...params} label="Pharmacy" variant="outlined" />
+              )}
+            />
+          )}
+        </Grid>
+      </Grid>
+
       <ScheduleComponent
         eventSettings={{
           dataSource: data,
@@ -104,6 +155,7 @@ const WorkCalendar = () => {
         height="500px"
         width="80%"
         eventClick={(e) => appointmentClick(e)}
+        style={{ marginTop: "1%" }}
       >
         <ResourcesDirective>
           <ResourceDirective
