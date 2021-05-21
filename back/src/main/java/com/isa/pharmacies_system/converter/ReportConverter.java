@@ -4,6 +4,7 @@ import com.isa.pharmacies_system.DTO.RecipeItemDTO;
 import com.isa.pharmacies_system.DTO.ReportForPatientDTO;
 import com.isa.pharmacies_system.domain.medicine.*;
 import com.isa.pharmacies_system.domain.report.DermatologistReport;
+import com.isa.pharmacies_system.domain.report.PharmacistReport;
 import com.isa.pharmacies_system.service.iService.IMedicineService;
 
 import java.util.HashSet;
@@ -14,12 +15,25 @@ public class ReportConverter {
     //Nemanja
     public DermatologistReport convertReportDTOToDermatologistReport(ReportForPatientDTO reportForPatientDTO, IMedicineService medicineService){
         DermatologistReport dermatologistReport = new DermatologistReport();
-        Recipe recipe = new Recipe();
         dermatologistReport.setReportInfo(reportForPatientDTO.getReportInfo());
+        dermatologistReport.setRecipeForDermatologistReport(createRecipeForReport(reportForPatientDTO,medicineService));
+        return dermatologistReport;
+    }
+
+    //Nemanja
+    public PharmacistReport convertReportDTOTOPharmacistReport(ReportForPatientDTO reportForPatientDTO, IMedicineService medicineService) {
+        PharmacistReport pharmacistReport = new PharmacistReport();
+        pharmacistReport.setReportInfo(reportForPatientDTO.getReportInfo());
+        pharmacistReport.setRecipeForPharmacistReport(createRecipeForReport(reportForPatientDTO,medicineService));
+        return pharmacistReport;
+    }
+
+    //Nemanja
+    private Recipe createRecipeForReport(ReportForPatientDTO reportForPatientDTO, IMedicineService medicineService) {
+        Recipe recipe = new Recipe();
         recipe.setCreationDate(reportForPatientDTO.getCreationDate());
         recipe.setRecipeItems(convertReportDTORecipeItemsToRecipeItems(reportForPatientDTO,medicineService,recipe));
-        dermatologistReport.setRecipeForDermatologistReport(recipe);
-        return dermatologistReport;
+        return recipe;
     }
 
     //Nemanja
@@ -42,5 +56,6 @@ public class ReportConverter {
         recipeItem.setRecipe(recipe);
         return recipeItem;
     }
+
 
 }

@@ -26,6 +26,10 @@ const AppointmentInfoDialog = ({
         AppointmentId: appointment.id,
         Email: appointment.patientEmail,
         PhoneNumber: appointment.patientPhoneNumber,
+        PharmacyName: appointment.pharmacyName,
+        PharamcyLocation: appointment.location,
+        AppointmentStartTime: appointment.startTime,
+        AppointmentEndTime: appointment.endTime,
       })
     );
   };
