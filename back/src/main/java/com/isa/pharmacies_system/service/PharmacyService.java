@@ -3,9 +3,7 @@ package com.isa.pharmacies_system.service;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import com.isa.pharmacies_system.DTO.PatientAppointmentInfoDTO;
-import com.isa.pharmacies_system.DTO.PharmacistAppointmentTimeDTO;
-import com.isa.pharmacies_system.DTO.PharmacyDTO;
+import com.isa.pharmacies_system.DTO.*;
 import com.isa.pharmacies_system.domain.user.Pharmacist;
 import com.isa.pharmacies_system.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +11,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
-import com.isa.pharmacies_system.DTO.PharmacyNewDTO;
 import com.isa.pharmacies_system.converter.PharmacyConverter;
 import com.isa.pharmacies_system.domain.medicine.MedicinePrice;
 import com.isa.pharmacies_system.domain.pharmacy.Pharmacy;
@@ -83,6 +80,31 @@ public class PharmacyService implements IPharmacyService {
 	@Override
 	public List<Pharmacy> getAll() {
 		return iPharmacyRepository.findAll();
+	}
+
+	@Override
+	public List<PharmacyDTO> searchPharmacyByNameAndCity(String word, List<PharmacyDTO> pharmacyDTOS) {
+		return pharmacyDTOS.stream().filter(pharmacyDTO -> pharmacyDTO.getPharmacyName().toLowerCase().contains(word.toLowerCase()) || pharmacyDTO.getPharmacyAddress().getCity().toLowerCase().contains(word.toLowerCase())).collect(Collectors.toList());
+	}
+
+	@Override
+	public List<PharmacyDTO> filterPharmacy(FilteringPharmacyDTO filteringPharmacyDTO) {
+		List<PharmacyDTO> filterList;
+		filterList = filteringPharmacyDTO.getPharmacyDTOS().stream().filter(pharmacyDTO ->
+				(pharmacyDTO.getPharmacyAverageRating() >= 1 && pharmacyDTO.getPharmacyAverageRating() <= 2 && filteringPharmacyDTO.getFilterListForRating().get(0))
+		|| (pharmacyDTO.getPharmacyAverageRating() >= 2  && pharmacyDTO.getPharmacyAverageRating() <= 3 && filteringPharmacyDTO.getFilterListForRating().get(1))
+		|| (pharmacyDTO.getPharmacyAverageRating() >= 3  && pharmacyDTO.getPharmacyAverageRating() <= 4 && filteringPharmacyDTO.getFilterListForRating().get(2))
+		|| (pharmacyDTO.getPharmacyAverageRating() >= 4  && pharmacyDTO.getPharmacyAverageRating() <= 5 && filteringPharmacyDTO.getFilterListForRating().get(3))
+		|| (pharmacyDTO.getPriceListForAppointmentDTO().getPharmacistAppointmentPricePerHour() <10 && filteringPharmacyDTO.getFilterListForPharmacistAppointmentPricePerHour().get(0))
+				|| (pharmacyDTO.getPriceListForAppointmentDTO().getPharmacistAppointmentPricePerHour() >= 10 && pharmacyDTO.getPriceListForAppointmentDTO().getPharmacistAppointmentPricePerHour() <= 20 && filteringPharmacyDTO.getFilterListForPharmacistAppointmentPricePerHour().get(1))
+				|| (pharmacyDTO.getPriceListForAppointmentDTO().getPharmacistAppointmentPricePerHour() >= 20  && pharmacyDTO.getPriceListForAppointmentDTO().getPharmacistAppointmentPricePerHour() <= 30 && filteringPharmacyDTO.getFilterListForPharmacistAppointmentPricePerHour().get(2))
+				|| (pharmacyDTO.getPriceListForAppointmentDTO().getPharmacistAppointmentPricePerHour() >= 30 && pharmacyDTO.getPriceListForAppointmentDTO().getPharmacistAppointmentPricePerHour() <= 40 && filteringPharmacyDTO.getFilterListForPharmacistAppointmentPricePerHour().get(3))
+				|| (pharmacyDTO.getPriceListForAppointmentDTO().getPharmacistAppointmentPricePerHour() > 40 && filteringPharmacyDTO.getFilterListForPharmacistAppointmentPricePerHour().get(4))
+				|| (pharmacyDTO.getPriceListForAppointmentDTO().getDermatologistAppointmentPricePerHour() >= 10 && pharmacyDTO.getPriceListForAppointmentDTO().getDermatologistAppointmentPricePerHour() <= 20 && filteringPharmacyDTO.getFilterListForDermatologistAppointmentPricePerHour().get(1))
+				|| (pharmacyDTO.getPriceListForAppointmentDTO().getDermatologistAppointmentPricePerHour() >= 20  && pharmacyDTO.getPriceListForAppointmentDTO().getDermatologistAppointmentPricePerHour() <= 30 && filteringPharmacyDTO.getFilterListForDermatologistAppointmentPricePerHour().get(2))
+				|| (pharmacyDTO.getPriceListForAppointmentDTO().getDermatologistAppointmentPricePerHour() >= 30 && pharmacyDTO.getPriceListForAppointmentDTO().getDermatologistAppointmentPricePerHour() <= 40 && filteringPharmacyDTO.getFilterListForDermatologistAppointmentPricePerHour().get(3))
+				|| (pharmacyDTO.getPriceListForAppointmentDTO().getDermatologistAppointmentPricePerHour() > 40 && filteringPharmacyDTO.getFilterListForDermatologistAppointmentPricePerHour().get(4))).collect(Collectors.toList());
+		return filterList;
 	}
 
 	@Override

@@ -2,6 +2,7 @@ package com.isa.pharmacies_system.service.iService;
 
 import java.util.List;
 
+import com.isa.pharmacies_system.DTO.FilteringPharmacyDTO;
 import com.isa.pharmacies_system.DTO.PharmacistAppointmentTimeDTO;
 import com.isa.pharmacies_system.DTO.PharmacyDTO;
 import com.isa.pharmacies_system.DTO.PharmacyNewDTO;
@@ -17,5 +18,6 @@ public interface IPharmacyService {
 	List<PharmacyDTO> sortByPharmacyName(List<PharmacyDTO> pharmacies, Boolean asc);
 	List<PharmacyDTO> sortByPharmacyRating(List<PharmacyDTO> pharmacies, Boolean asc);
 	List<Pharmacy> getAll();
-
+    List<PharmacyDTO> searchPharmacyByNameAndCity(String word, List<PharmacyDTO> pharmacyDTOS);
+	List<PharmacyDTO> filterPharmacy(FilteringPharmacyDTO filteringPharmacyDTO);
 }

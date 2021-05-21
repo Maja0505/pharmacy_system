@@ -3,6 +3,8 @@ package com.isa.pharmacies_system.controller;
 
 import java.time.LocalDateTime;
 import java.util.List;
+
+import com.isa.pharmacies_system.DTO.FilteringPharmacyDTO;
 import com.isa.pharmacies_system.DTO.PharmacistAppointmentTimeDTO;
 import com.isa.pharmacies_system.DTO.PharmacyDTO;
 import com.isa.pharmacies_system.converter.PharmacyConverter;
@@ -103,6 +105,25 @@ public class PharmacyController {
 			return new ResponseEntity<>(null,HttpStatus.BAD_REQUEST);
 		}
 
+	}
+
+
+	@PutMapping(value = "/search/{word}", consumes = "application/json")
+	public ResponseEntity<List<PharmacyDTO>> searchPharmacyByNameAndCity(@PathVariable String word, @RequestBody List<PharmacyDTO> pharmacyDTOS){
+		try {
+			return new ResponseEntity<>(iPharmacyService.searchPharmacyByNameAndCity(word,pharmacyDTOS),HttpStatus.OK);
+		}catch (Exception e){
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		}
+	}
+
+	@PutMapping(value = "/filter", consumes = "application/json")
+	public ResponseEntity<List<PharmacyDTO>> filterPharmacy(@RequestBody FilteringPharmacyDTO filteringPharmacyDTO){
+		try {
+			return new ResponseEntity<>(iPharmacyService.filterPharmacy(filteringPharmacyDTO),HttpStatus.OK);
+		}catch (Exception e){
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		}
 	}
 
 }
