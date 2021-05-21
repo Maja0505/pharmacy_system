@@ -140,6 +140,18 @@ public class PatientController {
     }
 
     //#1
+    @PutMapping(value = "/{patientId}/removeMedicineAllergies/{medicineId}")
+    public ResponseEntity<Boolean> removeMedicineAllergies(@PathVariable Long patientId, @PathVariable Long medicineId){
+
+        try {
+            return new ResponseEntity<>(patientService.removeMedicineAllergies(patientId,medicineId),HttpStatus.OK);
+        }catch (Exception e){
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+
+    }
+
+    //#1
     @GetMapping(value = "/{id}/dermatologistAppointment", consumes = "application/json")
     public ResponseEntity<List<DermatologistAppointmentDTO>> getDermatologistAppointmentsForPatient(@PathVariable Long id){
 

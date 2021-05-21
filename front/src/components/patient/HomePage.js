@@ -16,6 +16,7 @@ import SchedulePharmacistAppointment from './SchedulePharmacistAppointment'
 import EPrescriptionList from './EPrescriptionList'
 import SubscriptionPharmacy from './SubscriptionPharmacy'
 import Rating from './Rating'
+import Complaint from './Complaint'
 
 import { BrowserRouter as Router, Route, Link } from "react-router-dom";
 
@@ -67,6 +68,7 @@ const HomePage = () => {
      setButton6(false)
      setButton7(false)
      setButton10(false)
+     setButton11(false)
      setButton13(false)
      setButton14(false)
 
@@ -83,6 +85,7 @@ const HomePage = () => {
     setButton6(false)
     setButton7(false)
     setButton10(false)
+    setButton11(false)
     setButton13(false)
     setButton14(false)
 
@@ -101,6 +104,7 @@ const HomePage = () => {
     setButton6(false)
     setButton7(false)
     setButton10(false)
+    setButton11(false)
     setButton13(false)
     setButton14(false)
 
@@ -120,6 +124,7 @@ const HomePage = () => {
     setButton6(false)
     setButton7(false)
     setButton10(false)
+    setButton11(false)
     setButton13(false)
     setButton14(false)
 
@@ -139,6 +144,7 @@ const HomePage = () => {
     setButton6(false)
     setButton7(false)
     setButton10(false)
+    setButton11(false)
     setButton13(false)
     setButton14(false)
 
@@ -158,6 +164,7 @@ const HomePage = () => {
     setButton5(false)
     setButton7(false)
     setButton10(false)
+    setButton11(false)
     setButton13(false)
     setButton14(false)
 
@@ -177,6 +184,7 @@ const HomePage = () => {
     setButton5(false)
     setButton6(false)
     setButton10(false)
+    setButton11(false)
     setButton13(false)
     setButton14(false)
 
@@ -196,6 +204,7 @@ const HomePage = () => {
     setButton5(false)
     setButton6(false)
     setButton7(false)
+    setButton11(false)
     setButton13(false)
     setButton14(false)
 
@@ -204,6 +213,26 @@ const HomePage = () => {
 
     if(!button10){
       setButton10(true)
+    }
+  }
+
+  const HandleButton11 = () => {
+    setButton1(false)
+    setButton2(false)
+    setButton3(false)
+    setButton4(false)
+    setButton5(false)
+    setButton6(false)
+    setButton7(false)
+    setButton10(false)
+    setButton13(false)
+    setButton14(false)
+
+
+
+
+    if(!button11){
+      setButton11(true)
     }
   }
 
@@ -216,6 +245,7 @@ const HomePage = () => {
     setButton6(false)
     setButton7(false)
     setButton10(false)
+    setButton11(false)
     setButton14(false)
 
 
@@ -237,6 +267,7 @@ const HomePage = () => {
     setButton6(false)
     setButton7(false)
     setButton10(false)
+    setButton11(false)
     setButton13(false)
 
 
@@ -277,7 +308,7 @@ const HomePage = () => {
                 <Button component={Link} style={{backgroundColor:button8 ? "white" : '#4051bf',color:button8 ? 'black' : 'white'}}>Penals</Button>
                 <Button component={Link} style={{backgroundColor:button9 ? "white" : '#4051bf',color:button9 ? 'black' : 'white'}}>Medicines from ERecipe</Button>
                 <Button component={Link}  style={{backgroundColor:button10 ? "white" : '#4051bf',color:button10 ? 'black' : 'white'}} to="/patient/HomePage/subscriptionPharmacy" onClick={HandleButton10}>Followed pharmaciest</Button>
-                <Button component={Link} style={{backgroundColor:button11 ? "white" : '#4051bf',color:button11 ? 'black' : 'white'}}>Pisanje Zalbe</Button>
+                <Button component={Link} style={{backgroundColor:button11 ? "white" : '#4051bf',color:button11 ? 'black' : 'white'}} to="/patient/HomePage/complaint" onClick={HandleButton11}>Write complaint</Button>
                 <Button component={Link} style={{backgroundColor:button12 ? "white" : '#4051bf',color:button12 ? 'black' : 'white'}}>Preuzimanje leka</Button>
                 <Button component={Link} style={{backgroundColor:button13 ? "white" : '#4051bf',color:button13 ? 'black' : 'white'}} to="/patient/HomePage/schedulePharmacistAppointment"  onClick={HandleButton13}>Schedule pharmacist appointment</Button>
                 <Button component={Link} style={{backgroundColor:button14 ? "white" : '#4051bf',color:button14 ? 'black' : 'white'}} to="/patient/HomePage/rating"  onClick={HandleButton14}>Rating</Button>
@@ -296,6 +327,7 @@ const HomePage = () => {
                   <Route path='/patient/HomePage/ePrescriptionList' component={EPrescriptionList}></Route>
                   <Route path='/patient/HomePage/subscriptionPharmacy' component={SubscriptionPharmacy}></Route>
                   <Route path='/patient/HomePage/rating' component={Rating}></Route>
+                  <Route path='/patient/HomePage/complaint' component={Complaint}></Route>
 
                 </Paper>
               </Grid>

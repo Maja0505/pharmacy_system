@@ -12,6 +12,10 @@ import StepLabel from '@material-ui/core/StepLabel';
 import Button from '@material-ui/core/Button';
 import Link from '@material-ui/core/Link';
 import Typography from '@material-ui/core/Typography';
+import Alert from "@material-ui/lab/Alert";
+import  { useEffect, useState } from "react";
+import Snackbar from "@material-ui/core/Snackbar";
+
 import DatePickerForSchedulePharmacistAppointment from './DatePickerForSchedulePharmacistAppointment';
 import PharmacieTableWithFreePharmacist from './PharmacieTableWithFreePharmacist';
 import PharmacistsTableForSchedulePharmacistAppointment from './PharmacistsTableForSchedulePharmacistAppointment'
@@ -55,6 +59,25 @@ export default function Checkout() {
 
   const classes = useStyles();
   const [activeStep, setActiveStep] = React.useState(0);
+  const [alertTextError, setAlertTextError] = useState('')
+  const [openAlertError, setOpenAlertError] = useState(false)
+  const [openAlertSuccess, setOpenAlertSuccess] = useState(false)
+  const [alertTextSuccess, setAlertTextSuccess] = useState('')
+
+
+  const handleCloseAlertError = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    setOpenAlertError(false);
+  };
+
+  const handleCloseAlertSuccess = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    setOpenAlertSuccess(false);
+  };
 
   const handleNext = (step) => {
 
@@ -72,7 +95,6 @@ export default function Checkout() {
         throw new Error('Unknown step');
     }
    
-    setActiveStep(activeStep + 1);
   };
 
   const handleBack = () => {
@@ -167,9 +189,20 @@ export default function Checkout() {
            
         )
         .then((res) => {
-          setPharmacies(res.data)
-          console.log(res)
-        });
+          console.log(res.data)
+          if(res.data.length === 0){
+            setAlertTextError('There are no available pharmacists in selected time')
+            setOpenAlertError(true)
+          }else{
+            setActiveStep(activeStep + 1);
+            setPharmacies(res.data)
+          }
+        
+        }).catch(error => {
+          setAlertTextError('There are no available pharmacists in selected time');
+          setOpenAlertError(true);
+        })
+        
   }
 
   const HandleClickGetFreePharmacistsForSelectedPharmacy = () => {
@@ -185,7 +218,16 @@ export default function Checkout() {
            
         )
         .then((res) => {
-          setPharmacists(res.data)
+          if(res.data.length == 0){
+            setAlertTextError('There are no available pharmacists in selected time')
+            setOpenAlertError(true)
+          }else{
+            setActiveStep(activeStep + 1);
+            setPharmacists(res.data)
+          }
+          
+        }).catch(error => {
+         
         });
   }
 
@@ -202,8 +244,19 @@ export default function Checkout() {
        
     )
     .then((res) => {
-     console.log('uspesnooo')
-    });
+      setAlertTextSuccess('Success schedule pharmacist appointment')
+      setOpenAlertSuccess(true)
+      setActiveStep(0);
+      setDate()
+      setTime()
+      setDuration()
+      setSelectedPharmacist()
+      setSelectedPharmacy()
+    }).catch(error => {
+      setAlertTextError('PENALIIIIIIII')
+      setOpenAlertError(true)
+    }
+    );
   }
 
   const ValidateNextButton = (step) => {
@@ -260,13 +313,23 @@ export default function Checkout() {
                     className={classes.button}
                     disabled = {!ValidateNextButton(activeStep)}
                   >
-                    {activeStep === steps.length - 1 ? 'Place order' : 'Next'}
+                    {activeStep === steps.length - 1 ? 'Schedule' : 'Next'}
                   </Button>
                 </div>
               </React.Fragment>
             )}
           </React.Fragment>
       </main>
+      <Snackbar open={openAlertError} autoHideDuration={1500} onClose={handleCloseAlertError}>
+      <Alert severity="error">
+        {alertTextError}
+      </Alert>
+      </Snackbar>
+      <Snackbar open={openAlertSuccess} autoHideDuration={1500} onClose={handleCloseAlertSuccess}>
+      <Alert severity="success">
+        {alertTextSuccess}
+      </Alert>
+    </Snackbar>
     </React.Fragment>
   );
 }

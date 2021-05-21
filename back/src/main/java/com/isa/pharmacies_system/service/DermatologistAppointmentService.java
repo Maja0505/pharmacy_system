@@ -61,13 +61,16 @@ public class DermatologistAppointmentService implements IDermatologistAppointmen
 
         DermatologistAppointment dermatologistAppointment = findOne(appointmentId);
         Patient patient = patientRepository.findById(patientId).orElse(null);
-        if(isAppointmentOpen(dermatologistAppointment)
-                && !doesPatientHaveAnotherAppointmentInSameTime(patient,dermatologistAppointment)){
-            dermatologistAppointment.setPatientWithDermatologistAppointment(patient);
-            dermatologistAppointment.setStatusOfAppointment(StatusOfAppointment.Reserved);
-            dermatologistAppointmentRepository.save(dermatologistAppointment);
-            return true;
+        if(patient != null && patient.getPenalty() < 3){
+            if(isAppointmentOpen(dermatologistAppointment)
+                    && !doesPatientHaveAnotherAppointmentInSameTime(patient,dermatologistAppointment)){
+                dermatologistAppointment.setPatientWithDermatologistAppointment(patient);
+                dermatologistAppointment.setStatusOfAppointment(StatusOfAppointment.Reserved);
+                dermatologistAppointmentRepository.save(dermatologistAppointment);
+                return true;
+            }
         }
+
         return false;
     }
 

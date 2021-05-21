@@ -46,10 +46,10 @@ public class PharmacistAppointmentController {
     public ResponseEntity<Boolean> bookPharmacistAppointment(@PathVariable Long patientId,@PathVariable Long pharmacistId,@RequestBody PharmacistAppointmentTimeDTO timeDTO){
 
         try {
-            if(!timeDTO.getStartTime().isAfter(LocalDateTime.now()) || timeDTO.getDuration() < 10){
+            if(!timeDTO.getStartTime().isAfter(LocalDateTime.now()) || timeDTO.getDuration() < 5){
                 return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
             }
-            if(pharmacistAppointmentService.bookPharmacistAppointment(patientId,pharmacistId,timeDTO)){
+            if(pharmacistAppointmentService.bookPharmacistAppointment(patientId,pharmacistId,timeDTO,true)){
                 emailService.sendNotificationForSuccessBookAppointment(patientId);
                 return new ResponseEntity<>(HttpStatus.OK);
             }
@@ -172,7 +172,7 @@ public class PharmacistAppointmentController {
     public ResponseEntity<Boolean> bookPharmacistAppointmentByPharmacist(@RequestBody AppointmentScheduleByStaffDTO appointmentScheduleByStaffDTO){
         try {
             PharmacistAppointmentTimeDTO pharmacistAppointmentTimeDTO = pharmacistAppointmentConverter.convertAppointmentScheduleByStaffDTOToPharmacistAppointmentTimeDTO(appointmentScheduleByStaffDTO);
-            if(pharmacistAppointmentService.bookPharmacistAppointment(appointmentScheduleByStaffDTO.getPatientId(), appointmentScheduleByStaffDTO.getStaffId(),pharmacistAppointmentTimeDTO )){
+            if(pharmacistAppointmentService.bookPharmacistAppointment(appointmentScheduleByStaffDTO.getPatientId(), appointmentScheduleByStaffDTO.getStaffId(),pharmacistAppointmentTimeDTO,false)){
                 emailService.sendNotificationForSuccessBookAppointment(appointmentScheduleByStaffDTO.getPatientId());
                 return new ResponseEntity<>(HttpStatus.CREATED);
             }else{

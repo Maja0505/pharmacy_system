@@ -62,7 +62,7 @@ public class DermatologistAppointmentController {
                 emailService.sendNotificationForSuccessBookAppointment(patientId);
                 return new ResponseEntity<>(HttpStatus.OK);
             }
-                return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
+                return new ResponseEntity<>(HttpStatus.OK);
         }catch (Exception e){
             Thread.currentThread().interrupt();
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
