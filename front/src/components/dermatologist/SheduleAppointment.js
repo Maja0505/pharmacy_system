@@ -32,8 +32,7 @@ import { makeStyles } from "@material-ui/core/styles";
 const useStyles = makeStyles({
   cart: {
     fontSize: 15,
-    backgroundColor: "#3f51b5",
-    color: "#FFFFFF",
+    backgroundColor: "#bed5e7",
   },
 });
 
@@ -167,7 +166,7 @@ const SheduleAppointment = ({ pharmacyInfo }) => {
       {workingHoursForDate !== null &&
         haveWorkingHoursForSelectedDate === true && (
           <>
-            <Card className={classes.cart}>
+            <Card className={classes.cart} variant="outlined">
               <CardContent>
                 <Typography>
                   <b>Dermatologist work time for</b>
@@ -196,7 +195,7 @@ const SheduleAppointment = ({ pharmacyInfo }) => {
       {workingHoursForDate !== null &&
         haveWorkingHoursForSelectedDate !== true && (
           <>
-            <Card className={classes.cart}>
+            <Card className={classes.cart} variant="outlined">
               <CardContent>
                 <Typography>
                   <b>Dermatologist doesn't work</b>
@@ -216,7 +215,7 @@ const SheduleAppointment = ({ pharmacyInfo }) => {
         )}
       {workingHoursForDate === null && (
         <>
-          <Card className={classes.cart}>
+          <Card className={classes.cart} variant="outlined">
             <CardContent>
               <Typography>
                 <b>Pick some of open appointment</b>
@@ -237,7 +236,7 @@ const SheduleAppointment = ({ pharmacyInfo }) => {
   const patientPersonalInfoCard = (
     <>
       {patientInfo !== undefined && (
-        <Card className={classes.cart}>
+        <Card className={classes.cart} variant="outlined">
           <CardContent>
             <Typography>
               <b>Patient personal info</b>

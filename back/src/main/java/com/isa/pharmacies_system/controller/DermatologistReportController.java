@@ -9,7 +9,6 @@ import com.isa.pharmacies_system.converter.ReportConverter;
 import com.isa.pharmacies_system.domain.medicine.MedicineRequest;
 import com.isa.pharmacies_system.domain.report.DermatologistReport;
 import com.isa.pharmacies_system.domain.storage.PharmacyStorageItem;
-import com.isa.pharmacies_system.service.MedicineRequestService;
 import com.isa.pharmacies_system.service.iService.IDermatologistReportService;
 import com.isa.pharmacies_system.service.iService.IMedicineRequestService;
 import com.isa.pharmacies_system.service.iService.IMedicineService;

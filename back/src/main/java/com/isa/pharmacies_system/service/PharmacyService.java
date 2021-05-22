@@ -85,6 +85,8 @@ public class PharmacyService implements IPharmacyService {
 		return iPharmacyRepository.findAll();
 	}
 
+
+
 	@Override
 	public Pharmacy getById(Long id) throws Exception {
 		Pharmacy pharmacy = iPharmacyRepository.findById(id).orElse(null);
@@ -143,5 +145,14 @@ public class PharmacyService implements IPharmacyService {
 		return pharmacies;
 	}
 
+	//Nemanja
+	@Override
+	public List<Pharmacy> getAllPharmacyByDermatologistId(Long dermatologistId) {
+		List<Pharmacy> allPharmacy = iPharmacyRepository.findAll();
+		return allPharmacy.stream()
+				.filter(p -> p.getDermatologistsInPharmacy().stream()
+				.filter(d -> d.getId() == dermatologistId).count() > 0).collect(Collectors.toList());
+
+	}
 
 }

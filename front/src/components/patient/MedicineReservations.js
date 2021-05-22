@@ -1,5 +1,6 @@
 //SORTIRANJE
 //Otkazivanje
+//NAMESTITI DA TABELA BUDE FIKSNA
 
 import {
     Table,
@@ -28,6 +29,9 @@ import CloseIcon from '@material-ui/icons/Close';
 import Typography from '@material-ui/core/Typography';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import DateFnsUtils from '@date-io/date-fns';
+import Alert from "@material-ui/lab/Alert";
+import Snackbar from "@material-ui/core/Snackbar";
+
 import {
     MuiPickersUtilsProvider,
     KeyboardDatePicker,
@@ -35,6 +39,7 @@ import {
 
 import axios from "axios";
 import moment from "moment";
+import setDate from "date-fns/setDate";
   
   const useStyles = makeStyles((theme) => ({
     table: {
@@ -106,6 +111,26 @@ import moment from "moment";
     const [currPage, setCurrPage] = useState(1);
     const [open, setOpen] = React.useState(false);
     const [selectedDate, setSelectedDate] = React.useState();
+    const [alertTextError, setAlertTextError] = useState('')
+    const [openAlertError, setOpenAlertError] = useState(false)
+    const [openAlertSuccess, setOpenAlertSuccess] = useState(false)
+    const [alertTextSuccess, setAlertTextSuccess] = useState('')
+  
+  
+    const handleCloseAlertError = (event, reason) => {
+      if (reason === 'clickaway') {
+        return;
+      }
+      setOpenAlertError(false);
+    };
+  
+    const handleCloseAlertSuccess = (event, reason) => {
+      if (reason === 'clickaway') {
+        return;
+      }
+      setOpenAlertSuccess(false);
+    };
+  
 
 
     const handleDateChange = (date) => {
@@ -124,33 +149,46 @@ import moment from "moment";
                   "http://localhost:8080/api/patient/1/medicineReservation/" +
                   (currPage - 1).toString() +
                   ""
-                   
                 )
                 .then((res) => {
                   setRows(res.data);
                   setCopyRows(res.data);
                   handleClose()
+                }).catch(error => {
+
                 })
+             
                 }else{
-                    console.log('nema ga')
+                  handleClose()
                 }
+                setAlertTextSuccess('Success create medicine reservation')
+                setOpenAlertSuccess(true)
+                setSelectedMedicine()
+                setSelectedPharmacy()
+                setSelectedDate(new Date())
             }
-        )
+        ).catch(error => {
+          
+        })
     }
 
     const HandleCancelReservation = (row) => {
 
-        axios.put('http://localhost:8080/api/medicineReservation/cancel', row).then(
+        axios.put('http://localhost:8080/api/medicineReservation/cancel', row)
+        .then(
             (res)=> {
+             
                 if(res.data){
-                    console.log('jej')
                     row.statusOfMedicineReservation = 'CANCELED'
                     setRows(rows.map(el=> (el.reservationId === row.reservationId ? Object.assign({}, el, {row}) : el)))
                 }else{
-                    console.log('njeeee')
+                  setAlertTextError("You cant't cancel reservation");
+                  setOpenAlertError(true);
                 }
             }
-        )
+        ).catch(error => {
+
+        })
     }
 
     useEffect(() => {
@@ -164,7 +202,9 @@ import moment from "moment";
         .then((res) => {
           setRows(res.data);
           setCopyRows(res.data);
-        });
+        }).catch(error => {
+
+        })
     }, []);
 
     const handleClickOpen = () => {
@@ -175,14 +215,18 @@ import moment from "moment";
         )
         .then((res) => {
           setMedicines(res.data)
-        });
+        }).catch(error => {
+
+        })
         axios
         .get(
           "http://localhost:8080/api/pharmacy/all"
         )
         .then((res) => {
             setPharmacies(res.data)
-        });
+        }).catch(error => {
+
+        })
     };
     const handleClose = () => {
         setOpen(false);
@@ -218,7 +262,9 @@ import moment from "moment";
           } else {
             setHaveNextPage(false);
           }
-        });
+        }).catch(error => {
+
+        })
     };
   
     const beforePage = () => {
@@ -234,7 +280,9 @@ import moment from "moment";
             setCurrPage(currPage - 1);
             setRows(res.data);
           }
-        });
+        }).catch(error => {
+
+        })
     };
   
     const TableHeader = (
@@ -350,7 +398,7 @@ import moment from "moment";
                
             </DialogContent>
             <DialogActions>
-                <Button autoFocus onClick={handleSaveNewReservation} color="primary">
+                <Button disabled = {selectedMedicine == undefined || selectedPharmacy == undefined} autoFocus onClick={handleSaveNewReservation} color="primary">
                 Save changes
                 </Button>
             </DialogActions>
@@ -403,6 +451,16 @@ import moment from "moment";
           <Grid item xs={2} />
         </Grid>
         {CreateReservationDialog}
+        <Snackbar open={openAlertError} autoHideDuration={1500} onClose={handleCloseAlertError}>
+        <Alert severity="error">
+          {alertTextError}
+        </Alert>
+      </Snackbar>
+      <Snackbar open={openAlertSuccess} autoHideDuration={1500} onClose={handleCloseAlertSuccess}>
+        <Alert severity="success">
+          {alertTextSuccess}
+        </Alert>
+      </Snackbar>
       </div>
     );
   };

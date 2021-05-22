@@ -2,6 +2,7 @@ package com.isa.pharmacies_system.controller;
 
 
 import com.isa.pharmacies_system.DTO.MedicineReservationDTO;
+import com.isa.pharmacies_system.DTO.MedicineReservationForTakingDTO;
 import com.isa.pharmacies_system.DTO.MedicineReservationInfoDTO;
 import com.isa.pharmacies_system.converter.MedicineReservationConverter;
 import com.isa.pharmacies_system.domain.medicine.Medicine;
@@ -78,4 +79,39 @@ public class MedicineReservationController {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
+
+    //Nemanja
+    @GetMapping("/get/{medicineReservationId}/{pharmacyId}")
+    public ResponseEntity<MedicineReservationForTakingDTO> getMedicineReservationByIdAndPharmacy(@PathVariable Long medicineReservationId,@PathVariable Long pharmacyId){
+        try {
+            MedicineReservation medicineReservation = medicineReservationService.getMedicineReservationInPharmacy(medicineReservationId,pharmacyId);
+            if(medicineReservation != null){
+                MedicineReservationForTakingDTO medicineReservationForTakingDTO = medicineReservationConverter.convertMedicineReservationToMedicineReservationForTakingDTO(medicineReservation);
+                return new ResponseEntity<>(medicineReservationForTakingDTO,HttpStatus.OK);
+            }
+            return new ResponseEntity<>(null,HttpStatus.FORBIDDEN);
+        }catch (Exception e){
+            return  new ResponseEntity<>(null,HttpStatus.NOT_FOUND);
+        }
+    }
+
+    //Nemanja
+    @PutMapping("/finish/{medicineReservationId}")
+    public ResponseEntity<Boolean> finishMedicineReservation(@PathVariable Long medicineReservationId){
+        try {
+            MedicineReservation medicineReservation = medicineReservationService.getMedicineReservationById(medicineReservationId);
+            if(medicineReservation != null){
+                medicineReservationService.finishMedicineReservation(medicineReservation);
+                emailService.sendNotificationForSuccessTakingMedicineReservation(medicineReservation);
+                return new ResponseEntity<>(HttpStatus.OK);
+            }else{
+                return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+            }
+        }catch (Exception e){
+            Thread.currentThread().interrupt();
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
+    
+
 }

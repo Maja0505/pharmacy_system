@@ -7,10 +7,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.MailException;
 import org.springframework.stereotype.Service;
 
+import com.isa.pharmacies_system.DTO.MedicineDTO;
+import com.isa.pharmacies_system.DTO.PharmacyDTO;
 import com.isa.pharmacies_system.DTO.UserPasswordDTO;
-import com.isa.pharmacies_system.domain.medicine.EPrescription;
-import com.isa.pharmacies_system.domain.medicine.Medicine;
-import com.isa.pharmacies_system.domain.medicine.MedicineReservation;
+import com.isa.pharmacies_system.DTO.UserPersonalInfoDTO;
+import com.isa.pharmacies_system.converter.MedicineConverter;
+import com.isa.pharmacies_system.converter.PharmacyConverter;
+import com.isa.pharmacies_system.converter.UserConverter;
+import com.isa.pharmacies_system.domain.medicine.*;
 import com.isa.pharmacies_system.domain.pharmacy.Pharmacy;
 import com.isa.pharmacies_system.domain.schedule.DermatologistAppointment;
 import com.isa.pharmacies_system.domain.user.ConfirmationToken;
@@ -25,6 +29,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -36,6 +41,9 @@ public class PatientService implements IPatientService {
     private IMedicineRepository medicineRepository;
     private ConfirmationTokenService confirmationTokenService;
     private EmailService emailService;
+    private UserConverter userConverter;
+    private MedicineConverter medicineConverter;
+    private PharmacyConverter pharmacyConverter;
 
     @Autowired
     public PatientService(IPatientRepository patientRepository, IMedicineRepository medicineRepository, ConfirmationTokenService confirmationTokenService,EmailService emailService) {
@@ -43,6 +51,9 @@ public class PatientService implements IPatientService {
         this.patientRepository = patientRepository;
         this.medicineRepository = medicineRepository;
         this.emailService = emailService;
+        this.userConverter = new UserConverter();
+        this.medicineConverter = new MedicineConverter();
+        this.pharmacyConverter = new PharmacyConverter();
     }
 
     @Override
@@ -95,6 +106,18 @@ public class PatientService implements IPatientService {
 
     }
 
+    @Override
+    public Boolean removeMedicineAllergies(Long patientId, Long medicineId) {
+        Patient patient = patientRepository.findById(patientId).orElse(null);
+        Medicine medicine = medicineRepository.findById(medicineId).orElse(null);
+        if(patient!=null && medicine!=null && doesMedicineExistInAllergies(patient,medicine)){
+            patient.getMedicineAllergies().remove(medicine);
+            savePatient(patient);
+            return true;
+        }
+        return false;
+    }
+
     //#1
     private Boolean doesMedicineExistInAllergies(Patient patient,Medicine medicine){
         return patient.getMedicineAllergies().stream().filter(m -> m.getId() == medicine.getId()).count()>0;
@@ -142,9 +165,134 @@ public class PatientService implements IPatientService {
     }
 
 	
+    //#1
     @Override
     public List<Pharmacy> getSubscriptionPharmaciesForPatient(Long id){
         return List.copyOf(findOne(id).getPharmaciesSubscription());
+    }
+
+
+    //#1
+    @Override
+    public List<UserPersonalInfoDTO> getAllDermatologistForPatient(Long patientId){
+        Patient patient = patientRepository.findById(patientId).orElse(null);
+        List<UserPersonalInfoDTO> dermatologists = new ArrayList<>();
+        if(patient != null){
+            dermatologists = addDermatologistIfPatientHasDermatologistAppointmentWithIt(patient,dermatologists);
+        }
+        return dermatologists;
+    }
+
+    private List<UserPersonalInfoDTO> addDermatologistIfPatientHasDermatologistAppointmentWithIt(Patient patient,List<UserPersonalInfoDTO> dermatologists){
+        Set<DermatologistAppointment> dermatologistAppointments = patient.getDermatologistAppointment();
+        for (DermatologistAppointment dermatologistAppointment:dermatologistAppointments) {
+            if(dermatologistAppointment.getStatusOfAppointment().equals(StatusOfAppointment.Expired) && dermatologists.stream().filter(dermatologist -> dermatologist.getId() == dermatologistAppointment.getDermatologistForAppointment().getId()).count() == 0){
+                dermatologists.add(userConverter.convertDermatologistPersonalInfoToDTO(dermatologistAppointment.getDermatologistForAppointment()));
+            }
+        }
+        return dermatologists;
+    }
+
+    //#1
+    @Override
+    public List<UserPersonalInfoDTO> getAllPharmacistForPatient(Long patientId) {
+        Patient patient = patientRepository.findById(patientId).orElse(null);
+        List<UserPersonalInfoDTO> pharmacists = new ArrayList<>();
+        if(patient != null){
+            pharmacists = addPharmacistIfPatientHasPharmacistAppointmentWithIt(patient,pharmacists);
+        }
+        return pharmacists;
+    }
+
+
+    private List<UserPersonalInfoDTO> addPharmacistIfPatientHasPharmacistAppointmentWithIt(Patient patient,List<UserPersonalInfoDTO> pharmacists){
+        Set<PharmacistAppointment> pharmacistAppointments = patient.getPharmacistAppointments();
+        for (PharmacistAppointment pharmacistAppointment:pharmacistAppointments) {
+            if(pharmacistAppointment.getStatusOfAppointment().equals(StatusOfAppointment.Expired) && pharmacists.stream().filter(dermatologist -> dermatologist.getId() == pharmacistAppointment.getPharmacistForAppointment().getId()).count() == 0){
+                pharmacists.add(userConverter.convertPharmacistPersonalInfoToDTO(pharmacistAppointment.getPharmacistForAppointment()));
+            }
+        }
+        return pharmacists;
+    }
+
+
+    //#1
+    @Override
+    public List<MedicineDTO> getAllMedicinesForPatient(Long patientId) {
+        Patient patient = patientRepository.findById(patientId).orElse(null);
+        List<MedicineDTO> medicines = new ArrayList<>();
+        if(patient != null){
+            medicines = addMedicineIfPatientHasMedicineReservationWithIt(patient,medicines);
+            medicines = addMedicineIfPatientHasEPrescriptionWithIt(patient,medicines);
+        }
+        return medicines;
+    }
+
+    private List<MedicineDTO> addMedicineIfPatientHasMedicineReservationWithIt(Patient patient, List<MedicineDTO> medicines){
+        Set<MedicineReservation> medicineReservations = patient.getPatientMedicineReservations();
+        for (MedicineReservation medicineReservation:medicineReservations) {
+            if(medicineReservation.getStatusOfMedicineReservation().equals(StatusOfMedicineReservation.FINISHED) && medicines.stream().filter(medicine -> medicine.getMedicineId() == medicineReservation.getReservedMedicine().getId()).count() == 0){
+                medicines.add(medicineConverter.convertMedicineToMedicineDTO(medicineReservation.getReservedMedicine()));
+            }
+        }
+        return  medicines;
+    }
+
+    private List<MedicineDTO> addMedicineIfPatientHasEPrescriptionWithIt(Patient patient, List<MedicineDTO> medicines){
+        Set<EPrescription> ePrescriptions = patient.getPatientEPrescriptions();
+        for (EPrescription ePrescription:ePrescriptions) {
+            Set<EPrescriptionItem> ePrescriptionItems = ePrescription.getePrescriptionItems();
+            for (EPrescriptionItem ePrescriptionItem: ePrescriptionItems) {
+                if(medicines.stream().filter(medicine -> medicine.getMedicineId() == ePrescriptionItem.getMedicineItem().getId()).count() == 0){
+                    medicines.add(medicineConverter.convertMedicineToMedicineDTO(ePrescriptionItem.getMedicineItem()));
+                }
+            }
+        }
+        return  medicines;
+    }
+
+    //#1
+    @Override
+    public List<PharmacyDTO> getAllPharmaciesForPatient(Long patientId) {
+        Patient patient = patientRepository.findById(patientId).orElse(null);
+        List<PharmacyDTO> pharmacies = new ArrayList<>();
+        if(patient != null){
+           pharmacies = addPharmacyIfPatientHasMedicineReservationInIt(patient,pharmacies);
+           pharmacies = addPharmacyIfPatientHasPharmacistAppointmentInIt(patient,pharmacies);
+           pharmacies = addPharmacyIfPatientHasDermatologistAppointmentInIt(patient,pharmacies);
+
+        }
+        return pharmacies;
+    }
+
+    private List<PharmacyDTO> addPharmacyIfPatientHasMedicineReservationInIt(Patient patient,List<PharmacyDTO> pharmacies){
+        Set<MedicineReservation> medicineReservations = patient.getPatientMedicineReservations();
+        for (MedicineReservation medicineReservation:medicineReservations) {
+            if(medicineReservation.getStatusOfMedicineReservation().equals(StatusOfMedicineReservation.FINISHED) && pharmacies.stream().filter(pharmacy -> pharmacy.getId() == medicineReservation.getPharmacyForMedicineReservation().getId()).count() == 0){
+                pharmacies.add(pharmacyConverter.convertPharmacyInfoToPharmacyDTO(medicineReservation.getPharmacyForMedicineReservation()));
+            }
+        }
+        return pharmacies;
+    }
+
+    private List<PharmacyDTO> addPharmacyIfPatientHasPharmacistAppointmentInIt(Patient patient, List<PharmacyDTO> pharmacies){
+        Set<PharmacistAppointment> pharmacistAppointments = patient.getPharmacistAppointments();
+        for (PharmacistAppointment pharmacistAppointment:pharmacistAppointments) {
+            if(pharmacistAppointment.getStatusOfAppointment().equals(StatusOfAppointment.Expired) && pharmacies.stream().filter(pharmacy -> pharmacy.getId() == pharmacistAppointment.getPharmacistForAppointment().getPharmacyForPharmacist().getId()).count() == 0){
+                pharmacies.add(pharmacyConverter.convertPharmacyInfoToPharmacyDTO(pharmacistAppointment.getPharmacistForAppointment().getPharmacyForPharmacist()));
+            }
+        }
+        return pharmacies;
+    }
+
+    private List<PharmacyDTO> addPharmacyIfPatientHasDermatologistAppointmentInIt(Patient patient, List<PharmacyDTO> pharmacies){
+        Set<DermatologistAppointment> dermatologistAppointments = patient.getDermatologistAppointment();
+        for (DermatologistAppointment dermatologistAppointment:dermatologistAppointments) {
+            if(dermatologistAppointment.getStatusOfAppointment().equals(StatusOfAppointment.Expired) && pharmacies.stream().filter(pharmacy -> pharmacy.getId() == dermatologistAppointment.getPharmacyForDermatologistAppointment().getId()).count() == 0){
+                pharmacies.add(pharmacyConverter.convertPharmacyInfoToPharmacyDTO(dermatologistAppointment.getPharmacyForDermatologistAppointment()));
+            }
+        }
+        return pharmacies;
     }
 
 

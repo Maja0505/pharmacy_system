@@ -46,4 +46,42 @@ public class MedicineReservationConverter {
         medicineReservationInfoDTO.setTakingDate(medicineReservation.getDateOfTakingMedicine());
         return medicineReservationInfoDTO;
     }
+
+
+    //Nemanja
+    public MedicineReservationForTakingDTO convertMedicineReservationToMedicineReservationForTakingDTO(MedicineReservation medicineReservation){
+        MedicineReservationForTakingDTO medicineReservationForTakingDTO = new MedicineReservationForTakingDTO();
+        medicineReservationForTakingDTO.setMedicineReservationId(medicineReservation.getId());
+
+        medicineReservationForTakingDTO.setDateOfTakingMedicine(medicineReservation.getDateOfTakingMedicine());
+        medicineReservationForTakingDTO.setStatusOfMedicineReservation(medicineReservation.getStatusOfMedicineReservation());
+        Patient patient = medicineReservation.getPatientForMedicineReservation();
+        if(patient != null){
+            setPatientInfo(medicineReservationForTakingDTO,patient);
+        }
+        Medicine medicine = medicineReservation.getReservedMedicine();
+        if(medicine != null){
+            setMedicineInfo(medicineReservationForTakingDTO,medicine);
+        }
+        return  medicineReservationForTakingDTO;
+    }
+
+    //Nemanja
+    private void setMedicineInfo(MedicineReservationForTakingDTO medicineReservationForTakingDTO, Medicine medicine) {
+        medicineReservationForTakingDTO.setMedicineName(medicine.getMedicineName());
+        medicineReservationForTakingDTO.setMedicineCode(medicine.getMedicineCode());
+        medicineReservationForTakingDTO.setFormOfMedicine(medicine.getFormOfMedicine());
+        medicineReservationForTakingDTO.setTypeOfMedicine(medicine.getTypeOfMedicine());
+        medicineReservationForTakingDTO.setManufacturerOfMedicine(medicine.getManufacturerOfMedicine());
+
+    }
+
+    //Nemanja
+    private void setPatientInfo(MedicineReservationForTakingDTO medicineReservationForTakingDTO, Patient patient) {
+        medicineReservationForTakingDTO.setPatientFirstName(patient.getFirstName());
+        medicineReservationForTakingDTO.setPatientLastName(patient.getLastName());
+        medicineReservationForTakingDTO.setPatientPhoneNumber(patient.getPhoneNumber());
+        medicineReservationForTakingDTO.setPatientEmail(patient.getEmail());
+    }
+
 }

@@ -4,10 +4,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 
-import com.isa.pharmacies_system.DTO.PharmacyDTO;
-import com.isa.pharmacies_system.DTO.PharmacyNewDTO;
-import com.isa.pharmacies_system.DTO.PharmacyWithMedicinePriceDTO;
-import com.isa.pharmacies_system.DTO.PriceListForAppointmentDTO;
+import com.isa.pharmacies_system.DTO.*;
 import com.isa.pharmacies_system.domain.complaint.PharmacyComplaint;
 import com.isa.pharmacies_system.domain.medicine.MedicineReservation;
 import com.isa.pharmacies_system.domain.pharmacy.Pharmacy;
@@ -95,4 +92,28 @@ public class PharmacyConverter {
 		}
 		return pharmacyWithMedicinePriceDTOList;
 	}
+
+	//potrebe su samo osnovne info(bez cene)
+	public PharmacyDTO convertPharmacyInfoToPharmacyDTO(Pharmacy pharmacy){
+
+		PharmacyDTO pharmacyDTO = new PharmacyDTO();
+		pharmacyDTO.setId(pharmacy.getId());
+		pharmacyDTO.setPharmacyName(pharmacy.getPharmacyName());
+		pharmacyDTO.setPharmacyAddress(pharmacy.getPharmacyAddress());
+		pharmacyDTO.setPharmacyAverageRating(pharmacy.getPharmacyAverageRating());
+		return pharmacyDTO;
+	}
+
+	//Nemanja
+	public List<PharmacyWhereDermatologistWorkDTO> convertPharmacyListToPharmacyWhereDermatologistWorkDTOList(List<Pharmacy> pharmacies){
+		List<PharmacyWhereDermatologistWorkDTO> list = new ArrayList<>();
+		for(Pharmacy p : pharmacies){
+			PharmacyWhereDermatologistWorkDTO pDTO = new PharmacyWhereDermatologistWorkDTO();
+			pDTO.setPharmacyId(p.getId());
+			pDTO.setPharmacyName(p.getPharmacyName());
+			list.add(pDTO);
+		}
+		return list;
+	}
+
 }

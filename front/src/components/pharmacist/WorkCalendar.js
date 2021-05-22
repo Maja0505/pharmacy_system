@@ -71,7 +71,7 @@ const WorkCalendar = () => {
         setOpenDialog(false);
         setData(
           data.map((appointment) =>
-            appointment.Id === id ? { ...appointment, ColorID: 1 } : appointment
+            appointment.id === id ? { ...appointment, colorId: 1 } : appointment
           )
         );
       })

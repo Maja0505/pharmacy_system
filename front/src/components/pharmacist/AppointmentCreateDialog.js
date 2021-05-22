@@ -116,8 +116,8 @@ const AppointmentCreateDialog = ({
             new Date(a.startTime).getMinutes() + appointmentDuration
           )
         ),
-        pharmacyName: pharmacy !== undefined ? pharmacy.name : "DODATI APOTEKU",
-        location: pharmacy !== undefined ? pharmacy.address : "DODATI ADRESU",
+        pharmacyName: patient.PharmacyName,
+        location: patient.PharamcyLocation,
       },
     ]);
   };

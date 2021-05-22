@@ -118,7 +118,7 @@ import { withStyles } from '@material-ui/core/styles';
     const nextPage = () => {
       axios
         .get(
-          "http://localhost:8080/api/all/patient/1/" +
+          "http://localhost:8080/api/dermatologistReport/all/patient/1/" +
             currPage.toString() +
             ""
         )
@@ -135,7 +135,7 @@ import { withStyles } from '@material-ui/core/styles';
     const beforePage = () => {
       axios
         .get(
-          "http://localhost:8080/api/all/patient/1/" +
+          "http://localhost:8080/api/dermatologistReport/all/patient/1/" +
             (currPage - 2).toString() +
             ""
         )

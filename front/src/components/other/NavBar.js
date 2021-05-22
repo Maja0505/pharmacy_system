@@ -1,16 +1,42 @@
 import { AppBar, Typography, Toolbar, Grid } from "@material-ui/core";
 import { Link } from "react-router-dom";
 
+const setPharmacistPatientReport = () => {
+  localStorage.setItem("PatientForPharmacistReport", JSON.stringify(null));
+};
+
+const setDermatologistPatientReport = () => {
+  localStorage.setItem("PatientForDermatologistReport", JSON.stringify(null));
+};
+
 const NavBar = ({ user }) => {
   const NavBarForPharmacist = (
     <Toolbar>
-      <Grid container spacing={1}>
+      <Grid container>
         <Grid item xs={3}>
           <Typography>Hay {user}</Typography>
         </Grid>
-        <Grid item xs={3}></Grid>
-        <Grid item xs={6} container spacing={1} style={{ textAlign: "right" }}>
-          <Grid item xs={2} />
+        <Grid item xs={8} container style={{ textAlign: "right" }}>
+          <Grid item xs={2}>
+            <Typography>
+              <Link
+                to="/pharmacist/medicineReservations"
+                style={{ color: "#fafafa", textDecoration: "none" }}
+              >
+                Medicine reservations
+              </Link>
+            </Typography>
+          </Grid>
+          <Grid item xs={2}>
+            <Typography>
+              <Link
+                to="/pharmacist/futureExaminations"
+                style={{ color: "#fafafa", textDecoration: "none" }}
+              >
+                Future examinations
+              </Link>
+            </Typography>
+          </Grid>
           <Grid item xs={2}>
             <Typography>
               <Link
@@ -53,7 +79,11 @@ const NavBar = ({ user }) => {
           </Grid>
           <Grid item xs={2}>
             <Typography>
-              <a href="/" style={{ color: "#fafafa", textDecoration: "none" }}>
+              <a
+                href="/"
+                style={{ color: "#fafafa", textDecoration: "none" }}
+                onClick={setPharmacistPatientReport}
+              >
                 Sing out
               </a>
             </Typography>
@@ -65,13 +95,21 @@ const NavBar = ({ user }) => {
 
   const NavBarForDermatologist = (
     <Toolbar>
-      <Grid container spacing={1}>
+      <Grid container>
         <Grid item xs={3}>
           <Typography>Hay {user}</Typography>
         </Grid>
-        <Grid item xs={3}></Grid>
-        <Grid item xs={6} container spacing={1} style={{ textAlign: "right" }}>
-          <Grid item xs={2} />
+        <Grid item xs={8} container style={{ textAlign: "right" }}>
+          <Grid item xs={2}>
+            <Typography>
+              <Link
+                to="/dermatologist/futureExaminations"
+                style={{ color: "#fafafa", textDecoration: "none" }}
+              >
+                Future examinations
+              </Link>
+            </Typography>
+          </Grid>
           <Grid item xs={2}>
             <Typography>
               <Link
@@ -114,7 +152,11 @@ const NavBar = ({ user }) => {
           </Grid>
           <Grid item xs={2}>
             <Typography>
-              <a href="/" style={{ color: "#fafafa", textDecoration: "none" }}>
+              <a
+                href="/"
+                style={{ color: "#fafafa", textDecoration: "none" }}
+                onClick={setDermatologistPatientReport}
+              >
                 Sing out
               </a>
             </Typography>
@@ -131,7 +173,7 @@ const NavBar = ({ user }) => {
           <Typography>Hay {user}</Typography>
         </Grid>
         <Grid item xs={6} container spacing={1} style={{ textAlign: "right" }}>
-          <Grid item xs={3}></Grid>    
+          <Grid item xs={3}></Grid>
           <Grid item xs={3}>
             <Typography>
               <a

@@ -2,15 +2,21 @@ package com.isa.pharmacies_system.service;
 
 import com.isa.pharmacies_system.DTO.DermatologistNewDTO;
 import com.isa.pharmacies_system.DTO.UserPasswordDTO;
+import com.isa.pharmacies_system.domain.pharmacy.Pharmacy;
+import com.isa.pharmacies_system.domain.schedule.DermatologistAppointment;
 import com.isa.pharmacies_system.domain.schedule.DermatologistVacationRequest;
+import com.isa.pharmacies_system.domain.schedule.StatusOfAppointment;
 import com.isa.pharmacies_system.domain.schedule.StatusOfVacationRequest;
 import com.isa.pharmacies_system.converter.DermatologistConverter;
 import com.isa.pharmacies_system.domain.user.Dermatologist;
+import com.isa.pharmacies_system.domain.user.Patient;
 import com.isa.pharmacies_system.domain.user.Users;
 import com.isa.pharmacies_system.repository.IDermatologistRepository;
+import com.isa.pharmacies_system.repository.IPatientRepository;
 import com.isa.pharmacies_system.repository.IUserRepository;
 import com.isa.pharmacies_system.service.iService.IDermatologistService;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +30,8 @@ public class DermatologistService implements IDermatologistService {
 
     private IDermatologistRepository dermatologistRepository;
     private DermatologistConverter dermatologistConverter;
-    private IUserRepository iUserRepository; 
+    private IUserRepository iUserRepository;
+    private IPatientRepository patientRepository;
 
     @Autowired
     public DermatologistService(IDermatologistRepository dermatologistRepository,IUserRepository iUserRepository) {
@@ -91,5 +98,4 @@ public class DermatologistService implements IDermatologistService {
 	public List<Dermatologist> getAll() {
 		return dermatologistRepository.findAll();
 	}
-
 }

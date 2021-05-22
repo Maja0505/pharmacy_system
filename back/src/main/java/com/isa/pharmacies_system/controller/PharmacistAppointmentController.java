@@ -1,11 +1,9 @@
 package com.isa.pharmacies_system.controller;
 
-import com.isa.pharmacies_system.DTO.AppointmentScheduleByStaffDTO;
-import com.isa.pharmacies_system.DTO.PatientAppointmentInfoDTO;
-import com.isa.pharmacies_system.DTO.PharmacistAppointmentDTO;
-import com.isa.pharmacies_system.DTO.PharmacistAppointmentTimeDTO;
+import com.isa.pharmacies_system.DTO.*;
 import com.isa.pharmacies_system.converter.PatientConverter;
 import com.isa.pharmacies_system.converter.PharmacistAppointmentConverter;
+import com.isa.pharmacies_system.domain.schedule.DermatologistAppointment;
 import com.isa.pharmacies_system.domain.schedule.PharmacistAppointment;
 import com.isa.pharmacies_system.service.EmailService;
 import com.isa.pharmacies_system.service.iService.IPharmacistAppointmentService;
@@ -49,10 +47,10 @@ public class PharmacistAppointmentController {
     public ResponseEntity<Boolean> bookPharmacistAppointment(@PathVariable Long patientId,@PathVariable Long pharmacistId,@RequestBody PharmacistAppointmentTimeDTO timeDTO){
 
         try {
-            if(!timeDTO.getStartTime().isAfter(LocalDateTime.now()) || timeDTO.getDuration() < 10){
+            if(!timeDTO.getStartTime().isAfter(LocalDateTime.now()) || timeDTO.getDuration() < 5){
                 return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
             }
-            if(pharmacistAppointmentService.bookPharmacistAppointment(patientId,pharmacistId,timeDTO)){
+            if(pharmacistAppointmentService.bookPharmacistAppointment(patientId,pharmacistId,timeDTO,true)){
                 emailService.sendNotificationForSuccessBookAppointment(patientId);
                 return new ResponseEntity<>(HttpStatus.OK);
             }
@@ -175,7 +173,7 @@ public class PharmacistAppointmentController {
     public ResponseEntity<Boolean> bookPharmacistAppointmentByPharmacist(@RequestBody AppointmentScheduleByStaffDTO appointmentScheduleByStaffDTO){
         try {
             PharmacistAppointmentTimeDTO pharmacistAppointmentTimeDTO = pharmacistAppointmentConverter.convertAppointmentScheduleByStaffDTOToPharmacistAppointmentTimeDTO(appointmentScheduleByStaffDTO);
-            if(pharmacistAppointmentService.bookPharmacistAppointment(appointmentScheduleByStaffDTO.getPatientId(), appointmentScheduleByStaffDTO.getStaffId(),pharmacistAppointmentTimeDTO )){
+            if(pharmacistAppointmentService.bookPharmacistAppointment(appointmentScheduleByStaffDTO.getPatientId(), appointmentScheduleByStaffDTO.getStaffId(),pharmacistAppointmentTimeDTO,false)){
                 emailService.sendNotificationForSuccessBookAppointment(appointmentScheduleByStaffDTO.getPatientId());
                 return new ResponseEntity<>(HttpStatus.CREATED);
             }else{
@@ -186,4 +184,20 @@ public class PharmacistAppointmentController {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
+
+    //Nemanja
+    @GetMapping("/searchAllFutureReservedByPatient/{pharmacistId}/{firstName}/{lastName}")
+    public ResponseEntity<List<PharmacistAppointmentDTO>> searchFutureReservedAppointmentsByPatientFirstAndLastName(@PathVariable Long pharmacistId, @PathVariable String firstName,@PathVariable String lastName){
+        try {
+            List<PharmacistAppointment> pharmacistAppointmentList = pharmacistAppointmentService.searchAllFutureReservedByPatientFirstAndLastName(pharmacistId,firstName,lastName);
+            if(!pharmacistAppointmentList.isEmpty()){
+                List<PharmacistAppointmentDTO> pharmacistAppointmentDTOList = pharmacistAppointmentConverter.convertPharmacistAppointmentsListToDTOS(pharmacistAppointmentList);
+                return new ResponseEntity<>(pharmacistAppointmentDTOList,HttpStatus.OK);
+            }
+            return new ResponseEntity<>(null,HttpStatus.OK);
+        }catch (Exception e){
+            return new ResponseEntity<>(null,HttpStatus.BAD_REQUEST);
+        }
+    }
+
 }

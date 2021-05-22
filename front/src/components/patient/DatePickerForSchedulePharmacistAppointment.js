@@ -12,6 +12,7 @@ import {
   Link,
   TextField
 } from "@material-ui/core";
+import  { useEffect, useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 
 const SchedulePharmacistAppointment = ({date,time,duration,setDate,setTime,setDuration,setPharmacies}) => {
@@ -21,11 +22,20 @@ const SchedulePharmacistAppointment = ({date,time,duration,setDate,setTime,setDu
   ])
 
 
+
+  const [disableDates, setDisableDates] = useState([
+    {
+      before: new Date(),
+    },
+  ]);
+
+
   return (
         <div>
             Schedule pharmacist appointment
               <p>Select date and start time:</p>
               <DatePickerComponent 
+                min={new Date()}
                 id="datetimepicker"
                 format="yyyy-MM-dd"
                 placeholder='Select date'

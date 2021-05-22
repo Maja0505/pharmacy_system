@@ -9,6 +9,11 @@ import com.isa.pharmacies_system.repository.IPharmacyStorageItemRepository;
 import com.isa.pharmacies_system.service.iService.IMedicineReservationService;
 import org.springframework.stereotype.Service;
 
+import java.time.Duration;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.List;
+
 
 @Service
 public class MedicineReservationService implements IMedicineReservationService {
@@ -29,7 +34,9 @@ public class MedicineReservationService implements IMedicineReservationService {
     public Boolean createMedicineReservation(MedicineReservation medicineReservation){
         //uraditi provere
         PharmacyStorageItem pharmacyStorageItem = pharmacyStorageItemRepository.getSelectedMedicineFromPharmacyStorage(medicineReservation.getReservedMedicine().getId(),medicineReservation.getPharmacyForMedicineReservation().getId());
-        if(pharmacyStorageItem != null && doesPharmacyHaveSelectedMedicineInStorage(pharmacyStorageItem)){
+        if(pharmacyStorageItem != null
+                && doesPharmacyHaveSelectedMedicineInStorage(pharmacyStorageItem)
+                && medicineReservation.getPatientForMedicineReservation().getPenalty() < 3){
             medicineReservationRepository.save(medicineReservation);
             pharmacyStorageItem.setMedicineAmount(pharmacyStorageItem.getMedicineAmount() - 1);
             pharmacyStorageItemRepository.save(pharmacyStorageItem);
@@ -60,4 +67,37 @@ public class MedicineReservationService implements IMedicineReservationService {
         }
         return false;
     }
+
+    //Nemanja
+    @Override
+    public MedicineReservation getMedicineReservationInPharmacy(Long medicineReservationId, Long pharmacyId) {
+        List<MedicineReservation> medicineReservationList = medicineReservationRepository.findMedicineReservationByIdAndByPharmacy(medicineReservationId,pharmacyId);
+        if(medicineReservationList.isEmpty()){
+            return null;
+        }
+        MedicineReservation medicineReservation = medicineReservationList.get(0);
+        Duration duration = Duration.between(LocalDateTime.now(),medicineReservation.getDateOfTakingMedicine().atTime(20,00, 00));
+        if(duration.toHours() < 24){
+            return null;
+        }
+        return medicineReservation;
+    }
+
+    //Nemanja
+    @Override
+    public void finishMedicineReservation(MedicineReservation medicineReservation) {
+        if(medicineReservation != null){
+            if(medicineReservation.getStatusOfMedicineReservation().equals(StatusOfMedicineReservation.CREATED)){
+                medicineReservation.setStatusOfMedicineReservation(StatusOfMedicineReservation.FINISHED);
+                medicineReservationRepository.save(medicineReservation);
+            }
+        }
+    }
+
+    //Nemanja
+    @Override
+    public MedicineReservation getMedicineReservationById(Long medicineReservationId) {
+        return medicineReservationRepository.findById(medicineReservationId).orElse(null);
+    }
+
 }
