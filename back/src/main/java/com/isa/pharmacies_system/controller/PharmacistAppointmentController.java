@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -28,13 +29,15 @@ public class PharmacistAppointmentController {
     private EmailService emailService;
     private PharmacistAppointmentConverter pharmacistAppointmentConverter;
     private IPriceListService priceListService;
+    private PasswordEncoder passwordEncoder;
 
     @Autowired
-    public PharmacistAppointmentController(IPharmacistAppointmentService pharmacistAppointmentService, EmailService emailService, IPriceListService priceListService) {
+    public PharmacistAppointmentController(IPharmacistAppointmentService pharmacistAppointmentService, EmailService emailService, IPriceListService priceListService,PasswordEncoder passwordEncoder) {
         this.pharmacistAppointmentService = pharmacistAppointmentService;
         this.emailService = emailService;
         this.priceListService = priceListService;
-        this.patientConverter = new PatientConverter();
+        this.passwordEncoder = passwordEncoder;
+        this.patientConverter = new PatientConverter(passwordEncoder);
         this.pharmacistAppointmentConverter = new PharmacistAppointmentConverter(priceListService);
     }
 

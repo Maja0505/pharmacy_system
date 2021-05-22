@@ -17,6 +17,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -35,17 +36,22 @@ public class PatientController {
     private DermatologistAppointmentConverter dermatologistAppointmentConverter;
     private PharmacistAppointmentConverter pharmacistAppointmentConverter;
     private IMedicineService medicineService;
+    private PasswordEncoder passwordEncoder;
     private IPriceListService priceListService;
     private MedicineReservationConverter medicineReservationConverter;
     private PharmacyConverter pharmacyConverter;
 
+
+    
+
     @Autowired
-    public PatientController(IPatientService patientService, DermatologistAppointmentService dermatologistAppointmentService, MedicineService medicineService, IPriceListService priceListService) {
+    public PatientController(IPatientService patientService, DermatologistAppointmentService dermatologistAppointmentService, MedicineService medicineService, IPriceListService priceListService, PasswordEncoder passwordEncoder) {
 
         this.patientService = patientService;
         this.priceListService = priceListService;
         this.userConverter = new UserConverter();
-        this.patientConverter = new PatientConverter();
+        this.passwordEncoder = passwordEncoder;
+        this.patientConverter = new PatientConverter(passwordEncoder);
         this.dermatologistAppointmentConverter = new DermatologistAppointmentConverter(priceListService);
         this.pharmacistAppointmentConverter = new PharmacistAppointmentConverter(priceListService);
         this.medicineService = medicineService;

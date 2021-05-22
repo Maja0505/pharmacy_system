@@ -28,6 +28,17 @@ public class EmailService {
         this.env = env;
         this.patientRepository = patientRepository;
     }
+    
+    @Async
+    public void sendConfirmationMail(String email, String confirmationToken) throws MailException, InterruptedException {
+
+        SimpleMailMessage mail = new SimpleMailMessage();
+        mail.setTo(email);
+        mail.setFrom(env.getProperty("spring.mail.username"));
+        mail.setSubject("Confirm registration");
+        mail.setText("Please confirm your registration by clicking the link below \n\n"+ "http://localhost:8080/auth/confirm_account/" + confirmationToken);
+        javaMailSender.send(mail);
+    }
 
     @Async
     public void sendNotificationForSuccessBookAppointment(Long patientId) throws MailException, InterruptedException {

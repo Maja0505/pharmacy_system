@@ -9,6 +9,8 @@ import DermatologistHomePage from "./components/dermatologist/HomePage";
 import PharmacistHomePage from "./components/pharmacist/HomePage";
 import SupplierHomePage from "./components/supplier/HomePage";
 import SystemAdminHomePage from "./components/systemAdmin/HomePage";
+import RegistrationPage from "./components/other/RegistrationPage";
+import ConfirmationPage from "./components/other/ConfirmationPage"
 
 function App() {
   return (
@@ -16,7 +18,8 @@ function App() {
       <Router>
         <div className="App">
           <Switch>
-            <Route exact path="/" component={Login}></Route>
+            <Route exact path="/login" component={Login}></Route>
+            <Route exact path="/confirmAccount/:token" component={ConfirmationPage}></Route>
             <Route path="/patient" component={PatientHomePage}></Route>
             <Route
               path="/dermatologist"
@@ -25,6 +28,7 @@ function App() {
             <Route path="/pharmacist" component={PharmacistHomePage}></Route>
             <Route path="/supplier" component={SupplierHomePage}></Route>
             <Route path="/system-admin" component={SystemAdminHomePage}></Route>
+            <Route path="/registerPatient" component={RegistrationPage}></Route>
           </Switch>
         </div>
       </Router>

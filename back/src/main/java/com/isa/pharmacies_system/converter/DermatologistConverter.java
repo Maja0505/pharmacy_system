@@ -20,6 +20,8 @@ public class DermatologistConverter {
 		dermatologist.setEmail(dermatologistNewDTO.getEmail());
 		dermatologist.setFirstName(dermatologistNewDTO.getFirstName());
 		dermatologist.setLastName(dermatologistNewDTO.getLastName());
+		dermatologist.setFirstLogin(true);
+		dermatologist.setEnabled(true);
 		dermatologist.setPassword(dermatologistNewDTO.getPassword());
 		dermatologist.setPhoneNumber(dermatologistNewDTO.getPhoneNumber());
 		dermatologist.setTypeOfUser(TypeOfUser.Dermatologist);
