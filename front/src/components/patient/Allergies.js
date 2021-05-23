@@ -51,7 +51,14 @@ import {
 
 
 const Allergies = ({allergies,setAllergies,patientId}) => {
+
     const classes = useStyles()
+    const token = localStorage.getItem("token");
+    const userId = localStorage.getItem("userId");
+    const config = {
+      headers: { Authorization: `Bearer ${token}` }
+  };
+
     useEffect(() => {
         getMedicine()
     },[])
@@ -60,7 +67,7 @@ const Allergies = ({allergies,setAllergies,patientId}) => {
     const [selectedMedicine, setSelectedMedicine] = useState(null)
 
     const getMedicine = async () => {
-        axios.get('http://localhost:8080/api/medicine/all/short')
+        axios.get('http://localhost:8080/api/medicine/all/short', config)
         .then((res)=>{
             setMedicines(res.data)
         }).catch((err) => {
@@ -71,7 +78,7 @@ const Allergies = ({allergies,setAllergies,patientId}) => {
 
     const HandleAddButton = () => {
       if(selectedMedicine != undefined && selectedMedicine != null){
-        axios.put("http://localhost:8080/api/patient/" + patientId + "/addMedicineAllergies/" + selectedMedicine.medicineId)
+        axios.put("http://localhost:8080/api/patient/" + userId + "/addMedicineAllergies/" + selectedMedicine.medicineId,{},config)
         .then((res) => {
             if(res.data){
               setAllergies([...allergies,selectedMedicine])
@@ -83,7 +90,7 @@ const Allergies = ({allergies,setAllergies,patientId}) => {
     }
 
     const HandleClickRemoveAllerge = (row) => {
-      axios.put("http://localhost:8080/api/patient/" + patientId + "/removeMedicineAllergies/" + row.medicineId)
+      axios.put("http://localhost:8080/api/patient/" + userId + "/removeMedicineAllergies/" + row.medicineId,{},config)
         .then((res) => {
             if(res.data){
               var index = allergies.indexOf(row)

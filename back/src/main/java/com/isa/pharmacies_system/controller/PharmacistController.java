@@ -12,6 +12,7 @@ import com.isa.pharmacies_system.service.iService.IPharmacistService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -34,6 +35,7 @@ public class PharmacistController {
         this.pharmacistConverter = new PharmacistConverter();
     }
 
+    @PreAuthorize("hasRole('ROLE_PATIENT')")
     @GetMapping("/{id}")
     public ResponseEntity<UserPersonalInfoDTO> getPharmacistPersonalInfo(@PathVariable Long id){
         try {
@@ -70,6 +72,7 @@ public class PharmacistController {
     }
 
     //#1[3.16]Korak2
+    @PreAuthorize("hasRole('ROLE_PATIENT')")
     @PutMapping(value = "/free/{pharmacyId}", consumes = "application/json")
     public ResponseEntity<List<PharmacistInfoDTO>> getAllPharmacistsWithOpenAppointmentsByPharmacyId(@PathVariable Long pharmacyId, @RequestBody PharmacistAppointmentTimeDTO timeDTO) {
 

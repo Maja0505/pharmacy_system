@@ -44,6 +44,7 @@ public class PharmacistAppointmentController {
 
 
     //#1[3.16]Korak3
+    @PreAuthorize("hasRole('ROLE_PATIENT')")
     @PostMapping(value = "/book/{pharmacistId}/{patientId}", consumes = "application/json")
     public ResponseEntity<Boolean> bookPharmacistAppointment(@PathVariable Long patientId,@PathVariable Long pharmacistId,@RequestBody PharmacistAppointmentTimeDTO timeDTO){
 
@@ -63,6 +64,7 @@ public class PharmacistAppointmentController {
     }
 
     //#1[3.18]
+    @PreAuthorize("hasRole('ROLE_PATIENT')")
     @GetMapping(value = "/all/reserved/{patientId}")
     public ResponseEntity<List<PharmacistAppointmentDTO>> getAllFutureReservedPharmacistAppointmentForPatient(@PathVariable Long patientId){
         try {
@@ -76,6 +78,7 @@ public class PharmacistAppointmentController {
 
 
     //#1[3.18]
+    @PreAuthorize("hasRole('ROLE_PATIENT')")
     @PutMapping(value = "/cancel/{appointmentId}")
     public ResponseEntity<Boolean> cancelPharmacistAppointment(@PathVariable Long appointmentId){
         try {

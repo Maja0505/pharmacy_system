@@ -10,9 +10,9 @@ public class DermatologistAppointmentDTO {
 
     private long id;
     private double appointmentPrice;
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'hh:mm:ss")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime dermatologistAppointmentStartTime;
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'hh:mm:ss")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime dermatologistAppointmentEndTime;
     private UserPersonalInfoDTO dermatologistForAppointment;
     private PharmacyDTO pharmacyForDermatologistAppointment;

@@ -11,6 +11,7 @@ import com.isa.pharmacies_system.service.iService.IPriceListService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -32,6 +33,7 @@ public class PharmacyController {
 		this.pharmacyConverter = new PharmacyConverter(priceListService);
 	}
 
+	@PreAuthorize("hasRole('ROLE_PATIENT')")
 	@GetMapping(value = "/{id}")
 	public ResponseEntity<PharmacyDTO> findOneForPharmacyAdmin(@PathVariable Long id) {
 		try {
@@ -42,11 +44,13 @@ public class PharmacyController {
 
 	}
 
+	@PreAuthorize("hasRole('ROLE_PATIENT')")
 	@GetMapping(value = "/all/{page}")
 	public ResponseEntity<List<PharmacyDTO>> getAllPharmaciesWithPages(@PathVariable int page) {
 		return new ResponseEntity<>(pharmacyConverter.convertPharmacyListToPharmacyDTOList(iPharmacyService.getAllWithPages(page).toList()), HttpStatus.OK);
 	}
 
+	@PreAuthorize("hasRole('ROLE_PATIENT')")
 	@GetMapping(value = "/all")
 	public ResponseEntity<List<PharmacyDTO>> getAllPharmacies() {
 		return new ResponseEntity<>(pharmacyConverter.convertPharmacyListToPharmacyDTOList(iPharmacyService.getAll()), HttpStatus.OK);
@@ -64,6 +68,7 @@ public class PharmacyController {
 	}
 
 	//#1[3.16]-korak1
+	@PreAuthorize("hasRole('ROLE_PATIENT')")
 	@PutMapping(value = "/free", consumes = "application/json")
 	public ResponseEntity<List<PharmacyDTO>> getAllPharmacyWithFreePharmacistByDate(@RequestBody PharmacistAppointmentTimeDTO timeDTO){
 
@@ -78,6 +83,7 @@ public class PharmacyController {
 		}
 	}
 
+	@PreAuthorize("hasRole('ROLE_PATIENT')")
 	@PutMapping(value = "/sortByName/{asc}",consumes = "application/json")
 	public ResponseEntity<List<PharmacyDTO>> getSortedPharmacyByName(@RequestBody List<PharmacyDTO> pharmacies, @PathVariable String asc){
 		try {
@@ -92,6 +98,7 @@ public class PharmacyController {
 
 	}
 
+	@PreAuthorize("hasRole('ROLE_PATIENT')")
 	@PutMapping(value = "/sortByRating/{asc}",consumes = "application/json")
 	public ResponseEntity<List<PharmacyDTO>> getSortedPharmacyByRating(@RequestBody List<PharmacyDTO> pharmacies, @PathVariable String asc){
 		try {

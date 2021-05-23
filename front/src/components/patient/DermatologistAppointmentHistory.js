@@ -96,32 +96,36 @@ import { withStyles } from '@material-ui/core/styles';
     const [pharmacy,setPharmacy] = useState({})
     const [dermatologist,setDermatologist] = useState({})
     const [report,setReport] = useState({})
+    const token = localStorage.getItem("token");
+    const userId = localStorage.getItem("userId");
+    const config = {
+      headers: { Authorization: `Bearer ${token}` }
+  };
 
 
     useEffect(() => {
       axios
         .get(
-          "http://localhost:8080/api/dermatologistReport/all/patient/1/" +
+          "http://localhost:8080/api/dermatologistReport/all/patient/" + userId + "/" + 
           (currPage - 1).toString() +
-          ""
-           
-        )
+          "",config)
         .then((res) => {
           setRows(res.data);
           setCopyRows(res.data);
           console.log(res)
         });
     }, []);
+
+ 
   
     const [haveNextPage, setHaveNextPage] = useState(true);
   
     const nextPage = () => {
       axios
         .get(
-          "http://localhost:8080/api/dermatologistReport/all/patient/1/" +
+          "http://localhost:8080/api/dermatologistReport/all/patient/" + userId + "/" +
             currPage.toString() +
-            ""
-        )
+            "",config)
         .then((res) => {
           if (res.data.length > 0) {
             setCurrPage(currPage + 1);
@@ -135,10 +139,10 @@ import { withStyles } from '@material-ui/core/styles';
     const beforePage = () => {
       axios
         .get(
-          "http://localhost:8080/api/dermatologistReport/all/patient/1/" +
+          "http://localhost:8080/api/dermatologistReport/all/patient/" + userId + "/" + 
             (currPage - 2).toString() +
             ""
-        )
+        ,config)
         .then((res) => {
           setHaveNextPage(true);
           if (res.data.length > 0) {
@@ -152,7 +156,7 @@ import { withStyles } from '@material-ui/core/styles';
 
     const handleClickOpenPharmacyDialog = (pharmacyId) => {
         
-        axios.get( "http://localhost:8080/api/pharmacy/" + pharmacyId).then(
+        axios.get( "http://localhost:8080/api/pharmacy/" + pharmacyId,config).then(
             (res)=>{
                 setPharmacy(res.data)
                 setOpenPharmacyDialog(true)
@@ -165,7 +169,7 @@ import { withStyles } from '@material-ui/core/styles';
 
     const handleClickOpenDermatologistDialog = (dermatologistId) => {
         
-        axios.get( "http://localhost:8080/api/dermatologist/" + dermatologistId).then(
+        axios.get( "http://localhost:8080/api/dermatologist/" + dermatologistId,config).then(
             (res)=>{
                 setDermatologist(res.data)
                 setOpenDermatologistDialog(true)
