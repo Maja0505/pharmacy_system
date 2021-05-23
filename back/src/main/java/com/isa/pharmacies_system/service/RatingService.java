@@ -53,18 +53,26 @@ public class RatingService implements IRatingService {
             }
             if (ratingStaffDTO.getTypeOfRating().equals(TypeOfRating.Dermatologist_rating)) {
                 Dermatologist dermatologist = dermatologistRepository.findById(ratingStaffDTO.getStaffId()).orElse(null);
-                Integer countOfRating = dermatologist.getDermatologistRatings().size();
-                dermatologist.setDermatologistAverageRating(((dermatologist.getDermatologistAverageRating()*countOfRating) + (convertRatingScaleToNumber(ratingStaffDTO.getGrade())))/(countOfRating + 1));
-                ratingRepository.save(ratingConverter.convertRatingDermatologistDTOToDermatologistRating(ratingStaffDTO));
-                dermatologistRepository.save(dermatologist);
+                if(dermatologist!= null){
+                    Integer countOfRating = dermatologist.getDermatologistRatings().size();
+                    dermatologist.setDermatologistAverageRating(((dermatologist.getDermatologistAverageRating()*countOfRating) + (convertRatingScaleToNumber(ratingStaffDTO.getGrade())))/(countOfRating + 1));
+                    ratingRepository.save(ratingConverter.convertRatingDermatologistDTOToDermatologistRating(ratingStaffDTO));
+                    dermatologistRepository.save(dermatologist);
+                    return true;
+                }
+
             } else if(ratingStaffDTO.getTypeOfRating().equals(TypeOfRating.Pharmacist_rating)) {
                 Pharmacist pharmacist = pharmacistRepository.findById(ratingStaffDTO.getStaffId()).orElse(null);
-                Integer countOfRating = pharmacist.getPharmacistAppointments().size();
-                pharmacist.setPharmacistAverageRating((((pharmacist.getPharmacistAverageRating()*countOfRating) + (convertRatingScaleToNumber(ratingStaffDTO.getGrade())))/(countOfRating + 1)));
-                ratingRepository.save(ratingConverter.convertRatingPharmacistDTOToPharmacistRating(ratingStaffDTO));
-                pharmacistRepository.save(pharmacist);
+                if(pharmacist != null){
+                    Integer countOfRating = pharmacist.getPharmacistAppointments().size();
+                    pharmacist.setPharmacistAverageRating((((pharmacist.getPharmacistAverageRating()*countOfRating) + (convertRatingScaleToNumber(ratingStaffDTO.getGrade())))/(countOfRating + 1)));
+                    ratingRepository.save(ratingConverter.convertRatingPharmacistDTOToPharmacistRating(ratingStaffDTO));
+                    pharmacistRepository.save(pharmacist);
+                    return true;
+                }
+
             }
-            return true;
+
         }
         return false;
 
@@ -116,12 +124,15 @@ public class RatingService implements IRatingService {
                 return true;
             }
             Medicine medicine = medicineRepository.findById(ratingMedicineDTO.getMedicineId()).orElse(null);
-            Integer countOfRating = medicine.getMedicineRatings().size();
-            medicine.setMedicineAverageRating(((medicine.getMedicineAverageRating()*countOfRating) + (convertRatingScaleToNumber(ratingMedicineDTO.getGrade())))/(countOfRating + 1));
+            if(medicine != null){
+                Integer countOfRating = medicine.getMedicineRatings().size();
+                medicine.setMedicineAverageRating(((medicine.getMedicineAverageRating()*countOfRating) + (convertRatingScaleToNumber(ratingMedicineDTO.getGrade())))/(countOfRating + 1));
+                ratingRepository.save(ratingConverter.convertRatingMedicineDTOToRatingMedicine(ratingMedicineDTO));
+                medicineRepository.save(medicine);
+                return true;
+            }
 
-            ratingRepository.save(ratingConverter.convertRatingMedicineDTOToRatingMedicine(ratingMedicineDTO));
-            medicineRepository.save(medicine);
-            return true;
+
         }
         return false;
     }
@@ -163,11 +174,15 @@ public class RatingService implements IRatingService {
                 return true;
             }
             Pharmacy pharmacy = pharmacyRepository.findById(ratingPharmacyDTO.getPharmacyId()).orElse(null);
-            Integer countOfRating = pharmacy.getPharmacyRatings().size();
-            pharmacy.setPharmacyAverageRating(((pharmacy.getPharmacyAverageRating()*countOfRating) + (convertRatingScaleToNumber(ratingPharmacyDTO.getGrade())))/(countOfRating + 1));
-            ratingRepository.save(ratingConverter.convertRatingPharmacyDTOToPharmacyRating(ratingPharmacyDTO));
-            pharmacyRepository.save(pharmacy);
-            return true;
+            if(pharmacy != null){
+                Integer countOfRating = pharmacy.getPharmacyRatings().size();
+                pharmacy.setPharmacyAverageRating(((pharmacy.getPharmacyAverageRating()*countOfRating) + (convertRatingScaleToNumber(ratingPharmacyDTO.getGrade())))/(countOfRating + 1));
+                ratingRepository.save(ratingConverter.convertRatingPharmacyDTOToPharmacyRating(ratingPharmacyDTO));
+                pharmacyRepository.save(pharmacy);
+                return true;
+            }
+
+
         }
         return false;
     }
