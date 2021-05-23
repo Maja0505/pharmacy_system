@@ -115,6 +115,11 @@ import setDate from "date-fns/setDate";
     const [openAlertError, setOpenAlertError] = useState(false)
     const [openAlertSuccess, setOpenAlertSuccess] = useState(false)
     const [alertTextSuccess, setAlertTextSuccess] = useState('')
+    const token = localStorage.getItem("token");
+    const userId = localStorage.getItem("userId");
+    const config = {
+      headers: { Authorization: `Bearer ${token}` }
+  };
   
   
     const handleCloseAlertError = (event, reason) => {
@@ -141,15 +146,15 @@ import setDate from "date-fns/setDate";
         var medicine = selectedMedicine.medicineId
         var pharmacy = selectedPharmacy.id
         var date = moment(selectedDate).format('YYYY-MM-DD')
-        axios.post("http://localhost:8080/api/medicineReservation/create/1/" + medicine +"/" + pharmacy,{ dateOfTakingMedicine: date }).
+        axios.post("http://localhost:8080/api/medicineReservation/create/" + userId + "/" + medicine +"/" + pharmacy,{ dateOfTakingMedicine: date },config).
         then((res) => {
             if(res.data){
                 axios
                 .get(
-                  "http://localhost:8080/api/patient/1/medicineReservation/" +
+                  "http://localhost:8080/api/patient/" + userId + "/medicineReservation/" +
                   (currPage - 1).toString() +
                   ""
-                )
+                ,config)
                 .then((res) => {
                   setRows(res.data);
                   setCopyRows(res.data);
@@ -174,7 +179,7 @@ import setDate from "date-fns/setDate";
 
     const HandleCancelReservation = (row) => {
 
-        axios.put('http://localhost:8080/api/medicineReservation/cancel', row)
+        axios.put('http://localhost:8080/api/medicineReservation/cancel', row,config)
         .then(
             (res)=> {
              
@@ -194,11 +199,9 @@ import setDate from "date-fns/setDate";
     useEffect(() => {
       axios
         .get(
-          "http://localhost:8080/api/patient/1/medicineReservation/" +
+          "http://localhost:8080/api/patient/" + userId + "/medicineReservation/" +
           (currPage - 1).toString() +
-          ""
-           
-        )
+          "",config)
         .then((res) => {
           setRows(res.data);
           setCopyRows(res.data);
@@ -211,8 +214,7 @@ import setDate from "date-fns/setDate";
         setOpen(true);
         axios
         .get(
-          "http://localhost:8080/api/medicine/all/short"
-        )
+          "http://localhost:8080/api/medicine/all/short",config)
         .then((res) => {
           setMedicines(res.data)
         }).catch(error => {
@@ -220,8 +222,7 @@ import setDate from "date-fns/setDate";
         })
         axios
         .get(
-          "http://localhost:8080/api/pharmacy/all"
-        )
+          "http://localhost:8080/api/pharmacy/all",config)
         .then((res) => {
             setPharmacies(res.data)
         }).catch(error => {
@@ -254,7 +255,7 @@ import setDate from "date-fns/setDate";
           "http://localhost:8080/api/pharmacy/all/" +
             currPage.toString() +
             ""
-        )
+        ,config)
         .then((res) => {
           if (res.data.length > 0) {
             setCurrPage(currPage + 1);
@@ -273,7 +274,7 @@ import setDate from "date-fns/setDate";
           "http://localhost:8080/api/pharmacy/all/" +
             (currPage - 2).toString() +
             ""
-        )
+        ,config)
         .then((res) => {
           setHaveNextPage(true);
           if (res.data.length > 0) {

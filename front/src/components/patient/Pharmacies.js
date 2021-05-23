@@ -45,6 +45,11 @@ import {
     const [copyRows, setCopyRows] = useState({});
   
     const [currPage, setCurrPage] = useState(1);
+    const token = localStorage.getItem("token");
+    const userId = localStorage.getItem("userId");
+    const config = {
+      headers: { Authorization: `Bearer ${token}`, consumes:'application/json' }
+  };
 
    
     
@@ -55,7 +60,7 @@ import {
           "http://localhost:8080/api/pharmacy/all/" +
             (currPage - 1).toString() +
             ""
-        )
+        ,config)
         .then((res) => {
           setRows(res.data);
           setCopyRows(res.data);
@@ -85,7 +90,7 @@ import {
           "http://localhost:8080/api/pharmacy/sortByName/" +
             (pharmacyNameAsc.asc ? "asc" : "desc"),
           rows
-        )
+        ,config)
         .then((res) => {
           setRows(res.data);
         });
@@ -101,7 +106,7 @@ import {
         .put(
           "http://localhost:8080/api/pharmacy/sortByRating/" +
             (ratingAsc.asc ? "asc" : "desc"),
-          rows
+          rows,config
         )
         .then((res) => {
           setRows(res.data);
@@ -133,7 +138,7 @@ import {
           "http://localhost:8080/api/pharmacy/all/" +
             currPage.toString() +
             ""
-        )
+        ,config)
         .then((res) => {
           if (res.data.length > 0) {
             setCurrPage(currPage + 1);
@@ -150,7 +155,7 @@ import {
           "http://localhost:8080/api/pharmacy/all/" +
             (currPage - 2).toString() +
             ""
-        )
+        ,config)
         .then((res) => {
           setHaveNextPage(true);
           if (res.data.length > 0) {

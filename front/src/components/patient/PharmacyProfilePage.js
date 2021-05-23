@@ -13,6 +13,7 @@ import {
   import {
     NavigateNext,
     NavigateBefore,
+    TramRounded,
   } from "@material-ui/icons";
 import { useState, useEffect } from "react";
 import { makeStyles } from "@material-ui/core/styles";
@@ -26,6 +27,8 @@ import CloseIcon from '@material-ui/icons/Close';
 import Typography from '@material-ui/core/Typography';
 import { withStyles } from '@material-ui/core/styles';
 import { useParams } from "react-router-dom";
+import Alert from "@material-ui/lab/Alert";
+import Snackbar from "@material-ui/core/Snackbar";
 import { set } from "date-fns";
 
 
@@ -103,29 +106,46 @@ import { set } from "date-fns";
     const { id } = useParams()
     const [dermatologistAppointmentPart,setDermatologistAppointmentPart] = useState(false)
     const [dermatologistAppointment,setDermatologistAppointment] = useState([])
-
+    const [openAlertSuccess, setOpenAlertSuccess] = useState(false)
+    const [alertTextSuccess, setAlertTextSuccess] = useState('')
+    const token = localStorage.getItem("token");
+    const userId = localStorage.getItem("userId");
+    const config = {
+      headers: { Authorization: `Bearer ${token}`, consumes:'application/json' }
+  };
 
     useEffect(() => {
       axios
         .get(
-          "http://localhost:8080/api/pharmacy/" + id 
-        )
+          "http://localhost:8080/api/pharmacy/" + id, config)
         .then((res) => {
           setPharmacy(res.data)
         });
     }, []);
+
+    
+    const handleCloseAlertSuccess = (event, reason) => {
+      if (reason === 'clickaway') {
+        return;
+      }
+      setOpenAlertSuccess(false);
+    };
 
 
     const HandleClickDermatologistAppointment = () => {
       if(!dermatologistAppointmentPart){
         axios
         .get(
-          "http://localhost:8080/api/dermatologistAppointment/all/open/" + id 
-        )
+          "http://localhost:8080/api/dermatologistAppointment/all/open/" + id, config)
         .then((res) => {
-          setDermatologistAppointment(res.data)
-          setDermatologistAppointmentPart(true)
-
+          if(res.data.length != 0){
+            setDermatologistAppointment(res.data)
+            setDermatologistAppointmentPart(true)
+          }else{
+            setAlertTextSuccess('There are no open appointments')
+            setOpenAlertSuccess(true)
+          }
+          
         });
       }else{
         setDermatologistAppointmentPart(false)
@@ -175,12 +195,11 @@ import { set } from "date-fns";
     const HandleClickScheduleDermatologistAppointment = (row) => {
       axios
         .put(
-          "http://localhost:8080/api/dermatologistAppointment//book/" + row.id + "/" + id)
+          "http://localhost:8080/api/dermatologistAppointment/book/" + row.id + "/" + id,{},config)
         .then((res) => {
           axios
           .get(
-            "http://localhost:8080/api/dermatologistAppointment/all/open/" + id 
-          )
+            "http://localhost:8080/api/dermatologistAppointment/all/open/" + id,config)
           .then((res) => {
             setDermatologistAppointment(res.data)
             setDermatologistAppointmentPart(true)
@@ -298,7 +317,11 @@ import { set } from "date-fns";
         <div style={{visibility: dermatologistAppointmentPart ? 'visible' : 'hidden'}}>
           {dermatologistAppointment.length != 0 && scheduleDermatologistAppointment}
         </div>
-
+        <Snackbar open={openAlertSuccess} autoHideDuration={1500} onClose={handleCloseAlertSuccess}>
+        <Alert severity="warning">
+          {alertTextSuccess}
+        </Alert>
+      </Snackbar>
       </div>
     );
   };

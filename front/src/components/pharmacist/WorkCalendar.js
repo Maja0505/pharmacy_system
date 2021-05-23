@@ -16,6 +16,8 @@ import { useEffect, useState } from "react";
 
 const WorkCalendar = () => {
   const [data, setData] = useState([]);
+  const token = localStorage.getItem("token");
+  const userId = localStorage.getItem("userId");
 
   const resourceDataSource = [
     { Id: 1, Color: "#e51e36", Name: "missed" },
@@ -31,17 +33,38 @@ const WorkCalendar = () => {
 
   useEffect(async () => {
     axios
-      .get("http://localhost:8080/api/pharmacistAppointment/allMissed/6")
+      .get(
+        "http://localhost:8080/api/pharmacistAppointment/allMissed/" + userId,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      )
       .then((res) => {
         addAppointmentsToData(res.data);
       });
     axios
-      .get("http://localhost:8080/api/pharmacistAppointment/allExpired/6")
+      .get(
+        "http://localhost:8080/api/pharmacistAppointment/allExpired/" + userId,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      )
       .then((res) => {
         addAppointmentsToData(res.data);
       });
     axios
-      .get("http://localhost:8080/api/pharmacistAppointment/allReserved/6")
+      .get(
+        "http://localhost:8080/api/pharmacistAppointment/allReserved/" + userId,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      )
       .then((res) => {
         addAppointmentsToData(res.data);
       });

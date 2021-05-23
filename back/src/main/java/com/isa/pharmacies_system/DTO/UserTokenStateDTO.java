@@ -1,7 +1,8 @@
 package com.isa.pharmacies_system.DTO;
 
 public class UserTokenStateDTO {
-		
+
+		private Long userId;
 	    private String accessToken;
 	    private String email;
 	    private String role;
@@ -9,6 +10,7 @@ public class UserTokenStateDTO {
 	    private Boolean isFirstLogin;
 
 	    public UserTokenStateDTO() {
+	    	this.userId = null;
 	        this.accessToken = null;
 	        this.expiresIn = null;
 	        this.email = null;
@@ -16,8 +18,9 @@ public class UserTokenStateDTO {
 	        this.isFirstLogin = false;
 	    }
 
-	    public UserTokenStateDTO(String accessToken, long expiresIn,String email, String role, Boolean isFirstLogin) {
-	        this.accessToken = accessToken;
+	    public UserTokenStateDTO(Long userId,String accessToken, long expiresIn,String email, String role, Boolean isFirstLogin) {
+	        this.userId = userId;
+	    	this.accessToken = accessToken;
 	        this.expiresIn = expiresIn;
 	        this.email = email;
 	        this.role = role;
@@ -63,5 +66,20 @@ public class UserTokenStateDTO {
 		public void setIsFirstLogin(Boolean isFirstLogin) {
 			this.isFirstLogin = isFirstLogin;
 		}
-		
+
+	public Long getUserId() {
+		return userId;
+	}
+
+	public void setUserId(Long userId) {
+		this.userId = userId;
+	}
+
+	public Boolean getFirstLogin() {
+		return isFirstLogin;
+	}
+
+	public void setFirstLogin(Boolean firstLogin) {
+		isFirstLogin = firstLogin;
+	}
 }

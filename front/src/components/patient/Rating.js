@@ -79,7 +79,11 @@ const Rating = () => {
     const classes = useStyles();
     const [openAlertSuccess, setOpenAlertSuccess] = useState(false)
     const [alertTextSuccess, setAlertTextSuccess] = useState('')
-
+    const token = localStorage.getItem("token");
+    const userId = localStorage.getItem("userId");
+    const config = {
+      headers: { Authorization: `Bearer ${token}` }
+  };
     const handleClickOpenRatingDialog= (row) => {
         setSelectedRow(row)
         setOpenRatingDialog(true)
@@ -103,7 +107,7 @@ const Rating = () => {
             var staffDTO = {
                 id:0,
                 grade:radioValue,
-                patientId:1,
+                patientId:userId,
                 typeOfRating:selectedType,
                 staffId:selectedRow.id,
                 staffFirstName:selectedRow.firstName,
@@ -112,7 +116,7 @@ const Rating = () => {
 
 
             }
-            axios.post('http://localhost:8080/api/rating/staff',staffDTO)
+            axios.post('http://localhost:8080/api/rating/staff',staffDTO,config)
             .then((res)=> {
                 setAlertTextSuccess('Success set rating')
                 setOpenAlertSuccess(true)
@@ -127,12 +131,12 @@ const Rating = () => {
             var staffDTO = {
                 id:0,
                 grade:radioValue,
-                patientId:1,
+                patientId:userId,
                 typeOfRating:selectedType,
                 medicineId:selectedRow.medicineId,
                 medicineName:selectedRow.medicineName
             }
-            axios.post('http://localhost:8080/api/rating/medicine',staffDTO)
+            axios.post('http://localhost:8080/api/rating/medicine',staffDTO,config)
             .then((res)=> {
                 setAlertTextSuccess('Success set rating')
                 setOpenAlertSuccess(true)
@@ -147,12 +151,12 @@ const Rating = () => {
             var staffDTO = {
                 id:0,
                 grade:radioValue,
-                patientId:1,
+                patientId:userId,
                 typeOfRating:selectedType,
                 pharmacyId:selectedRow.id,
                 pharmacyName:selectedRow.pharmacyName
             }
-            axios.post('http://localhost:8080/api/rating/pharmacy',staffDTO)
+            axios.post('http://localhost:8080/api/rating/pharmacy',staffDTO,config)
             .then((res)=> {
                 setAlertTextSuccess('Success set rating')
                 setOpenAlertSuccess(true)
@@ -168,14 +172,14 @@ const Rating = () => {
 
     const HandleClickRatingType = (type) => {
         if(type == 'Dermatologist_rating'){
-            axios.get('http://localhost:8080/api/patient/1/dermatologist/expired')
+            axios.get('http://localhost:8080/api/patient/' + userId + '/dermatologist/expired',config)
             .then((res) => {
                 setStaffs(res.data)
             }).catch(error => {
               
             })
         }else if(type == 'Medicine_rating'){
-            axios.get('http://localhost:8080/api/patient/1/medicine')
+            axios.get('http://localhost:8080/api/patient/' + userId + '/medicine',config)
             .then((res) => {
                 setMedicines(res.data)
             }).catch(error => {
@@ -183,7 +187,7 @@ const Rating = () => {
             })
 
         }else if(type == 'Pharmacy_rating'){
-            axios.get('http://localhost:8080/api/patient/1/pharmacy')
+            axios.get('http://localhost:8080/api/patient/' + userId + '/pharmacy',config)
             .then((res) => {
                 setPharmacies(res.data)
             }).catch(error => {
@@ -191,7 +195,7 @@ const Rating = () => {
             })
 
         }else{
-            axios.get('http://localhost:8080/api/patient/1/pharmacist/expired')
+            axios.get('http://localhost:8080/api/patient/' + userId + '/pharmacist/expired',config)
             .then((res) => {
                 setStaffs(res.data)
             }).catch(error => {

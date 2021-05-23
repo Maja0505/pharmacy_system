@@ -16,6 +16,7 @@ import com.isa.pharmacies_system.service.iService.IPharmacyStorageItemService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -74,6 +75,7 @@ public class DermatologistReportController {
     }
 
     //#1
+    @PreAuthorize("hasRole('ROLE_PATIENT')")
     @GetMapping("/all/patient/{idPatient}/{page}")
     public ResponseEntity<List<DermatologistReportDTO>> findAllForPatient(@PathVariable Long idPatient,@PathVariable int page){
         try{

@@ -112,7 +112,7 @@ public class AuthenticationController {
 		//cuvanje tokena
 		//tokenService.addToken(jwt, user.getId());
 		// Vrati token kao odgovor na uspesnu autentifikaciju
-		return new ResponseEntity<>(new UserTokenStateDTO(jwt, expiresIn, user.getEmail(), getRoleString(user.getTypeOfUser()),user.isFirstLogin()), HttpStatus.OK);
+		return new ResponseEntity<>(new UserTokenStateDTO(user.getId(),jwt, expiresIn, user.getEmail(), getRoleString(user.getTypeOfUser()),user.isFirstLogin()), HttpStatus.OK);
 		} catch (NullPointerException e) {
 			return new ResponseEntity<>(null,HttpStatus.BAD_REQUEST);
 		}catch (Exception e) {
@@ -133,7 +133,7 @@ public class AuthenticationController {
 		case Patient:
 			return "Patient";
 		case Supplier:
-			return "Pharmacist";
+			return "Supplier";
 		default:
 			return "ERROR";
 		}
@@ -203,7 +203,7 @@ public class AuthenticationController {
 			String refreshedToken = tokenUtils.refreshToken(token);
 			int expiresIn = tokenUtils.getExpiredIn();
 
-			return new ResponseEntity<>(new UserTokenStateDTO(refreshedToken, expiresIn, user.getEmail(), getRoleString(user.getTypeOfUser()),user.isFirstLogin()), HttpStatus.OK);
+			return new ResponseEntity<>(new UserTokenStateDTO(user.getId(),refreshedToken, expiresIn, user.getEmail(), getRoleString(user.getTypeOfUser()),user.isFirstLogin()), HttpStatus.OK);
 		} else {
 			UserTokenStateDTO userTokenState = new UserTokenStateDTO();
 			return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);

@@ -1,12 +1,12 @@
-INSERT INTO users (id, email, password, first_name, last_name, phone_number, type_of_user,city,country,latitude,longitude,street_name,street_number,enabled,enable_login,is_first_login, last_password_reset_date) VALUES (nextval('my_seq_users'), 'patient1@gmail.com', '12345', 'Pera', 'Peric', '064000000', 2,'Chicago','USD', 41, 87, 'Fifth Ave','5A', true, true, false, '2021-01-01T00:58:53');
-INSERT INTO users (id, email, password, first_name, last_name, phone_number, type_of_user,city,country,latitude,longitude,street_name,street_number,enabled,enable_login,is_first_login, last_password_reset_date) VALUES (nextval('my_seq_users'), 'patient2@gmail.com', '12345', 'Mika', 'Mikic', '064000000', 2,'Chicago','USD', 41, 87, 'Fifth Ave','5A', true, true, false, '2021-01-01T00:58:53');
+INSERT INTO users (id, email, password, first_name, last_name, phone_number, type_of_user,city,country,latitude,longitude,street_name,street_number,enabled,enable_login,is_first_login, last_password_reset_date) VALUES (nextval('my_seq_users'), 'patient1@gmail.com', '$2a$05$j41h6yKxMGORqXRsQuf8EO53aIDL8nd/MNZtIdsbl5zRShHJwt0Om', 'Pera', 'Peric', '064000000', 2,'Chicago','USD', 41, 87, 'Fifth Ave','5A', true, true, false, '2021-01-01T00:58:53');
+INSERT INTO users (id, email, password, first_name, last_name, phone_number, type_of_user,city,country,latitude,longitude,street_name,street_number,enabled,enable_login,is_first_login, last_password_reset_date) VALUES (nextval('my_seq_users'), 'patient2@gmail.com', '$2a$05$j41h6yKxMGORqXRsQuf8EO53aIDL8nd/MNZtIdsbl5zRShHJwt0Om', 'Mika', 'Mikic', '064000000', 2,'Chicago','USD', 41, 87, 'Fifth Ave','5A', true, true, false, '2021-01-01T00:58:53');
 INSERT INTO users (id, email, password, first_name, last_name, phone_number, type_of_user,city,country,latitude,longitude,street_name,street_number,enabled,enable_login,is_first_login, last_password_reset_date) VALUES (nextval('my_seq_users'), 'systemadmin1@gmail.com', '12345', 'Ivan', 'Ivanovic', '064000000', 0,'Chicago','USD', 41, 87, 'Fifth Ave','5A', true, true, false, '2021-01-01T00:58:53');
 INSERT INTO users (id, email, password, first_name, last_name, phone_number, type_of_user,city,country,latitude,longitude,street_name,street_number,enabled,enable_login,is_first_login, last_password_reset_date) VALUES (nextval('my_seq_users'), 'pharmacyadmin1@gmail.com', '12345', 'Janko', 'Jankovic', '064000000', 1,'Chicago','USD', 41, 87, 'Fifth Ave','5A', true, true, false, '2021-01-01T00:58:53');
 INSERT INTO users (id, email, password, first_name, last_name, phone_number, type_of_user,city,country,latitude,longitude,street_name,street_number,enabled,enable_login,is_first_login, last_password_reset_date) VALUES (nextval('my_seq_users'), 'pharmacyadmin2@gmail.com', '12345', 'Nikola', 'Nikolic', '064000000', 1,'Chicago','USD', 41, 87, 'Fifth Ave','5A', true, true, false, '2021-01-01T00:58:53');
-INSERT INTO users (id, email, password, first_name, last_name, phone_number, type_of_user,city,country,latitude,longitude,street_name,street_number,enabled,enable_login,is_first_login, last_password_reset_date) VALUES (nextval('my_seq_users'), 'pharmacist1@gmail.com', '12345', 'Jana', 'Jankovic', '064000000', 3,'Chicago','USD', 41, 87, 'Fifth Ave','5A', true, true, false, '2021-01-01T00:58:53');
-INSERT INTO users (id, email, password, first_name, last_name, phone_number, type_of_user,city,country,latitude,longitude,street_name,street_number,enabled,enable_login,is_first_login, last_password_reset_date) VALUES (nextval('my_seq_users'), 'pharmacist2@gmail.com', '12345', 'Nina', 'Ninkovic', '064000000', 3,'Chicago','USD', 41, 87, 'Fifth Ave','5A', true, true, false, '2021-01-01T00:58:53');
-INSERT INTO users (id, email, password, first_name, last_name, phone_number, type_of_user,city,country,latitude,longitude,street_name,street_number,enabled,enable_login,is_first_login, last_password_reset_date) VALUES (nextval('my_seq_users'), 'dermatologist1@gmail.com', '12345', 'Pavle', 'Pavlovic', '064000000', 4,'Chicago','USD', 41, 87, 'Fifth Ave','5A', true, true, false, '2021-01-01T00:58:53');
-INSERT INTO users (id, email, password, first_name, last_name, phone_number, type_of_user,city,country,latitude,longitude,street_name,street_number,enabled,enable_login,is_first_login, last_password_reset_date) VALUES (nextval('my_seq_users'), 'dermatologist2@gmail.com', '12345', 'Marko', 'Markovic', '064000000', 4,'Chicago','USD', 41, 87, 'Fifth Ave','5A', true, true, false, '2021-01-01T00:58:53');
+INSERT INTO users (id, email, password, first_name, last_name, phone_number, type_of_user,city,country,latitude,longitude,street_name,street_number,enabled,enable_login,is_first_login, last_password_reset_date) VALUES (nextval('my_seq_users'), 'pharmacist1@gmail.com', '$2a$05$j41h6yKxMGORqXRsQuf8EO53aIDL8nd/MNZtIdsbl5zRShHJwt0Om', 'Jana', 'Jankovic', '064000000', 3,'Chicago','USD', 41, 87, 'Fifth Ave','5A', true, true, false, '2021-01-01T00:58:53');
+INSERT INTO users (id, email, password, first_name, last_name, phone_number, type_of_user,city,country,latitude,longitude,street_name,street_number,enabled,enable_login,is_first_login, last_password_reset_date) VALUES (nextval('my_seq_users'), 'pharmacist2@gmail.com', '$2a$05$j41h6yKxMGORqXRsQuf8EO53aIDL8nd/MNZtIdsbl5zRShHJwt0Om', 'Nina', 'Ninkovic', '064000000', 3,'Chicago','USD', 41, 87, 'Fifth Ave','5A', true, true, false, '2021-01-01T00:58:53');
+INSERT INTO users (id, email, password, first_name, last_name, phone_number, type_of_user,city,country,latitude,longitude,street_name,street_number,enabled,enable_login,is_first_login, last_password_reset_date) VALUES (nextval('my_seq_users'), 'dermatologist1@gmail.com', '$2a$05$j41h6yKxMGORqXRsQuf8EO53aIDL8nd/MNZtIdsbl5zRShHJwt0Om', 'Pavle', 'Pavlovic', '064000000', 4,'Chicago','USD', 41, 87, 'Fifth Ave','5A', true, true, false, '2021-01-01T00:58:53');
+INSERT INTO users (id, email, password, first_name, last_name, phone_number, type_of_user,city,country,latitude,longitude,street_name,street_number,enabled,enable_login,is_first_login, last_password_reset_date) VALUES (nextval('my_seq_users'), 'dermatologist2@gmail.com', '$2a$05$j41h6yKxMGORqXRsQuf8EO53aIDL8nd/MNZtIdsbl5zRShHJwt0Om', 'Marko', 'Markovic', '064000000', 4,'Chicago','USD', 41, 87, 'Fifth Ave','5A', true, true, false, '2021-01-01T00:58:53');
 INSERT INTO users (id, email, password, first_name, last_name, phone_number, type_of_user,city,country,latitude,longitude,street_name,street_number,enabled,enable_login,is_first_login, last_password_reset_date) VALUES (nextval('my_seq_users'), 'supplier1@gmail.com', '12345', 'Ana', 'Ivanovic', '064000000', 5,'Chicago','USD', 41, 87, 'Fifth Ave','5A', true, true, false, '2021-01-01T00:58:53');
 INSERT INTO users (id, email, password, first_name, last_name, phone_number, type_of_user,city,country,latitude,longitude,street_name,street_number,enabled,enable_login,is_first_login, last_password_reset_date) VALUES (nextval('my_seq_users'), 'supplier2@gmail.com', '12345', 'Milan', 'Jankovic', '064001100', 5,'Subotica','Srbija', 211, 100, 'Kralja Milana Obrenovica','16A', true, true, false, '2021-01-01T00:58:53');
 
@@ -24,8 +24,8 @@ INSERT INTO price_lists (id, dermatologist_appointment_price_per_hour, pharmacis
 INSERT INTO pharmacy_admins (id, pharmacy_for_pharmacy_admin_id) VALUES (4, 2);
 INSERT INTO pharmacy_admins (id, pharmacy_for_pharmacy_admin_id) VALUES (5, 2);
 
-INSERT INTO dermatologists (id,dermatologist_average_rating) VALUES (8,4.3);
-INSERT INTO dermatologists (id,dermatologist_average_rating) VALUES (9,2.3);
+INSERT INTO dermatologists (id,dermatologist_average_rating) VALUES (8,0);
+INSERT INTO dermatologists (id,dermatologist_average_rating) VALUES (9,0);
 
 INSERT INTO pharmacists (id,pharmacist_average_rating,pharmacy_for_pharmacist_id) VALUES (6,4.3,1);
 INSERT INTO pharmacists (id,pharmacist_average_rating,pharmacy_for_pharmacist_id) VALUES (7,4.3,2);
@@ -209,6 +209,15 @@ INSERT INTO autorizations (id, name) values (nextval('my_seq_authority'), 'ROLE_
 INSERT INTO autorizations (id, name) values (nextval('my_seq_authority'), 'ROLE_PATIENT');
 INSERT INTO autorizations (id, name) values (nextval('my_seq_authority'), 'ROLE_PHARMACIST');
 INSERT INTO autorizations (id, name) values (nextval('my_seq_authority'), 'ROLE_DERMATOLOGIST');
+
+
+insert into users_authorities(users_id,authorities_id) values(1,4);
+insert into users_authorities(users_id,authorities_id) values(2,4);
+insert into users_authorities(users_id,authorities_id) values(6,5);
+insert into users_authorities(users_id,authorities_id) values(7,5);
+insert into users_authorities(users_id,authorities_id) values(8,6);
+insert into users_authorities(users_id,authorities_id) values(9,6);
+
 
 insert into dermatologist_reports(id,report_infos,dermatologist_appointment_id,recipe_for_dermatologist_report_id) values (nextval('my_seq_dermatologist_report'),'tralala',7,null);
 insert into dermatologist_reports(id,report_infos,dermatologist_appointment_id,recipe_for_dermatologist_report_id) values (nextval('my_seq_dermatologist_report'),'caocao',8,null);

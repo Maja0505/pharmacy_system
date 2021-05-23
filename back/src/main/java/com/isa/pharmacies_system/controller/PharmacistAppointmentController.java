@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -43,6 +44,7 @@ public class PharmacistAppointmentController {
 
 
     //#1[3.16]Korak3
+    @PreAuthorize("hasRole('ROLE_PATIENT')")
     @PostMapping(value = "/book/{pharmacistId}/{patientId}", consumes = "application/json")
     public ResponseEntity<Boolean> bookPharmacistAppointment(@PathVariable Long patientId,@PathVariable Long pharmacistId,@RequestBody PharmacistAppointmentTimeDTO timeDTO){
 
@@ -62,6 +64,7 @@ public class PharmacistAppointmentController {
     }
 
     //#1[3.18]
+    @PreAuthorize("hasRole('ROLE_PATIENT')")
     @GetMapping(value = "/all/reserved/{patientId}")
     public ResponseEntity<List<PharmacistAppointmentDTO>> getAllFutureReservedPharmacistAppointmentForPatient(@PathVariable Long patientId){
         try {
@@ -75,6 +78,7 @@ public class PharmacistAppointmentController {
 
 
     //#1[3.18]
+    @PreAuthorize("hasRole('ROLE_PATIENT')")
     @PutMapping(value = "/cancel/{appointmentId}")
     public ResponseEntity<Boolean> cancelPharmacistAppointment(@PathVariable Long appointmentId){
         try {
@@ -111,6 +115,7 @@ public class PharmacistAppointmentController {
     }
 
     //Nemanja
+    @PreAuthorize("hasRole('ROLE_PHARMACIST')")
     @GetMapping("/allMissed/{pharmacistId}")
     public ResponseEntity<List<PharmacistAppointmentDTO>> getAllMissedPharmacistAppointmentByPharmacist(@PathVariable Long pharmacistId){
         try {
@@ -122,6 +127,7 @@ public class PharmacistAppointmentController {
     }
 
     //Nemanja
+    @PreAuthorize("hasRole('ROLE_PHARMACIST')")
     @GetMapping("/allExpired/{pharmacistId}")
     public ResponseEntity<List<PharmacistAppointmentDTO>> getAllExpiredPharmacistAppointmentByPharmacist(@PathVariable Long pharmacistId){
         try {
@@ -133,6 +139,7 @@ public class PharmacistAppointmentController {
     }
 
     //Nemanja
+    @PreAuthorize("hasRole('ROLE_PHARMACIST')")
     @GetMapping("/allReserved/{pharmacistId}")
     public ResponseEntity<List<PharmacistAppointmentDTO>> getAllReservedPharmacistAppointmentByPharmacist(@PathVariable Long pharmacistId){
         try {

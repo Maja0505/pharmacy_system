@@ -1,37 +1,43 @@
 package com.isa.pharmacies_system.DTO;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import java.time.LocalDateTime;
 
 public class PharmacistAppointmentDTO {
 
-    private long Id;
+    private long id;
     private double appointmentPrice;
-    private String Subject;
-    private String Location;
-    private LocalDateTime StartTime;
-    private LocalDateTime EndTime;
+    private String subject;
+    private String location;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'hh:mm:ss")
+    private LocalDateTime startTime;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'hh:mm:ss")
+    private LocalDateTime endTime;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'hh:mm:ss")
     private LocalDateTime pharmacistAppointmentStartTime;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'hh:mm:ss")
     private LocalDateTime pharmacistAppointmentEndTime;
     private long pharmacistAppointmentDuration;
     private UserPersonalInfoDTO pharmacistForAppointment;
     private PharmacyDTO pharmacyForPharmacistAppointment;
-    private Long PatientId;
-    private String PatientFirstName;
-    private String PatientLastName;
-    private String PatientEmail;
-    private String PatientPhoneNumber;
-    private String PharmacyName;
-    private int ColorId;
+    private Long patientId;
+    private String patientFirstName;
+    private String patientLastName;
+    private String patientEmail;
+    private String patientPhoneNumber;
+    private String pharmacyName;
+    private int colorId;
 
     public PharmacistAppointmentDTO() {
     }
 
     public long getId() {
-        return Id;
+        return id;
     }
 
     public void setId(long id) {
-        Id = id;
+        this.id = id;
     }
 
     public double getAppointmentPrice() {
@@ -43,35 +49,35 @@ public class PharmacistAppointmentDTO {
     }
 
     public String getSubject() {
-        return Subject;
+        return subject;
     }
 
     public void setSubject(String subject) {
-        Subject = subject;
+        this.subject = subject;
     }
 
     public String getLocation() {
-        return Location;
+        return location;
     }
 
     public void setLocation(String location) {
-        Location = location;
+        this.location = location;
     }
 
     public LocalDateTime getStartTime() {
-        return StartTime;
+        return startTime;
     }
 
     public void setStartTime(LocalDateTime startTime) {
-        StartTime = startTime;
+        this.startTime = startTime;
     }
 
     public LocalDateTime getEndTime() {
-        return EndTime;
+        return endTime;
     }
 
     public void setEndTime(LocalDateTime endTime) {
-        EndTime = endTime;
+        this.endTime = endTime;
     }
 
     public LocalDateTime getPharmacistAppointmentStartTime() {
@@ -115,58 +121,58 @@ public class PharmacistAppointmentDTO {
     }
 
     public Long getPatientId() {
-        return PatientId;
+        return patientId;
     }
 
     public void setPatientId(Long patientId) {
-        PatientId = patientId;
+        this.patientId = patientId;
     }
 
     public String getPatientFirstName() {
-        return PatientFirstName;
+        return patientFirstName;
     }
 
     public void setPatientFirstName(String patientFirstName) {
-        PatientFirstName = patientFirstName;
+        this.patientFirstName = patientFirstName;
     }
 
     public String getPatientLastName() {
-        return PatientLastName;
+        return patientLastName;
     }
 
     public void setPatientLastName(String patientLastName) {
-        PatientLastName = patientLastName;
+        this.patientLastName = patientLastName;
     }
 
     public String getPatientEmail() {
-        return PatientEmail;
+        return patientEmail;
     }
 
     public void setPatientEmail(String patientEmail) {
-        PatientEmail = patientEmail;
+        this.patientEmail = patientEmail;
     }
 
     public String getPatientPhoneNumber() {
-        return PatientPhoneNumber;
+        return patientPhoneNumber;
     }
 
     public void setPatientPhoneNumber(String patientPhoneNumber) {
-        PatientPhoneNumber = patientPhoneNumber;
+        this.patientPhoneNumber = patientPhoneNumber;
     }
 
     public String getPharmacyName() {
-        return PharmacyName;
+        return pharmacyName;
     }
 
     public void setPharmacyName(String pharmacyName) {
-        PharmacyName = pharmacyName;
+        this.pharmacyName = pharmacyName;
     }
 
     public int getColorId() {
-        return ColorId;
+        return colorId;
     }
 
     public void setColorId(int colorId) {
-        ColorId = colorId;
+        this.colorId = colorId;
     }
 }

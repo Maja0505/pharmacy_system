@@ -1,5 +1,6 @@
 package com.isa.pharmacies_system.DTO;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.isa.pharmacies_system.domain.medicine.StatusOfMedicineReservation;
 
 import java.time.LocalDate;
@@ -11,6 +12,7 @@ public class MedicineReservationInfoDTO {
     private Long pharmacyId;
     private String medicineName;
     private String pharmacyName;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private LocalDate takingDate;
     private StatusOfMedicineReservation statusOfMedicineReservation;
 

@@ -6,62 +6,53 @@ import axios from "axios";
 import { Link } from "react-router-dom";
 
 class Login extends Component {
-
-  constructor(props){
+  constructor(props) {
     super(props);
-    
+
     this.state = {
-    
-      "email": "",
-      "password": "",
-      warn:false,
-      firstLogin:false
-    
-  };
-}
+      email: "",
+      password: "",
+      warn: false,
+      firstLogin: false,
+    };
+  }
 
-  async loginClick(){
+  async loginClick() {
     await axios
-    .post('http://localhost:8080/auth/login',
-    {
-
-      "email":this.state.email,
-      "password":this.state.password
-    }).then(res => {
-      let tokenDTO = res.data;
-      alert(tokenDTO.isFirstLogin)
-      this.setState({
+      .post("http://localhost:8080/auth/login", {
+        email: this.state.email,
+        password: this.state.password,
+      })
+      .then((res) => {
+        let tokenDTO = res.data;
+        alert(tokenDTO.isFirstLogin);
+        this.setState({
+          userId: tokenDTO.userId,
           token: tokenDTO.accessToken,
           userEmail: tokenDTO.email,
           roleUser: tokenDTO.role,
-          firstLogin: tokenDTO.isFirstLogin
+          firstLogin: tokenDTO.isFirstLogin,
+        });
+        localStorage.setItem("userId", this.state.userId);
+        localStorage.setItem("token", this.state.token);
+        localStorage.setItem("userEmail", this.state.userEmail);
+        localStorage.setItem("roleUser", this.state.roleUser);
+        localStorage.setItem("firstLogin", this.state.firstLogin);
+        console.log("TOKEN " + this.state.token);
       })
-      localStorage.setItem('token',this.state.token);
-      localStorage.setItem('userEmail',this.state.userEmail);
-      localStorage.setItem('roleUser', this.state.roleUser);
-      localStorage.setItem('firstLogin', this.state.firstLogin);
-      console.log("TOKEN " + this.state.token);
-    
-     
-    }).catch(function(error){
-      if(error.response){
-        alert("Wrong email or password!");
-      }
-      
+      .catch(function (error) {
+        if (error.response) {
+          alert("Wrong email or password!");
+        }
+      });
 
-    })
+    console.log("email: " + this.state.email);
+    console.log("pass: " + this.state.password);
 
-    console.log("email: "+ this.state.email)
-    console.log("pass: "+ this.state.password)
-
-    this.redirect()
+    this.redirect();
   }
 
-
-
-
-
-/*
+  /*
   login = (p) => {
     if (p.role === "") {
       alert("Unesite korisnicko ime i lozinku");
@@ -90,20 +81,17 @@ class Login extends Component {
     }
   };*/
 
-  onTodoChangeUsername(value){
+  onTodoChangeUsername(value) {
     this.setState({
-      email: value
+      email: value,
     });
-   
+  }
 
-}
-
-onTodoChangePassword(value){
-  this.setState({
-    password: value
-  });
- 
-}
+  onTodoChangePassword(value) {
+    this.setState({
+      password: value,
+    });
+  }
 
   render() {
     const inputProps = {
@@ -116,8 +104,8 @@ onTodoChangePassword(value){
           id="outlined-basic"
           label="Username"
           variant="outlined"
-          value={this.state.email} 
-          onChange={e=> this.onTodoChangeUsername(e.target.value)}
+          value={this.state.email}
+          onChange={(e) => this.onTodoChangeUsername(e.target.value)}
           size="small"
         />
         <br />
@@ -126,25 +114,26 @@ onTodoChangePassword(value){
           id="outlined-basic"
           label="Password"
           variant="outlined"
-          value={this.state.password} 
-          onChange={e=> this.onTodoChangePassword(e.target.value)}
+          value={this.state.password}
+          onChange={(e) => this.onTodoChangePassword(e.target.value)}
           size="small"
         />
-        {this.state.wrong ?
-          <p>Wrong email or password</p> : null
-        }
+        {this.state.wrong ? <p>Wrong email or password</p> : null}
         <br />
         <br />
-        <Link to="/registerPatient">You don't have account? Please, register with click on link!</Link>
+        <Link to="/registerPatient">
+          You don't have account? Please, register with click on link!
+        </Link>
         <br />
         <br />
         <div>
-        <Button
-          variant="contained"
-          color="primary"
-          onClick={this.loginClick.bind(this)}>
-          Login
-        </Button>
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={this.loginClick.bind(this)}
+          >
+            Login
+          </Button>
         </div>
       </div>
     );
@@ -157,41 +146,41 @@ onTodoChangePassword(value){
     var redirection4 = "/pharmacist";
     var redirection5 = "/dermatologist";
     alert(this.state.roleUser + " " + this.state.firstLogin);
-    if(this.state.roleUser === "System_admin"){
-        if(this.state.firstLogin === true){
-            //stranica za promjenu lozinke
-        } else {
-          window.location.href = "http://localhost:3000/system_admin"
-        }
+    if (this.state.roleUser === "System_admin") {
+      if (this.state.firstLogin === true) {
+        //stranica za promjenu lozinke
+      } else {
+        window.location.href = "http://localhost:3000/system_admin";
+      }
     }
-    if(this.state.roleUser === "Supplier"){
-        if(this.state.firstLogin === true){
-            //stranica za promjenu lozinke
-        } else {
-            window.location.href = "http://localhost:3000/supplier"
-        } 
+    if (this.state.roleUser === "Supplier") {
+      if (this.state.firstLogin === true) {
+        //stranica za promjenu lozinke
+      } else {
+        window.location.href = "http://localhost:3000/supplier";
+      }
     }
-    if(this.state.roleUser === "Patient"){
-        if(this.state.firstLogin === true){
-            //stranica za promjenu lozinke
-        } else {
-            alert("treba da redirektuje");
-            window.location.href = "http://localhost:3000/patient"
-        } 
+    if (this.state.roleUser === "Patient") {
+      if (this.state.firstLogin === true) {
+        //stranica za promjenu lozinke
+      } else {
+        alert("treba da redirektuje");
+        window.location.href = "http://localhost:3000/patient";
+      }
     }
-    if(this.state.roleUser === "Dermatologist"){
-        if(this.state.firstLogin === true){
-            //stranica za promjenu lozinke
-        } else {
-            window.location.href = "http://localhost:3000/dermatologist"
-        } 
+    if (this.state.roleUser === "Dermatologist") {
+      if (this.state.firstLogin === true) {
+        //stranica za promjenu lozinke
+      } else {
+        window.location.href = "http://localhost:3000/dermatologist";
+      }
     }
-    if(this.state.roleUser === "Pharmacist"){
-        if(this.state.firstLogin === true){
-            //stranica za promjenu lozinke
-        } else {
-            window.location.href = "http://localhost:3000/pharmacist"
-        } 
+    if (this.state.roleUser === "Pharmacist") {
+      if (this.state.firstLogin === true) {
+        //stranica za promjenu lozinke
+      } else {
+        window.location.href = "http://localhost:3000/pharmacist";
+      }
     }
   }
 }

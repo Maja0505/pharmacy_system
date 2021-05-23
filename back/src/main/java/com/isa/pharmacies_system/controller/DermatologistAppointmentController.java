@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -45,6 +46,7 @@ public class DermatologistAppointmentController {
     }
 
     //#1[3.13]
+    @PreAuthorize("hasRole('ROLE_PATIENT')")
     @GetMapping("/all/open/{pharmacyId}")
     public ResponseEntity<List<DermatologistAppointmentDTO>> getOpenDermatologistAppointment(@PathVariable Long pharmacyId){
         try{
@@ -55,6 +57,7 @@ public class DermatologistAppointmentController {
         }
     }
 
+    @PreAuthorize("hasRole('ROLE_PATIENT')")
     @PutMapping(value = "/book/{appointmentId}/{patientId}")
     public ResponseEntity<Boolean> bookDermatologistAppointment(@PathVariable Long patientId, @PathVariable Long appointmentId){
         try{
@@ -70,6 +73,7 @@ public class DermatologistAppointmentController {
     }
 
     //#1[3.15]
+    @PreAuthorize("hasRole('ROLE_PATIENT')")
     @PutMapping(value = "/cancel")
     public ResponseEntity<Boolean> cancelDermatologistAppointment(@RequestBody DermatologistAppointmentDTO dermatologistAppointmentDTO){
         try {
@@ -143,6 +147,7 @@ public class DermatologistAppointmentController {
     }
 
     //Nemanja
+    @PreAuthorize("hasRole('ROLE_DERMATOLOGIST')")
     @GetMapping("/allMissed/{dermatologistId}/{pharmacyId}")
     public ResponseEntity<List<DermatologistAppointmentDTO>> getAllMissedDermatologistAppointmentByDermatologistInPharmacy(@PathVariable Long dermatologistId,@PathVariable Long pharmacyId){
         try {
