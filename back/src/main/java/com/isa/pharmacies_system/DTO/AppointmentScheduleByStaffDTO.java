@@ -1,5 +1,7 @@
 package com.isa.pharmacies_system.DTO;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import java.time.LocalDateTime;
 
 public class AppointmentScheduleByStaffDTO {
@@ -7,7 +9,9 @@ public class AppointmentScheduleByStaffDTO {
     private Long staffId;
     private Long pharmacyId;
     private Long patientId;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime appointmentStartTime;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime appointmentEndTime;
     private Long appointmentDuration;
     private LocalDateTime staffWorkStartTime;

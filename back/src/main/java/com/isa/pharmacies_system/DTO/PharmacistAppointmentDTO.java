@@ -10,13 +10,13 @@ public class PharmacistAppointmentDTO {
     private double appointmentPrice;
     private String subject;
     private String location;
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'hh:mm:ss")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime startTime;
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'hh:mm:ss")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime endTime;
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'hh:mm:ss")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime pharmacistAppointmentStartTime;
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'hh:mm:ss")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime pharmacistAppointmentEndTime;
     private long pharmacistAppointmentDuration;
     private UserPersonalInfoDTO pharmacistForAppointment;
@@ -26,6 +26,7 @@ public class PharmacistAppointmentDTO {
     private String patientLastName;
     private String patientEmail;
     private String patientPhoneNumber;
+    private Long pharmacyId;
     private String pharmacyName;
     private int colorId;
 
@@ -174,5 +175,13 @@ public class PharmacistAppointmentDTO {
 
     public void setColorId(int colorId) {
         this.colorId = colorId;
+    }
+
+    public Long getPharmacyId() {
+        return pharmacyId;
+    }
+
+    public void setPharmacyId(Long pharmacyId) {
+        this.pharmacyId = pharmacyId;
     }
 }

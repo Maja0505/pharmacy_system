@@ -5,6 +5,7 @@ import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.MailException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.isa.pharmacies_system.DTO.MedicineDTO;
@@ -84,8 +85,10 @@ public class PatientService implements IPatientService {
     @Override
     public Boolean changePassword(UserPasswordDTO userPasswordDTO){
         Patient patient = findOne(userPasswordDTO.getId());
-        if(checkPassword(patient.getPassword(), userPasswordDTO.getConfirmedPassword()) && checkPassword(userPasswordDTO.getNewPassword(), userPasswordDTO.getConfirmedNewPassword())){
-            patient.setPassword(userPasswordDTO.getNewPassword());
+        BCryptPasswordEncoder b = new BCryptPasswordEncoder();
+
+        if(b.matches(patient.getPassword(), userPasswordDTO.getConfirmedPassword()) && checkPassword(userPasswordDTO.getNewPassword(), userPasswordDTO.getConfirmedNewPassword())){
+            patient.setPassword(b.encode(userPasswordDTO.getNewPassword()));
             savePatient(patient);
             return true;
         }

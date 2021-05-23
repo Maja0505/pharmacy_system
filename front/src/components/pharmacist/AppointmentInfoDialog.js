@@ -26,6 +26,7 @@ const AppointmentInfoDialog = ({
         AppointmentId: appointment.id,
         Email: appointment.patientEmail,
         PhoneNumber: appointment.patientPhoneNumber,
+        PharmacyId: appointment.pharmacyId,
         PharmacyName: appointment.pharmacyName,
         PharamcyLocation: appointment.location,
         AppointmentStartTime: appointment.startTime,

@@ -11,6 +11,9 @@ const useStyles = makeStyles({
 });
 
 const WriteReportSecondStep = ({ appointment, report, setReport }) => {
+  const token = localStorage.getItem("token");
+  const userId = localStorage.getItem("userId");
+
   const classes = useStyles();
 
   const [nowTime, setDate] = useState(new Date());

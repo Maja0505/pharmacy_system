@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -53,11 +54,12 @@ public class DermatologistService implements IDermatologistService {
     @Override
     public Boolean changePassword(UserPasswordDTO dermatologistPasswordDTO) {
         Dermatologist dermatologist = getDermatologist(dermatologistPasswordDTO.getId());
+        BCryptPasswordEncoder b = new BCryptPasswordEncoder();
 
-        if(checkPassword(dermatologistPasswordDTO.getConfirmedPassword(),dermatologist.getPassword()) &&
+        if(b.matches(dermatologistPasswordDTO.getConfirmedPassword(),dermatologist.getPassword()) &&
                 checkPassword(dermatologistPasswordDTO.getNewPassword(),dermatologistPasswordDTO.getConfirmedNewPassword())){
 
-            dermatologist.setPassword(dermatologistPasswordDTO.getNewPassword());
+            dermatologist.setPassword(b.encode(dermatologistPasswordDTO.getNewPassword()));
             saveDermatologist(dermatologist);
             return true;
 

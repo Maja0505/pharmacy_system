@@ -2,6 +2,7 @@ package com.isa.pharmacies_system.service.iService;
 
 import com.isa.pharmacies_system.DTO.PharmacistAppointmentTimeDTO;
 import com.isa.pharmacies_system.DTO.UserPasswordDTO;
+import com.isa.pharmacies_system.domain.pharmacy.Pharmacy;
 import com.isa.pharmacies_system.domain.schedule.PharmacistVacationRequest;
 import com.isa.pharmacies_system.domain.user.Pharmacist;
 
@@ -15,4 +16,5 @@ public interface IPharmacistService {
     Boolean checkPassword(String firstPassword,String secondPassword);
     List<Pharmacist> getAllPharmacistsWithOpenAppointmentsByPharmacyId(Long pharmacyId, PharmacistAppointmentTimeDTO timeDTO);
     List<PharmacistVacationRequest> getAllFuturePharmacistVacationRequest(Long pharmacistId);
+    Long getPharmacyIdWherePharmacistWork(Long pharmacistId);
 }

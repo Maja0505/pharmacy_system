@@ -22,6 +22,9 @@ const AppointmentCreateDialog = ({
   setOpenAlertSuccsess,
   setOpenAlertUnsuccses,
 }) => {
+  const token = localStorage.getItem("token");
+  const userId = localStorage.getItem("userId");
+
   const closeDialog = () => {
     setOpenDialog(false);
   };
@@ -86,14 +89,19 @@ const AppointmentCreateDialog = ({
           .post(
             "http://localhost:8080/api/dermatologistAppointment/bookByDermatologist",
             {
-              staffId: 8,
-              pharmacyId: 1,
+              staffId: userId,
+              pharmacyId: patient.PharmacyId,
               patientId: patient.Id,
               appointmentStartTime: makeDate(a.StartTime),
               appointmentEndTime: makeDate(a.EndTime),
               appointmentDuration: null,
               staffWorkStartTime: makeDate(workingHoursForDate.startWorkTime),
               staffWorkEndTime: makeDate(workingHoursForDate.endWorkTime),
+            },
+            {
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
             }
           )
           .then((res) => {
@@ -110,7 +118,13 @@ const AppointmentCreateDialog = ({
             "http://localhost:8080/api/dermatologistAppointment/book/" +
               a.id +
               "/" +
-              patient.Id
+              patient.Id,
+            {},
+            {
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+            }
           )
           .then((res) => {
             setOpenAlertSuccsess(true);

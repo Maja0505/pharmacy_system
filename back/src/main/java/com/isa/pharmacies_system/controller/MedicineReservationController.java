@@ -16,6 +16,7 @@ import com.isa.pharmacies_system.service.iService.IPatientService;
 import com.isa.pharmacies_system.service.iService.IPharmacyService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -81,6 +82,7 @@ public class MedicineReservationController {
     }
 
     //Nemanja
+    @PreAuthorize("hasRole('ROLE_PHARMACIST')")
     @GetMapping("/get/{medicineReservationId}/{pharmacyId}")
     public ResponseEntity<MedicineReservationForTakingDTO> getMedicineReservationByIdAndPharmacy(@PathVariable Long medicineReservationId,@PathVariable Long pharmacyId){
         try {
@@ -96,6 +98,7 @@ public class MedicineReservationController {
     }
 
     //Nemanja
+    @PreAuthorize("hasRole('ROLE_PHARMACIST')")
     @PutMapping("/finish/{medicineReservationId}")
     public ResponseEntity<Boolean> finishMedicineReservation(@PathVariable Long medicineReservationId){
         try {

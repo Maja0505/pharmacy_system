@@ -12,6 +12,7 @@ import com.isa.pharmacies_system.service.iService.IPharmacistService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -34,6 +35,7 @@ public class PharmacistController {
         this.pharmacistConverter = new PharmacistConverter();
     }
 
+    @PreAuthorize("hasRole('ROLE_PHARMACIST')")
     @GetMapping("/{id}")
     public ResponseEntity<UserPersonalInfoDTO> getPharmacistPersonalInfo(@PathVariable Long id){
         try {
@@ -45,6 +47,7 @@ public class PharmacistController {
 
     }
 
+    @PreAuthorize("hasRole('ROLE_PHARMACIST')")
     @PutMapping(value = "/update", consumes = "application/json")
     public ResponseEntity<Boolean> updatePharmacistPersonalInfo(@RequestBody UserPersonalInfoDTO pharmacistPersonalInfoDTO){
         try {
@@ -57,6 +60,7 @@ public class PharmacistController {
 
     }
 
+    @PreAuthorize("hasRole('ROLE_PHARMACIST')")
     @PutMapping(value = "/changePassword",consumes = "application/json")
     public ResponseEntity<Boolean> changePharmacistPassword(@RequestBody UserPasswordDTO pharmacistPasswordDTO){
         try {
@@ -85,11 +89,22 @@ public class PharmacistController {
         }
     }
 
+    @PreAuthorize("hasRole('ROLE_PHARMACIST')")
     @GetMapping("/futureVacationRequest/{id}")
     public ResponseEntity<List<PharmacistVacationRequest>> getAllFuturePharmacistVacationRequest (@PathVariable Long
     id){
         try {
             return new ResponseEntity<>(pharmacistService.getAllFuturePharmacistVacationRequest(id), HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @PreAuthorize("hasRole('ROLE_PHARMACIST')")
+    @GetMapping("/getPharmacyId/{pharmacistId}")
+    public ResponseEntity<Long> getPharmacyIdWherePharmacistWork (@PathVariable Long pharmacistId){
+        try {
+            return new ResponseEntity<>(pharmacistService.getPharmacyIdWherePharmacistWork(pharmacistId), HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
         }

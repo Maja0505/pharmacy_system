@@ -19,6 +19,9 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 
 const WorkCalendar = () => {
+  const token = localStorage.getItem("token");
+  const userId = localStorage.getItem("userId");
+
   const [data, setData] = useState([]);
 
   const [pharmacies, setPharmacies] = useState([]);
@@ -37,7 +40,11 @@ const WorkCalendar = () => {
 
   useEffect(() => {
     axios
-      .get("http://localhost:8080/api/pharmacy/getPharmacies/8")
+      .get("http://localhost:8080/api/pharmacy/getPharmacies/" + userId, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
       .then((res) => {
         setPharmacies(res.data);
         addAppointmentForSelectedPharmacy(res.data[0].pharmacyId);
@@ -47,24 +54,45 @@ const WorkCalendar = () => {
   const addAppointmentForSelectedPharmacy = (pharmacyId) => {
     axios
       .get(
-        "http://localhost:8080/api/dermatologistAppointment/allMissed/8/" +
-          pharmacyId
+        "http://localhost:8080/api/dermatologistAppointment/allMissed/" +
+          userId +
+          "/" +
+          pharmacyId,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
       )
       .then((res) => {
         addAppointmentsToData(res.data);
       });
     axios
       .get(
-        "http://localhost:8080/api/dermatologistAppointment/allExpired/8/" +
-          pharmacyId
+        "http://localhost:8080/api/dermatologistAppointment/allExpired/" +
+          userId +
+          "/" +
+          pharmacyId,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
       )
       .then((res) => {
         addAppointmentsToData(res.data);
       });
     axios
       .get(
-        "http://localhost:8080/api/dermatologistAppointment/allReserved/8/" +
-          pharmacyId
+        "http://localhost:8080/api/dermatologistAppointment/allReserved/" +
+          userId +
+          "/" +
+          pharmacyId,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
       )
       .then((res) => {
         addAppointmentsToData(res.data);
@@ -89,7 +117,13 @@ const WorkCalendar = () => {
     axios
       .put(
         "http://localhost:8080/api/dermatologistAppointment/changeStatusToMissed/" +
-          id
+          id,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
       )
       .then((res) => {
         setOpenDialog(false);
@@ -122,6 +156,7 @@ const WorkCalendar = () => {
           {pharmacies.length !== 0 && (
             <Autocomplete
               id="controllable-states-demo"
+              size="small"
               options={pharmacies}
               getOptionLabel={(option) => option.pharmacyName}
               defaultValue={pharmacies.find((v) => v.pharmacyName[0])}

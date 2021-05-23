@@ -22,6 +22,9 @@ const RecipeAddItemDialog = ({
   recipeItems,
   setRecipeItems,
 }) => {
+  const token = localStorage.getItem("token");
+  const userId = localStorage.getItem("userId");
+
   const [recomendeDailyIntake, setRecomendedDailyIntake] = useState("");
   const [medicineAmount, setMedicineAmount] = useState(1);
   const [haveEnough, setHaveEnought] = useState(null);
@@ -50,7 +53,12 @@ const RecipeAddItemDialog = ({
           "/" +
           medicineAmount +
           "/" +
-          appointment.Id
+          appointment.Id,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
       )
       .then((res) => {
         if (res.status === 202) {

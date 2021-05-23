@@ -17,13 +17,22 @@ const useStyles = makeStyles({
 });
 
 const WriteReportFirstStep = ({ appointment, setAppointment }) => {
+  const token = localStorage.getItem("token");
+  const userId = localStorage.getItem("userId");
+
   const classes = useStyles();
 
   const changeAppointmentToMissed = () => {
     axios
       .put(
         "http://localhost:8080/api/pharmacistAppointment/changeStatusToMissed/" +
-          appointment.AppointmentId
+          appointment.AppointmentId,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
       )
       .then((res) => {
         setAppointment(null);

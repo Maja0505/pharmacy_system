@@ -40,6 +40,7 @@ public class PharmacistAppointmentConverter {
             pharmacistAppointmentDTO.setPharmacyForPharmacistAppointment(pharmacyDTO);
             pharmacistAppointmentDTO.setPharmacyName(pharmacyDTO.getPharmacyName());
             pharmacistAppointmentDTO.setLocation(pharmacyDTO.getPharmacyAddress().getCity() + ", " + pharmacyDTO.getPharmacyAddress().getStreetName() + " " + pharmacyDTO.getPharmacyAddress().getStreetNumber());
+            pharmacistAppointmentDTO.setPharmacyId(pharmacyDTO.getId());
         }catch (Exception e){
         }
         pharmacistAppointmentDTO.setPharmacistAppointmentEndTime(pharmacistAppointment.getPharmacistAppointmentStartTime().plusMinutes(pharmacistAppointment.getPharmacistAppointmentDuration()));

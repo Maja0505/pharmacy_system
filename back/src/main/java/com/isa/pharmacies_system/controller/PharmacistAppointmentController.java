@@ -97,6 +97,7 @@ public class PharmacistAppointmentController {
     }
 
     //Nemanja
+    @PreAuthorize("hasRole('ROLE_PHARMACIST')")
     @PutMapping(value = "/sortByAppointmentDuration/{asc}",consumes = "application/json")
     public ResponseEntity<List<PatientAppointmentInfoDTO>> getSortedPastPharmacistAppointmentByAppointmentDuration(@RequestBody List<PatientAppointmentInfoDTO> patientAppointmentInfoDTOList, @PathVariable String asc){
         try {
@@ -148,6 +149,7 @@ public class PharmacistAppointmentController {
     }
 
     //Nemanja
+    @PreAuthorize("hasRole('ROLE_PHARMACIST')")
     @PutMapping("/changeStatusToMissed/{id}")
     public ResponseEntity<Boolean> changePharmacistAppointmentStatusToMissed(@PathVariable Long id){
         try {
@@ -162,6 +164,7 @@ public class PharmacistAppointmentController {
     }
 
     //Nemanja
+    @PreAuthorize("hasRole('ROLE_PHARMACIST')")
     @GetMapping("/allFutureReserved/{pharmacistId}")
     public ResponseEntity<List<PharmacistAppointmentDTO>> getAllFutureReservedAppointmentByPharmacist(@PathVariable Long pharmacistId){
         try {
@@ -173,6 +176,7 @@ public class PharmacistAppointmentController {
     }
 
     //Nemanja
+    @PreAuthorize("hasRole('ROLE_PHARMACIST')")
     @PostMapping(value = "/bookByPharmacist",consumes = "application/json")
     public ResponseEntity<Boolean> bookPharmacistAppointmentByPharmacist(@RequestBody AppointmentScheduleByStaffDTO appointmentScheduleByStaffDTO){
         try {
@@ -190,6 +194,7 @@ public class PharmacistAppointmentController {
     }
 
     //Nemanja
+    @PreAuthorize("hasRole('ROLE_PHARMACIST')")
     @GetMapping("/searchAllFutureReservedByPatient/{pharmacistId}/{firstName}/{lastName}")
     public ResponseEntity<List<PharmacistAppointmentDTO>> searchFutureReservedAppointmentsByPatientFirstAndLastName(@PathVariable Long pharmacistId, @PathVariable String firstName,@PathVariable String lastName){
         try {
