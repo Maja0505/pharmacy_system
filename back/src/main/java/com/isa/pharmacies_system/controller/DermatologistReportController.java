@@ -76,6 +76,7 @@ public class DermatologistReportController {
     }
 
     //#1
+    @PreAuthorize("hasRole('ROLE_PATIENT')")
     @GetMapping("/all/patient/{idPatient}/{page}")
     public ResponseEntity<List<DermatologistReportDTO>> findAllForPatient(@PathVariable Long idPatient,@PathVariable int page){
         try{

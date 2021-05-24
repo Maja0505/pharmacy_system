@@ -1,3 +1,5 @@
+//KAKO DA JE ZAPRATIIII???
+
 import React from 'react'
 import { useState, useEffect } from "react";
 import { TimePickerComponent, DatePickerComponent } from "@syncfusion/ej2-react-calendars";
@@ -40,14 +42,21 @@ const SubscriptionPharmacy = () => {
 
   const classes = useStyles();
   const [rows,setRows] = useState([]);
+  const token = localStorage.getItem("token");
+  const userId = localStorage.getItem("userId");
+  const config = {
+    headers: { Authorization: `Bearer ${token}` }
+};
 
   useEffect(() => {
     axios
       .get(
-        "http://localhost:8080/api/patient/1//subscription" 
-      )
+        "http://localhost:8080/api/patient/" + userId + "/subscription" 
+      ,config)
       .then((res) => {
         setRows(res.data);
+      }).catch(error => {
+
       });
   }, []);
  

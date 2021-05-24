@@ -32,7 +32,7 @@ public class DermatologistController {
         this.userConverter = new UserConverter();
     }
 
-    @PreAuthorize("hasRole('ROLE_DERMATOLOGIST')")
+    @PreAuthorize("hasRole('ROLE_DERMATOLOGIST') or hasRole('ROLE_PATIENT')")
     @GetMapping("/{id}")
     public ResponseEntity<UserPersonalInfoDTO> getDermatologistPersonalInfo(@PathVariable Long id){
         try {

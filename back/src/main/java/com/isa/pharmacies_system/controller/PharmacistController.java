@@ -35,7 +35,7 @@ public class PharmacistController {
         this.pharmacistConverter = new PharmacistConverter();
     }
 
-    @PreAuthorize("hasRole('ROLE_PHARMACIST')")
+    @PreAuthorize("hasRole('ROLE_PHARMACIST') or hasRole('ROLE_PATIENT')")
     @GetMapping("/{id}")
     public ResponseEntity<UserPersonalInfoDTO> getPharmacistPersonalInfo(@PathVariable Long id){
         try {
@@ -74,6 +74,7 @@ public class PharmacistController {
     }
 
     //#1[3.16]Korak2
+    @PreAuthorize("hasRole('ROLE_PATIENT')")
     @PutMapping(value = "/free/{pharmacyId}", consumes = "application/json")
     public ResponseEntity<List<PharmacistInfoDTO>> getAllPharmacistsWithOpenAppointmentsByPharmacyId(@PathVariable Long pharmacyId, @RequestBody PharmacistAppointmentTimeDTO timeDTO) {
 

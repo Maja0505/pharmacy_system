@@ -17,6 +17,12 @@ const PasswordDialog = ({openDialog,id,setOpenAlert,setOpenDialog,setAlertText})
     const [newPassword, setNewPassword] = useState('')
     const [confirmedNewPassword, setConfirmedNewPassword] = useState('')
     const [error, setError] = useState('')
+    const token = localStorage.getItem("token");
+    const userId = localStorage.getItem("userId");
+    const config = {
+      headers: { Authorization: `Bearer ${token}`, consumes:'application/json' }
+  };
+
     const closeDialog = () => {
         setError('')
         setOpenDialog(false);
@@ -34,7 +40,7 @@ const PasswordDialog = ({openDialog,id,setOpenAlert,setOpenDialog,setAlertText})
     
     const changePassword = (passwordDTO) => {
        setError('')
-        axios.put('http://localhost:8080/api/patient/changePassword',passwordDTO)
+        axios.put('http://localhost:8080/api/patient/changePassword',passwordDTO,config)
         .then((res) => {
             setAlertText('Success change passowrd!')
             setOpenAlert(true)

@@ -6,6 +6,7 @@ import com.isa.pharmacies_system.domain.medicine.EPrescriptionItem;
 import com.isa.pharmacies_system.service.iService.IEPrescriptionService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -27,6 +28,7 @@ public class EPrescriptionController {
         this.ePrescriptionItemConverter = new EPrescriptionItemConverter();
     }
 
+    @PreAuthorize("hasRole('ROLE_PATIENT')")
     @GetMapping(value = "/{id}/ePrescriptionItems")
     public ResponseEntity<List<EPrescriptionItemDTO>> getAllEPrescriptionItemForEPrescription(@PathVariable Long id) {
 

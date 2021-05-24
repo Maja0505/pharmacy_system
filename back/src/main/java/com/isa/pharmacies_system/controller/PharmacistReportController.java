@@ -44,7 +44,8 @@ public class PharmacistReportController {
 
     }
 
-    //#1
+    //#1]
+    @PreAuthorize("hasRole('ROLE_PATIENT')")
     @GetMapping("/all/patient/{idPatient}/{page}")
     public ResponseEntity<List<PharmacistReportDTO>> findAllForPatient(@PathVariable Long idPatient, @PathVariable int page){
         try{

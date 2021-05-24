@@ -49,6 +49,11 @@ import {
     const [openAlertError, setOpenAlertError] = useState(false)
     const [openAlertSuccess, setOpenAlertSuccess] = useState(false)
     const [alertTextSuccess, setAlertTextSuccess] = useState('')
+    const token = localStorage.getItem("token");
+    const userId = localStorage.getItem("userId");
+    const config = {
+      headers: { Authorization: `Bearer ${token}` }
+  };
   
   
     const handleCloseAlertError = (event, reason) => {
@@ -68,11 +73,9 @@ import {
     useEffect(() => {
       axios
         .get(
-          "http://localhost:8080/api/patient/1/pharmacistAppointment/all/reserved/" +
+          "http://localhost:8080/api/patient/" + userId + "/pharmacistAppointment/all/reserved/" +
           (currPage - 1).toString() +
-          ""
-           
-        )
+          "",config)
         .then((res) => {
           setRows(res.data);
           setCopyRows(res.data);
@@ -101,8 +104,7 @@ import {
         .get(
           "http://localhost:8080/api/pharmacy/all/" +
             currPage.toString() +
-            ""
-        )
+            "",config )
         .then((res) => {
           if (res.data.length > 0) {
             setCurrPage(currPage + 1);
@@ -119,7 +121,7 @@ import {
           "http://localhost:8080/api/pharmacy/all/" +
             (currPage - 2).toString() +
             ""
-        )
+        ,config)
         .then((res) => {
           setHaveNextPage(true);
           if (res.data.length > 0) {
@@ -133,17 +135,15 @@ import {
     const HandleClickCancelPharmacistAppointment = (row) => {
       axios
       .put(
-        "http://localhost:8080/api/pharmacistAppointment/cancel/" + row.id
+        "http://localhost:8080/api/pharmacistAppointment/cancel/" + row.id,{},config
       )
       .then((res) => {
         if(res.data){
           axios
           .get(
-            "http://localhost:8080/api/patient/1/pharmacistAppointment/all/reserved/" +
+            "http://localhost:8080/api/patient/"+ userId + "/pharmacistAppointment/all/reserved/" +
             (currPage - 1).toString() +
-            ""
-             
-          )
+            "",config)
           .then((res) => {
             setRows(res.data);
             setCopyRows(res.data);

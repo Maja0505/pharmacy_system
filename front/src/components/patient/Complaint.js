@@ -21,6 +21,7 @@ import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
 import Typography from '@material-ui/core/Typography';
 import { withStyles } from '@material-ui/core/styles';
+import { getConfig } from '@testing-library/dom';
 
 
 
@@ -68,6 +69,11 @@ const Complaint = () => {
     const [radioValue, setRadioValue] = React.useState('female');
     const [selectedRow, setSelectedRow] = useState()
     const classes = useStyles();
+    const token = localStorage.getItem("token");
+    const userId = localStorage.getItem("userId");
+    const config = {
+      headers: { Authorization: `Bearer ${token}`, consumes:'application/json' }
+  };
 
     const handleClickOpenComplaintDialog= (row) => {
         setSelectedRow(row)
@@ -85,18 +91,18 @@ const Complaint = () => {
 
     const HandleClickComplaintType = (type) => {
         if(type == 'Dermatologist_complaint'){
-            axios.get('http://localhost:8080/api/patient/1/dermatologist/expired')
+            axios.get('http://localhost:8080/api/patient/' + userId +  '/dermatologist/expired',config)
             .then((res) => {
                 setStaffs(res.data)
             })
         }else if(type == 'Pharmacy_complaint'){
-            axios.get('http://localhost:8080/api/patient/1/pharmacy')
+            axios.get('http://localhost:8080/api/patient/' + userId + '/pharmacy',config)
             .then((res) => {
                 setPharmacies(res.data)
             })
 
         }else{
-            axios.get('http://localhost:8080/api/patient/1/pharmacist/expired')
+            axios.get('http://localhost:8080/api/patient/' + userId + '/pharmacist/expired',config)
             .then((res) => {
                 setStaffs(res.data)
             })

@@ -65,12 +65,16 @@ const EPrescriptionList = () => {
   const [ePrescriptionItemList,setEPrescriptionList] = useState([])
   const [openEPrescriptionItemListDialog,setOpenEPrescriptionItemListDialog] = useState(false)
   const [selectedEPrescription, setSelectedEPrescription] = useState()
+  const token = localStorage.getItem("token");
+  const userId = localStorage.getItem("userId");
+  const config = {
+    headers: { Authorization: `Bearer ${token}` }
+};
 
   useEffect(() => {
     axios
       .get(
-        "http://localhost:8080/api/patient/1/ePrescription" 
-      )
+        "http://localhost:8080/api/patient/" + userId + "/ePrescription", config)
       .then((res) => {
         setRows(res.data);
       });
@@ -78,7 +82,7 @@ const EPrescriptionList = () => {
 
   const handleClickOpenEPrescriptionItemDialog= (ePrescription) => {
         
-    axios.get( "http://localhost:8080/api/ePrescription/" + ePrescription.id + "/ePrescriptionItems").then(
+    axios.get( "http://localhost:8080/api/ePrescription/" + ePrescription.id + "/ePrescriptionItems",config).then(
         (res)=>{
             setEPrescriptionList(res.data)
             setOpenEPrescriptionItemListDialog(true)

@@ -67,6 +67,7 @@ public class MedicineReservationController {
     }
 
     //#1[3.19]
+    @PreAuthorize("hasRole('ROLE_PATIENT')")
     @PutMapping(value = "/cancel", consumes = "application/json")
     public ResponseEntity<Boolean> createMedicineReservation(@RequestBody MedicineReservationInfoDTO medicineReservationInfoDTO){
         try {

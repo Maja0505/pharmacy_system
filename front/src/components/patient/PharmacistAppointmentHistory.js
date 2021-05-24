@@ -100,15 +100,18 @@ import { withStyles } from '@material-ui/core/styles';
     const [openPharmacyDialog, setOpenPharmacyDialog] = useState(false);
     const [openPharmacistDialog, setOpenPharmacistDialog] = useState(false);
     const [openReportDialog, setOpenReportDialog] = useState(false);
+    const token = localStorage.getItem("token");
+    const userId = localStorage.getItem("userId");
+    const config = {
+      headers: { Authorization: `Bearer ${token}` }
+  };
   
     useEffect(() => {
       axios
         .get(
-          "http://localhost:8080/api/pharmacistReport/all/patient/1/" +
+          "http://localhost:8080/api/pharmacistReport/all/patient/" + userId + "/" +
           (currPage - 1).toString() +
-          ""
-           
-        )
+          "",config)
         .then((res) => {
           setRows(res.data);
           setCopyRows(res.data);
@@ -134,10 +137,10 @@ import { withStyles } from '@material-ui/core/styles';
     const nextPage = () => {
       axios
         .get(
-          "http://localhost:8080/api/pharmacistReport/all/patient/1/" +
+          "http://localhost:8080/api/pharmacistReport/all/patient/" + userId + "/" +
             currPage.toString() +
             ""
-        )
+        ,config)
         .then((res) => {
           if (res.data.length > 0) {
             setCurrPage(currPage + 1);
@@ -151,10 +154,10 @@ import { withStyles } from '@material-ui/core/styles';
     const beforePage = () => {
       axios
         .get(
-          "http://localhost:8080/api/pharmacistReport/all/patient/1/" +
+          "http://localhost:8080/api/pharmacistReport/all/patient/" + userId + "/" +
             (currPage - 2).toString() +
             ""
-        )
+        ,config)
         .then((res) => {
           setHaveNextPage(true);
           if (res.data.length > 0) {
@@ -170,7 +173,7 @@ import { withStyles } from '@material-ui/core/styles';
 
     const handleClickOpenPharmacyDialog = (pharmacyId) => {
         
-        axios.get( "http://localhost:8080/api/pharmacy/" + pharmacyId).then(
+        axios.get( "http://localhost:8080/api/pharmacy/" + pharmacyId,config).then(
             (res)=>{
                 setPharmacy(res.data)
                 setOpenPharmacyDialog(true)
@@ -183,7 +186,7 @@ import { withStyles } from '@material-ui/core/styles';
 
     const handleClickOpenPharmacistDialog = (pharmacistId) => {
         
-        axios.get( "http://localhost:8080/api/pharmacist/" + pharmacistId).then(
+        axios.get( "http://localhost:8080/api/pharmacist/" + pharmacistId,config).then(
             (res)=>{
                 setPharmacist(res.data)
                 setOpenPharmacistDialog(true)

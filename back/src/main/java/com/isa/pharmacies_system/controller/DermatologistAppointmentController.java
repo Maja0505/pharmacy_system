@@ -46,6 +46,7 @@ public class DermatologistAppointmentController {
     }
 
     //#1[3.13]
+    @PreAuthorize("hasRole('ROLE_PATIENT')")
     @GetMapping("/all/open/{pharmacyId}")
     public ResponseEntity<List<DermatologistAppointmentDTO>> getOpenDermatologistAppointment(@PathVariable Long pharmacyId){
         try{
@@ -56,6 +57,7 @@ public class DermatologistAppointmentController {
         }
     }
 
+    @PreAuthorize("hasRole('ROLE_PATIENT')")
     @PutMapping(value = "/book/{appointmentId}/{patientId}")
     public ResponseEntity<Boolean> bookDermatologistAppointment(@PathVariable Long patientId, @PathVariable Long appointmentId){
         try{
@@ -71,6 +73,7 @@ public class DermatologistAppointmentController {
     }
 
     //#1[3.15]
+    @PreAuthorize("hasRole('ROLE_PATIENT')")
     @PutMapping(value = "/cancel")
     public ResponseEntity<Boolean> cancelDermatologistAppointment(@RequestBody DermatologistAppointmentDTO dermatologistAppointmentDTO){
         try {
