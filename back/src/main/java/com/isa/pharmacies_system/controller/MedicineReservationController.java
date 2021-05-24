@@ -83,6 +83,7 @@ public class MedicineReservationController {
     }
 
     //Nemanja
+    @PreAuthorize("hasRole('ROLE_PHARMACIST')")
     @GetMapping("/get/{medicineReservationId}/{pharmacyId}")
     public ResponseEntity<MedicineReservationForTakingDTO> getMedicineReservationByIdAndPharmacy(@PathVariable Long medicineReservationId,@PathVariable Long pharmacyId){
         try {
@@ -98,6 +99,7 @@ public class MedicineReservationController {
     }
 
     //Nemanja
+    @PreAuthorize("hasRole('ROLE_PHARMACIST')")
     @PutMapping("/finish/{medicineReservationId}")
     public ResponseEntity<Boolean> finishMedicineReservation(@PathVariable Long medicineReservationId){
         try {

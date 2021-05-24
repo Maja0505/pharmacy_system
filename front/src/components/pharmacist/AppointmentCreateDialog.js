@@ -20,6 +20,9 @@ const AppointmentCreateDialog = ({
   setOpenAlertSuccsess,
   setOpenAlertUnsuccses,
 }) => {
+  const token = localStorage.getItem("token");
+  const userId = localStorage.getItem("userId");
+
   const durationData = [15, 30, 45, 60, 75, 90, 105, 120];
   const [appointmentDuration, setAppointmentDuration] = useState(15);
 
@@ -77,19 +80,25 @@ const AppointmentCreateDialog = ({
   };
 
   const createAppointment = (a) => {
+    console.log(patient);
     if (a.EndTime !== null) {
       axios
         .post(
           "http://localhost:8080/api/pharmacistAppointment/bookByPharmacist",
           {
-            staffId: 6,
-            pharmacyId: 1,
+            staffId: userId,
+            pharmacyId: patient.PharmacyId,
             patientId: patient.Id,
             appointmentStartTime: makeDate(a.startTime),
             appointmentEndTime: null,
             appointmentDuration: appointmentDuration,
             staffWorkStartTime: null,
             staffWorkEndTime: null,
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
           }
         )
         .then((res) => {

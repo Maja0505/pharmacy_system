@@ -14,6 +14,9 @@ import axios from "axios";
 import Alert from "@material-ui/lab/Alert";
 
 const VacationRequest = () => {
+  const token = localStorage.getItem("token");
+  const userId = localStorage.getItem("userId");
+
   const [disableDates, setDisableDates] = useState([
     {
       before: new Date(),
@@ -26,7 +29,12 @@ const VacationRequest = () => {
 
   const getDisabledDates = async () => {
     const res = await axios.get(
-      "http://localhost:8080/api/dermatologist/futureVacationRequest/8"
+      "http://localhost:8080/api/dermatologist/futureVacationRequest/" + userId,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
     );
     res.data.map((vacationRequest) => createDisableDates(vacationRequest));
   };
@@ -142,7 +150,12 @@ const VacationRequest = () => {
     axios
       .post(
         "http://localhost:8080/api/dermatologistVacationRequest/create",
-        vacationRequest
+        vacationRequest,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
       )
       .then((res) => {
         setOpenAlertSuccsess(true);

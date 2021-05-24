@@ -14,6 +14,9 @@ const PasswordDialog = ({
   setOpenDialog,
   setAlertText,
 }) => {
+  const token = localStorage.getItem("token");
+  const userId = localStorage.getItem("userId");
+
   const [currentPassword, setCurrentPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmedNewPassword, setConfirmedNewPassword] = useState("");
@@ -38,7 +41,12 @@ const PasswordDialog = ({
     axios
       .put(
         "http://localhost:8080/api/dermatologist/changePassword",
-        passwordDTO
+        passwordDTO,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
       )
       .then((res) => {
         setAlertText("Success change passowrd!");

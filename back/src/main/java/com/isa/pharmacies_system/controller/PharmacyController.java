@@ -114,6 +114,7 @@ public class PharmacyController {
 	}
 
 	//Nemanja
+	@PreAuthorize("hasRole('ROLE_DERMATOLOGIST')")
 	@GetMapping("/getPharmacies/{dermatologistId}")
 	public ResponseEntity<List<PharmacyWhereDermatologistWorkDTO>> getAllPharmaciesWhereDermatologistWork(@PathVariable Long dermatologistId){
 		try {

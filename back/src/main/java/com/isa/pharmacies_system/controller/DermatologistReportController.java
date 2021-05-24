@@ -52,6 +52,7 @@ public class DermatologistReportController {
     }
 
     //Nemanja
+    @PreAuthorize("hasRole('ROLE_DERMATOLOGIST')")
     @PostMapping(value = "/create", consumes = "application/json")
     public ResponseEntity<Boolean> createDermatologistReport(@RequestBody ReportForPatientDTO reportForPatientDTO){
         try {

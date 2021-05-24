@@ -23,6 +23,7 @@ public class DermatologistAppointmentDTO {
     private String patientPhoneNumber;
     private String location;
     private String subject;
+    private Long pharmacyId;
     private String pharmacyName;
     private int colorId;
 
@@ -147,5 +148,13 @@ public class DermatologistAppointmentDTO {
 
     public void setPharmacyName(String pharmacyName) {
         this.pharmacyName = pharmacyName;
+    }
+
+    public Long getPharmacyId() {
+        return pharmacyId;
+    }
+
+    public void setPharmacyId(Long pharmacyId) {
+        this.pharmacyId = pharmacyId;
     }
 }

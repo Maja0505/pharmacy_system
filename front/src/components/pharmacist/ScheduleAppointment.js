@@ -36,6 +36,9 @@ const useStyles = makeStyles({
 });
 
 const ScheduleAppointment = ({ pharmacyInfo }) => {
+  const token = localStorage.getItem("token");
+  const userId = localStorage.getItem("userId");
+
   const [data, setData] = useState([]);
 
   const [openCreateDialog, setOpenCreateDialog] = useState(false);
@@ -93,7 +96,15 @@ const ScheduleAppointment = ({ pharmacyInfo }) => {
     }
 
     axios
-      .get("http://localhost:8080/api/workingHours/allPharmacistWorkingHours/6")
+      .get(
+        "http://localhost:8080/api/workingHours/allPharmacistWorkingHours/" +
+          userId,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      )
       .then((res) => {
         res.data.map((workDay) => {
           addToWorkingDates(workDay);
@@ -102,7 +113,13 @@ const ScheduleAppointment = ({ pharmacyInfo }) => {
 
     axios
       .get(
-        "http://localhost:8080/api/pharmacistAppointment/allFutureReserved/6"
+        "http://localhost:8080/api/pharmacistAppointment/allFutureReserved/" +
+          userId,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
       )
       .then((res) => {
         addAppointmentsToData(res.data);

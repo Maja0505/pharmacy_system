@@ -33,6 +33,22 @@ class Login extends Component {
           roleUser: tokenDTO.role,
           firstLogin: tokenDTO.isFirstLogin,
         });
+        if (res.data.role === "Pharmacist") {
+          axios
+            .get(
+              "http://localhost:8080/api/pharmacist/getPharmacyId/" +
+                res.data.userId,
+              {
+                headers: {
+                  Authorization: `Bearer ${res.data.accessToken}`,
+                },
+              }
+            )
+            .then((res) => {
+              localStorage.setItem("pharmacyId", res.data);
+            });
+        }
+
         localStorage.setItem("userId", this.state.userId);
         localStorage.setItem("token", this.state.token);
         localStorage.setItem("userEmail", this.state.userEmail);

@@ -34,6 +34,9 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const FutureExaminations = () => {
+  const token = localStorage.getItem("token");
+  const userId = localStorage.getItem("userId");
+
   const classes = useStyles();
 
   const [data, setData] = useState([]);
@@ -46,7 +49,13 @@ const FutureExaminations = () => {
   useEffect(() => {
     axios
       .get(
-        "http://localhost:8080/api/dermatologistAppointment/allFutureReserveByDermatologist/8"
+        "http://localhost:8080/api/dermatologistAppointment/allFutureReserveByDermatologist/" +
+          userId,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
       )
       .then((res) => {
         if (res.data.length === 0) {
@@ -68,10 +77,17 @@ const FutureExaminations = () => {
     if (first_lastName.length === 2) {
       axios
         .get(
-          "http://localhost:8080/api/dermatologistAppointment/searchAllFutureReservedByPatient/8/" +
+          "http://localhost:8080/api/dermatologistAppointment/searchAllFutureReservedByPatient/" +
+            userId +
+            "/" +
             first_lastName[0] +
             "/" +
-            first_lastName[1]
+            first_lastName[1],
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
         )
         .then((res) => {
           if (res.data.length === 0) {
@@ -90,7 +106,13 @@ const FutureExaminations = () => {
   const showAll = () => {
     axios
       .get(
-        "http://localhost:8080/api/dermatologistAppointment/allFutureReserveByDermatologist/8"
+        "http://localhost:8080/api/dermatologistAppointment/allFutureReserveByDermatologist/" +
+          userId,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
       )
       .then((res) => {
         if (res.data.length === 0) {
@@ -107,7 +129,13 @@ const FutureExaminations = () => {
     axios
       .put(
         "http://localhost:8080/api/dermatologistAppointment/changeStatusToMissed/" +
-          appointment.id
+          appointment.id,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
       )
       .then((res) => {
         setData(
@@ -131,6 +159,7 @@ const FutureExaminations = () => {
         AppointmentId: appointment.id,
         Email: appointment.patientEmail,
         PhoneNumber: appointment.patientPhoneNumber,
+        PharmacyId: appointment.pharmacyId,
         PharmacyName: appointment.pharmacyName,
         PharamcyLocation: appointment.location,
         AppointmentStartTime: appointment.dermatologistAppointmentStartTime,

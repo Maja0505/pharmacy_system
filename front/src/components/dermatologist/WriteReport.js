@@ -45,6 +45,9 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const WriteReport = () => {
+  const token = localStorage.getItem("token");
+  const userId = localStorage.getItem("userId");
+
   const classes = useStyles();
 
   const [openAlertSuccsess, setOpenAlertSuccsess] = useState(false);
@@ -151,7 +154,11 @@ const WriteReport = () => {
 
   const finishReport = async () => {
     axios
-      .post("http://localhost:8080/api/dermatologistReport/create", report)
+      .post("http://localhost:8080/api/dermatologistReport/create", report, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
       .then((res) => {
         localStorage.setItem(
           "PatientForDermatologistReport",

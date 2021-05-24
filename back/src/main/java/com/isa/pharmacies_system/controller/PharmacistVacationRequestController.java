@@ -10,6 +10,7 @@ import com.isa.pharmacies_system.service.iService.IVacationRequestService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -31,6 +32,7 @@ public class PharmacistVacationRequestController {
         this.vacationRequestConverter = new VacationRequestConverter();
     }
 
+    @PreAuthorize("hasRole('ROLE_PHARMACIST')")
     @GetMapping("/")
     public ResponseEntity<List<PharmacistVacationRequest>> getAllPharmacistVacationRequest(){
         try {
@@ -40,6 +42,7 @@ public class PharmacistVacationRequestController {
         }
     }
 
+    @PreAuthorize("hasRole('ROLE_PHARMACIST')")
     @PostMapping(value = "/create",consumes = "application/json")
     public ResponseEntity<Boolean> createPharmacistVacationRequest(@RequestBody VacationRequestDTO vacationRequestDTO){
        try {

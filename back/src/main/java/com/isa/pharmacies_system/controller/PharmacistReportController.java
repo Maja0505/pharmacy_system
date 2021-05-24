@@ -58,6 +58,7 @@ public class PharmacistReportController {
     }
 
     //Nemanja
+    @PreAuthorize("hasRole('ROLE_PHARMACIST')")
     @PostMapping(value = "/create",consumes="application/json")
     public ResponseEntity<Boolean> createPharmacistReport(@RequestBody ReportForPatientDTO reportForPatientDTO){
         try {

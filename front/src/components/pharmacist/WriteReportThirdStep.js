@@ -38,6 +38,9 @@ const WriteReportThirdStep = ({
   recipeItems,
   setRecipeItems,
 }) => {
+  const token = localStorage.getItem("token");
+  const userId = localStorage.getItem("userId");
+
   const classes = useStyles();
 
   const [selectedMedicine, setSelectedMedicine] = useState(null);
@@ -49,7 +52,15 @@ const WriteReportThirdStep = ({
 
   useEffect(() => {
     axios
-      .get("http://localhost:8080/api/pharmacyStorageItem/all/1")
+      .get(
+        "http://localhost:8080/api/pharmacyStorageItem/all/" +
+          appointment.PharmacyId,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      )
       .then((res) => {
         setMedicinesInPharmacy(res.data);
       });
@@ -75,7 +86,15 @@ const WriteReportThirdStep = ({
 
   const seeAllMedicinesInPharmacy = () => {
     axios
-      .get("http://localhost:8080/api/pharmacyStorageItem/all/1")
+      .get(
+        "http://localhost:8080/api/pharmacyStorageItem/all/" +
+          appointment.PharmacyId,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      )
       .then((res) => {
         setMedicinesInPharmacy(res.data);
         setIsAlternative(false);

@@ -88,6 +88,7 @@ public class DermatologistAppointmentController {
     }
 
     //Nemanja
+    @PreAuthorize("hasRole('ROLE_DERMATOLOGIST')")
     @GetMapping("/allPastAppointmentByDermatologist/{dermatologistId}/{page}")
     public ResponseEntity<List<PatientAppointmentInfoDTO>> getAllPastDermatologistAppointmentByDermatologist(@PathVariable ("dermatologistId") Long id,@PathVariable int page){
         try {
@@ -100,6 +101,7 @@ public class DermatologistAppointmentController {
     }
 
     //Nemanja
+    @PreAuthorize("hasRole('ROLE_DERMATOLOGIST')")
     @GetMapping("/allPastAppointmentByDermatologistAndPharmacy/{dermatologistId}/{pharmacyId}/{page}")
     public ResponseEntity<List<PatientAppointmentInfoDTO>> getAllPastDermatologistAppointmentByDermatologistAndPharmacy(@PathVariable Long dermatologistId,@PathVariable Long pharmacyId,@PathVariable int page){
         try {
@@ -111,6 +113,7 @@ public class DermatologistAppointmentController {
     }
 
     //Nemanja
+    @PreAuthorize("hasRole('ROLE_DERMATOLOGIST')")
     @PutMapping(value = "/sortByAppointmentEndTime/{asc}",consumes = "application/json")
     public ResponseEntity<List<PatientAppointmentInfoDTO>> getSortedPastDermatologistAppointmentByAppointmentEndTime(@RequestBody List<PatientAppointmentInfoDTO> patientAppointmentInfoDTOList,@PathVariable String asc){
         try {
@@ -125,6 +128,7 @@ public class DermatologistAppointmentController {
     }
 
     //Nemanja
+    @PreAuthorize("hasRole('ROLE_DERMATOLOGIST')")
     @GetMapping("/allFutureOpen/{dermatologistId}/{pharmacyId}")
     public ResponseEntity<List<DermatologistAppointmentDTO>> getAllFutureOpenDermatologistAppointmentByDermatologistInPharmacy(@PathVariable Long dermatologistId,@PathVariable Long pharmacyId){
         try {
@@ -136,6 +140,7 @@ public class DermatologistAppointmentController {
     }
 
     //Nemanja
+    @PreAuthorize("hasRole('ROLE_DERMATOLOGIST')")
     @GetMapping("/allFutureReserved/{dermatologistId}/{pharmacyId}")
     public ResponseEntity<List<DermatologistAppointmentDTO>> getAllFutureReservedDermatologistAppointmentByDermatologistInPharmacy(@PathVariable Long dermatologistId,@PathVariable Long pharmacyId){
         try {
@@ -159,6 +164,7 @@ public class DermatologistAppointmentController {
     }
 
     //Nemanja
+    @PreAuthorize("hasRole('ROLE_DERMATOLOGIST')")
     @GetMapping("/allExpired/{dermatologistId}/{pharmacyId}")
     public ResponseEntity<List<DermatologistAppointmentDTO>> getAllExpiredDermatologistAppointmentByDermatologistInPharmacy(@PathVariable Long dermatologistId,@PathVariable Long pharmacyId){
         try {
@@ -170,6 +176,7 @@ public class DermatologistAppointmentController {
     }
 
     //Nemanja
+    @PreAuthorize("hasRole('ROLE_DERMATOLOGIST')")
     @GetMapping("/allReserved/{dermatologistId}/{pharmacyId}")
     public ResponseEntity<List<DermatologistAppointmentDTO>> getAllReservedDermatologistAppointmentByDermatologistInPharmacy(@PathVariable Long dermatologistId,@PathVariable Long pharmacyId){
         try {
@@ -181,6 +188,7 @@ public class DermatologistAppointmentController {
     }
 
     //Nemanja
+    @PreAuthorize("hasRole('ROLE_DERMATOLOGIST')")
     @PostMapping(value = "/bookByDermatologist",consumes = "application/json")
     public ResponseEntity<Boolean> bookDermatologistAppointmentByDermatologist(@RequestBody AppointmentScheduleByStaffDTO appointmentScheduleByStaffDTO){
         try {
@@ -198,6 +206,7 @@ public class DermatologistAppointmentController {
     }
 
     //Nemanja
+    @PreAuthorize("hasRole('ROLE_DERMATOLOGIST')")
     @PutMapping("/changeStatusToMissed/{id}")
     public ResponseEntity<Boolean> changeDermatologistAppointmentStatusToMissed(@PathVariable Long id){
         try {
@@ -212,6 +221,7 @@ public class DermatologistAppointmentController {
     }
 
     //Nemanja
+    @PreAuthorize("hasRole('ROLE_DERMATOLOGIST')")
     @GetMapping("/searchAllFutureReservedByPatient/{dermatologistId}/{firstName}/{lastName}")
     public ResponseEntity<List<DermatologistAppointmentDTO>> searchFutureReservedAppointmentsByPatientFirstAndLastName(@PathVariable Long dermatologistId, @PathVariable String firstName,@PathVariable String lastName){
         try {
@@ -227,6 +237,7 @@ public class DermatologistAppointmentController {
     }
 
     //Nemanja
+    @PreAuthorize("hasRole('ROLE_DERMATOLOGIST')")
     @GetMapping("/allFutureReserveByDermatologist/{dermatologistId}")
     public ResponseEntity<List<DermatologistAppointmentDTO>> getAllFutureReservedDermatologistAppointmentByDermatologist(@PathVariable Long dermatologistId){
         try {

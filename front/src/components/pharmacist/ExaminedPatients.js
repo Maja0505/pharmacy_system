@@ -34,6 +34,9 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const ExaminedPatients = () => {
+  const token = localStorage.getItem("token");
+  const userId = localStorage.getItem("userId");
+
   const classes = useStyles();
 
   const [rows, setRows] = useState([]);
@@ -45,9 +48,16 @@ const ExaminedPatients = () => {
   useEffect(() => {
     axios
       .get(
-        "http://localhost:8080/api/pharmacistAppointment/allPastAppointment/6/" +
+        "http://localhost:8080/api/pharmacistAppointment/allPastAppointment/" +
+          userId +
+          "/" +
           (currPage - 1).toString() +
-          ""
+          "",
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
       )
       .then((res) => {
         setRows(res.data);
@@ -99,7 +109,12 @@ const ExaminedPatients = () => {
       .put(
         "http://localhost:8080/api/appointment/sortByPatientFirstName/" +
           (firstNameAsc.asc ? "asc" : "desc"),
-        rows
+        rows,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
       )
       .then((res) => {
         setRows(res.data);
@@ -120,7 +135,12 @@ const ExaminedPatients = () => {
       .put(
         "http://localhost:8080/api/appointment/sortByPatientLastName/" +
           (lastNameAsc.asc ? "asc" : "desc"),
-        rows
+        rows,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
       )
       .then((res) => {
         setRows(res.data);
@@ -141,7 +161,12 @@ const ExaminedPatients = () => {
       .put(
         "http://localhost:8080/api/appointment/sortByPatientEmail/" +
           (emailAsc.asc ? "asc" : "desc"),
-        rows
+        rows,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
       )
       .then((res) => {
         setRows(res.data);
@@ -162,7 +187,12 @@ const ExaminedPatients = () => {
       .put(
         "http://localhost:8080/api/appointment/sortByAppointmentStartTime/" +
           (startTimeAsc.asc ? "asc" : "desc"),
-        rows
+        rows,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
       )
       .then((res) => {
         setRows(res.data);
@@ -183,7 +213,12 @@ const ExaminedPatients = () => {
       .put(
         "http://localhost:8080/api/pharmacistAppointment/sortByAppointmentDuration/" +
           (durationAsc.asc ? "asc" : "desc"),
-        rows
+        rows,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
       )
       .then((res) => {
         setRows(res.data);
@@ -204,7 +239,12 @@ const ExaminedPatients = () => {
       .put(
         "http://localhost:8080/api/appointment/sortByAppointmentPrice/" +
           (priceAsc.asc ? "asc" : "desc"),
-        rows
+        rows,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
       )
       .then((res) => {
         setRows(res.data);
@@ -231,9 +271,16 @@ const ExaminedPatients = () => {
   const nextPage = () => {
     axios
       .get(
-        "http://localhost:8080/api/pharmacistAppointment/allPastAppointment/6/" +
+        "http://localhost:8080/api/pharmacistAppointment/allPastAppointment/" +
+          userId +
+          "/" +
           currPage.toString() +
-          ""
+          "",
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
       )
       .then((res) => {
         if (res.data.length > 0) {
@@ -248,9 +295,16 @@ const ExaminedPatients = () => {
   const beforePage = () => {
     axios
       .get(
-        "http://localhost:8080/api/pharmacistAppointment/allPastAppointment/6/" +
+        "http://localhost:8080/api/pharmacistAppointment/allPastAppointment/" +
+          userId +
+          "/" +
           (currPage - 2).toString() +
-          ""
+          "",
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
       )
       .then((res) => {
         setHaveNextPage(true);

@@ -23,6 +23,7 @@ public class AppointmentController {
         this.appointmentService = appointmentService;
     }
 
+    @PreAuthorize("hasRole('ROLE_DERMATOLOGIST') or hasRole('ROLE_PHARMACIST')")
     @PutMapping(value = "/sortByPatientFirstName/{asc}",consumes = "application/json")
     public ResponseEntity<List<PatientAppointmentInfoDTO>> getSortedPastAppointmentByPatientFistName(@RequestBody List<PatientAppointmentInfoDTO> patientAppointmentInfoDTOList, @PathVariable String asc){
         try {
@@ -37,6 +38,7 @@ public class AppointmentController {
 
     }
 
+    @PreAuthorize("hasRole('ROLE_DERMATOLOGIST') or hasRole('ROLE_PHARMACIST')")
     @PutMapping(value = "/sortByPatientLastName/{asc}",consumes = "application/json")
     public ResponseEntity<List<PatientAppointmentInfoDTO>> getSortedPastAppointmentByPatientLastName(@RequestBody List<PatientAppointmentInfoDTO> patientAppointmentInfoDTOList, @PathVariable String asc){
         try {
@@ -51,6 +53,7 @@ public class AppointmentController {
 
     }
 
+    @PreAuthorize("hasRole('ROLE_DERMATOLOGIST') or hasRole('ROLE_PHARMACIST')")
     @PutMapping(value = "/sortByPatientEmail/{asc}",consumes = "application/json")
     public ResponseEntity<List<PatientAppointmentInfoDTO>> getSortedPastAppointmentByPatientEmail(@RequestBody List<PatientAppointmentInfoDTO> patientAppointmentInfoDTOList, @PathVariable String asc){
         try {
@@ -65,6 +68,7 @@ public class AppointmentController {
 
     }
 
+    @PreAuthorize("hasRole('ROLE_DERMATOLOGIST') or hasRole('ROLE_PHARMACIST')")
     @PutMapping(value = "/sortByAppointmentStartTime/{asc}",consumes = "application/json")
     public ResponseEntity<List<PatientAppointmentInfoDTO>> getSortedPastAppointmentByAppointmentStartTime(@RequestBody List<PatientAppointmentInfoDTO> patientAppointmentInfoDTOList, @PathVariable String asc){
         try {
@@ -79,6 +83,7 @@ public class AppointmentController {
 
     }
 
+    @PreAuthorize("hasRole('ROLE_DERMATOLOGIST') or hasRole('ROLE_PHARMACIST')")
     @PutMapping(value = "/sortByAppointmentPrice/{asc}",consumes = "application/json")
     public ResponseEntity<List<PatientAppointmentInfoDTO>> getSortedPastAppointmentByAppointmentPrice(@RequestBody List<PatientAppointmentInfoDTO> patientAppointmentInfoDTOList, @PathVariable String asc){
         try {

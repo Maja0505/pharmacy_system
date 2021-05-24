@@ -15,9 +15,10 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 
 const WorkCalendar = () => {
-  const [data, setData] = useState([]);
   const token = localStorage.getItem("token");
   const userId = localStorage.getItem("userId");
+
+  const [data, setData] = useState([]);
 
   const resourceDataSource = [
     { Id: 1, Color: "#e51e36", Name: "missed" },
@@ -88,7 +89,13 @@ const WorkCalendar = () => {
     axios
       .put(
         "http://localhost:8080/api/pharmacistAppointment/changeStatusToMissed/" +
-          id
+          id,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
       )
       .then((res) => {
         setOpenDialog(false);

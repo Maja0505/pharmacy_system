@@ -32,7 +32,7 @@ public class DermatologistController {
         this.userConverter = new UserConverter();
     }
 
-    @PreAuthorize("hasRole('ROLE_PATIENT')")
+    @PreAuthorize("hasRole('ROLE_DERMATOLOGIST') or hasRole('ROLE_PATIENT')")
     @GetMapping("/{id}")
     public ResponseEntity<UserPersonalInfoDTO> getDermatologistPersonalInfo(@PathVariable Long id){
         try {
@@ -42,6 +42,7 @@ public class DermatologistController {
         }
     }
 
+    @PreAuthorize("hasRole('ROLE_DERMATOLOGIST')")
     @PutMapping(value = "/update", consumes = "application/json")
     public ResponseEntity<Boolean> updateDermatologistPersonalInfo(@RequestBody UserPersonalInfoDTO dermatologistPersonalInfoDTO){
         try {
@@ -53,6 +54,7 @@ public class DermatologistController {
         }
     }
 
+    @PreAuthorize("hasRole('ROLE_DERMATOLOGIST')")
     @PutMapping(value = "/changePassword",consumes = "application/json")
     public ResponseEntity<Boolean> changeDermatologistPassword(@RequestBody UserPasswordDTO dermatologistPasswordDTO){
         try {
@@ -79,6 +81,7 @@ public class DermatologistController {
 		}
 	}
 
+    @PreAuthorize("hasRole('ROLE_DERMATOLOGIST')")
     @GetMapping("/futureVacationRequest/{id}")
     public ResponseEntity<List<DermatologistVacationRequest>> getFutureDermatologistVacationRequest(@PathVariable Long id){
         try {
