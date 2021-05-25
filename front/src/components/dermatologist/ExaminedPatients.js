@@ -6,13 +6,9 @@ import {
   TableRow,
   Grid,
   TextField,
+  TableContainer,
 } from "@material-ui/core";
-import {
-  ArrowDropDown,
-  ArrowDropUp,
-  NavigateNext,
-  NavigateBefore,
-} from "@material-ui/icons";
+import { ArrowDropDown, ArrowDropUp } from "@material-ui/icons";
 import Autocomplete from "@material-ui/lab/Autocomplete";
 import { useState, useEffect } from "react";
 import { makeStyles } from "@material-ui/core/styles";
@@ -28,6 +24,9 @@ const useStyles = makeStyles((theme) => ({
   hederCell: {
     cursor: "pointer",
     color: "#ffffff",
+    position: "sticky",
+    top: 0,
+    background: "#4051bf",
   },
   icons: {
     cursor: "pointer",
@@ -45,8 +44,6 @@ const ExaminedPatients = () => {
   const [rows, setRows] = useState([]);
 
   const [copyRows, setCopyRows] = useState({});
-
-  const [currPage, setCurrPage] = useState(1);
 
   useEffect(() => {
     axios
@@ -264,63 +261,13 @@ const ExaminedPatients = () => {
 
   const [haveNextPage, setHaveNextPage] = useState(true);
 
-  const nextPage = () => {
-    axios
-      .get(
-        "http://localhost:8080/api/dermatologistAppointment/allPastAppointmentByDermatologistAndPharmacy/" +
-          userId +
-          "/1/" +
-          currPage.toString() +
-          "",
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      )
-      .then((res) => {
-        if (res.data.length > 0) {
-          setCurrPage(currPage + 1);
-          setRows(res.data);
-        } else {
-          setHaveNextPage(false);
-        }
-      });
-  };
-
-  const beforePage = () => {
-    axios
-      .get(
-        "http://localhost:8080/api/dermatologistAppointment/allPastAppointmentByDermatologistAndPharmacy/" +
-          userId +
-          "/1/" +
-          (currPage - 2).toString() +
-          "",
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      )
-      .then((res) => {
-        setHaveNextPage(true);
-        if (res.data.length > 0) {
-          setCurrPage(currPage - 1);
-          setRows(res.data);
-        }
-      });
-  };
-
   const addPastAppointmentForSelectedPharmacy = (pharmacyId) => {
     axios
       .get(
         "http://localhost:8080/api/dermatologistAppointment/allPastAppointmentByDermatologistAndPharmacy/" +
           userId +
           "/" +
-          pharmacyId +
-          "/" +
-          (currPage - 1).toString() +
-          "",
+          pharmacyId,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -430,7 +377,7 @@ const ExaminedPatients = () => {
       <Grid item xs={6} style={{ margin: "auto", textAlign: "right" }}>
         <TextField
           id="outlined-search"
-          label="Search patient"
+          label="Search patient by first name/last name/email"
           type="search"
           size="small"
           variant="outlined"
@@ -449,39 +396,14 @@ const ExaminedPatients = () => {
       <Grid container spacing={1}>
         <Grid item xs={2} />
         <Grid item xs={8}>
-          <Table style={{ marginTop: "2%" }}>
-            {TableHeader}
-            {TableContent}
-          </Table>
+          <TableContainer style={{ height: "500px", marginTop: "2%" }}>
+            <Table>
+              {TableHeader}
+              {TableContent}
+            </Table>
+          </TableContainer>
         </Grid>
         <Grid item xs={2}></Grid>
-      </Grid>
-      <Grid container spacing={1} className={classes.table}>
-        <Grid item xs={2} />
-        <Grid item xs={8} container spacing={1}>
-          <Grid item xs={2}>
-            {currPage > 1 && (
-              <NavigateBefore
-                className={classes.icons}
-                fontSize="large"
-                onClick={beforePage}
-              />
-            )}
-          </Grid>
-          <Grid item xs={8}>
-            Current Page {currPage}
-          </Grid>
-          <Grid item xs={2}>
-            {haveNextPage && (
-              <NavigateNext
-                className={classes.icons}
-                fontSize="large"
-                onClick={nextPage}
-              />
-            )}
-          </Grid>
-        </Grid>
-        <Grid item xs={2} />
       </Grid>
     </div>
   );

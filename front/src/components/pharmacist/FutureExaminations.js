@@ -8,6 +8,7 @@ import {
   TextField,
   Button,
   Typography,
+  TableContainer,
 } from "@material-ui/core";
 
 import { Link } from "react-router-dom";
@@ -27,6 +28,9 @@ const useStyles = makeStyles((theme) => ({
   hederCell: {
     cursor: "pointer",
     color: "#ffffff",
+    position: "sticky",
+    top: 0,
+    background: "#4051bf",
   },
   icons: {
     cursor: "pointer",
@@ -283,10 +287,14 @@ const FutureExaminations = () => {
       <Grid container>
         <Grid item xs={2} />
         <Grid item xs={8}>
-          <Table style={{ marginTop: "2%" }}>
-            {TableHeader}
-            {TableContent}
-          </Table>
+          {emptyTable === false && (
+            <TableContainer style={{ height: "450px", marginTop: "2%" }}>
+              <Table>
+                {TableHeader}
+                {TableContent}
+              </Table>
+            </TableContainer>
+          )}
         </Grid>
         <Grid item xs={2}></Grid>
       </Grid>

@@ -11,7 +11,7 @@ import java.util.List;
 public interface IPharmacistAppointmentService{
 
     PharmacistAppointment findOne(Long id);
-    Page<PharmacistAppointment> getAllPastPharmacistAppointmentByPharmacist(Long id,int page);
+    List<PharmacistAppointment> getAllPastPharmacistAppointmentByPharmacist(Long id);
     List<PatientAppointmentInfoDTO> sortByAppointmentDuration(List<PatientAppointmentInfoDTO> patientAppointmentInfoDTOList,Boolean asc);
     Boolean bookPharmacistAppointment(Long patientId, Long pharmacistId, PharmacistAppointmentTimeDTO timeDTO, Boolean isPatient);
     List<PharmacistAppointment> getFutureReservedAppointment(Long patientId);

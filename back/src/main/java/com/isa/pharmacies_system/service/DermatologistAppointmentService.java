@@ -138,14 +138,14 @@ public class DermatologistAppointmentService implements IDermatologistAppointmen
 
     //Nemanja
     @Override
-    public Page<DermatologistAppointment> getAllPastDermatologistAppointmentByDermatologist(Long id, int page) {
-        return dermatologistAppointmentRepository.findAllPastDermatologistAppointment(id, PageRequest.of(page,10));
+    public List<DermatologistAppointment> getAllPastDermatologistAppointmentByDermatologist(Long id) {
+        return dermatologistAppointmentRepository.findAllPastDermatologistAppointment(id);
     }
 
     //Nemanja
     @Override
-    public Page<DermatologistAppointment> getAllPastDermatologistAppointmentByDermatologistAndPharmacy(Long idDermatologist, Long idPharmacy, int page) {
-        return dermatologistAppointmentRepository.findAllPastDermatologistAppointmentByPharmacy(idDermatologist,idPharmacy,PageRequest.of(page,10));
+    public List<DermatologistAppointment> getAllPastDermatologistAppointmentByDermatologistAndPharmacy(Long idDermatologist, Long idPharmacy) {
+        return dermatologistAppointmentRepository.findAllPastDermatologistAppointmentByPharmacy(idDermatologist,idPharmacy);
     }
 
     //Nemanja
@@ -225,9 +225,10 @@ public class DermatologistAppointmentService implements IDermatologistAppointmen
         if(!doesPatientHaveAnotherAppointmentInSameTime(patient,dermatologistAppointment)
             && !doesDermatologistHaveAppointmentInSameTime(dermatologist,dermatologistAppointment)){
 
+            Duration appointmentDuration = Duration.between(appointmentScheduleByStaffDTO.getAppointmentStartTime(),appointmentScheduleByStaffDTO.getAppointmentEndTime());
             Pharmacy pharmacy = pharmacyRepository.findById(appointmentScheduleByStaffDTO.getPharmacyId()).orElse(null);
             fillDermatologistAppointmentWithPatientPharmacyAndDermatologist(patient,dermatologist,pharmacy,dermatologistAppointment);
-            fillDermatologistAppointmentWithPrice(dermatologistAppointment);
+            fillDermatologistAppointmentWithPrice(dermatologistAppointment,appointmentDuration.toMinutes());
             dermatologistAppointmentRepository.save(dermatologistAppointment);
             return true;
         }
@@ -235,9 +236,9 @@ public class DermatologistAppointmentService implements IDermatologistAppointmen
     }
 
     //Nemanja
-    private void fillDermatologistAppointmentWithPrice(DermatologistAppointment dermatologistAppointment) {
+    private void fillDermatologistAppointmentWithPrice(DermatologistAppointment dermatologistAppointment, Long duration) {
         PriceListForAppointmentDTO priceListForAppointmentDTO = priceListRepository.getPriceListForAppointmentByPharmacyId(dermatologistAppointment.getPharmacyForDermatologistAppointment().getId());
-        dermatologistAppointment.setAppointmentPrice(priceListForAppointmentDTO.getDermatologistAppointmentPricePerHour());
+        dermatologistAppointment.setAppointmentPrice(priceListForAppointmentDTO.getDermatologistAppointmentPricePerHour() * duration/60);
     }
 
     //Nemanja
@@ -286,6 +287,6 @@ public class DermatologistAppointmentService implements IDermatologistAppointmen
 
     //Nemanja
     private void addPatientPoint(Patient patient) {
-        patient.setPatientPoints(patient.getPatientPoints() + 1);
+        patient.setPenalty(patient.getPenalty() + 1);
     }
 }

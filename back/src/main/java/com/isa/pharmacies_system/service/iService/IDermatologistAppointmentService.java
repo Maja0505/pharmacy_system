@@ -15,8 +15,8 @@ public interface IDermatologistAppointmentService{
     DermatologistAppointment findOne(Long id);
     Boolean bookDermatologistAppointment(Long patientId, Long appointmentId);
     List<DermatologistAppointment> getOpenDermatologistAppointment(Long pharmacyId);
-    Page<DermatologistAppointment> getAllPastDermatologistAppointmentByDermatologist(Long id, int page);
-    Page<DermatologistAppointment> getAllPastDermatologistAppointmentByDermatologistAndPharmacy(Long idDermatologist,Long idPharmacy, int page);
+    List<DermatologistAppointment> getAllPastDermatologistAppointmentByDermatologist(Long id);
+    List<DermatologistAppointment> getAllPastDermatologistAppointmentByDermatologistAndPharmacy(Long idDermatologist,Long idPharmacy);
     List<PatientAppointmentInfoDTO> sortByAppointmentEndTime(List<PatientAppointmentInfoDTO> patientAppointmentInfoDTOList, Boolean asc);
     Boolean cancelDermatologistAppointment(DermatologistAppointment dermatologistAppointment);
     List<DermatologistAppointment> getAllFutureOpenDermatologistAppointmentForDermatologistInPharmacy(Long dermatologistId,Long pharmacyId);
