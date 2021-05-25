@@ -62,7 +62,7 @@ public class PatientConverter{
         return patientAdditionalInfoDTO;
     }
 
-    public List<PatientAppointmentInfoDTO> convertPatientPharmacistAppointmentInfoToDTO(Page<PharmacistAppointment> pharmacistAppointments){
+    public List<PatientAppointmentInfoDTO> convertPatientPharmacistAppointmentInfoToDTO(List<PharmacistAppointment> pharmacistAppointments){
         List<PatientAppointmentInfoDTO> list = new ArrayList<>();
         for (PharmacistAppointment appointment :pharmacistAppointments
              ) {
@@ -71,7 +71,7 @@ public class PatientConverter{
         return list;
     }
 
-    public List<PatientAppointmentInfoDTO> convertPatientDermatologistAppointmentInfoToDTO(Page<DermatologistAppointment> dermatologistAppointments){
+    public List<PatientAppointmentInfoDTO> convertPatientDermatologistAppointmentInfoToDTO(List<DermatologistAppointment> dermatologistAppointments){
         List<PatientAppointmentInfoDTO> list = new ArrayList<>();
         for (DermatologistAppointment appointment :dermatologistAppointments
         ) {

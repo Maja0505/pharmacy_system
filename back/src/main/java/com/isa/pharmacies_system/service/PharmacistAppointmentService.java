@@ -63,11 +63,18 @@ public class PharmacistAppointmentService implements IPharmacistAppointmentServi
                 && !doesPatientHaveAnotherAppointmentInSameTime(patient,pharmacistAppointment)
                 && ((patient.getPenalty() < 3 && isPatient) || (!isPatient))){
 
+            fillPriceForPharmacistAppointment(timeDTO,pharmacistAppointment);
             pharmacistAppointmentRepository.save(pharmacistAppointment);
             return true;
         }else{
             return false;
         }
+    }
+
+    private void fillPriceForPharmacistAppointment(PharmacistAppointmentTimeDTO timeDTO, PharmacistAppointment pharmacistAppointment) {
+        PriceListForAppointmentDTO priceListForAppointmentDTO = priceListRepository.getPriceListForAppointmentByPharmacyId(pharmacistAppointment.getPharmacistForAppointment().getPharmacyForPharmacist().getId());
+        pharmacistAppointment.setAppointmentPrice(priceListForAppointmentDTO.getDermatologistAppointmentPricePerHour() * (long)timeDTO.getDuration()/60);
+
     }
 
     //#1
@@ -164,8 +171,8 @@ public class PharmacistAppointmentService implements IPharmacistAppointmentServi
 
     //Nemanja
     @Override
-    public Page<PharmacistAppointment> getAllPastPharmacistAppointmentByPharmacist(Long id,int page) {
-        return pharmacistAppointmentRepository.findAllPastPharmacistAppointment(id,PageRequest.of(page,10));
+    public List<PharmacistAppointment> getAllPastPharmacistAppointmentByPharmacist(Long id) {
+        return pharmacistAppointmentRepository.findAllPastPharmacistAppointment(id);
     }
 
     //Nemanja
@@ -228,6 +235,6 @@ public class PharmacistAppointmentService implements IPharmacistAppointmentServi
 
     //Nemanja
     private void addPatientPoint(Patient patient) {
-        patient.setPatientPoints(patient.getPatientPoints() + 1);
+        patient.setPenalty(patient.getPenalty() + 1);
     }
 }
