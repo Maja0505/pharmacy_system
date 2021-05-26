@@ -10,7 +10,9 @@ import {
     TableRow,
     Grid,
     Button,
-    TextField
+    TextField,
+    TableContainer
+
   } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import Dialog from '@material-ui/core/Dialog';
@@ -36,6 +38,9 @@ import { getConfig } from '@testing-library/dom';
     hederCell: {
       cursor: "pointer",
       color: "#ffffff",
+      position: "sticky",
+      top: 0,
+      background: "#4051bf",
     },
     icons: {
       cursor: "pointer",
@@ -237,10 +242,12 @@ const Complaint = () => {
             <Grid container spacing={1} style={{marginTop:'10%'}}>
                 <Grid item xs={2} />
                 <Grid item xs={8}>
+                <TableContainer style={{ height: "450px", marginTop: "2%" }}>
                     <Table>
                     {TableHeaderPharmacy}
                     {TableContentPharmacy}
                     </Table>
+                  </TableContainer>
                 </Grid>
                 <Grid item xs={2}></Grid>
             </Grid>

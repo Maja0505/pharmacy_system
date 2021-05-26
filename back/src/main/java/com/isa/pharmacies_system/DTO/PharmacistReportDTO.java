@@ -18,6 +18,7 @@ public class PharmacistReportDTO {
     private LocalDateTime pharmacistAppointmentStartTime;
     private Long duration;
     private double appointmentPoints;
+    private double appointmentPrice;
     private StatusOfAppointment statusOfAppointment;
 
     public PharmacistReportDTO() {
@@ -117,5 +118,13 @@ public class PharmacistReportDTO {
 
     public void setStatusOfAppointment(StatusOfAppointment statusOfAppointment) {
         this.statusOfAppointment = statusOfAppointment;
+    }
+
+    public double getAppointmentPrice() {
+        return appointmentPrice;
+    }
+
+    public void setAppointmentPrice(double appointmentPrice) {
+        this.appointmentPrice = appointmentPrice;
     }
 }

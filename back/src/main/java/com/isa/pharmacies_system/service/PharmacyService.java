@@ -75,10 +75,6 @@ public class PharmacyService implements IPharmacyService {
 		
 	}
 
-	@Override
-	public Page<Pharmacy> getAllWithPages(int page) {
-		return iPharmacyRepository.findAll(PageRequest.of(page,10));
-	}
 
 	@Override
 	public List<Pharmacy> getAll() {
@@ -141,6 +137,16 @@ public class PharmacyService implements IPharmacyService {
 			Collections.sort(pharmacies, Comparator.comparing(PharmacyDTO::getPharmacyAverageRating));
 		}else{
 			Collections.sort(pharmacies, Comparator.comparing(PharmacyDTO::getPharmacyAverageRating).reversed());
+		}
+		return pharmacies;
+	}
+
+	@Override
+	public List<PharmacyDTO> sortByPharmacyCity(List<PharmacyDTO> pharmacies, Boolean asc) {
+		if(asc){
+			Collections.sort(pharmacies, Comparator.comparing(PharmacyDTO::getCityForPharmacy));
+		}else{
+			Collections.sort(pharmacies, Comparator.comparing(PharmacyDTO::getCityForPharmacy).reversed());
 		}
 		return pharmacies;
 	}

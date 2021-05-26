@@ -7,18 +7,17 @@ import {
     TableRow,
     Grid,
     TextField,
-    Button
+    Button,
+    TableContainer
   } from "@material-ui/core";
   import {
     ArrowDropDown,
     ArrowDropUp,
-    NavigateNext,
-    NavigateBefore,
   } from "@material-ui/icons";
   import { useState, useEffect } from "react";
   import { makeStyles } from "@material-ui/core/styles";
   import axios from "axios";
-  import { BrowserRouter as Router, Route, Link } from "react-router-dom";
+  import { BrowserRouter as Link } from "react-router-dom";
 
   
   const useStyles = makeStyles((theme) => ({
@@ -31,10 +30,14 @@ import {
     hederCell: {
       cursor: "pointer",
       color: "#ffffff",
+      position: "sticky",
+      top: 0,
+      background: "#4051bf",
     },
     icons: {
       cursor: "pointer",
     },
+    
   }));
   
   const Pharmacies = () => {
@@ -44,7 +47,6 @@ import {
   
     const [copyRows, setCopyRows] = useState({});
   
-    const [currPage, setCurrPage] = useState(1);
     const token = localStorage.getItem("token");
     const userId = localStorage.getItem("userId");
     const config = {
@@ -57,9 +59,7 @@ import {
     useEffect(() => {
       axios
         .get(
-          "http://localhost:8080/api/pharmacy/all/" +
-            (currPage - 1).toString() +
-            ""
+          "http://localhost:8080/api/pharmacy/all"
         ,config)
         .then((res) => {
           setRows(res.data);
@@ -72,6 +72,11 @@ import {
       counter: -1,
       asc: true,
     });
+
+    const [pharmacyCityAsc, setPharmacyCityAsc] = useState({
+      counter: -1,
+      asc: true,
+    });
   
     const [ratingAsc, setRatingAsc] = useState({
       counter: -1,
@@ -80,15 +85,38 @@ import {
   
   
     const sortByPharmacyName = () => {
-      setRatingAsc({ asc: true, counter: -1 });
+
+        setRatingAsc({ asc: true, counter: -1 });
+        setPharmacyCityAsc({ asc: true, counter: -1 });
   
-      if (pharmacyNameAsc.asc === true) setPharmacyNameAsc({ counter: 0, asc: false });
-      else setPharmacyNameAsc({ counter: 0, asc: true });
+    
+        if (pharmacyNameAsc.asc === true) setPharmacyNameAsc({ counter: 0, asc: false });
+        else setPharmacyNameAsc({ counter: 0, asc: true });
+    
+        axios
+          .put(
+            "http://localhost:8080/api/pharmacy/sortByName/" +
+              (pharmacyNameAsc.asc ? "asc" : "desc"),
+            rows
+          ,config)
+          .then((res) => {
+            setRows(res.data);
+          });
+    };
+
+    const sortByPharmacyCity = () => {
+      setRatingAsc({ asc: true, counter: -1 });
+      setPharmacyNameAsc({ asc: true, counter: -1 });
+
+  
+      if (pharmacyCityAsc.asc === true) setPharmacyCityAsc({ counter: 0, asc: false });
+      else setPharmacyCityAsc({ counter: 0, asc: true });
+      
   
       axios
         .put(
-          "http://localhost:8080/api/pharmacy/sortByName/" +
-            (pharmacyNameAsc.asc ? "asc" : "desc"),
+          "http://localhost:8080/api/pharmacy/sortByCity/" +
+            (pharmacyCityAsc.asc ? "asc" : "desc"),
           rows
         ,config)
         .then((res) => {
@@ -98,6 +126,9 @@ import {
   
     const sortByRating = () => {
       setPharmacyNameAsc({ asc: true, counter: -1 });
+      setPharmacyCityAsc({ asc: true, counter: -1 });
+
+      
     
       if (ratingAsc.asc === true) setRatingAsc({ counter: 0, asc: false });
       else setRatingAsc({ counter: 0, asc: true });
@@ -129,42 +160,7 @@ import {
         )
       );
     };
-  
-    const [haveNextPage, setHaveNextPage] = useState(true);
-  
-    const nextPage = () => {
-      axios
-        .get(
-          "http://localhost:8080/api/pharmacy/all/" +
-            currPage.toString() +
-            ""
-        ,config)
-        .then((res) => {
-          if (res.data.length > 0) {
-            setCurrPage(currPage + 1);
-            setRows(res.data);
-          } else {
-            setHaveNextPage(false);
-          }
-        });
-    };
-  
-    const beforePage = () => {
-      axios
-        .get(
-          "http://localhost:8080/api/pharmacy/all/" +
-            (currPage - 2).toString() +
-            ""
-        ,config)
-        .then((res) => {
-          setHaveNextPage(true);
-          if (res.data.length > 0) {
-            setCurrPage(currPage - 1);
-            setRows(res.data);
-          }
-        });
-    };
-   
+
     const openProfile = (row) => {
       console.log(row)
     }
@@ -177,8 +173,10 @@ import {
            {pharmacyNameAsc.asc && pharmacyNameAsc.counter !== -1 && <ArrowDropDown />}{" "}
           {!pharmacyNameAsc.asc && pharmacyNameAsc.counter !== -1 && <ArrowDropUp />}
           </TableCell>
-          <TableCell className={classes.hederCell} >
+          <TableCell className={classes.hederCell} onClick={sortByPharmacyCity} >
            Address{" "}
+           {pharmacyCityAsc.asc && pharmacyCityAsc.counter !== -1 && <ArrowDropDown />}{" "}
+          {!pharmacyCityAsc.asc && pharmacyCityAsc.counter !== -1 && <ArrowDropUp />}
           </TableCell>
           <TableCell className={classes.hederCell} onClick={sortByRating}>
             Rating {" "}
@@ -203,7 +201,7 @@ import {
         {rows.map((row, index) => (
           <TableRow key={index} >
             <TableCell>{row.pharmacyName}</TableCell>
-            <TableCell>{row.pharmacyAddress.streetName} {row.pharmacyAddress.streetNumber},{row.pharmacyAddress.city}</TableCell>
+            <TableCell>{row.pharmacyAddress.city},{row.pharmacyAddress.streetName} {row.pharmacyAddress.streetNumber}</TableCell>
             <TableCell>{row.pharmacyAverageRating}</TableCell>
             <TableCell>{row.priceListForAppointmentDTO.dermatologistAppointmentPricePerHour}</TableCell>
             <TableCell>{row.priceListForAppointmentDTO.pharmacistAppointmentPricePerHour}</TableCell>
@@ -238,39 +236,14 @@ import {
         <Grid container spacing={1}>
           <Grid item xs={2} />
           <Grid item xs={8}>
+          <TableContainer style={{ height: "450px", marginTop: "2%" }}>
             <Table>
               {TableHeader}
               {TableContent}
             </Table>
+          </TableContainer>
           </Grid>
           <Grid item xs={2}></Grid>
-        </Grid>
-        <Grid container spacing={1} className={classes.table}>
-          <Grid item xs={2} />
-          <Grid item xs={8} container spacing={1}>
-            <Grid item xs={2}>
-              {currPage > 1 && (
-                <NavigateBefore
-                  className={classes.icons}
-                  fontSize="large"
-                  onClick={beforePage}
-                />
-              )}
-            </Grid>
-            <Grid item xs={8}>
-              Current Page {currPage}
-            </Grid>
-            <Grid item xs={2}>
-              {haveNextPage && (
-                <NavigateNext
-                  className={classes.icons}
-                  fontSize="large"
-                  onClick={nextPage}
-                />
-              )}
-            </Grid>
-          </Grid>
-          <Grid item xs={2} />
         </Grid>
       </div>
     );

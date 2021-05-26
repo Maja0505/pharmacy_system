@@ -5,17 +5,7 @@ import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.SequenceGenerator;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -41,6 +31,9 @@ public class EPrescription {
 	@JsonManagedReference
 	@OneToMany(mappedBy = "ePrescriton", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private Set<EPrescriptionItem> ePrescriptionItems = new HashSet<EPrescriptionItem>();
+
+	@Enumerated(EnumType.ORDINAL)
+	private StatusOfEPrescription statusOfEPrescription;
 	
 	
 	public EPrescription() {
@@ -96,7 +89,11 @@ public class EPrescription {
 		this.ePrescriptionItems = ePrescriptionItems;
 	}
 
-	
-	
-	
+	public StatusOfEPrescription getStatusOfEPrescription() {
+		return statusOfEPrescription;
+	}
+
+	public void setStatusOfEPrescription(StatusOfEPrescription statusOfEPrescription) {
+		this.statusOfEPrescription = statusOfEPrescription;
+	}
 }

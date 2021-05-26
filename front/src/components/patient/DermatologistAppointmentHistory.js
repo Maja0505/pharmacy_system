@@ -8,11 +8,12 @@ import {
     TableRow,
     Grid,
     Button,
-    Link
+    Link,
+    TableContainer
   } from "@material-ui/core";
   import {
-    NavigateNext,
-    NavigateBefore,
+    ArrowDropDown,
+    ArrowDropUp,
   } from "@material-ui/icons";
 import { useState, useEffect } from "react";
 import { makeStyles } from "@material-ui/core/styles";
@@ -37,6 +38,9 @@ import { withStyles } from '@material-ui/core/styles';
     hederCell: {
       cursor: "pointer",
       color: "#ffffff",
+      position: "sticky",
+      top: 0,
+      background: "#4051bf",
     },
     icons: {
       cursor: "pointer",
@@ -106,53 +110,13 @@ import { withStyles } from '@material-ui/core/styles';
     useEffect(() => {
       axios
         .get(
-          "http://localhost:8080/api/dermatologistReport/all/patient/" + userId + "/" + 
-          (currPage - 1).toString() +
-          "",config)
+          "http://localhost:8080/api/dermatologistReport/all/patient/" + userId,config)
         .then((res) => {
           setRows(res.data);
           setCopyRows(res.data);
           console.log(res)
         });
     }, []);
-
- 
-  
-    const [haveNextPage, setHaveNextPage] = useState(true);
-  
-    const nextPage = () => {
-      axios
-        .get(
-          "http://localhost:8080/api/dermatologistReport/all/patient/" + userId + "/" +
-            currPage.toString() +
-            "",config)
-        .then((res) => {
-          if (res.data.length > 0) {
-            setCurrPage(currPage + 1);
-            setRows(res.data);
-          } else {
-            setHaveNextPage(false);
-          }
-        });
-    };
-  
-    const beforePage = () => {
-      axios
-        .get(
-          "http://localhost:8080/api/dermatologistReport/all/patient/" + userId + "/" + 
-            (currPage - 2).toString() +
-            ""
-        ,config)
-        .then((res) => {
-          setHaveNextPage(true);
-          if (res.data.length > 0) {
-            setCurrPage(currPage - 1);
-            setRows(res.data);
-          }
-        });
-    };
-
-  
 
     const handleClickOpenPharmacyDialog = (pharmacyId) => {
         
@@ -188,6 +152,81 @@ import { withStyles } from '@material-ui/core/styles';
     const handleClickCloseViewReport = () => {
         setOpenReportDialog(false)
     }
+
+    const [dateAsc, setDateAsc] = useState({
+      counter: -1,
+      asc: true,
+    });
+
+    const [durationAsc, setDurationAsc] = useState({
+      counter: -1,
+      asc: true,
+    });
+  
+    const [priceAsc, setPriceAsc] = useState({
+      counter: -1,
+      asc: true,
+    });
+
+    const sortByDate = () => {
+
+      setDurationAsc({ asc: true, counter: -1 });
+      setPriceAsc({ asc: true, counter: -1 });
+
+  
+      if (dateAsc.asc === true) setDateAsc({ counter: 0, asc: false });
+      else setDateAsc({ counter: 0, asc: true });
+  
+      axios
+        .put(
+          "http://localhost:8080/api/dermatologistReport/sortByDate/" +
+            (dateAsc.asc ? "asc" : "desc"),
+          rows
+        ,config)
+        .then((res) => {
+          setRows(res.data);
+        });
+  };
+
+  const sortByDuration = () => {
+
+    setDateAsc({ asc: true, counter: -1 });
+    setPriceAsc({ asc: true, counter: -1 });
+
+
+    if (durationAsc.asc === true) setDurationAsc({ counter: 0, asc: false });
+    else setDurationAsc({ counter: 0, asc: true });
+
+    axios
+      .put(
+        "http://localhost:8080/api/dermatologistReport/sortByDuration/" +
+          (durationAsc.asc ? "asc" : "desc"),
+        rows
+      ,config)
+      .then((res) => {
+        setRows(res.data);
+      });
+};
+
+const sortByPrice = () => {
+
+  setDateAsc({ asc: true, counter: -1 });
+  setDurationAsc({ asc: true, counter: -1 });
+
+
+  if (priceAsc.asc === true) setPriceAsc({ counter: 0, asc: false });
+  else setPriceAsc({ counter: 0, asc: true });
+
+  axios
+    .put(
+      "http://localhost:8080/api/dermatologistReport/sortByPrice/" +
+        (priceAsc.asc ? "asc" : "desc"),
+      rows
+    ,config)
+    .then((res) => {
+      setRows(res.data);
+    });
+};
   
     const TableHeader = (
       <TableHead>
@@ -199,14 +238,26 @@ import { withStyles } from '@material-ui/core/styles';
           <TableCell className={classes.hederCell} >
           Dermatologist
           </TableCell>
-          <TableCell className={classes.hederCell} >
-          Start time
+          <TableCell className={classes.hederCell} onClick={sortByDate}>
+          Start time{" "}
+          {dateAsc.asc && dateAsc.counter !== -1 && <ArrowDropDown />}{" "}
+          {!dateAsc.asc && dateAsc.counter !== -1 && <ArrowDropUp />}
           </TableCell>
           <TableCell className={classes.hederCell} >
          End time
           </TableCell>
           <TableCell className={classes.hederCell} >
           Points
+          </TableCell>
+          <TableCell className={classes.hederCell} onClick={sortByDuration}> 
+          Duration(min){" "}
+          {durationAsc.asc && durationAsc.counter !== -1 && <ArrowDropDown />}{" "}
+          {!durationAsc.asc && durationAsc.counter !== -1 && <ArrowDropUp />}
+          </TableCell>
+          <TableCell className={classes.hederCell} onClick={sortByPrice} >
+          Price{" "}
+          {priceAsc.asc && priceAsc.counter !== -1 && <ArrowDropDown />}{" "}
+          {!priceAsc.asc && priceAsc.counter !== -1 && <ArrowDropUp />}
           </TableCell>
           <TableCell className={classes.hederCell} >
           Report
@@ -233,6 +284,8 @@ import { withStyles } from '@material-ui/core/styles';
               ":" +
               row.dermatologistAppointmentEndTime.split("T")[1].split(":")[1]}</TableCell>
             <TableCell> {row.appointmentPoints}</TableCell>
+            <TableCell> {row.durationOfAppointment}</TableCell>
+            <TableCell> {row.appointmentPrice}</TableCell>
             <TableCell> <Button style={{backgroundColor:'gray',color:'white'}} onClick={() => handleClickOpenViewReport(row.reportInfo)}>View</Button></TableCell>
           </TableRow>
           
@@ -324,39 +377,14 @@ import { withStyles } from '@material-ui/core/styles';
         <Grid container spacing={1}>
           <Grid item xs={2} />
           <Grid item xs={8}>
+          <TableContainer style={{ height: "450px", marginTop: "2%" }}>
             <Table>
               {TableHeader}
               {TableContent}
             </Table>
+          </TableContainer>
           </Grid>
           <Grid item xs={2}></Grid>
-        </Grid>
-        <Grid container spacing={1} className={classes.table}>
-          <Grid item xs={2} />
-          <Grid item xs={8} container spacing={1}>
-            <Grid item xs={2}>
-              {currPage > 1 && (
-                <NavigateBefore
-                  className={classes.icons}
-                  fontSize="large"
-                  onClick={beforePage}
-                />
-              )}
-            </Grid>
-            <Grid item xs={8}>
-              Current Page {currPage}
-            </Grid>
-            <Grid item xs={2}>
-              {haveNextPage && (
-                <NavigateNext
-                  className={classes.icons}
-                  fontSize="large"
-                  onClick={nextPage}
-                />
-              )}
-            </Grid>
-          </Grid>
-          <Grid item xs={2} />
         </Grid>
         {CreatePharmacyDialog}
         {CreateDermatologistDialog}

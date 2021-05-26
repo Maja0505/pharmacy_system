@@ -1,6 +1,7 @@
 package com.isa.pharmacies_system.controller;
 
 import com.isa.pharmacies_system.DTO.DermatologistReportDTO;
+import com.isa.pharmacies_system.DTO.PharmacyDTO;
 import com.isa.pharmacies_system.DTO.RecipeItemDTO;
 import com.isa.pharmacies_system.DTO.ReportForPatientDTO;
 import com.isa.pharmacies_system.converter.DermatologistReportConverter;
@@ -77,15 +78,60 @@ public class DermatologistReportController {
 
     //#1
     @PreAuthorize("hasRole('ROLE_PATIENT')")
-    @GetMapping("/all/patient/{idPatient}/{page}")
-    public ResponseEntity<List<DermatologistReportDTO>> findAllForPatient(@PathVariable Long idPatient,@PathVariable int page){
+    @GetMapping("/all/patient/{idPatient}")
+    public ResponseEntity<List<DermatologistReportDTO>> findAllForPatient(@PathVariable Long idPatient){
         try{
-            List<DermatologistReportDTO> dermatologistReportDTOS = dermatologistReportConverter.convertDermatologistReportToDermatologistReportDTOS(dermatologistReportService.findAllDermatologistReportForPatient(idPatient,page));
+            List<DermatologistReportDTO> dermatologistReportDTOS = dermatologistReportConverter.convertDermatologistReportToDermatologistReportDTOS(dermatologistReportService.findAllDermatologistReportForPatient(idPatient));
             return new ResponseEntity<>(dermatologistReportDTOS, HttpStatus.OK);
         }catch (Exception e){
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
     }
+
+    @PreAuthorize("hasRole('ROLE_PATIENT')")
+    @PutMapping(value = "/sortByDate/{asc}",consumes = "application/json")
+    public ResponseEntity<List<DermatologistReportDTO>> getSortedPharmacyByDate(@RequestBody List<DermatologistReportDTO> dermatologistReports, @PathVariable String asc){
+        try {
+            if(asc.equals("asc")){
+                return new ResponseEntity<>(dermatologistReportService.sortByPharmacyDate(dermatologistReports,true),HttpStatus.OK);
+            }else{
+                return new ResponseEntity<>(dermatologistReportService.sortByPharmacyDate(dermatologistReports,false),HttpStatus.OK);
+            }
+        }catch (Exception e){
+            return new ResponseEntity<>(null,HttpStatus.BAD_REQUEST);
+        }
+
+    }
+
+    @PreAuthorize("hasRole('ROLE_PATIENT')")
+    @PutMapping(value = "/sortByDuration/{asc}",consumes = "application/json")
+    public ResponseEntity<List<DermatologistReportDTO>> getSortedPharmacyByDuration(@RequestBody List<DermatologistReportDTO> dermatologistReports, @PathVariable String asc){
+        try {
+            if(asc.equals("asc")){
+                return new ResponseEntity<>(dermatologistReportService.sortByPharmacyDuration(dermatologistReports,true),HttpStatus.OK);
+            }else{
+                return new ResponseEntity<>(dermatologistReportService.sortByPharmacyDuration(dermatologistReports,false),HttpStatus.OK);
+            }
+        }catch (Exception e){
+            return new ResponseEntity<>(null,HttpStatus.BAD_REQUEST);
+        }
+
+    }
+    @PreAuthorize("hasRole('ROLE_PATIENT')")
+    @PutMapping(value = "/sortByPrice/{asc}",consumes = "application/json")
+    public ResponseEntity<List<DermatologistReportDTO>> getSortedPharmacyByPrice(@RequestBody List<DermatologistReportDTO> dermatologistReports, @PathVariable String asc){
+        try {
+            if(asc.equals("asc")){
+                return new ResponseEntity<>(dermatologistReportService.sortByPharmacyPrice(dermatologistReports,true),HttpStatus.OK);
+            }else{
+                return new ResponseEntity<>(dermatologistReportService.sortByPharmacyPrice(dermatologistReports,false),HttpStatus.OK);
+            }
+        }catch (Exception e){
+            return new ResponseEntity<>(null,HttpStatus.BAD_REQUEST);
+        }
+
+    }
+
 
 }

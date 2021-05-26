@@ -36,6 +36,7 @@ public class PharmacyConverter {
 		pharmacyDTO.setId(pharmacy.getId());
 		pharmacyDTO.setPharmacyName(pharmacy.getPharmacyName());
 		pharmacyDTO.setPharmacyAddress(pharmacy.getPharmacyAddress());
+		pharmacyDTO.setCityForPharmacy(pharmacy.getPharmacyAddress().getCity());
 		pharmacyDTO.setPharmacyAverageRating(pharmacy.getPharmacyAverageRating());
 		PriceListForAppointmentDTO priceList = priceListService.findPriceListByPharmacyId(pharmacyDTO.getId());
 		pharmacyDTO.setPriceListForAppointmentDTO(priceList);

@@ -45,6 +45,7 @@ public class PharmacistReportConverter {
         pharmacistReportDTO.setAppointmentPoints(pharmacistAppointment.getAppointmentPoints());
         pharmacistReportDTO.setStatusOfAppointment(pharmacistAppointment.getStatusOfAppointment());
         pharmacistReportDTO.setReportInfo(pharmacistReport.getReportInfo());
+        pharmacistReportDTO.setAppointmentPrice(pharmacistAppointment.getAppointmentPrice());
 
         return  pharmacistReportDTO;
     }

@@ -1,5 +1,6 @@
 package com.isa.pharmacies_system.controller;
 
+import com.isa.pharmacies_system.DTO.DermatologistReportDTO;
 import com.isa.pharmacies_system.DTO.PharmacistReportDTO;
 import com.isa.pharmacies_system.DTO.RecipeItemDTO;
 import com.isa.pharmacies_system.DTO.ReportForPatientDTO;
@@ -46,10 +47,10 @@ public class PharmacistReportController {
 
     //#1]
     @PreAuthorize("hasRole('ROLE_PATIENT')")
-    @GetMapping("/all/patient/{idPatient}/{page}")
-    public ResponseEntity<List<PharmacistReportDTO>> findAllForPatient(@PathVariable Long idPatient, @PathVariable int page){
+    @GetMapping("/all/patient/{idPatient}")
+    public ResponseEntity<List<PharmacistReportDTO>> findAllForPatient(@PathVariable Long idPatient){
         try{
-            List<PharmacistReportDTO> pharmacistReportDTOS = pharmacistReportConverter.convertPharmacistReportToPharmacistReportDTOS(pharmacistReportService.findAllPharmacistReportForPatient(idPatient,page));
+            List<PharmacistReportDTO> pharmacistReportDTOS = pharmacistReportConverter.convertPharmacistReportToPharmacistReportDTOS(pharmacistReportService.findAllPharmacistReportForPatient(idPatient));
             return new ResponseEntity<>(pharmacistReportDTOS, HttpStatus.OK);
         }catch (Exception e){
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -78,6 +79,50 @@ public class PharmacistReportController {
         }catch (Exception e){
             return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
+    }
+
+    @PreAuthorize("hasRole('ROLE_PATIENT')")
+    @PutMapping(value = "/sortByDate/{asc}",consumes = "application/json")
+    public ResponseEntity<List<PharmacistReportDTO>> getSortedPharmacyByDate(@RequestBody List<PharmacistReportDTO> pharmacistReports, @PathVariable String asc){
+        try {
+            if(asc.equals("asc")){
+                return new ResponseEntity<>(pharmacistReportService.sortByPharmacyDate(pharmacistReports,true),HttpStatus.OK);
+            }else{
+                return new ResponseEntity<>(pharmacistReportService.sortByPharmacyDate(pharmacistReports,false),HttpStatus.OK);
+            }
+        }catch (Exception e){
+            return new ResponseEntity<>(null,HttpStatus.BAD_REQUEST);
+        }
+
+    }
+
+    @PreAuthorize("hasRole('ROLE_PATIENT')")
+    @PutMapping(value = "/sortByDuration/{asc}",consumes = "application/json")
+    public ResponseEntity<List<PharmacistReportDTO>> getSortedPharmacyByDuration(@RequestBody List<PharmacistReportDTO> pharmacistReports, @PathVariable String asc){
+        try {
+            if(asc.equals("asc")){
+                return new ResponseEntity<>(pharmacistReportService.sortByPharmacyDuration(pharmacistReports,true),HttpStatus.OK);
+            }else{
+                return new ResponseEntity<>(pharmacistReportService.sortByPharmacyDuration(pharmacistReports,false),HttpStatus.OK);
+            }
+        }catch (Exception e){
+            return new ResponseEntity<>(null,HttpStatus.BAD_REQUEST);
+        }
+
+    }
+    @PreAuthorize("hasRole('ROLE_PATIENT')")
+    @PutMapping(value = "/sortByPrice/{asc}",consumes = "application/json")
+    public ResponseEntity<List<PharmacistReportDTO>> getSortedPharmacyByPrice(@RequestBody List<PharmacistReportDTO> pharmacistReports, @PathVariable String asc){
+        try {
+            if(asc.equals("asc")){
+                return new ResponseEntity<>(pharmacistReportService.sortByPharmacyPrice(pharmacistReports,true),HttpStatus.OK);
+            }else{
+                return new ResponseEntity<>(pharmacistReportService.sortByPharmacyPrice(pharmacistReports,false),HttpStatus.OK);
+            }
+        }catch (Exception e){
+            return new ResponseEntity<>(null,HttpStatus.BAD_REQUEST);
+        }
+
     }
 
 

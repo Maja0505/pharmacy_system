@@ -6,7 +6,8 @@ import {
     TableRow,
     TextField,
     Button,
-    Grid
+    Grid,
+    TableContainer
   } from "@material-ui/core";
   import { makeStyles } from '@material-ui/core/styles';
   import Autocomplete from '@material-ui/lab/Autocomplete';
@@ -32,7 +33,11 @@ import {
         background: "#e57373",
       },
       hederCell: {
+        cursor: "pointer",
         color: "#ffffff",
+        position: "sticky",
+        top: 0,
+        background: "#4051bf",
       },
       icons: {
         cursor: "pointer",
@@ -151,10 +156,13 @@ const Allergies = ({allergies,setAllergies,patientId}) => {
                 </Grid>
             </Grid>
             <br></br>
-            <Table stickyHeader aria-label="sticky table">
-                {TableHeader}
-                {TableContent}
-            </Table>
+            <TableContainer style={{ height: "450px", marginTop: "2%" }}>
+              <Table stickyHeader aria-label="sticky table">
+                  {TableHeader}
+                  {TableContent}
+              </Table>
+            </TableContainer>
+            
         </div>
     )
 }
