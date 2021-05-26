@@ -9,6 +9,7 @@ import com.isa.pharmacies_system.domain.report.DermatologistReport;
 import com.isa.pharmacies_system.domain.schedule.DermatologistAppointment;
 import com.isa.pharmacies_system.domain.user.Dermatologist;
 
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -45,6 +46,8 @@ public class DermatologistReportConverter {
         dermatologistReportDTO.setAppointmentPoints(dermatologistAppointment.getAppointmentPoints());
         dermatologistReportDTO.setStatusOfAppointment(dermatologistAppointment.getStatusOfAppointment());
         dermatologistReportDTO.setReportInfo(dermatologistReport.getReportInfo());
+        dermatologistReportDTO.setAppointmentPrice(dermatologistAppointment.getAppointmentPrice());
+        dermatologistReportDTO.setDurationOfAppointment(Duration.between(dermatologistAppointment.getDermatologistAppointmentStartTime(),dermatologistReportDTO.getDermatologistAppointmentEndTime()).toMinutes());
 
         return  dermatologistReportDTO;
     }

@@ -41,6 +41,7 @@ public class PatientController {
     private IPriceListService priceListService;
     private MedicineReservationConverter medicineReservationConverter;
     private PharmacyConverter pharmacyConverter;
+    private EPrescriptionItemConverter ePrescriptionItemConverter;
 
 
     
@@ -58,6 +59,7 @@ public class PatientController {
         this.medicineService = medicineService;
         this.medicineReservationConverter = new MedicineReservationConverter();
         this.pharmacyConverter = new PharmacyConverter(priceListService);
+        this.ePrescriptionItemConverter = new EPrescriptionItemConverter();
 
     }
 
@@ -217,10 +219,10 @@ public class PatientController {
 
     @PreAuthorize("hasRole('ROLE_PATIENT')")
     @GetMapping(value = "/{id}/ePrescription")
-    public ResponseEntity<List<EPrescription>> getAllEPrescriptionsForPatient(@PathVariable Long id){
+    public ResponseEntity<List<EPrescriptionDTO>> getAllEPrescriptionsForPatient(@PathVariable Long id){
 
         try {
-            return new ResponseEntity<>(patientService.getAllEPrescriptionsForPatient(id),HttpStatus.OK);
+            return new ResponseEntity<>(ePrescriptionItemConverter.convertEPrescriptionToEPrescriptionDTOS(patientService.getAllEPrescriptionsForPatient(id)),HttpStatus.OK);
         }catch (Exception e){
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }

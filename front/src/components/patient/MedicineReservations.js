@@ -11,6 +11,8 @@ import {
     Grid,
     TextField,
     Button,
+    TableContainer
+
   } from "@material-ui/core";
   import {
     NavigateNext,
@@ -51,6 +53,9 @@ import setDate from "date-fns/setDate";
     hederCell: {
       cursor: "pointer",
       color: "#ffffff",
+      position: "sticky",
+      top: 0,
+      background: "#4051bf",
     },
     icons: {
       cursor: "pointer",
@@ -247,44 +252,6 @@ import setDate from "date-fns/setDate";
       );
     };
   
-    const [haveNextPage, setHaveNextPage] = useState(true);
-  
-    const nextPage = () => {
-      axios
-        .get(
-          "http://localhost:8080/api/pharmacy/all/" +
-            currPage.toString() +
-            ""
-        ,config)
-        .then((res) => {
-          if (res.data.length > 0) {
-            setCurrPage(currPage + 1);
-            setRows(res.data);
-          } else {
-            setHaveNextPage(false);
-          }
-        }).catch(error => {
-
-        })
-    };
-  
-    const beforePage = () => {
-      axios
-        .get(
-          "http://localhost:8080/api/pharmacy/all/" +
-            (currPage - 2).toString() +
-            ""
-        ,config)
-        .then((res) => {
-          setHaveNextPage(true);
-          if (res.data.length > 0) {
-            setCurrPage(currPage - 1);
-            setRows(res.data);
-          }
-        }).catch(error => {
-
-        })
-    };
   
     const TableHeader = (
       <TableHead>
@@ -417,39 +384,14 @@ import setDate from "date-fns/setDate";
         <Grid container spacing={1}>
           <Grid item xs={2} />
           <Grid item xs={8}>
+          <TableContainer style={{ height: "450px", marginTop: "2%" }}>
             <Table>
               {TableHeader}
               {TableContent}
             </Table>
+          </TableContainer>
           </Grid>
           <Grid item xs={2}></Grid>
-        </Grid>
-        <Grid container spacing={1} className={classes.table}>
-          <Grid item xs={2} />
-          <Grid item xs={8} container spacing={1}>
-            <Grid item xs={2}>
-              {currPage > 1 && (
-                <NavigateBefore
-                  className={classes.icons}
-                  fontSize="large"
-                  onClick={beforePage}
-                />
-              )}
-            </Grid>
-            <Grid item xs={8}>
-              Current Page {currPage}
-            </Grid>
-            <Grid item xs={2}>
-              {haveNextPage && (
-                <NavigateNext
-                  className={classes.icons}
-                  fontSize="large"
-                  onClick={nextPage}
-                />
-              )}
-            </Grid>
-          </Grid>
-          <Grid item xs={2} />
         </Grid>
         {CreateReservationDialog}
         <Snackbar open={openAlertError} autoHideDuration={1500} onClose={handleCloseAlertError}>

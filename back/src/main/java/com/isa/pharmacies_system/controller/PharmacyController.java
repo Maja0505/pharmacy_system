@@ -44,11 +44,6 @@ public class PharmacyController {
 
 	}
 
-	@PreAuthorize("hasRole('ROLE_PATIENT')")
-	@GetMapping(value = "/all/{page}")
-	public ResponseEntity<List<PharmacyDTO>> getAllPharmaciesWithPages(@PathVariable int page) {
-		return new ResponseEntity<>(pharmacyConverter.convertPharmacyListToPharmacyDTOList(iPharmacyService.getAllWithPages(page).toList()), HttpStatus.OK);
-	}
 
 	@PreAuthorize("hasRole('ROLE_PATIENT')")
 	@GetMapping(value = "/all")
@@ -106,6 +101,21 @@ public class PharmacyController {
 				return new ResponseEntity<>(iPharmacyService.sortByPharmacyRating(pharmacies,true),HttpStatus.OK);
 			}else{
 				return new ResponseEntity<>(iPharmacyService.sortByPharmacyRating(pharmacies,false),HttpStatus.OK);
+			}
+		}catch (Exception e){
+			return new ResponseEntity<>(null,HttpStatus.BAD_REQUEST);
+		}
+
+	}
+
+	@PreAuthorize("hasRole('ROLE_PATIENT')")
+	@PutMapping(value = "/sortByCity/{asc}",consumes = "application/json")
+	public ResponseEntity<List<PharmacyDTO>> getSortedPharmacyByCity(@RequestBody List<PharmacyDTO> pharmacies, @PathVariable String asc){
+		try {
+			if(asc.equals("asc")){
+				return new ResponseEntity<>(iPharmacyService.sortByPharmacyCity(pharmacies,true),HttpStatus.OK);
+			}else{
+				return new ResponseEntity<>(iPharmacyService.sortByPharmacyCity(pharmacies,false),HttpStatus.OK);
 			}
 		}catch (Exception e){
 			return new ResponseEntity<>(null,HttpStatus.BAD_REQUEST);

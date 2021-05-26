@@ -8,6 +8,7 @@ public class PharmacyDTO extends PharmacyInfoDTO{
     private long id;
     private String pharmacyName;
     private Address pharmacyAddress;
+    private String cityForPharmacy; //zbog sortiranja
     private double pharmacyAverageRating;
     private PriceListForAppointmentDTO priceListForAppointmentDTO;
 
@@ -56,4 +57,11 @@ public class PharmacyDTO extends PharmacyInfoDTO{
         this.priceListForAppointmentDTO = priceListForAppointmentDTO;
     }
 
+    public String getCityForPharmacy() {
+        return cityForPharmacy;
+    }
+
+    public void setCityForPharmacy(String cityForPharmacy) {
+        this.cityForPharmacy = cityForPharmacy;
+    }
 }
