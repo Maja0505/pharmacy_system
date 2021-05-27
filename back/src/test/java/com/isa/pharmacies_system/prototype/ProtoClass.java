@@ -42,6 +42,20 @@ public class ProtoClass {
         return d;
     }
 
+    public static DermatologistAppointment protoDermatologistAppointmentOpen(DermatologistAppointment d){
+        d.setId(1l);
+        d.setStatusOfAppointment(StatusOfAppointment.Open);
+        d.setAppointmentPrice(100);
+        d.setAppointmentPoints(10);
+        d.setTypeOfAppointment(TypeOfAppointment.Dermatologist_appointment);
+        d.setDermatologistAppointmentStartTime(LocalDateTime.now().minusHours(1));
+        d.setDermatologistAppointmentEndTime(LocalDateTime.now().plusHours(1));
+        d.setPatientWithDermatologistAppointment(null);
+        d.setDermatologistForAppointment(protoDermatologist(new Dermatologist()));
+        d.setPharmacyForDermatologistAppointment(protoPharmacy(new Pharmacy()));
+        return d;
+    }
+
     public static Patient protoPatient(Patient p){
         p.setId(1l);
         p.setFirstName("Mile");
@@ -88,7 +102,7 @@ public class ProtoClass {
 
     public static PharmacyStorageItem protoPharmacyStorageItem(PharmacyStorageItem i){
         i.setId(1l);
-        i.setMedicineAmount(1);
+        i.setMedicineAmount(1L);
         i.setTypeOfItem(TypeOfItem.Pharmacy_storage_item);
         i.setPharmacyStorageWithItem(protoPharmacyStorage(new PharmacyStorage()));
         i.setMedicineItem(protoMedicine(new Medicine()));
@@ -100,6 +114,10 @@ public class ProtoClass {
         m.setMedicineName("Brufen");
         m.setMedicineCode("123");
         m.setTypeOfMedicine(TypeOfMedicine.Antibiotics);
+        m.setFormOfMedicine(FormOfMedicine.Capsule);
+        m.setManufacturerOfMedicine("Ivancic i sinovi");
+        m.setNotes("Bilo sta");
+        m.setIngredients(new HashSet<>());
         return m;
     }
 
@@ -118,6 +136,16 @@ public class ProtoClass {
         m.setPharmacyForMedicineReservation(protoPharmacy(new Pharmacy()));
         m.setDateOfTakingMedicine(LocalDate.now().plusDays(5));
         return Arrays.asList(m);
+    }
+
+    public static MedicineReservation protoMedicineReservation(MedicineReservation m){
+        m.setStatusOfMedicineReservation(StatusOfMedicineReservation.CREATED);
+        m.setId(1l);
+        m.setReservedMedicine(protoMedicine(new Medicine()));
+        m.setPatientForMedicineReservation(protoPatient(new Patient()));
+        m.setPharmacyForMedicineReservation(protoPharmacy(new Pharmacy()));
+        m.setDateOfTakingMedicine(LocalDate.now().plusDays(5));
+        return m;
     }
 
 }

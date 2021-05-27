@@ -67,7 +67,7 @@ public class MedicineConverter {
 	}
 
 	//Nemanja
-	private MedicineForRecipeDTO convertOnePharmacyStorageItemToMedicineForRecipe(PharmacyStorageItem p) {
+	public MedicineForRecipeDTO convertOnePharmacyStorageItemToMedicineForRecipe(PharmacyStorageItem p) {
 		MedicineForRecipeDTO medicineForRecipeDTO = new MedicineForRecipeDTO();
 		Medicine medicine = p.getMedicineItem();
 		medicineForRecipeDTO.setItemId(p.getId());

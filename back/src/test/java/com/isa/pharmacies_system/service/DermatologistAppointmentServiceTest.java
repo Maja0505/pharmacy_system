@@ -2,11 +2,12 @@ package com.isa.pharmacies_system.service;
 
 import com.isa.pharmacies_system.domain.schedule.DermatologistAppointment;
 import com.isa.pharmacies_system.domain.schedule.StatusOfAppointment;
+import com.isa.pharmacies_system.domain.user.Patient;
 import com.isa.pharmacies_system.repository.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import static com.isa.pharmacies_system.prototype.ProtoClass.protoDermatologistAppointment;
+import static com.isa.pharmacies_system.prototype.ProtoClass.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;
 import static org.mockito.Mockito.times;
@@ -42,5 +43,24 @@ class DermatologistAppointmentServiceTest {
         verify(dermatologistAppointmentRepository,times(1)).save(da);
         assertThat(da.getStatusOfAppointment()).isEqualTo(StatusOfAppointment.Missed);
         assertThat(da.getPatientWithDermatologistAppointment().getPenalty()).isEqualTo(1);
+    }
+
+    @Test
+    void bookDermatologistAppointment(){
+        DermatologistAppointment dermatologistAppointment = protoDermatologistAppointmentOpen(new DermatologistAppointment());
+        Patient patient = protoPatient(new Patient());
+        when(dermatologistAppointmentRepository.findById(1l)).thenReturn(java.util.Optional.of(dermatologistAppointment));
+        when(patientRepository.findById(1l)).thenReturn(java.util.Optional.of(patient));
+
+        assertThat(patient.getPenalty()).isLessThan(3);
+        assertThat(dermatologistAppointment.getStatusOfAppointment()).isEqualTo(StatusOfAppointment.Open);
+        assertThat(dermatologistAppointment.getPatientWithDermatologistAppointment()).isNull();
+
+        Boolean retVal = dermatologistAppointmentService.bookDermatologistAppointment(patient.getId(),dermatologistAppointment.getId());
+
+        assertThat(retVal).isEqualTo(true);
+        assertThat(dermatologistAppointment.getPatientWithDermatologistAppointment()).isEqualTo(patient);
+        assertThat(dermatologistAppointment.getStatusOfAppointment()).isEqualTo(StatusOfAppointment.Reserved);
+        verify(dermatologistAppointmentRepository,times(1)).save(dermatologistAppointment);
     }
 }
