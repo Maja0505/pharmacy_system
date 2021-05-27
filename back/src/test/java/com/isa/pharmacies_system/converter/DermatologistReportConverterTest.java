@@ -4,12 +4,17 @@ import com.isa.pharmacies_system.DTO.DermatologistReportDTO;
 import com.isa.pharmacies_system.domain.report.DermatologistReport;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.runner.RunWith;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.junit4.SpringRunner;
 
 
 import static com.isa.pharmacies_system.prototype.ProtoClass.protoDermatologistReport;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+@RunWith(SpringRunner.class)
+@SpringBootTest
 class DermatologistReportConverterTest {
     
     private DermatologistReportConverter dermatologistReportConverter;

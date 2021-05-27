@@ -1,5 +1,7 @@
 package com.isa.pharmacies_system.prototype;
 
+import com.isa.pharmacies_system.DTO.UserPasswordDTO;
+import com.isa.pharmacies_system.DTO.VacationRequestDTO;
 import com.isa.pharmacies_system.domain.medicine.*;
 import com.isa.pharmacies_system.domain.pharmacy.Address;
 import com.isa.pharmacies_system.domain.pharmacy.Pharmacy;
@@ -7,6 +9,7 @@ import com.isa.pharmacies_system.domain.report.DermatologistReport;
 import com.isa.pharmacies_system.domain.schedule.DermatologistAppointment;
 import com.isa.pharmacies_system.domain.schedule.StatusOfAppointment;
 import com.isa.pharmacies_system.domain.schedule.TypeOfAppointment;
+import com.isa.pharmacies_system.domain.schedule.TypeOfVacation;
 import com.isa.pharmacies_system.domain.storage.PharmacyStorage;
 import com.isa.pharmacies_system.domain.storage.PharmacyStorageItem;
 import com.isa.pharmacies_system.domain.user.Dermatologist;
@@ -148,4 +151,21 @@ public class ProtoClass {
         return m;
     }
 
+
+    public static UserPasswordDTO protoUserPasswordDTO(UserPasswordDTO u){
+        u.setId(1l);
+        u.setConfirmedNewPassword("1234");
+        u.setNewPassword("1234");
+        u.setConfirmedPassword("12345");
+        return u;
+    }
+
+    public static VacationRequestDTO protoVacationRequestDTO(VacationRequestDTO v){
+        v.setStaffId(1l);
+        v.setTypeOfVacation(TypeOfVacation.Holiday);
+        v.setVacationRequestNotes("Some Notes");
+        v.setVacationStartDate(LocalDate.now());
+        v.setVacationEndDate(LocalDate.now().plusMonths(1));
+        return v;
+    }
 }

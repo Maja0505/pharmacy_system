@@ -6,12 +6,20 @@ import com.isa.pharmacies_system.domain.user.Patient;
 import com.isa.pharmacies_system.repository.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.runner.RunWith;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.Rollback;
+import org.springframework.test.context.junit4.SpringRunner;
+
+import javax.transaction.Transactional;
 
 import static com.isa.pharmacies_system.prototype.ProtoClass.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;
 import static org.mockito.Mockito.times;
 
+@RunWith(SpringRunner.class)
+@SpringBootTest
 class DermatologistAppointmentServiceTest {
 
     private IDermatologistAppointmentRepository dermatologistAppointmentRepository;
@@ -32,6 +40,8 @@ class DermatologistAppointmentServiceTest {
     }
 
     @Test
+    @Transactional
+    @Rollback()
     void changeDermatologistAppointmentStatusToMissed() {
         DermatologistAppointment da = protoDermatologistAppointment(new DermatologistAppointment());
         when(dermatologistAppointmentRepository.save(da)).thenReturn(da);
@@ -46,6 +56,8 @@ class DermatologistAppointmentServiceTest {
     }
 
     @Test
+    @Transactional
+    @Rollback()
     void bookDermatologistAppointment(){
         DermatologistAppointment dermatologistAppointment = protoDermatologistAppointmentOpen(new DermatologistAppointment());
         Patient patient = protoPatient(new Patient());
