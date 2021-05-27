@@ -89,6 +89,7 @@ public class PharmacistAppointmentController {
     }
 
     //Nemanja
+    @PreAuthorize("hasRole('ROLE_PHARMACIST')")
     @GetMapping("/allPastAppointment/{pharmacistId}")
     public ResponseEntity<List<PatientAppointmentInfoDTO>> getAllPastPharmacistAppointment(@PathVariable("pharmacistId") Long id){
         try {

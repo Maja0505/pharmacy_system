@@ -7,7 +7,12 @@ import com.isa.pharmacies_system.repository.IMedicineReservationRepository;
 import com.isa.pharmacies_system.repository.IPharmacyStorageItemRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.runner.RunWith;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.Rollback;
+import org.springframework.test.context.junit4.SpringRunner;
 
+import javax.transaction.Transactional;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -16,6 +21,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
+@RunWith(SpringRunner.class)
+@SpringBootTest
 class MedicineReservationServiceTest {
 
     private IMedicineReservationRepository medicineReservationRepository;
@@ -42,6 +49,8 @@ class MedicineReservationServiceTest {
     }
 
     @Test
+    @Transactional
+    @Rollback()
     void createMedicineReservation(){
         PharmacyStorageItem item = protoPharmacyStorageItem(new PharmacyStorageItem());
         MedicineReservation medicineReservation = protoMedicineReservation(new MedicineReservation());

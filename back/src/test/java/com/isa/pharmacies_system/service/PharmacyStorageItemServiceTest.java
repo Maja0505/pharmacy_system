@@ -8,8 +8,11 @@ import com.isa.pharmacies_system.repository.IPatientRepository;
 import com.isa.pharmacies_system.repository.IPharmacyStorageItemRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.junit4.SpringRunner;
 
 import static com.isa.pharmacies_system.prototype.ProtoClass.protoPatient;
 import static com.isa.pharmacies_system.prototype.ProtoClass.protoPharmacyStorageItem;
@@ -17,6 +20,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
+@RunWith(SpringRunner.class)
+@SpringBootTest
 class PharmacyStorageItemServiceTest {
 
     private IPharmacyStorageItemRepository pharmacyStorageItemRepository;
