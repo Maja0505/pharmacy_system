@@ -1,5 +1,7 @@
 package com.isa.pharmacies_system.service;
 
+import com.isa.pharmacies_system.DTO.DermatologistReportDTO;
+import com.isa.pharmacies_system.DTO.PharmacyDTO;
 import com.isa.pharmacies_system.domain.medicine.Recipe;
 import com.isa.pharmacies_system.domain.report.DermatologistReport;
 import com.isa.pharmacies_system.domain.schedule.DermatologistAppointment;
@@ -11,6 +13,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 @Service
@@ -48,7 +52,37 @@ public class DermatologistReportService implements IDermatologistReportService {
 
     //#1
     @Override
-    public List<DermatologistReport> findAllDermatologistReportForPatient(Long id, int page) {
-        return dermatologistReportRepository.getAllDermatologistReportForPatient(id, PageRequest.of(page,10));
+    public List<DermatologistReport> findAllDermatologistReportForPatient(Long id) {
+        return dermatologistReportRepository.getAllDermatologistReportForPatient(id);
+    }
+
+    @Override
+    public List<DermatologistReportDTO> sortByPharmacyDate(List<DermatologistReportDTO> dermatologistReports, boolean asc) {
+        if(asc){
+            Collections.sort(dermatologistReports, Comparator.comparing(DermatologistReportDTO::getDermatologistAppointmentStartTime));
+        }else{
+            Collections.sort(dermatologistReports, Comparator.comparing(DermatologistReportDTO::getDermatologistAppointmentStartTime).reversed());
+        }
+        return dermatologistReports;
+    }
+
+    @Override
+    public List<DermatologistReportDTO> sortByPharmacyDuration(List<DermatologistReportDTO> dermatologistReports, boolean asc) {
+        if(asc){
+            Collections.sort(dermatologistReports, Comparator.comparing(DermatologistReportDTO::getDurationOfAppointment));
+        }else{
+            Collections.sort(dermatologistReports, Comparator.comparing(DermatologistReportDTO::getDurationOfAppointment).reversed());
+        }
+        return dermatologistReports;
+    }
+
+    @Override
+    public List<DermatologistReportDTO> sortByPharmacyPrice(List<DermatologistReportDTO> dermatologistReports, boolean asc) {
+        if(asc){
+            Collections.sort(dermatologistReports, Comparator.comparing(DermatologistReportDTO::getAppointmentPrice));
+        }else{
+            Collections.sort(dermatologistReports, Comparator.comparing(DermatologistReportDTO::getAppointmentPrice).reversed());
+        }
+        return dermatologistReports;
     }
 }

@@ -11,5 +11,5 @@ import java.util.List;
 public interface IPharmacistReportRepository extends JpaRepository<PharmacistReport,Long> {
 
     @Query("select p from PharmacistReport p where p.pharmacistAppointment.patientWithPharmacistAppointment.id = ?1")
-    List<PharmacistReport> getAllPharmacistReportForPatient(Long id, Pageable pageable);
+    List<PharmacistReport> getAllPharmacistReportForPatient(Long id);
 }

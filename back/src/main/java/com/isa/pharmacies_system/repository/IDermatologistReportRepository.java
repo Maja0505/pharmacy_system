@@ -11,5 +11,5 @@ import java.util.Set;
 public interface IDermatologistReportRepository extends JpaRepository<DermatologistReport,Long> {
 
     @Query("select d from DermatologistReport d where d.dermatologistAppointment.patientWithDermatologistAppointment.id = ?1")
-    List<DermatologistReport> getAllDermatologistReportForPatient(Long id, Pageable pageable);
+    List<DermatologistReport> getAllDermatologistReportForPatient(Long id);
 }

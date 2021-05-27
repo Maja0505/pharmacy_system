@@ -10,7 +10,8 @@ import {
   Grid,
   Button,
   Link,
-  TextField
+  TextField,
+  TableContainer
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import axios from "axios";
@@ -26,6 +27,9 @@ const useStyles = makeStyles((theme) => ({
   hederCell: {
     cursor: "pointer",
     color: "#ffffff",
+    position: "sticky",
+    top: 0,
+    background: "#4051bf",
   },
   icons: {
     cursor: "pointer",
@@ -78,10 +82,12 @@ const PharmacistsTableForSchedulePharmacistAppointment = ({pharmacists,setSelect
         <Grid container spacing={1}>
           <Grid item xs={2} />
           <Grid item xs={8}>
+          <TableContainer style={{ height: "450px", marginTop: "2%" }}>
             <Table>
               {TableHeader}
               {TableContent}
             </Table>
+          </TableContainer>
           </Grid>
           <Grid item xs={2}></Grid>
         </Grid>
