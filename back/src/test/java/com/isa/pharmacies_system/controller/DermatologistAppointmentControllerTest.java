@@ -1,5 +1,6 @@
 package com.isa.pharmacies_system.controller;
 
+import com.isa.pharmacies_system.DTO.DermatologistAppointmentDTO;
 import com.isa.pharmacies_system.DTO.PatientAppointmentInfoDTO;
 import com.isa.pharmacies_system.util.TestUtil;
 import org.junit.jupiter.api.BeforeEach;
@@ -21,6 +22,7 @@ import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.isa.pharmacies_system.prototype.ProtoClass.protoDermatologistAppointmentDTO;
 import static org.hamcrest.Matchers.hasItem;
 import static org.hamcrest.Matchers.hasSize;
 import static org.junit.jupiter.api.Assertions.*;
@@ -73,5 +75,16 @@ class DermatologistAppointmentControllerTest {
         mockMvc.perform(put(URL_PREFIX_SORT + "/sortByPatientLastName/desc").contentType(contentType).content(json)).andExpect(status().isOk())
                 .andExpect(content().contentType(contentType)).andExpect(jsonPath("$", hasSize(2)))
                 .andExpect(jsonPath("$.[0].patientLastName").value("Bajic"));
+    }
+
+
+    @Test
+    @Transactional
+    @Rollback()
+    @WithMockUser(authorities = {"ROLE_PATIENT"})
+    void cancelDermatologistAppointment() throws Exception {
+        DermatologistAppointmentDTO m = protoDermatologistAppointmentDTO(new DermatologistAppointmentDTO());
+        String json = TestUtil.json(m);
+        this.mockMvc.perform(put(URL_PREFIX + "/cancel").contentType(contentType).content(json)).andExpect(status().isOk());
     }
 }
