@@ -55,7 +55,7 @@ public class MedicineReservationController {
                 MedicineReservation medicineReservation = medicineReservationConverter.convertMedicineReservationDTOToMedicineReservarvation(medicineReservationDTO,patient,medicine,pharmacy);
                 if(medicineReservationService.createMedicineReservation(medicineReservation)){
                     emailService.sendNotificationForSuccessMedicineReservation(medicineReservation);
-                    return new ResponseEntity<>(true,HttpStatus.OK);
+                    return new ResponseEntity<>(true,HttpStatus.CREATED);
                 }
                 return new ResponseEntity<>(false,HttpStatus.OK);
             }
@@ -69,7 +69,7 @@ public class MedicineReservationController {
     //#1[3.19]
     @PreAuthorize("hasRole('ROLE_PATIENT')")
     @PutMapping(value = "/cancel", consumes = "application/json")
-    public ResponseEntity<Boolean> createMedicineReservation(@RequestBody MedicineReservationInfoDTO medicineReservationInfoDTO){
+    public ResponseEntity<Boolean> cancelMedicineReservation(@RequestBody MedicineReservationInfoDTO medicineReservationInfoDTO){
         try {
           if(medicineReservationService.cancelMedicineReservation(medicineReservationInfoDTO)){
               return new ResponseEntity<>(true,HttpStatus.OK);

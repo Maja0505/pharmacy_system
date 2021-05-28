@@ -43,6 +43,7 @@ public class PharmacyStorageItemController {
     }
 
     //#1[3.19]
+    @PreAuthorize("hasRole('ROLE_PATIENT')")
     @GetMapping("/{medicineId}/{patientId}")
     public ResponseEntity<List<PharmacyWithMedicinePriceDTO>> getAllPharmacyStorageItemsWithSelectedMedicine(@PathVariable Long medicineId,@PathVariable Long patientId){
         try {

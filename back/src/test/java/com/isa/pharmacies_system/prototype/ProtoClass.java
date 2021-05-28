@@ -1,7 +1,6 @@
 package com.isa.pharmacies_system.prototype;
 
-import com.isa.pharmacies_system.DTO.UserPasswordDTO;
-import com.isa.pharmacies_system.DTO.VacationRequestDTO;
+import com.isa.pharmacies_system.DTO.*;
 import com.isa.pharmacies_system.domain.medicine.*;
 import com.isa.pharmacies_system.domain.pharmacy.Address;
 import com.isa.pharmacies_system.domain.pharmacy.Pharmacy;
@@ -167,5 +166,47 @@ public class ProtoClass {
         v.setVacationStartDate(LocalDate.now());
         v.setVacationEndDate(LocalDate.now().plusMonths(1));
         return v;
+    }
+
+    public static Address protoAddress(){
+       Address a = new Address();
+       a.setStreetNumber("Bulevar");
+       a.setStreetNumber("12");
+       a.setCity("Novi Sad");
+       a.setCountry("Srbija");
+       a.setLatitude(11111);
+       a.setLongitude(22222);
+       return a;
+    }
+
+    public static UserPersonalInfoDTO protoUserPersonalInfoDTO(UserPersonalInfoDTO u){
+        u.setId(2l);
+        u. setFirstName("Peraaaa");
+        u.setLastName("Pericccc");
+        u.setAddress(protoAddress());
+        u.setPhoneNumber("065/123-123");
+        u.setEmail("patient1@gmail.com");
+        return u;
+    }
+
+    public static MedicineReservationDTO protoMedicineReservationDTO(MedicineReservationDTO m){
+        m.setDateOfTakingMedicine(LocalDate.now().plusDays(3));
+        return m;
+    }
+
+    public static MedicineReservationInfoDTO protoMedicineReservationInfo(MedicineReservationInfoDTO m){
+        m.setReservationId(1l);
+        m.setMedicineId(1l);
+        m.setPharmacyId(1l);
+        m.setMedicineName("Bromic");
+        m.setPharmacyName("Pharmacy1");
+        m.setTakingDate(LocalDate.now().plusDays(3));
+        m.setStatusOfMedicineReservation(StatusOfMedicineReservation.CREATED);
+        return m;
+    }
+
+    public static DermatologistAppointmentDTO protoDermatologistAppointmentDTO(DermatologistAppointmentDTO d){
+        d.setId(2);
+        return d;
     }
 }
