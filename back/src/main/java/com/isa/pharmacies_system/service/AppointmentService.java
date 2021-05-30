@@ -50,7 +50,6 @@ public class AppointmentService implements IAppointmentService {
         return patientAppointmentInfoDTOList;
     }
 
-
     private void doSort(List<PatientAppointmentInfoDTO> list,Comparator comparator,Boolean asc){
         if(asc){
             Collections.sort(list, comparator);

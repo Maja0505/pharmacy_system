@@ -10,4 +10,5 @@ public interface IMedicineReservationService {
     MedicineReservation getMedicineReservationInPharmacy(Long medicineReservationId,Long pharmacyId);
     void finishMedicineReservation(MedicineReservation medicineReservation);
     MedicineReservation getMedicineReservationById(Long medicineReservationId);
+    void increasePenaltyForMissedMedicineReservation();
 }
