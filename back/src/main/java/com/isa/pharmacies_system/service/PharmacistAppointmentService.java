@@ -236,6 +236,20 @@ public class PharmacistAppointmentService implements IPharmacistAppointmentServi
     }
 
     //Nemanja
+    @Override
+    public void setMissedPharmacistAppointmentEveryDayOnRightStatusAndIncreasePenaltyForPatient() {
+        List<PharmacistAppointment> allAppointmentsInPast = pharmacistAppointmentRepository.findAllReservedAppointmentsInPast();
+        for (PharmacistAppointment pa:
+             allAppointmentsInPast) {
+            if(pa.getPharmacistAppointmentStartTime().plusMinutes(pa.getPharmacistAppointmentDuration()).isBefore(LocalDateTime.now())){
+                addPatientPoint(pa.getPatientWithPharmacistAppointment());
+                pa.setStatusOfAppointment(StatusOfAppointment.Missed);
+                pharmacistAppointmentRepository.save(pa);
+            }
+        }
+    }
+
+    //Nemanja
     private void addPatientPoint(Patient patient) {
         patient.setPenalty(patient.getPenalty() + 1);
     }

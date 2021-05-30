@@ -29,4 +29,5 @@ public interface IDermatologistAppointmentService{
     Boolean bookDermatologistAppointmentByDermatologist(AppointmentScheduleByStaffDTO appointmentScheduleByStaffDTO,DermatologistAppointment dermatologistAppointment);
     Boolean changeDermatologistAppointmentStatusToMissed(DermatologistAppointment dermatologistAppointment);
     Boolean bookDermatologistAppointmentTest(Long patientId,Long appointmentId,Long milliseconds);
+    void setMissedDermatologistAppointmentEveryDayOnRightStatusAndIncreasePenaltyForPatient();
 }

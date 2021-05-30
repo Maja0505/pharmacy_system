@@ -12,4 +12,5 @@ public interface IMedicineReservationService {
     MedicineReservation getMedicineReservationById(Long medicineReservationId);
     void finishMedicineReservationTest(MedicineReservation medicineReservation,Long milliseconds);
     Boolean createMedicineReservationTest(MedicineReservation medicineReservation,Long milliseconds);
+    void increasePenaltyForMissedMedicineReservation();
 }

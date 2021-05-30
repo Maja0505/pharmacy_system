@@ -158,8 +158,6 @@ insert into dermatologist_appointment (dermatologist_appointment_start_time,derm
 insert into dermatologist_appointment (dermatologist_appointment_start_time,dermatologist_appointment_end_time,id,dermatologist_for_appointment_id,patient_with_dermatologist_appointment_id,pharmacy_for_dermatologist_appointment_id) values('2021-05-28 14:55','2021-05-28 15:50',14,8,null,1);
 
 
-
-
 insert into pharmacist_appointment (pharmacist_appointment_duration,pharmacist_appointment_start_time,id,pharmacist_for_appointment_id,patient_with_pharmacist_appointment_id) values (16,'2021-05-22 19:05',1,6,1);
 insert into pharmacist_appointment (pharmacist_appointment_duration,pharmacist_appointment_start_time,id,pharmacist_for_appointment_id,patient_with_pharmacist_appointment_id) values (20,'2021-05-26 19:20',2,6,2);
 insert into pharmacist_appointment (pharmacist_appointment_duration,pharmacist_appointment_start_time,id,pharmacist_for_appointment_id,patient_with_pharmacist_appointment_id) values (45,'2021-05-16 14:35',3,7,1);
@@ -173,8 +171,7 @@ insert into pharmacist_appointment (pharmacist_appointment_duration,pharmacist_a
 insert into medicine_reservations(id,patient_for_medicine_reservation_id,date_of_taking_medicine,pharmacy_for_medicine_reservation_id,status_of_medicine_reservation,reserved_medicine_id,version) values (nextval('my_seq_gen_medicine_reservation'),1,'2021-05-15',1,2,1,1);
 insert into medicine_reservations(id,patient_for_medicine_reservation_id,date_of_taking_medicine,pharmacy_for_medicine_reservation_id,status_of_medicine_reservation,reserved_medicine_id,version) values (nextval('my_seq_gen_medicine_reservation'),1,'2021-05-28',1,2,2,1);
 insert into medicine_reservations(id,patient_for_medicine_reservation_id,date_of_taking_medicine,pharmacy_for_medicine_reservation_id,status_of_medicine_reservation,reserved_medicine_id,version) values (nextval('my_seq_gen_medicine_reservation'),1,'2021-05-28',1,2,3,1);
-insert into medicine_reservations(id,patient_for_medicine_reservation_id,date_of_taking_medicine,pharmacy_for_medicine_reservation_id,status_of_medicine_reservation,reserved_medicine_id,version) values (nextval('my_seq_gen_medicine_reservation'),1,'2021-05-21',2,2,4,1);
-
+insert into medicine_reservations(id,patient_for_medicine_reservation_id,date_of_taking_medicine,pharmacy_for_medicine_reservation_id,status_of_medicine_reservation,reserved_medicine_id,version) values (nextval('my_seq_gen_medicine_reservation'),2,'2021-06-01',2,2,4,1);
 
 insert into storages(id,type_of_storage) values (nextval('my_seq_storage'),1);
 
@@ -186,8 +183,8 @@ insert into items(id,medicine_amount,type_of_item,medicine_item_id,version) valu
 insert into items(id,medicine_amount,type_of_item,medicine_item_id,version) values (nextval('my_seq_item'),5,4,4,1);
 
 /*type:EPrescription*/
-insert into items(id,medicine_amount,type_of_item,medicine_item_id) values (nextval('my_seq_item'),5,0,4,1);
-insert into items(id,medicine_amount,type_of_item,medicine_item_id) values (nextval('my_seq_item'),5,0,3,1);
+insert into items(id,medicine_amount,type_of_item,medicine_item_id,version) values (nextval('my_seq_item'),5,0,4,1);
+insert into items(id,medicine_amount,type_of_item,medicine_item_id,version) values (nextval('my_seq_item'),5,0,3,1);
 
 
 insert into e_prescriptions(id,creation_date,patient_foreprescription_id,status_ofeprescription) values (1,'2021-05-16 19:05',1,0);

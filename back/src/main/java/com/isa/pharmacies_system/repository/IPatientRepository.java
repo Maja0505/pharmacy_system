@@ -25,4 +25,7 @@ public interface IPatientRepository extends JpaRepository<Patient, Long> {
 
     @Query("select p.patientEPrescriptions from Patient p where p.id=?1")
     List<EPrescription> getAllEPrescriptionsForPatient(Long id);
+
+    @Query("select p from Patient p where p.penalty > 0 ")
+    List<Patient> findAllPatientsWithMoreThenZeroPenalties();
 }

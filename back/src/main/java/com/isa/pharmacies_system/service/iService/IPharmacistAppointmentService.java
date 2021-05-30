@@ -23,4 +23,5 @@ public interface IPharmacistAppointmentService{
     Boolean cancelPharmacistAppointment(Long appointmentId);
     Boolean changePharmacistAppointmentStatusToMissed(PharmacistAppointment pharmacistAppointment);
     Boolean bookPharmacistAppointmentTest(Long patientId, Long pharmacistId, PharmacistAppointmentTimeDTO timeDTO,Boolean isPatient,Long milliseconds);
+    void setMissedPharmacistAppointmentEveryDayOnRightStatusAndIncreasePenaltyForPatient();
 }
