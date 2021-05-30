@@ -15,6 +15,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import com.isa.pharmacies_system.domain.schedule.StatusOfAppointment;
 import com.isa.pharmacies_system.domain.user.Patient;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
@@ -57,6 +58,7 @@ public class DermatologistAppointmentService implements IDermatologistAppointmen
     }
 
     //#1[3.13]
+    @Transactional
     @Override
     public Boolean bookDermatologistAppointment(Long patientId,Long appointmentId){
 
@@ -289,4 +291,26 @@ public class DermatologistAppointmentService implements IDermatologistAppointmen
     private void addPatientPoint(Patient patient) {
         patient.setPenalty(patient.getPenalty() + 1);
     }
+
+    //Nemanja
+    @Transactional
+    @Override
+    public Boolean bookDermatologistAppointmentTest(Long patientId,Long appointmentId,Long milliseconds){
+
+        DermatologistAppointment dermatologistAppointment = findOne(appointmentId);
+        Patient patient = patientRepository.findById(patientId).orElse(null);
+        if(patient != null && patient.getPenalty() < 3){
+            if(isAppointmentOpen(dermatologistAppointment)
+                    && !doesPatientHaveAnotherAppointmentInSameTime(patient,dermatologistAppointment)){
+                dermatologistAppointment.setPatientWithDermatologistAppointment(patient);
+                dermatologistAppointment.setStatusOfAppointment(StatusOfAppointment.Reserved);
+                try { Thread.sleep(milliseconds); } catch (InterruptedException e) {}
+                dermatologistAppointmentRepository.save(dermatologistAppointment);
+                return true;
+            }
+        }
+
+        return false;
+    }
+
 }

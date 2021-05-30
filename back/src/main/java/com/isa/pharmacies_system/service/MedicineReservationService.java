@@ -8,6 +8,7 @@ import com.isa.pharmacies_system.repository.IMedicineReservationRepository;
 import com.isa.pharmacies_system.repository.IPharmacyStorageItemRepository;
 import com.isa.pharmacies_system.service.iService.IMedicineReservationService;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Duration;
 import java.time.LocalDate;
@@ -84,6 +85,7 @@ public class MedicineReservationService implements IMedicineReservationService {
     }
 
     //Nemanja
+    @Transactional
     @Override
     public void finishMedicineReservation(MedicineReservation medicineReservation) {
         if(medicineReservation != null){
@@ -99,5 +101,19 @@ public class MedicineReservationService implements IMedicineReservationService {
     public MedicineReservation getMedicineReservationById(Long medicineReservationId) {
         return medicineReservationRepository.findById(medicineReservationId).orElse(null);
     }
+
+    //Nemanja
+    @Transactional
+    @Override
+    public void finishMedicineReservationTest(MedicineReservation medicineReservation,Long milliseconds) {
+        if(medicineReservation != null){
+            if(medicineReservation.getStatusOfMedicineReservation().equals(StatusOfMedicineReservation.CREATED)){
+                medicineReservation.setStatusOfMedicineReservation(StatusOfMedicineReservation.FINISHED);
+                try { Thread.sleep(milliseconds); } catch (InterruptedException e) {}
+                medicineReservationRepository.save(medicineReservation);
+            }
+        }
+    }
+
 
 }
