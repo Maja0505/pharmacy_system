@@ -56,7 +56,7 @@ class MedicineReservationControllerTest {
         MedicineReservationDTO m = protoMedicineReservationDTO(new MedicineReservationDTO());
         String json = "{\"dateOfTakingMedicine\":\"" + m.getDateOfTakingMedicine() +  "\"" + "}";
         System.out.println(json);
-        this.mockMvc.perform(post(URL_PREFIX + "/create/2/1/1").contentType(contentType).content(json)).andExpect(status().isCreated());
+        this.mockMvc.perform(post(URL_PREFIX + "/create/2/2/1").contentType(contentType).content(json)).andExpect(status().isCreated());
     }
 
     @Test
@@ -81,7 +81,7 @@ class MedicineReservationControllerTest {
     @Test
     void getAllMedicinesShortVersion() throws Exception {
         mockMvc.perform(get(URL_PREFIX_MEDICINE + "/all/short")).andExpect(status().isOk())
-                .andExpect(content().contentType(contentType)).andExpect(jsonPath("$", hasSize(1)))
+                .andExpect(content().contentType(contentType)).andExpect(jsonPath("$", hasSize(2)))
                 .andExpect(jsonPath("$.[*].medicineId").value(hasItem(1)))
                 .andExpect(jsonPath("$.[*].medicineName").value(hasItem("Bromic")));
     }

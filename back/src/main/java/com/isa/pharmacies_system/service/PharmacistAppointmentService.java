@@ -236,6 +236,7 @@ public class PharmacistAppointmentService implements IPharmacistAppointmentServi
     }
 
     //Nemanja
+    @Transactional
     @Override
     public void setMissedPharmacistAppointmentEveryDayOnRightStatusAndIncreasePenaltyForPatient() {
         List<PharmacistAppointment> allAppointmentsInPast = pharmacistAppointmentRepository.findAllReservedAppointmentsInPast();

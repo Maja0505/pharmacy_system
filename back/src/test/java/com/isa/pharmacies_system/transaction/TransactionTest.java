@@ -227,5 +227,37 @@ public class TransactionTest {
 
     }
 
+    @Test(expected = ObjectOptimisticLockingFailureException.class)
+    public void testOptimisticLockingScenarioConflict3Student1() throws Throwable {
 
+        ExecutorService executor = Executors.newFixedThreadPool(2);
+        Future<?> future1 = executor.submit(new Runnable() {
+            @Override
+            public void run() {
+                System.out.println("Startovan Thread 1. ");
+                medicineReservationService.increasePenaltyForMissedMedicineReservationTest(3000L);
+                System.out.println("Thread 1 upisao : ");
+            }
+        });
+        executor.submit(new Runnable() {
+
+            @Override
+            public void run() {
+                System.out.println("Startovan Thread 2. Pacijent 2 pokusava da zakaze novi pregled");
+                DermatologistAppointment dermatologistAppointment = dermatologistAppointmentService.findOne(4l);
+                dermatologistAppointmentService.changeDermatologistAppointmentStatusToMissedTest(dermatologistAppointment,0l);
+                System.out.println("Thread 2 upisao : ");
+            }
+        });
+        try {
+            future1.get();
+        } catch (ExecutionException e) {
+            System.out.println("Exception from thread " + e.getCause().getClass());
+            throw e.getCause();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        executor.shutdown();
+
+    }
 }

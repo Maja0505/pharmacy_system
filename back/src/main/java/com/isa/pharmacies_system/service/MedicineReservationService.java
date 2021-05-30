@@ -42,6 +42,11 @@ public class MedicineReservationService implements IMedicineReservationService {
     public Boolean createMedicineReservation(MedicineReservation medicineReservation){
         //uraditi provere
         PharmacyStorageItem pharmacyStorageItem = pharmacyStorageItemRepository.getSelectedMedicineFromPharmacyStorage(medicineReservation.getReservedMedicine().getId(),medicineReservation.getPharmacyForMedicineReservation().getId());
+        System.out.println(pharmacyStorageItem != null);
+        System.out.println(doesPharmacyHaveSelectedMedicineInStorage(pharmacyStorageItem));
+        System.out.println(medicineReservation.getPatientForMedicineReservation().getPenalty() < 3);
+
+
         if(pharmacyStorageItem != null
                 && doesPharmacyHaveSelectedMedicineInStorage(pharmacyStorageItem)
                 && medicineReservation.getPatientForMedicineReservation().getPenalty() < 3){
@@ -141,6 +146,7 @@ public class MedicineReservationService implements IMedicineReservationService {
     }
 
 
+    @Transactional
     @Override
     public void increasePenaltyForMissedMedicineReservation() {
         List<MedicineReservation> medicineReservations = medicineReservationRepository.getAllMedicineReservationsWhoseDateIsInThePast();
@@ -150,6 +156,24 @@ public class MedicineReservationService implements IMedicineReservationService {
             patient.setPenalty(patient.getPenalty() + 1);
             PharmacyStorageItem pharmacyStorageItem = pharmacyStorageItemRepository.getSelectedMedicineFromPharmacyStorage(medicineReservation.getReservedMedicine().getId(),medicineReservation.getPharmacyForMedicineReservation().getId());
             pharmacyStorageItem.setMedicineAmount(pharmacyStorageItem.getMedicineAmount() + 1);
+            pharmacyStorageItemRepository.save(pharmacyStorageItem);
+            medicineReservationRepository.save(medicineReservation);
+            patientRepository.save(patient);
+
+        }
+    }
+
+    @Transactional
+    @Override
+    public void increasePenaltyForMissedMedicineReservationTest(Long milliseconds) {
+        List<MedicineReservation> medicineReservations = medicineReservationRepository.getAllMedicineReservationsWhoseDateIsInThePast();
+        for (MedicineReservation medicineReservation: medicineReservations) {
+            medicineReservation.setStatusOfMedicineReservation(StatusOfMedicineReservation.MISSED);
+            Patient patient = medicineReservation.getPatientForMedicineReservation();
+            patient.setPenalty(patient.getPenalty() + 1);
+            PharmacyStorageItem pharmacyStorageItem = pharmacyStorageItemRepository.getSelectedMedicineFromPharmacyStorage(medicineReservation.getReservedMedicine().getId(),medicineReservation.getPharmacyForMedicineReservation().getId());
+            pharmacyStorageItem.setMedicineAmount(pharmacyStorageItem.getMedicineAmount() + 1);
+            try { Thread.sleep(milliseconds); } catch (InterruptedException e) {}
             pharmacyStorageItemRepository.save(pharmacyStorageItem);
             medicineReservationRepository.save(medicineReservation);
             patientRepository.save(patient);

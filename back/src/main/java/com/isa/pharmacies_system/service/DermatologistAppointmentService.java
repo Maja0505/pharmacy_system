@@ -276,6 +276,7 @@ public class DermatologistAppointmentService implements IDermatologistAppointmen
     }
 
     //Nemanja
+    @Transactional
     @Override
     public Boolean changeDermatologistAppointmentStatusToMissed(DermatologistAppointment dermatologistAppointment) {
         if(dermatologistAppointment.getStatusOfAppointment().equals(StatusOfAppointment.Reserved) && dermatologistAppointment.getDermatologistAppointmentStartTime().isBefore(LocalDateTime.now())){
@@ -287,6 +288,7 @@ public class DermatologistAppointmentService implements IDermatologistAppointmen
         return false;
     }
 
+    @Transactional
     @Override
     public void setMissedDermatologistAppointmentEveryDayOnRightStatusAndIncreasePenaltyForPatient() {
         List<DermatologistAppointment> listReservedAppointmentsInPast = dermatologistAppointmentRepository.findAllReservedDermatologistAppointmentInPast();
@@ -297,6 +299,7 @@ public class DermatologistAppointmentService implements IDermatologistAppointmen
             dermatologistAppointmentRepository.save(da);
         }
     }
+
 
     //Nemanja
     private void addPatientPoint(Patient patient) {
@@ -321,6 +324,20 @@ public class DermatologistAppointmentService implements IDermatologistAppointmen
             }
         }
 
+        return false;
+    }
+
+    //Nemanja
+    @Transactional
+    @Override
+    public Boolean changeDermatologistAppointmentStatusToMissedTest(DermatologistAppointment dermatologistAppointment,Long milliseconds) {
+        if(dermatologistAppointment.getStatusOfAppointment().equals(StatusOfAppointment.Reserved) && dermatologistAppointment.getDermatologistAppointmentStartTime().isBefore(LocalDateTime.now())){
+            dermatologistAppointment.setStatusOfAppointment(StatusOfAppointment.Missed);
+            addPatientPoint(dermatologistAppointment.getPatientWithDermatologistAppointment());
+            try { Thread.sleep(milliseconds); } catch (InterruptedException e) {}
+            dermatologistAppointmentRepository.save(dermatologistAppointment);
+            return true;
+        }
         return false;
     }
 
