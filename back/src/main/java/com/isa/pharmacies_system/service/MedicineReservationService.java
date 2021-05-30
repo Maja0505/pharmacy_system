@@ -121,7 +121,9 @@ public class MedicineReservationService implements IMedicineReservationService {
         if(medicineReservation != null){
             if(medicineReservation.getStatusOfMedicineReservation().equals(StatusOfMedicineReservation.CREATED)){
                 medicineReservation.setStatusOfMedicineReservation(StatusOfMedicineReservation.FINISHED);
-                try { Thread.sleep(milliseconds); } catch (InterruptedException e) {}
+                try { Thread.sleep(milliseconds); } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                }
                 medicineReservationRepository.save(medicineReservation);
             }
         }
@@ -138,7 +140,9 @@ public class MedicineReservationService implements IMedicineReservationService {
                 && medicineReservation.getPatientForMedicineReservation().getPenalty() < 3){
             medicineReservationRepository.save(medicineReservation);
             pharmacyStorageItem.setMedicineAmount(pharmacyStorageItem.getMedicineAmount() - 1);
-            try { Thread.sleep(milliseconds); } catch (InterruptedException e) {}
+            try { Thread.sleep(milliseconds); } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+            }
             pharmacyStorageItemRepository.save(pharmacyStorageItem);
             return true;
         }
@@ -173,7 +177,9 @@ public class MedicineReservationService implements IMedicineReservationService {
             patient.setPenalty(patient.getPenalty() + 1);
             PharmacyStorageItem pharmacyStorageItem = pharmacyStorageItemRepository.getSelectedMedicineFromPharmacyStorage(medicineReservation.getReservedMedicine().getId(),medicineReservation.getPharmacyForMedicineReservation().getId());
             pharmacyStorageItem.setMedicineAmount(pharmacyStorageItem.getMedicineAmount() + 1);
-            try { Thread.sleep(milliseconds); } catch (InterruptedException e) {}
+            try { Thread.sleep(milliseconds); } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+            }
             pharmacyStorageItemRepository.save(pharmacyStorageItem);
             medicineReservationRepository.save(medicineReservation);
             patientRepository.save(patient);

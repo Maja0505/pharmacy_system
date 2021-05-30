@@ -113,7 +113,6 @@ public class TransactionTest {
 
     }
 
-
     //Nemanja
     @Test(expected = ObjectOptimisticLockingFailureException.class)
     public void testOptimisticLockingScenarioConflict3Student3() throws Throwable {
@@ -186,7 +185,6 @@ public class TransactionTest {
         executor.shutdown();
 
     }
-
 
     @Test
     public void testPessimisticLockingScenarioConflict2Student1() throws Throwable {

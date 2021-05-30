@@ -318,7 +318,9 @@ public class DermatologistAppointmentService implements IDermatologistAppointmen
                     && !doesPatientHaveAnotherAppointmentInSameTime(patient,dermatologistAppointment)){
                 dermatologistAppointment.setPatientWithDermatologistAppointment(patient);
                 dermatologistAppointment.setStatusOfAppointment(StatusOfAppointment.Reserved);
-                try { Thread.sleep(milliseconds); } catch (InterruptedException e) {}
+                try { Thread.sleep(milliseconds); } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                }
                 dermatologistAppointmentRepository.save(dermatologistAppointment);
                 return true;
             }
@@ -334,7 +336,9 @@ public class DermatologistAppointmentService implements IDermatologistAppointmen
         if(dermatologistAppointment.getStatusOfAppointment().equals(StatusOfAppointment.Reserved) && dermatologistAppointment.getDermatologistAppointmentStartTime().isBefore(LocalDateTime.now())){
             dermatologistAppointment.setStatusOfAppointment(StatusOfAppointment.Missed);
             addPatientPoint(dermatologistAppointment.getPatientWithDermatologistAppointment());
-            try { Thread.sleep(milliseconds); } catch (InterruptedException e) {}
+            try { Thread.sleep(milliseconds); } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+            }
             dermatologistAppointmentRepository.save(dermatologistAppointment);
             return true;
         }

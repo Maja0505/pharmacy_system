@@ -271,7 +271,9 @@ public class PharmacistAppointmentService implements IPharmacistAppointmentServi
                 && ((pharmacistAppointment.getPatientWithPharmacistAppointment().getPenalty() < 3 && isPatient) || (!isPatient))){
 
             fillPriceForPharmacistAppointment(timeDTO,pharmacistAppointment);
-            try { Thread.sleep(milliseconds); } catch (InterruptedException e) {}
+            try { Thread.sleep(milliseconds); } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+            }
             pharmacistAppointmentRepository.save(pharmacistAppointment);
 
             return true;
