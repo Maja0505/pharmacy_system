@@ -113,34 +113,34 @@ insert into suppliers (id) values (10);
 insert into suppliers (id) values (11);
 
 /*pharmacist appointment*/
-insert into appointments (id,appointment_points,appointment_price,status_of_appointment,type_of_appointment) values (nextval('my_seq_appointment'),5,13,2,1);
-insert into appointments (id,appointment_points,appointment_price,status_of_appointment,type_of_appointment) values (nextval('my_seq_appointment'),5,40,3,1);
-insert into appointments (id,appointment_points,appointment_price,status_of_appointment,type_of_appointment) values (nextval('my_seq_appointment'),5,50,3,1);
+insert into appointments (id,appointment_points,appointment_price,status_of_appointment,type_of_appointment,version) values (nextval('my_seq_appointment'),5,13,2,1,1);
+insert into appointments (id,appointment_points,appointment_price,status_of_appointment,type_of_appointment,version) values (nextval('my_seq_appointment'),5,40,3,1,1);
+insert into appointments (id,appointment_points,appointment_price,status_of_appointment,type_of_appointment,version) values (nextval('my_seq_appointment'),5,50,3,1,1);
 
 /*dermatologist missed appointment*/
-insert into appointments (id,appointment_points,appointment_price,status_of_appointment,type_of_appointment) values (nextval('my_seq_appointment'),5,120,2,0);
-insert into appointments (id,appointment_points,appointment_price,status_of_appointment,type_of_appointment) values (nextval('my_seq_appointment'),5,15,2,0);
+insert into appointments (id,appointment_points,appointment_price,status_of_appointment,type_of_appointment,version) values (nextval('my_seq_appointment'),5,120,2,0,1);
+insert into appointments (id,appointment_points,appointment_price,status_of_appointment,type_of_appointment,version) values (nextval('my_seq_appointment'),5,15,2,0,1);
 
 /*dermatologist expired appointment*/
-insert into appointments (id,appointment_points,appointment_price,status_of_appointment,type_of_appointment) values (nextval('my_seq_appointment'),5,133,3,0);
-insert into appointments (id,appointment_points,appointment_price,status_of_appointment,type_of_appointment) values (nextval('my_seq_appointment'),5,15,3,0);
-insert into appointments (id,appointment_points,appointment_price,status_of_appointment,type_of_appointment) values (nextval('my_seq_appointment'),5,133,3,0);
-insert into appointments (id,appointment_points,appointment_price,status_of_appointment,type_of_appointment) values (nextval('my_seq_appointment'),5,31,3,0);
+insert into appointments (id,appointment_points,appointment_price,status_of_appointment,type_of_appointment,version) values (nextval('my_seq_appointment'),5,133,3,0,1);
+insert into appointments (id,appointment_points,appointment_price,status_of_appointment,type_of_appointment,version) values (nextval('my_seq_appointment'),5,15,3,0,1);
+insert into appointments (id,appointment_points,appointment_price,status_of_appointment,type_of_appointment,version) values (nextval('my_seq_appointment'),5,133,3,0,1);
+insert into appointments (id,appointment_points,appointment_price,status_of_appointment,type_of_appointment,version) values (nextval('my_seq_appointment'),5,31,3,0,1);
 
 /*dermatologist reserved appointment*/
-insert into appointments (id,appointment_points,appointment_price,status_of_appointment,type_of_appointment) values (nextval('my_seq_appointment'),5,133,1,0);
-insert into appointments (id,appointment_points,appointment_price,status_of_appointment,type_of_appointment) values (nextval('my_seq_appointment'),5,31,1,0);
+insert into appointments (id,appointment_points,appointment_price,status_of_appointment,type_of_appointment,version) values (nextval('my_seq_appointment'),5,133,1,0,1);
+insert into appointments (id,appointment_points,appointment_price,status_of_appointment,type_of_appointment,version) values (nextval('my_seq_appointment'),5,31,1,0,1);
 
 
 /*dermatologist open appointment*/
-insert into appointments (id,appointment_points,appointment_price,status_of_appointment,type_of_appointment) values (nextval('my_seq_appointment'),5,330,0,0);
-insert into appointments (id,appointment_points,appointment_price,status_of_appointment,type_of_appointment) values (nextval('my_seq_appointment'),5,10,0,0);
-insert into appointments (id,appointment_points,appointment_price,status_of_appointment,type_of_appointment) values (nextval('my_seq_appointment'),5,54,0,0);
+insert into appointments (id,appointment_points,appointment_price,status_of_appointment,type_of_appointment,version) values (nextval('my_seq_appointment'),5,330,0,0,1);
+insert into appointments (id,appointment_points,appointment_price,status_of_appointment,type_of_appointment,version) values (nextval('my_seq_appointment'),5,10,0,0,1);
+insert into appointments (id,appointment_points,appointment_price,status_of_appointment,type_of_appointment,version) values (nextval('my_seq_appointment'),5,54,0,0,1);
 
 /*pharmacist reserved appointment*/
-insert into appointments (id,appointment_points,appointment_price,status_of_appointment,type_of_appointment) values (nextval('my_seq_appointment'),5,13,1,1);
-insert into appointments (id,appointment_points,appointment_price,status_of_appointment,type_of_appointment) values (nextval('my_seq_appointment'),5,40,1,1);
-insert into appointments (id,appointment_points,appointment_price,status_of_appointment,type_of_appointment) values (nextval('my_seq_appointment'),5,50,1,1);
+insert into appointments (id,appointment_points,appointment_price,status_of_appointment,type_of_appointment,version) values (nextval('my_seq_appointment'),5,13,1,1,1);
+insert into appointments (id,appointment_points,appointment_price,status_of_appointment,type_of_appointment,version) values (nextval('my_seq_appointment'),5,40,1,1,1);
+insert into appointments (id,appointment_points,appointment_price,status_of_appointment,type_of_appointment,version) values (nextval('my_seq_appointment'),5,50,1,1,1);
 
 
 
@@ -170,24 +170,24 @@ insert into pharmacist_appointment (pharmacist_appointment_duration,pharmacist_a
 
 
 
-insert into medicine_reservations(id,patient_for_medicine_reservation_id,date_of_taking_medicine,pharmacy_for_medicine_reservation_id,status_of_medicine_reservation,reserved_medicine_id) values (nextval('my_seq_gen_medicine_reservation'),1,'2021-05-15',1,2,1);
-insert into medicine_reservations(id,patient_for_medicine_reservation_id,date_of_taking_medicine,pharmacy_for_medicine_reservation_id,status_of_medicine_reservation,reserved_medicine_id) values (nextval('my_seq_gen_medicine_reservation'),1,'2021-05-28',1,2,2);
-insert into medicine_reservations(id,patient_for_medicine_reservation_id,date_of_taking_medicine,pharmacy_for_medicine_reservation_id,status_of_medicine_reservation,reserved_medicine_id) values (nextval('my_seq_gen_medicine_reservation'),1,'2021-05-28',1,2,3);
-insert into medicine_reservations(id,patient_for_medicine_reservation_id,date_of_taking_medicine,pharmacy_for_medicine_reservation_id,status_of_medicine_reservation,reserved_medicine_id) values (nextval('my_seq_gen_medicine_reservation'),1,'2021-05-21',2,2,4);
+insert into medicine_reservations(id,patient_for_medicine_reservation_id,date_of_taking_medicine,pharmacy_for_medicine_reservation_id,status_of_medicine_reservation,reserved_medicine_id,version) values (nextval('my_seq_gen_medicine_reservation'),1,'2021-05-15',1,2,1,1);
+insert into medicine_reservations(id,patient_for_medicine_reservation_id,date_of_taking_medicine,pharmacy_for_medicine_reservation_id,status_of_medicine_reservation,reserved_medicine_id,version) values (nextval('my_seq_gen_medicine_reservation'),1,'2021-05-28',1,2,2,1);
+insert into medicine_reservations(id,patient_for_medicine_reservation_id,date_of_taking_medicine,pharmacy_for_medicine_reservation_id,status_of_medicine_reservation,reserved_medicine_id,version) values (nextval('my_seq_gen_medicine_reservation'),1,'2021-05-28',1,2,3,1);
+insert into medicine_reservations(id,patient_for_medicine_reservation_id,date_of_taking_medicine,pharmacy_for_medicine_reservation_id,status_of_medicine_reservation,reserved_medicine_id,version) values (nextval('my_seq_gen_medicine_reservation'),1,'2021-05-21',2,2,4,1);
 
 
 insert into storages(id,type_of_storage) values (nextval('my_seq_storage'),1);
 
 insert into pharmacy_storages(id,pharmacy_id) values (1,1);
 
-insert into items(id,medicine_amount,type_of_item,medicine_item_id) values (nextval('my_seq_item'),30,4,1);
-insert into items(id,medicine_amount,type_of_item,medicine_item_id) values (nextval('my_seq_item'),10,4,2);
-insert into items(id,medicine_amount,type_of_item,medicine_item_id) values (nextval('my_seq_item'),45,4,3);
-insert into items(id,medicine_amount,type_of_item,medicine_item_id) values (nextval('my_seq_item'),5,4,4);
+insert into items(id,medicine_amount,type_of_item,medicine_item_id,version) values (nextval('my_seq_item'),30,4,1,1);
+insert into items(id,medicine_amount,type_of_item,medicine_item_id,version) values (nextval('my_seq_item'),10,4,2,1);
+insert into items(id,medicine_amount,type_of_item,medicine_item_id,version) values (nextval('my_seq_item'),45,4,3,1);
+insert into items(id,medicine_amount,type_of_item,medicine_item_id,version) values (nextval('my_seq_item'),5,4,4,1);
 
 /*type:EPrescription*/
-insert into items(id,medicine_amount,type_of_item,medicine_item_id) values (nextval('my_seq_item'),5,0,4);
-insert into items(id,medicine_amount,type_of_item,medicine_item_id) values (nextval('my_seq_item'),5,0,3);
+insert into items(id,medicine_amount,type_of_item,medicine_item_id) values (nextval('my_seq_item'),5,0,4,1);
+insert into items(id,medicine_amount,type_of_item,medicine_item_id) values (nextval('my_seq_item'),5,0,3,1);
 
 
 insert into e_prescriptions(id,creation_date,patient_foreprescription_id,status_ofeprescription) values (1,'2021-05-16 19:05',1,0);

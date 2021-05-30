@@ -31,17 +31,15 @@ insert into dermatologist_appointment (dermatologist_appointment_start_time,derm
 insert into medicine_infos (id, form_of_medicine, manufacturer_of_medicine, medicine_code, medicine_name, notes, prescription_regime, type_of_medicine) values (1,0,'Medic Pharmacy', '211236', 'Bromic','Brapoooooooo',1,1);
 insert into medicine (medicine_average_rating, id) values (0,1);
 
-insert into storages(id,type_of_storage) values (1,1);
-
-insert into pharmacy_storages(id,pharmacy_id) values (1,1);
-
-insert into items(id,medicine_amount,type_of_item,medicine_item_id) values (1,30,4,1);
-
-insert into pharmacy_storage_items(id,pharmacy_storage_with_item_id) values (1,1);
-
 insert into medicine_reservations(id,patient_for_medicine_reservation_id,date_of_taking_medicine,pharmacy_for_medicine_reservation_id,status_of_medicine_reservation,reserved_medicine_id,version) values (nextval('my_seq_gen_medicine_reservation'),2,'2021-05-15',1,2,1,1);
 insert into medicine_reservations(id,patient_for_medicine_reservation_id,date_of_taking_medicine,pharmacy_for_medicine_reservation_id,status_of_medicine_reservation,reserved_medicine_id,version) values (nextval('my_seq_gen_medicine_reservation'),2,'2022-05-15',1,2,1,1);
 
-
 INSERT INTO price_lists (id, dermatologist_appointment_price_per_hour, pharmacist_appointment_price_per_hour, pharmacy_id) VALUES (nextval('my_seq_price_list'), 10, 20, 1);
+
+insert into storages(id,type_of_storage) values (nextval('my_seq_storage'),1);
+insert into pharmacy_storages(id,pharmacy_id) values (1,1);
+insert into items(id,medicine_amount,type_of_item,medicine_item_id,version) values (nextval('my_seq_item'),1,4,1,1);
+insert into pharmacy_storage_items(id,pharmacy_storage_with_item_id) values (1,1);
+
+
 

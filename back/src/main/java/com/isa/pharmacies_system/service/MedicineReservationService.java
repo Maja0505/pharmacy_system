@@ -31,6 +31,7 @@ public class MedicineReservationService implements IMedicineReservationService {
     }
 
     //#1[3.19]
+    @Transactional
     @Override
     public Boolean createMedicineReservation(MedicineReservation medicineReservation){
         //uraditi provere
@@ -113,6 +114,24 @@ public class MedicineReservationService implements IMedicineReservationService {
                 medicineReservationRepository.save(medicineReservation);
             }
         }
+    }
+
+
+    @Transactional
+    @Override
+    public Boolean createMedicineReservationTest(MedicineReservation medicineReservation,Long milliseconds){
+        //uraditi provere
+        PharmacyStorageItem pharmacyStorageItem = pharmacyStorageItemRepository.getSelectedMedicineFromPharmacyStorage(medicineReservation.getReservedMedicine().getId(),medicineReservation.getPharmacyForMedicineReservation().getId());
+        if(pharmacyStorageItem != null
+                && doesPharmacyHaveSelectedMedicineInStorage(pharmacyStorageItem)
+                && medicineReservation.getPatientForMedicineReservation().getPenalty() < 3){
+            medicineReservationRepository.save(medicineReservation);
+            pharmacyStorageItem.setMedicineAmount(pharmacyStorageItem.getMedicineAmount() - 1);
+            try { Thread.sleep(milliseconds); } catch (InterruptedException e) {}
+            pharmacyStorageItemRepository.save(pharmacyStorageItem);
+            return true;
+        }
+        return false;
     }
 
 

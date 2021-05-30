@@ -4,19 +4,7 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 
 import static javax.persistence.InheritanceType.JOINED;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Inheritance;
-import javax.persistence.ManyToOne;
-import javax.persistence.SequenceGenerator;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Entity
 @Table(name="items")
@@ -26,6 +14,9 @@ public class Item {
 	@SequenceGenerator(name = "mySeqGenItem", sequenceName = "mySeqItem", initialValue = 1, allocationSize = 1)
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "mySeqGenItem")
 	private long id;
+
+	@Version
+	private Long version;
 
 	@JsonBackReference
 	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
@@ -80,6 +71,12 @@ public class Item {
 	public void setTypeOfItem(TypeOfItem typeOfItem) {
 		this.typeOfItem = typeOfItem;
 	}
-	
-	
+
+	public Long getVersion() {
+		return version;
+	}
+
+	public void setVersion(Long version) {
+		this.version = version;
+	}
 }

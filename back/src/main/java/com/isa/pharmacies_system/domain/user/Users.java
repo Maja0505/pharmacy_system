@@ -7,27 +7,13 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.CascadeType;
-import javax.persistence.FetchType;
-import javax.persistence.Id;
-import javax.persistence.Inheritance;
-import javax.persistence.ManyToMany;
-import javax.persistence.SequenceGenerator;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import com.isa.pharmacies_system.domain.pharmacy.Address;
 import com.isa.pharmacies_system.domain.user.Authority;
-
-import javax.persistence.ManyToOne;
 
 @Entity
 @Table(name = "users")
@@ -38,6 +24,9 @@ public class Users implements UserDetails {
 	@SequenceGenerator(name = "mySeqGenUsers", sequenceName = "mySeqUsers", initialValue = 1, allocationSize = 1)
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "mySeqGenUsers")
 	private long id;
+
+	@Version
+	private Long version;
 
 	@Column(name = "email", unique = true, nullable = false)
 	private String email;
@@ -225,5 +214,13 @@ public class Users implements UserDetails {
 
 	public void setEnableLogin(boolean enableLogin) {
 		this.enableLogin = enableLogin;
+	}
+
+	public Long getVersion() {
+		return version;
+	}
+
+	public void setVersion(Long version) {
+		this.version = version;
 	}
 }
