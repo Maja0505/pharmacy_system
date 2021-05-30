@@ -285,6 +285,17 @@ public class DermatologistAppointmentService implements IDermatologistAppointmen
         return false;
     }
 
+    @Override
+    public void setMissedDermatologistAppointmentEveryDayOnRightStatusAndIncreasePenaltyForPatient() {
+        List<DermatologistAppointment> listReservedAppointmentsInPast = dermatologistAppointmentRepository.findAllReservedDermatologistAppointmentInPast();
+        for (DermatologistAppointment da:
+             listReservedAppointmentsInPast) {
+            addPatientPoint(da.getPatientWithDermatologistAppointment());
+            da.setStatusOfAppointment(StatusOfAppointment.Missed);
+            dermatologistAppointmentRepository.save(da);
+        }
+    }
+
     //Nemanja
     private void addPatientPoint(Patient patient) {
         patient.setPenalty(patient.getPenalty() + 1);

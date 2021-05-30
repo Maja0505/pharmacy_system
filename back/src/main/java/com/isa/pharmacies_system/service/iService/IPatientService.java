@@ -36,4 +36,5 @@ public interface IPatientService {
     List<MedicineDTO> getAllMedicinesForPatient(Long id);
     List<PharmacyDTO> getAllPharmaciesForPatient(Long patientId);
     Boolean removeMedicineAllergies(Long patientId, Long medicineId);
+    void resetAllPenaltiesForPatient();
 }

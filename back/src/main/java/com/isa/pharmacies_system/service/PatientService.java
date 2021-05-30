@@ -121,6 +121,18 @@ public class PatientService implements IPatientService {
         return false;
     }
 
+    @Override
+    public void resetAllPenaltiesForPatient() {
+        List<Patient> patients = patientRepository.findAllPatientsWithMoreThenZeroPenalties();
+        try{
+            for (Patient patient: patients) {
+                patient.setPenalty(0);
+                patientRepository.save(patient);
+            }
+        }catch (Exception e){}
+
+    }
+
     //#1
     private Boolean doesMedicineExistInAllergies(Patient patient,Medicine medicine){
         return patient.getMedicineAllergies().stream().filter(m -> m.getId() == medicine.getId()).count()>0;

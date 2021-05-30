@@ -28,5 +28,9 @@ public interface IPharmacistAppointmentRepository extends JpaRepository<Pharmaci
     @Query("select a from PharmacistAppointment a where a.pharmacistForAppointment.id = ?1 and a.statusOfAppointment = 1 and a.pharmacistAppointmentStartTime > current_timestamp")
     List<PharmacistAppointment> findAllFutureReservedPharmacistAppointmentByPharmacist(Long id);
 
+    //Nemanja
+    @Query("select a from PharmacistAppointment a where  a.statusOfAppointment = 1 and a.pharmacistAppointmentStartTime < current_timestamp")
+    List<PharmacistAppointment> findAllReservedAppointmentsInPast();
+
 
 }

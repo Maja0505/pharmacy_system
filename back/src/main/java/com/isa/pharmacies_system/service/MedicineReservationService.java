@@ -4,9 +4,12 @@ import com.isa.pharmacies_system.DTO.MedicineReservationInfoDTO;
 import com.isa.pharmacies_system.domain.medicine.MedicineReservation;
 import com.isa.pharmacies_system.domain.medicine.StatusOfMedicineReservation;
 import com.isa.pharmacies_system.domain.storage.PharmacyStorageItem;
+import com.isa.pharmacies_system.domain.user.Patient;
 import com.isa.pharmacies_system.repository.IMedicineReservationRepository;
+import com.isa.pharmacies_system.repository.IPatientRepository;
 import com.isa.pharmacies_system.repository.IPharmacyStorageItemRepository;
 import com.isa.pharmacies_system.service.iService.IMedicineReservationService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.Duration;
@@ -21,6 +24,9 @@ public class MedicineReservationService implements IMedicineReservationService {
     private IMedicineReservationRepository medicineReservationRepository;
     private IPharmacyStorageItemRepository pharmacyStorageItemRepository;
     private UtilityMethods utilityMethods;
+    @Autowired
+    private IPatientRepository patientRepository;
+
 
     public MedicineReservationService(IMedicineReservationRepository medicineReservationRepository, IPharmacyStorageItemRepository pharmacyStorageItemRepository) {
         this.medicineReservationRepository = medicineReservationRepository;
@@ -98,6 +104,22 @@ public class MedicineReservationService implements IMedicineReservationService {
     @Override
     public MedicineReservation getMedicineReservationById(Long medicineReservationId) {
         return medicineReservationRepository.findById(medicineReservationId).orElse(null);
+    }
+
+    @Override
+    public void increasePenaltyForMissedMedicineReservation() {
+        List<MedicineReservation> medicineReservations = medicineReservationRepository.getAllMedicineReservationsWhoseDateIsInThePast();
+        for (MedicineReservation medicineReservation: medicineReservations) {
+            medicineReservation.setStatusOfMedicineReservation(StatusOfMedicineReservation.MISSED);
+            Patient patient = medicineReservation.getPatientForMedicineReservation();
+            patient.setPenalty(patient.getPenalty() + 1);
+            PharmacyStorageItem pharmacyStorageItem = pharmacyStorageItemRepository.getSelectedMedicineFromPharmacyStorage(medicineReservation.getReservedMedicine().getId(),medicineReservation.getPharmacyForMedicineReservation().getId());
+            pharmacyStorageItem.setMedicineAmount(pharmacyStorageItem.getMedicineAmount() + 1);
+            pharmacyStorageItemRepository.save(pharmacyStorageItem);
+            medicineReservationRepository.save(medicineReservation);
+            patientRepository.save(patient);
+
+        }
     }
 
 }
