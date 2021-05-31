@@ -11,6 +11,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -24,7 +25,6 @@ public class CustomUserDetailsService implements UserDetailsService {
 
 	private IUserRepository userRepository;
 
-	@Autowired
 	private PasswordEncoder passwordEncoder;
 
 	private AuthenticationManager authenticationManager;
@@ -32,6 +32,7 @@ public class CustomUserDetailsService implements UserDetailsService {
 	@Autowired
 	public CustomUserDetailsService(IUserRepository userRepository,
 			AuthenticationManager authenticationManager) {
+		this.passwordEncoder = new BCryptPasswordEncoder();
 		this.userRepository = userRepository;
 		this.authenticationManager = authenticationManager;
 	}
