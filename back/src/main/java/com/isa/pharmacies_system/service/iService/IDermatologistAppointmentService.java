@@ -28,5 +28,7 @@ public interface IDermatologistAppointmentService{
     List<DermatologistAppointment> findAllFutureReservedDermatologistAppointmentByDermatologist(Long dermatologistId);
     Boolean bookDermatologistAppointmentByDermatologist(AppointmentScheduleByStaffDTO appointmentScheduleByStaffDTO,DermatologistAppointment dermatologistAppointment);
     Boolean changeDermatologistAppointmentStatusToMissed(DermatologistAppointment dermatologistAppointment);
+    Boolean bookDermatologistAppointmentTest(Long patientId,Long appointmentId,Long milliseconds);
     void setMissedDermatologistAppointmentEveryDayOnRightStatusAndIncreasePenaltyForPatient();
+    Boolean changeDermatologistAppointmentStatusToMissedTest(DermatologistAppointment dermatologistAppointment,Long milliseconds);
 }

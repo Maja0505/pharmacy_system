@@ -121,6 +121,7 @@ public class PatientService implements IPatientService {
         return false;
     }
 
+
     @Override
     public void resetAllPenaltiesForPatient() {
         List<Patient> patients = patientRepository.findAllPatientsWithMoreThenZeroPenalties();

@@ -22,5 +22,6 @@ public interface IPharmacistAppointmentService{
     List<PharmacistAppointment> searchAllFutureReservedByPatientFirstAndLastName(Long pharmacistId, String firstName, String lastName);
     Boolean cancelPharmacistAppointment(Long appointmentId);
     Boolean changePharmacistAppointmentStatusToMissed(PharmacistAppointment pharmacistAppointment);
+    Boolean bookPharmacistAppointmentTest(Long patientId, Long pharmacistId, PharmacistAppointmentTimeDTO timeDTO,Boolean isPatient,Long milliseconds);
     void setMissedPharmacistAppointmentEveryDayOnRightStatusAndIncreasePenaltyForPatient();
 }

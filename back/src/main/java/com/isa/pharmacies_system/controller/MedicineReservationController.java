@@ -52,14 +52,15 @@ public class MedicineReservationController {
                 Patient patient = patientService.findOne(patientId);
                 Medicine medicine = medicineService.findOne(medicineId);
                 Pharmacy pharmacy = pharmacyService.getById(pharmacyId);
+                System.out.println("prvi if");
                 MedicineReservation medicineReservation = medicineReservationConverter.convertMedicineReservationDTOToMedicineReservarvation(medicineReservationDTO,patient,medicine,pharmacy);
                 if(medicineReservationService.createMedicineReservation(medicineReservation)){
                     emailService.sendNotificationForSuccessMedicineReservation(medicineReservation);
                     return new ResponseEntity<>(true,HttpStatus.CREATED);
                 }
-                return new ResponseEntity<>(false,HttpStatus.OK);
+                return new ResponseEntity<>(false,HttpStatus.FORBIDDEN);
             }
-            return new ResponseEntity<>(false,HttpStatus.OK);
+            return new ResponseEntity<>(false,HttpStatus.FORBIDDEN);
         }catch (Exception e){
             Thread.currentThread().interrupt();
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
