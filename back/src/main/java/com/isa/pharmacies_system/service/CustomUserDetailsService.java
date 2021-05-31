@@ -24,15 +24,15 @@ public class CustomUserDetailsService implements UserDetailsService {
 
 	private IUserRepository userRepository;
 
+	@Autowired
 	private PasswordEncoder passwordEncoder;
 
 	private AuthenticationManager authenticationManager;
 	
 	@Autowired
-	public CustomUserDetailsService(IUserRepository userRepository, PasswordEncoder passwordEncoder,
+	public CustomUserDetailsService(IUserRepository userRepository,
 			AuthenticationManager authenticationManager) {
 		this.userRepository = userRepository;
-		this.passwordEncoder = passwordEncoder;
 		this.authenticationManager = authenticationManager;
 	}
 

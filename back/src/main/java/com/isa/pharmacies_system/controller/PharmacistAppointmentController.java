@@ -30,14 +30,14 @@ public class PharmacistAppointmentController {
     private EmailService emailService;
     private PharmacistAppointmentConverter pharmacistAppointmentConverter;
     private IPriceListService priceListService;
+    @Autowired
     private PasswordEncoder passwordEncoder;
 
     @Autowired
-    public PharmacistAppointmentController(IPharmacistAppointmentService pharmacistAppointmentService, EmailService emailService, IPriceListService priceListService,PasswordEncoder passwordEncoder) {
+    public PharmacistAppointmentController(IPharmacistAppointmentService pharmacistAppointmentService, EmailService emailService, IPriceListService priceListService) {
         this.pharmacistAppointmentService = pharmacistAppointmentService;
         this.emailService = emailService;
         this.priceListService = priceListService;
-        this.passwordEncoder = passwordEncoder;
         this.patientConverter = new PatientConverter(passwordEncoder);
         this.pharmacistAppointmentConverter = new PharmacistAppointmentConverter(priceListService);
     }
