@@ -12,6 +12,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -44,7 +45,7 @@ public class DermatologistAppointmentController {
         this.dermatologistAppointmentService = dermatologistAppointmentService;
         this.emailService = emailService;
         this.priceListService = priceListService;
-        this.patientConverter = new PatientConverter(passwordEncoder);
+        this.patientConverter = new PatientConverter(new BCryptPasswordEncoder());
         this.dermatologistAppointmentConverter = new DermatologistAppointmentConverter(priceListService);
     }
 

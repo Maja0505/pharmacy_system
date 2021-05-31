@@ -4,6 +4,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.websocket.server.PathParam;
 
+import com.isa.pharmacies_system.security.exception.ResourceConflictException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -12,6 +13,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -38,7 +40,6 @@ import com.isa.pharmacies_system.service.iService.IConfirmationTokenService;
 import com.isa.pharmacies_system.service.iService.IPatientService;
 /*import com.isa.pharmaciessystem.DTO.RoleDTO;
 import com.isa.pharmaciessystem.DTO.UserRegistrationDTO;*/
-import com.isa.pharmaciessystem.exception.ResourceConflictException;
 
 @Controller
 @CrossOrigin(origins="http://localhost:3000")
@@ -73,7 +74,7 @@ public class AuthenticationController {
 		this.userDetailsService = userDetailsService;
 		this.userService = userService;
 		this.tokenUtils = tokenUtils;
-		this.patientConverter = new PatientConverter(passwordEncoder);
+		this.patientConverter = new PatientConverter(new BCryptPasswordEncoder());
 		this.iPatientService = iPatientService;
 		this.authorityService = authorityService;
 		this.iConfirmationTokenService = iConfirmationTokenService;
