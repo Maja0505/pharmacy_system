@@ -34,6 +34,9 @@ public class Patient extends Users {
 
 	@Column(name = "patientPoints", unique = false, nullable = false)
 	private double patientPoints;
+
+	@Column(name = "penalty", unique = false, nullable = false)
+	private int penalty;
 	
 	@Enumerated(EnumType.ORDINAL)
 	private CategoryOfPatient categoryOfPatient;
@@ -47,7 +50,7 @@ public class Patient extends Users {
 
 	@JsonManagedReference
 	@OneToMany(mappedBy = "patientWithDermatologistAppointment", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-	private Set<DermatologistAppointment> dermatologistAppointment = new HashSet<DermatologistAppointment>();
+	private Set<DermatologistAppointment> dermatologistAppointment = new HashSet<>();
 
 	@ManyToMany(fetch = FetchType.LAZY)
 	private Set<Pharmacy> pharmaciesSubscription = new HashSet<>();
@@ -160,5 +163,13 @@ public class Patient extends Users {
 
 	public void setPatientRatings(Set<Rating> patientRatings) {
 		this.patientRatings = patientRatings;
+	}
+
+	public int getPenalty() {
+		return penalty;
+	}
+
+	public void setPenalty(int penalty) {
+		this.penalty = penalty;
 	}
 }

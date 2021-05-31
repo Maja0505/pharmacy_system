@@ -30,14 +30,14 @@ public class PharmacistAppointment extends Appointment {
 	private LocalDateTime pharmacistAppointmentStartTime;
 
 	@Column(name="pharmacistAppointmentDuration", unique=false, nullable=false)
-	private double pharmacistAppointmentDuration;
+	private long pharmacistAppointmentDuration;
 
 	@JsonBackReference
-	@ManyToOne(cascade = {CascadeType.DETACH,CascadeType.MERGE,CascadeType.REFRESH,CascadeType.REMOVE}, fetch = FetchType.EAGER)
+	@ManyToOne(cascade = {CascadeType.ALL}, fetch = FetchType.EAGER)
 	private Patient patientWithPharmacistAppointment;
 
 	@JsonBackReference
-	@ManyToOne(cascade = {CascadeType.DETACH,CascadeType.MERGE,CascadeType.REFRESH,CascadeType.REMOVE}, fetch = FetchType.EAGER)
+	@ManyToOne(cascade = {CascadeType.DETACH,CascadeType.MERGE,CascadeType.REFRESH,CascadeType.REMOVE}, fetch = FetchType.LAZY)
 	private Pharmacist pharmacistForAppointment;
 	
 	public PharmacistAppointment() {
@@ -52,11 +52,11 @@ public class PharmacistAppointment extends Appointment {
 		this.pharmacistAppointmentStartTime = pharmacistAppointmentStartTime;
 	}
 
-	public double getPharmacistAppointmentDuration() {
+	public long getPharmacistAppointmentDuration() {
 		return pharmacistAppointmentDuration;
 	}
 
-	public void setPharmacistAppointmentDuration(double pharmacistAppointmentDuration) {
+	public void setPharmacistAppointmentDuration(long pharmacistAppointmentDuration) {
 		this.pharmacistAppointmentDuration = pharmacistAppointmentDuration;
 	}
 

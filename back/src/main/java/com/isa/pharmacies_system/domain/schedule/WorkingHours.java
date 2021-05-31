@@ -46,8 +46,6 @@ public class WorkingHours {
 	public WorkingHours() {
 	
 	}
-	
-	
 
 	public WorkingHours(long id, LocalDateTime workingStartTime, LocalDateTime workingEndTime,
 			StatusOfWorkingHours statusOfWorkingHours, WorkerSchedule workerSchedule) {

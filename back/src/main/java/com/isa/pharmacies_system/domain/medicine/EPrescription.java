@@ -1,20 +1,11 @@
 package com.isa.pharmacies_system.domain.medicine;
 
 import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.SequenceGenerator;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -34,12 +25,15 @@ public class EPrescription {
 	private Patient patientForEPrescription;
 	
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm")
-	private Instant creationDate;
+	private LocalDateTime creationDate;
 	
 	//spisak lekova sa kolicinama
 	@JsonManagedReference
 	@OneToMany(mappedBy = "ePrescriton", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private Set<EPrescriptionItem> ePrescriptionItems = new HashSet<EPrescriptionItem>();
+
+	@Enumerated(EnumType.ORDINAL)
+	private StatusOfEPrescription statusOfEPrescription;
 	
 	
 	public EPrescription() {
@@ -48,7 +42,7 @@ public class EPrescription {
 
 	
 
-	public EPrescription(long id, Patient patientForEPrescription, Instant creationDate,
+	public EPrescription(long id, Patient patientForEPrescription, LocalDateTime creationDate,
 			Set<EPrescriptionItem> ePrescriptionItems) {
 		super();
 		this.id = id;
@@ -75,11 +69,11 @@ public class EPrescription {
 		this.patientForEPrescription = patientForEPrescription;
 	}
 
-	public Instant getCreationDate() {
+	public LocalDateTime getCreationDate() {
 		return creationDate;
 	}
 
-	public void setCreationDate(Instant creationDate) {
+	public void setCreationDate(LocalDateTime creationDate) {
 		this.creationDate = creationDate;
 	}
 
@@ -95,7 +89,11 @@ public class EPrescription {
 		this.ePrescriptionItems = ePrescriptionItems;
 	}
 
-	
-	
-	
+	public StatusOfEPrescription getStatusOfEPrescription() {
+		return statusOfEPrescription;
+	}
+
+	public void setStatusOfEPrescription(StatusOfEPrescription statusOfEPrescription) {
+		this.statusOfEPrescription = statusOfEPrescription;
+	}
 }

@@ -39,7 +39,7 @@ public class Medicine extends MedicineInfo {
 
 	@JsonManagedReference
 	@OneToMany(mappedBy = "reservedMedicine", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-	private Set<MedicineReservation> medicineReservations= new HashSet<MedicineReservation>();
+	private Set<MedicineReservation> medicineReservations= new HashSet<>();
 	
 	@Column(name="medicineAverageRating", unique=false, nullable=false)
 	private double medicineAverageRating;
