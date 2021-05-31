@@ -56,7 +56,8 @@ public class AuthenticationController {
 	private PatientConverter patientConverter;
 	
 	private IPatientService iPatientService;
-	
+
+	@Autowired
 	private PasswordEncoder passwordEncoder;
 	
 	private AuthorityService authorityService;
@@ -65,14 +66,13 @@ public class AuthenticationController {
 	
 	@Autowired
 	public AuthenticationController(AuthenticationManager authenticationManager,
-			CustomUserDetailsService userDetailsService, UserService userService,TokenUtils tokenUtils, PasswordEncoder passwordEncoder,
+			CustomUserDetailsService userDetailsService, UserService userService,TokenUtils tokenUtils,
 			IPatientService iPatientService, AuthorityService authorityService, IConfirmationTokenService iConfirmationTokenService) {
 		super();
 		this.authenticationManager = authenticationManager;
 		this.userDetailsService = userDetailsService;
 		this.userService = userService;
 		this.tokenUtils = tokenUtils;
-		this.passwordEncoder = passwordEncoder;
 		this.patientConverter = new PatientConverter(passwordEncoder);
 		this.iPatientService = iPatientService;
 		this.authorityService = authorityService;

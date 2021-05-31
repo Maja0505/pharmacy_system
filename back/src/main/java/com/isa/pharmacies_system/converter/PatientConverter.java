@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
@@ -24,16 +25,18 @@ import com.isa.pharmacies_system.domain.user.CategoryOfPatient;
 import com.isa.pharmacies_system.domain.user.Patient;
 import com.isa.pharmacies_system.domain.user.TypeOfUser;
 
+import javax.persistence.Access;
+
 public class PatientConverter{
 
     private  DermatologistAppointmentConverter dermatologistAppointmentConverter;
-    
+
     private PasswordEncoder passwordEncoder;
-    
+
     public PatientConverter() {
 		// TODO Auto-generated constructor stub
 	}
-    
+
     public PatientConverter(PasswordEncoder passwordEncoder) {
         dermatologistAppointmentConverter = new DermatologistAppointmentConverter();
         this.passwordEncoder = passwordEncoder;

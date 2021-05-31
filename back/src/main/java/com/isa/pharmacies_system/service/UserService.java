@@ -17,13 +17,14 @@ public class UserService implements IUserService {
 
     private IUserRepository userRepository;
     private IAuthorityService iAuthorityService;
+
+    @Autowired
     private PasswordEncoder passwordEncoder;
 
     @Autowired
-    public UserService(IUserRepository userRepository,IAuthorityService iAuthorityService,PasswordEncoder passwordEncoder){
+    public UserService(IUserRepository userRepository,IAuthorityService iAuthorityService){
         this.userRepository = userRepository;
         this.iAuthorityService = iAuthorityService;
-        this.passwordEncoder = passwordEncoder;
     }
 
     @Override

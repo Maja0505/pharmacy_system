@@ -35,9 +35,12 @@ public class DermatologistAppointmentController {
     private DermatologistAppointmentConverter dermatologistAppointmentConverter;
     private EmailService emailService;
     private IPriceListService priceListService;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
 
     @Autowired
-    public DermatologistAppointmentController(IDermatologistAppointmentService dermatologistAppointmentService, EmailService emailService, IPriceListService priceListService, PasswordEncoder passwordEncoder) {
+    public DermatologistAppointmentController(IDermatologistAppointmentService dermatologistAppointmentService, EmailService emailService, IPriceListService priceListService) {
         this.dermatologistAppointmentService = dermatologistAppointmentService;
         this.emailService = emailService;
         this.priceListService = priceListService;

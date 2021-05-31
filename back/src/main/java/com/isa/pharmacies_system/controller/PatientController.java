@@ -37,6 +37,7 @@ public class PatientController {
     private DermatologistAppointmentConverter dermatologistAppointmentConverter;
     private PharmacistAppointmentConverter pharmacistAppointmentConverter;
     private IMedicineService medicineService;
+    @Autowired
     private PasswordEncoder passwordEncoder;
     private IPriceListService priceListService;
     private MedicineReservationConverter medicineReservationConverter;
@@ -47,12 +48,11 @@ public class PatientController {
     
 
     @Autowired
-    public PatientController(IPatientService patientService, DermatologistAppointmentService dermatologistAppointmentService, MedicineService medicineService, IPriceListService priceListService, PasswordEncoder passwordEncoder) {
+    public PatientController(IPatientService patientService, DermatologistAppointmentService dermatologistAppointmentService, MedicineService medicineService, IPriceListService priceListService) {
 
         this.patientService = patientService;
         this.priceListService = priceListService;
         this.userConverter = new UserConverter();
-        this.passwordEncoder = passwordEncoder;
         this.patientConverter = new PatientConverter(passwordEncoder);
         this.dermatologistAppointmentConverter = new DermatologistAppointmentConverter(priceListService);
         this.pharmacistAppointmentConverter = new PharmacistAppointmentConverter(priceListService);
