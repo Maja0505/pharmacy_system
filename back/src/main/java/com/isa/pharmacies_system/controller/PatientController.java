@@ -27,7 +27,7 @@ import java.util.List;
 import java.util.Set;
 
 @Controller
-@CrossOrigin(origins="http://localhost:3000")
+@CrossOrigin(origins="*")
 @RequestMapping(value = "/api/patient", produces = MediaType.APPLICATION_JSON_VALUE)
 public class PatientController {
 

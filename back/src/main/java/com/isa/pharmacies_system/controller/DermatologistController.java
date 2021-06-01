@@ -19,7 +19,7 @@ import com.isa.pharmacies_system.service.iService.IDermatologistService;
 
 
 @Controller
-@CrossOrigin(origins="http://localhost:3000")
+@CrossOrigin(origins="*")
 @RequestMapping("api/dermatologist")
 public class DermatologistController {
 

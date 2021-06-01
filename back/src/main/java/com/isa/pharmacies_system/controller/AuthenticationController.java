@@ -42,7 +42,7 @@ import com.isa.pharmacies_system.service.iService.IPatientService;
 import com.isa.pharmaciessystem.DTO.UserRegistrationDTO;*/
 
 @Controller
-@CrossOrigin(origins="http://localhost:3000")
+@CrossOrigin(origins="*")
 @RequestMapping(value = "/auth", produces = MediaType.APPLICATION_JSON_VALUE)
 public class AuthenticationController {
 	

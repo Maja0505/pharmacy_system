@@ -20,7 +20,7 @@ import com.isa.pharmacies_system.domain.pharmacy.Pharmacy;
 import com.isa.pharmacies_system.service.iService.IPharmacyService;
 
 @Controller
-@CrossOrigin(origins="http://localhost:3000")
+@CrossOrigin(origins="*")
 @RequestMapping(value = "api/pharmacy")
 public class PharmacyController {
 	private final IPharmacyService iPharmacyService;

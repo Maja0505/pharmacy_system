@@ -17,7 +17,7 @@ import com.isa.pharmacies_system.domain.medicine.Medicine;
 import com.isa.pharmacies_system.service.iService.IMedicineService;
 
 @Controller
-@CrossOrigin(origins="http://localhost:3000")
+@CrossOrigin(origins="*")
 @RequestMapping(value = "api/medicine", produces = MediaType.APPLICATION_JSON_VALUE)
 public class MedicineController {
 
