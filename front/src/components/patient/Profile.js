@@ -89,7 +89,7 @@ const HomePage = () => {
 
   
     const getUser = async () => {
-        const res = await axios.get('http://localhost:8080/api/patient/' + userId +'/additionalInfo',config)
+        const res = await axios.get(URL + '/api/patient/' + userId +'/additionalInfo',config)
         let patient = res.data
         setUser({id : patient.id,firstName : patient.firstName, lastName : patient.lastName, address : patient.address, phoneNumber : patient.phoneNumber, email : patient.email, patientPoints : patient.patientPoints, categoryOfPatient : patient.categoryOfPatient, allergies : patient.allergies})
         setUserCopy({id : patient.id,firstName : patient.firstName, lastName : patient.lastName, address : patient.address, phoneNumber : patient.phoneNumber, email : patient.email, patientPoints : patient.patientPoints, categoryOfPatient : patient.categoryOfPatient})

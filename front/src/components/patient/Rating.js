@@ -30,6 +30,7 @@ import FormControl from '@material-ui/core/FormControl';
 import FormLabel from '@material-ui/core/FormLabel';
 import Alert from "@material-ui/lab/Alert";
 import Snackbar from "@material-ui/core/Snackbar";
+import {URL} from '../other/components'
 
 
 
@@ -120,7 +121,7 @@ const Rating = () => {
 
 
             }
-            axios.post('http://localhost:8080/api/rating/staff',staffDTO,config)
+            axios.post(URL + '/api/rating/staff',staffDTO,config)
             .then((res)=> {
                 setAlertTextSuccess('Success set rating')
                 setOpenAlertSuccess(true)
@@ -140,7 +141,7 @@ const Rating = () => {
                 medicineId:selectedRow.medicineId,
                 medicineName:selectedRow.medicineName
             }
-            axios.post('http://localhost:8080/api/rating/medicine',staffDTO,config)
+            axios.post(URL + '/api/rating/medicine',staffDTO,config)
             .then((res)=> {
                 setAlertTextSuccess('Success set rating')
                 setOpenAlertSuccess(true)
@@ -160,7 +161,7 @@ const Rating = () => {
                 pharmacyId:selectedRow.id,
                 pharmacyName:selectedRow.pharmacyName
             }
-            axios.post('http://localhost:8080/api/rating/pharmacy',staffDTO,config)
+            axios.post(URL + '/api/rating/pharmacy',staffDTO,config)
             .then((res)=> {
                 setAlertTextSuccess('Success set rating')
                 setOpenAlertSuccess(true)
@@ -176,14 +177,14 @@ const Rating = () => {
 
     const HandleClickRatingType = (type) => {
         if(type == 'Dermatologist_rating'){
-            axios.get('http://localhost:8080/api/patient/' + userId + '/dermatologist/expired',config)
+            axios.get(URL + '/api/patient/' + userId + '/dermatologist/expired',config)
             .then((res) => {
                 setStaffs(res.data)
             }).catch(error => {
               
             })
         }else if(type == 'Medicine_rating'){
-            axios.get('http://localhost:8080/api/patient/' + userId + '/medicine',config)
+            axios.get(URL + '/api/patient/' + userId + '/medicine',config)
             .then((res) => {
                 setMedicines(res.data)
             }).catch(error => {
@@ -191,7 +192,7 @@ const Rating = () => {
             })
 
         }else if(type == 'Pharmacy_rating'){
-            axios.get('http://localhost:8080/api/patient/' + userId + '/pharmacy',config)
+            axios.get(URL + '/api/patient/' + userId + '/pharmacy',config)
             .then((res) => {
                 setPharmacies(res.data)
             }).catch(error => {
@@ -199,7 +200,7 @@ const Rating = () => {
             })
 
         }else{
-            axios.get('http://localhost:8080/api/patient/' + userId + '/pharmacist/expired',config)
+            axios.get(URL + '/api/patient/' + userId + '/pharmacist/expired',config)
             .then((res) => {
                 setStaffs(res.data)
             }).catch(error => {

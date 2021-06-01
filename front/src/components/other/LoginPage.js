@@ -5,6 +5,8 @@ import Button from "@material-ui/core/Button";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import {URL} from "./components"
+import {REACT_URL} from "./components"
+
 
 class Login extends Component {
   constructor(props) {
@@ -167,14 +169,14 @@ class Login extends Component {
       if (this.state.firstLogin === true) {
         //stranica za promjenu lozinke
       } else {
-        window.location.href = "http://localhost:3000/system_admin";
+        window.location.href = REACT_URL + "/system_admin";
       }
     }
     if (this.state.roleUser === "Supplier") {
       if (this.state.firstLogin === true) {
         //stranica za promjenu lozinke
       } else {
-        window.location.href = "http://localhost:3000/supplier";
+        window.location.href =  REACT_URL + "/supplier";
       }
     }
     if (this.state.roleUser === "Patient") {
@@ -182,21 +184,21 @@ class Login extends Component {
         //stranica za promjenu lozinke
       } else {
         alert("treba da redirektuje");
-        window.location.href = "http://localhost:3000/patient";
+        window.location.href =  REACT_URL + "/patient";
       }
     }
     if (this.state.roleUser === "Dermatologist") {
       if (this.state.firstLogin === true) {
         //stranica za promjenu lozinke
       } else {
-        window.location.href = "http://localhost:3000/dermatologist";
+        window.location.href =  REACT_URL + "/dermatologist";
       }
     }
     if (this.state.roleUser === "Pharmacist") {
       if (this.state.firstLogin === true) {
         //stranica za promjenu lozinke
       } else {
-        window.location.href = "http://localhost:3000/pharmacist";
+        window.location.href =  REACT_URL + "/pharmacist";
       }
     }
   }

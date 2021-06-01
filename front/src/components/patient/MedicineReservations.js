@@ -186,7 +186,7 @@ import setDate from "date-fns/setDate";
 
     const HandleCancelReservation = (row) => {
 
-        axios.put('http://localhost:8080/api/medicineReservation/cancel', row,config)
+        axios.put(URL + '/api/medicineReservation/cancel', row,config)
         .then(
             (res)=> {
              

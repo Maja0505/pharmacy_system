@@ -24,6 +24,7 @@ import CloseIcon from '@material-ui/icons/Close';
 import Typography from '@material-ui/core/Typography';
 import { withStyles } from '@material-ui/core/styles';
 import { getConfig } from '@testing-library/dom';
+import {URL} from '../other/components'
 
 
 
@@ -96,18 +97,18 @@ const Complaint = () => {
 
     const HandleClickComplaintType = (type) => {
         if(type == 'Dermatologist_complaint'){
-            axios.get('http://localhost:8080/api/patient/' + userId +  '/dermatologist/expired',config)
+            axios.get(URL + '/api/patient/' + userId +  '/dermatologist/expired',config)
             .then((res) => {
                 setStaffs(res.data)
             })
         }else if(type == 'Pharmacy_complaint'){
-            axios.get('http://localhost:8080/api/patient/' + userId + '/pharmacy',config)
+            axios.get(URL + '/api/patient/' + userId + '/pharmacy',config)
             .then((res) => {
                 setPharmacies(res.data)
             })
 
         }else{
-            axios.get('http://localhost:8080/api/patient/' + userId + '/pharmacist/expired',config)
+            axios.get(URL + '/api/patient/' + userId + '/pharmacist/expired',config)
             .then((res) => {
                 setStaffs(res.data)
             })
