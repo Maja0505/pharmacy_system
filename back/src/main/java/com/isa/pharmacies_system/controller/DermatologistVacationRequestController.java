@@ -17,6 +17,7 @@ import java.util.List;
 
 @Controller
 @CrossOrigin(origins="*")
+@RequestMapping("api/dermatologistVacationRequest")
 public class DermatologistVacationRequestController {
 
     private IDermatologistVacationRequestService dermatologistVacationRequestService;
