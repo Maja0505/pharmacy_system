@@ -13,6 +13,8 @@ import Autocomplete from "@material-ui/lab/Autocomplete";
 import { useState, useEffect } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import axios from "axios";
+import {URL} from "../other/components"
+
 
 const useStyles = makeStyles((theme) => ({
   table: {
@@ -47,7 +49,7 @@ const ExaminedPatients = () => {
 
   useEffect(() => {
     axios
-      .get("http://localhost:8080/api/pharmacy/getPharmacies/" + userId, {
+      .get(URL + "/api/pharmacy/getPharmacies/" + userId, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -100,7 +102,7 @@ const ExaminedPatients = () => {
 
     axios
       .put(
-        "http://localhost:8080/api/appointment/sortByPatientFirstName/" +
+        URL + "/api/appointment/sortByPatientFirstName/" +
           (firstNameAsc.asc ? "asc" : "desc"),
         rows,
         {
@@ -126,7 +128,7 @@ const ExaminedPatients = () => {
 
     axios
       .put(
-        "http://localhost:8080/api/appointment/sortByPatientLastName/" +
+        URL + "/api/appointment/sortByPatientLastName/" +
           (lastNameAsc.asc ? "asc" : "desc"),
         rows,
         {
@@ -152,7 +154,7 @@ const ExaminedPatients = () => {
 
     axios
       .put(
-        "http://localhost:8080/api/appointment/sortByPatientEmail/" +
+        URL + "/api/appointment/sortByPatientEmail/" +
           (emailAsc.asc ? "asc" : "desc"),
         rows,
         {
@@ -178,7 +180,7 @@ const ExaminedPatients = () => {
 
     axios
       .put(
-        "http://localhost:8080/api/appointment/sortByAppointmentStartTime/" +
+        URL + "/api/appointment/sortByAppointmentStartTime/" +
           (startTimeAsc.asc ? "asc" : "desc"),
         rows,
         {
@@ -204,7 +206,7 @@ const ExaminedPatients = () => {
 
     axios
       .put(
-        "http://localhost:8080/api/dermatologistAppointment/sortByAppointmentEndTime/" +
+        URL + "/api/dermatologistAppointment/sortByAppointmentEndTime/" +
           (endTimeAsc.asc ? "asc" : "desc"),
         rows,
         {
@@ -230,7 +232,7 @@ const ExaminedPatients = () => {
 
     axios
       .put(
-        "http://localhost:8080/api/appointment/sortByAppointmentPrice/" +
+        URL + "/api/appointment/sortByAppointmentPrice/" +
           (priceAsc.asc ? "asc" : "desc"),
         rows,
         {
@@ -264,7 +266,7 @@ const ExaminedPatients = () => {
   const addPastAppointmentForSelectedPharmacy = (pharmacyId) => {
     axios
       .get(
-        "http://localhost:8080/api/dermatologistAppointment/allPastAppointmentByDermatologistAndPharmacy/" +
+        URL + "/api/dermatologistAppointment/allPastAppointmentByDermatologistAndPharmacy/" +
           userId +
           "/" +
           pharmacyId,

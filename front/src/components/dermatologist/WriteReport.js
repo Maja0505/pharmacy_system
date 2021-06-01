@@ -18,6 +18,7 @@ import WriteReportFirstStep from "./WriteReportFirstStep.js";
 import WriteReportSecondStep from "./WriteReportSecondStep.js";
 import ScheduleAppointment from "./SheduleAppointment.js";
 import WriteReportThirdStep from "./WriteReportThirdStep.js";
+import {URL} from "../other/components"
 
 import axios from "axios";
 
@@ -154,7 +155,7 @@ const WriteReport = () => {
 
   const finishReport = async () => {
     axios
-      .post("http://localhost:8080/api/dermatologistReport/create", report, {
+      .post(URL + "/api/dermatologistReport/create", report, {
         headers: {
           Authorization: `Bearer ${token}`,
         },

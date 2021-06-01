@@ -33,6 +33,8 @@ import Autocomplete from '@material-ui/lab/Autocomplete';
 import DateFnsUtils from '@date-io/date-fns';
 import Alert from "@material-ui/lab/Alert";
 import Snackbar from "@material-ui/core/Snackbar";
+import {URL} from "../other/components"
+
 
 import {
     MuiPickersUtilsProvider,
@@ -151,12 +153,12 @@ import setDate from "date-fns/setDate";
         var medicine = selectedMedicine.medicineId
         var pharmacy = selectedPharmacy.id
         var date = moment(selectedDate).format('YYYY-MM-DD')
-        axios.post("http://localhost:8080/api/medicineReservation/create/" + userId + "/" + medicine +"/" + pharmacy,{ dateOfTakingMedicine: date },config).
+        axios.post(URL + "/api/medicineReservation/create/" + userId + "/" + medicine +"/" + pharmacy,{ dateOfTakingMedicine: date },config).
         then((res) => {
             if(res.data){
                 axios
                 .get(
-                  "http://localhost:8080/api/patient/" + userId + "/medicineReservation/" +
+                  URL + "/api/patient/" + userId + "/medicineReservation/" +
                   (currPage - 1).toString() +
                   ""
                 ,config)
@@ -204,7 +206,7 @@ import setDate from "date-fns/setDate";
     useEffect(() => {
       axios
         .get(
-          "http://localhost:8080/api/patient/" + userId + "/medicineReservation/" +
+          URL + "/api/patient/" + userId + "/medicineReservation/" +
           (currPage - 1).toString() +
           "",config)
         .then((res) => {
@@ -219,7 +221,7 @@ import setDate from "date-fns/setDate";
         setOpen(true);
         axios
         .get(
-          "http://localhost:8080/api/medicine/all/short",config)
+          URL + "/api/medicine/all/short",config)
         .then((res) => {
           setMedicines(res.data)
         }).catch(error => {
@@ -227,7 +229,7 @@ import setDate from "date-fns/setDate";
         })
         axios
         .get(
-          "http://localhost:8080/api/pharmacy/all",config)
+          URL + "/api/pharmacy/all",config)
         .then((res) => {
             setPharmacies(res.data)
         }).catch(error => {

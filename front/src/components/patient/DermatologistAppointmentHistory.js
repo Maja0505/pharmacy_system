@@ -26,6 +26,8 @@ import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
 import Typography from '@material-ui/core/Typography';
 import { withStyles } from '@material-ui/core/styles';
+import {URL} from "../other/components"
+
 
   
   const useStyles = makeStyles((theme) => ({
@@ -110,7 +112,7 @@ import { withStyles } from '@material-ui/core/styles';
     useEffect(() => {
       axios
         .get(
-          "http://localhost:8080/api/dermatologistReport/all/patient/" + userId,config)
+          URL + "/api/dermatologistReport/all/patient/" + userId,config)
         .then((res) => {
           setRows(res.data);
           setCopyRows(res.data);
@@ -120,7 +122,7 @@ import { withStyles } from '@material-ui/core/styles';
 
     const handleClickOpenPharmacyDialog = (pharmacyId) => {
         
-        axios.get( "http://localhost:8080/api/pharmacy/" + pharmacyId,config).then(
+        axios.get( URL + "/api/pharmacy/" + pharmacyId,config).then(
             (res)=>{
                 setPharmacy(res.data)
                 setOpenPharmacyDialog(true)
@@ -133,7 +135,7 @@ import { withStyles } from '@material-ui/core/styles';
 
     const handleClickOpenDermatologistDialog = (dermatologistId) => {
         
-        axios.get( "http://localhost:8080/api/dermatologist/" + dermatologistId,config).then(
+        axios.get( URL + "/api/dermatologist/" + dermatologistId,config).then(
             (res)=>{
                 setDermatologist(res.data)
                 setOpenDermatologistDialog(true)
@@ -179,7 +181,7 @@ import { withStyles } from '@material-ui/core/styles';
   
       axios
         .put(
-          "http://localhost:8080/api/dermatologistReport/sortByDate/" +
+          URL + "/api/dermatologistReport/sortByDate/" +
             (dateAsc.asc ? "asc" : "desc"),
           rows
         ,config)
@@ -199,7 +201,7 @@ import { withStyles } from '@material-ui/core/styles';
 
     axios
       .put(
-        "http://localhost:8080/api/dermatologistReport/sortByDuration/" +
+        URL + "/api/dermatologistReport/sortByDuration/" +
           (durationAsc.asc ? "asc" : "desc"),
         rows
       ,config)
@@ -219,7 +221,7 @@ const sortByPrice = () => {
 
   axios
     .put(
-      "http://localhost:8080/api/dermatologistReport/sortByPrice/" +
+      URL + "/api/dermatologistReport/sortByPrice/" +
         (priceAsc.asc ? "asc" : "desc"),
       rows
     ,config)

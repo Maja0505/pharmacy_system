@@ -6,6 +6,7 @@ import DialogContent from "@material-ui/core/DialogContent";
 import TextField from "@material-ui/core/TextField";
 import DialogActions from "@material-ui/core/DialogActions";
 import axios from "axios";
+import {URL} from "../other/components"
 
 const PasswordDialog = ({
   openDialog,
@@ -40,7 +41,7 @@ const PasswordDialog = ({
     setError("");
     axios
       .put(
-        "http://localhost:8080/api/dermatologist/changePassword",
+        URL + "/api/dermatologist/changePassword",
         passwordDTO,
         {
           headers: {

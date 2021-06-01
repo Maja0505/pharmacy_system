@@ -30,6 +30,7 @@ import { useParams } from "react-router-dom";
 import Alert from "@material-ui/lab/Alert";
 import Snackbar from "@material-ui/core/Snackbar";
 import { set } from "date-fns";
+import {URL} from "../other/components"
 
 
 
@@ -117,7 +118,7 @@ import { set } from "date-fns";
     useEffect(() => {
       axios
         .get(
-          "http://localhost:8080/api/pharmacy/" + id, config)
+          URL + "/api/pharmacy/" + id, config)
         .then((res) => {
           setPharmacy(res.data)
         });
@@ -136,7 +137,7 @@ import { set } from "date-fns";
       if(!dermatologistAppointmentPart){
         axios
         .get(
-          "http://localhost:8080/api/dermatologistAppointment/all/open/" + id, config)
+          URL + "/api/dermatologistAppointment/all/open/" + id, config)
         .then((res) => {
           if(res.data.length != 0){
             setDermatologistAppointment(res.data)
@@ -158,7 +159,7 @@ import { set } from "date-fns";
     const nextPage = () => {
       axios
         .get(
-          "http://localhost:8080/api/pharmacy/all/" +
+          URL + "/api/pharmacy/all/" +
             currPage.toString() +
             ""
         )
@@ -175,7 +176,7 @@ import { set } from "date-fns";
     const beforePage = () => {
       axios
         .get(
-          "http://localhost:8080/api/pharmacy/all/" +
+          URL + "/api/pharmacy/all/" +
             (currPage - 2).toString() +
             ""
         )
@@ -195,11 +196,11 @@ import { set } from "date-fns";
     const HandleClickScheduleDermatologistAppointment = (row) => {
       axios
         .put(
-          "http://localhost:8080/api/dermatologistAppointment/book/" + row.id + "/" + id,{},config)
+          URL + "/api/dermatologistAppointment/book/" + row.id + "/" + id,{},config)
         .then((res) => {
           axios
           .get(
-            "http://localhost:8080/api/dermatologistAppointment/all/open/" + id,config)
+            URL + "/api/dermatologistAppointment/all/open/" + id,config)
           .then((res) => {
             setDermatologistAppointment(res.data)
             setDermatologistAppointmentPart(true)

@@ -28,6 +28,8 @@ import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
 import Typography from '@material-ui/core/Typography';
 import { withStyles } from '@material-ui/core/styles';
+import {URL} from "../other/components"
+
 
   
   const useStyles = makeStyles((theme) => ({
@@ -113,7 +115,7 @@ import { withStyles } from '@material-ui/core/styles';
     useEffect(() => {
       axios
         .get(
-          "http://localhost:8080/api/pharmacistReport/all/patient/" + userId,config)
+          URL + "/api/pharmacistReport/all/patient/" + userId,config)
         .then((res) => {
           setRows(res.data);
           setCopyRows(res.data);
@@ -140,7 +142,7 @@ import { withStyles } from '@material-ui/core/styles';
 
     const handleClickOpenPharmacyDialog = (pharmacyId) => {
         
-        axios.get( "http://localhost:8080/api/pharmacy/" + pharmacyId,config).then(
+        axios.get( URL + "/api/pharmacy/" + pharmacyId,config).then(
             (res)=>{
                 setPharmacy(res.data)
                 setOpenPharmacyDialog(true)
@@ -153,7 +155,7 @@ import { withStyles } from '@material-ui/core/styles';
 
     const handleClickOpenPharmacistDialog = (pharmacistId) => {
         
-        axios.get( "http://localhost:8080/api/pharmacist/" + pharmacistId,config).then(
+        axios.get( URL + "/api/pharmacist/" + pharmacistId,config).then(
             (res)=>{
                 setPharmacist(res.data)
                 setOpenPharmacistDialog(true)
@@ -199,7 +201,7 @@ import { withStyles } from '@material-ui/core/styles';
   
       axios
         .put(
-          "http://localhost:8080/api/pharmacistReport/sortByDate/" +
+          URL + "/api/pharmacistReport/sortByDate/" +
             (dateAsc.asc ? "asc" : "desc"),
           rows
         ,config)
@@ -219,7 +221,7 @@ import { withStyles } from '@material-ui/core/styles';
 
     axios
       .put(
-        "http://localhost:8080/api/pharmacistReport/sortByDuration/" +
+        URL + "/api/pharmacistReport/sortByDuration/" +
           (durationAsc.asc ? "asc" : "desc"),
         rows
       ,config)
@@ -239,7 +241,7 @@ const sortByPrice = () => {
 
   axios
     .put(
-      "http://localhost:8080/api/pharmacistReport/sortByPrice/" +
+      URL + "/api/pharmacistReport/sortByPrice/" +
         (priceAsc.asc ? "asc" : "desc"),
       rows
     ,config)

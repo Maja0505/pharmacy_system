@@ -29,6 +29,8 @@ import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
 import Typography from '@material-ui/core/Typography';
 import { withStyles } from '@material-ui/core/styles';
+import {URL} from "../other/components"
+
 
 
 const useStyles = makeStyles((theme) => ({
@@ -83,7 +85,7 @@ const EPrescriptionList = () => {
   useEffect(() => {
     axios
       .get(
-        "http://localhost:8080/api/patient/" + userId + "/ePrescription", config)
+        URL + "/api/patient/" + userId + "/ePrescription", config)
       .then((res) => {
         setRows(res.data);
       });
@@ -91,7 +93,7 @@ const EPrescriptionList = () => {
 
   const handleClickOpenEPrescriptionItemDialog= (ePrescription) => {
         
-    axios.get( "http://localhost:8080/api/ePrescription/" + ePrescription.id + "/ePrescriptionItems",config).then(
+    axios.get( URL + "/api/ePrescription/" + ePrescription.id + "/ePrescriptionItems",config).then(
         (res)=>{
             setEPrescriptionList(res.data)
             setOpenEPrescriptionItemListDialog(true)
@@ -126,7 +128,7 @@ const sortByDate = () => {
 
   axios
     .put(
-      "http://localhost:8080/api/ePrescription/sortByDate/" +
+      URL + "/api/ePrescription/sortByDate/" +
         (dateAsc.asc ? "asc" : "desc"),
       rows
     ,config)
@@ -145,7 +147,7 @@ const sortByStatus = () => {
 
   axios
     .put(
-      "http://localhost:8080/api/ePrescription/sortByStatus/" +
+      URL + "/api/ePrescription/sortByStatus/" +
         (statusAsc.asc ? "asc" : "desc"),
       rows
     ,config)

@@ -13,6 +13,8 @@ import { makeStyles } from "@material-ui/core/styles";
 import { useState } from "react";
 
 import axios from "axios";
+import {URL} from "../other/components"
+
 
 const useStyles = makeStyles({
   cart: {
@@ -43,7 +45,7 @@ const MedicineReservation = () => {
   const searchReservation = () => {
     axios
       .get(
-        "http://localhost:8080/api/medicineReservation/get/" +
+        URL + "/api/medicineReservation/get/" +
           medicineReservationId +
           "/" +
           pharamcyId,
@@ -65,7 +67,7 @@ const MedicineReservation = () => {
   const changeStatusOfReservation = () => {
     axios
       .put(
-        "http://localhost:8080/api/medicineReservation/finish/" +
+        URL + "/api/medicineReservation/finish/" +
           medicineReservationId,
         {},
         {

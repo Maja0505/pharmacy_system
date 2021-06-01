@@ -3,6 +3,8 @@ import { Redirect } from "react-router-dom";
 import TextField from "@material-ui/core/TextField";
 import Grid from "@material-ui/core/Grid";
 import Button from "@material-ui/core/Button";
+import {URL} from "./components"
+
 
 
 import axios from "axios";
@@ -64,7 +66,7 @@ class RegistrationPage extends Component {
         }
         else{
         axios
-        .post('http://localhost:8080/auth/signup',
+        .post(URL + "/auth/signup",
         user, {
             headers: {
                 'Content-Type': 'application/json',

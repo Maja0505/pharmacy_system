@@ -3,6 +3,8 @@ import { Button, Card, CardContent, Grid, Typography } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 
 import axios from "axios";
+import {URL} from "../other/components"
+
 
 const useStyles = makeStyles({
   cart: {
@@ -25,7 +27,7 @@ const WriteReportFirstStep = ({ appointment, setAppointment }) => {
   const changeAppointmentToMissed = () => {
     axios
       .put(
-        "http://localhost:8080/api/dermatologistAppointment/changeStatusToMissed/" +
+        URL + "/api/dermatologistAppointment/changeStatusToMissed/" +
           appointment.AppointmentId,
         {},
         {

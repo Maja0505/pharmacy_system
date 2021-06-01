@@ -7,6 +7,7 @@ import Snackbar from "@material-ui/core/Snackbar";
 import Alert from "@material-ui/lab/Alert";
 import { makeStyles } from "@material-ui/core/styles";
 import PasswordDialog from "./PasswordDialog";
+import {URL} from "../other/components"
 
 import axios from "axios";
 
@@ -83,7 +84,7 @@ const EditProfile = () => {
 
   const getUser = async () => {
     const res = await axios.get(
-      "http://localhost:8080/api/dermatologist/" + userId,
+      URL + "/api/dermatologist/" + userId,
       {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -129,7 +130,7 @@ const EditProfile = () => {
 
     if (validate(updateUser)) {
       axios
-        .put("http://localhost:8080/api/dermatologist/update", updateUser, {
+        .put(URL + "/api/dermatologist/update", updateUser, {
           headers: {
             Authorization: `Bearer ${token}`,
           },

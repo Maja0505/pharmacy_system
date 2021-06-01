@@ -12,6 +12,8 @@ import { ArrowDropDown, ArrowDropUp } from "@material-ui/icons";
 import { useState, useEffect } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import axios from "axios";
+import {URL} from "../other/components"
+
 
 const useStyles = makeStyles((theme) => ({
   table: {
@@ -45,7 +47,7 @@ const ExaminedPatients = () => {
   useEffect(() => {
     axios
       .get(
-        "http://localhost:8080/api/pharmacistAppointment/allPastAppointment/" +
+        URL + "/api/pharmacistAppointment/allPastAppointment/" +
           userId,
         {
           headers: {
@@ -101,7 +103,7 @@ const ExaminedPatients = () => {
 
     axios
       .put(
-        "http://localhost:8080/api/appointment/sortByPatientFirstName/" +
+        URL + "/api/appointment/sortByPatientFirstName/" +
           (firstNameAsc.asc ? "asc" : "desc"),
         rows,
         {
@@ -127,7 +129,7 @@ const ExaminedPatients = () => {
 
     axios
       .put(
-        "http://localhost:8080/api/appointment/sortByPatientLastName/" +
+        URL + "/api/appointment/sortByPatientLastName/" +
           (lastNameAsc.asc ? "asc" : "desc"),
         rows,
         {
@@ -153,7 +155,7 @@ const ExaminedPatients = () => {
 
     axios
       .put(
-        "http://localhost:8080/api/appointment/sortByPatientEmail/" +
+        URL + "/api/appointment/sortByPatientEmail/" +
           (emailAsc.asc ? "asc" : "desc"),
         rows,
         {
@@ -179,7 +181,7 @@ const ExaminedPatients = () => {
 
     axios
       .put(
-        "http://localhost:8080/api/appointment/sortByAppointmentStartTime/" +
+        URL + "/api/appointment/sortByAppointmentStartTime/" +
           (startTimeAsc.asc ? "asc" : "desc"),
         rows,
         {
@@ -205,7 +207,7 @@ const ExaminedPatients = () => {
 
     axios
       .put(
-        "http://localhost:8080/api/pharmacistAppointment/sortByAppointmentDuration/" +
+        URL + "/api/pharmacistAppointment/sortByAppointmentDuration/" +
           (durationAsc.asc ? "asc" : "desc"),
         rows,
         {
@@ -231,7 +233,7 @@ const ExaminedPatients = () => {
 
     axios
       .put(
-        "http://localhost:8080/api/appointment/sortByAppointmentPrice/" +
+        URL + "/api/appointment/sortByAppointmentPrice/" +
           (priceAsc.asc ? "asc" : "desc"),
         rows,
         {

@@ -9,6 +9,8 @@ import { ComboBoxComponent } from "@syncfusion/ej2-react-dropdowns";
 import { useState } from "react";
 
 import axios from "axios";
+import {URL} from "../other/components"
+
 
 const AppointmentCreateDialog = ({
   openDialog,
@@ -84,7 +86,7 @@ const AppointmentCreateDialog = ({
     if (a.EndTime !== null) {
       axios
         .post(
-          "http://localhost:8080/api/pharmacistAppointment/bookByPharmacist",
+          URL + "/api/pharmacistAppointment/bookByPharmacist",
           {
             staffId: userId,
             pharmacyId: patient.PharmacyId,

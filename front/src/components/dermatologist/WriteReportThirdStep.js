@@ -18,6 +18,8 @@ import { useState, useEffect } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 
 import RecipeAddItemDialog from "./RecipeAddItemDialog.js";
+import {URL} from "../other/components"
+
 
 import axios from "axios";
 
@@ -53,7 +55,7 @@ const WriteReportThirdStep = ({
   useEffect(() => {
     axios
       .get(
-        "http://localhost:8080/api/pharmacyStorageItem/all/" +
+        URL + "/api/pharmacyStorageItem/all/" +
           appointment.PharmacyId,
         {
           headers: {
@@ -87,7 +89,7 @@ const WriteReportThirdStep = ({
   const seeAllMedicinesInPharmacy = () => {
     axios
       .get(
-        "http://localhost:8080/api/pharmacyStorageItem/all/" +
+        URL + "/api/pharmacyStorageItem/all/" +
           appointment.PharmacyId,
         {
           headers: {

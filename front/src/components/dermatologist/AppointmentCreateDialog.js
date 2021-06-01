@@ -3,6 +3,8 @@ import Dialog from "@material-ui/core/Dialog";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogActions from "@material-ui/core/DialogActions";
+import {URL} from "../other/components"
+
 
 import { TimePickerComponent } from "@syncfusion/ej2-react-calendars";
 
@@ -87,7 +89,7 @@ const AppointmentCreateDialog = ({
       if (predefinedAppointment === false) {
         axios
           .post(
-            "http://localhost:8080/api/dermatologistAppointment/bookByDermatologist",
+            URL + "/api/dermatologistAppointment/bookByDermatologist",
             {
               staffId: userId,
               pharmacyId: patient.PharmacyId,
@@ -115,7 +117,7 @@ const AppointmentCreateDialog = ({
       } else {
         axios
           .put(
-            "http://localhost:8080/api/dermatologistAppointment/book/" +
+            URL + "/api/dermatologistAppointment/book/" +
               a.id +
               "/" +
               patient.Id,

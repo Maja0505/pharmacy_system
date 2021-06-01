@@ -28,6 +28,8 @@ import axios from "axios";
 import { Redirect } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
+import {URL} from "../other/components"
+
 
 const useStyles = makeStyles({
   cart: {
@@ -101,7 +103,7 @@ const SheduleAppointment = ({ pharmacyInfo }) => {
     }
     axios
       .get(
-        "http://localhost:8080/api/workingHours/all/" +
+        URL + "/api/workingHours/all/" +
           userId +
           "/" +
           patientInfo.PharmacyId,
@@ -119,7 +121,7 @@ const SheduleAppointment = ({ pharmacyInfo }) => {
 
     axios
       .get(
-        "http://localhost:8080/api/dermatologistAppointment/allFutureOpen/" +
+        URL + "/api/dermatologistAppointment/allFutureOpen/" +
           userId +
           "/" +
           patientInfo.PharmacyId,
@@ -135,7 +137,7 @@ const SheduleAppointment = ({ pharmacyInfo }) => {
 
     axios
       .get(
-        "http://localhost:8080/api/dermatologistAppointment/allFutureReserved/" +
+        URL + "/api/dermatologistAppointment/allFutureReserved/" +
           userId +
           "/" +
           patientInfo.PharmacyId,

@@ -17,6 +17,8 @@ import Autocomplete from "@material-ui/lab/Autocomplete";
 
 import axios from "axios";
 import { useEffect, useState } from "react";
+import {URL} from "../other/components"
+
 
 const WorkCalendar = () => {
   const token = localStorage.getItem("token");
@@ -40,7 +42,7 @@ const WorkCalendar = () => {
 
   useEffect(() => {
     axios
-      .get("http://localhost:8080/api/pharmacy/getPharmacies/" + userId, {
+      .get(URL + "/api/pharmacy/getPharmacies/" + userId, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -54,7 +56,7 @@ const WorkCalendar = () => {
   const addAppointmentForSelectedPharmacy = (pharmacyId) => {
     axios
       .get(
-        "http://localhost:8080/api/dermatologistAppointment/allMissed/" +
+        URL + "/api/dermatologistAppointment/allMissed/" +
           userId +
           "/" +
           pharmacyId,
@@ -69,7 +71,7 @@ const WorkCalendar = () => {
       });
     axios
       .get(
-        "http://localhost:8080/api/dermatologistAppointment/allExpired/" +
+        URL + "/api/dermatologistAppointment/allExpired/" +
           userId +
           "/" +
           pharmacyId,
@@ -84,7 +86,7 @@ const WorkCalendar = () => {
       });
     axios
       .get(
-        "http://localhost:8080/api/dermatologistAppointment/allReserved/" +
+        URL + "/api/dermatologistAppointment/allReserved/" +
           userId +
           "/" +
           pharmacyId,
@@ -116,7 +118,7 @@ const WorkCalendar = () => {
   const changeAppointmentToMissed = async (id) => {
     axios
       .put(
-        "http://localhost:8080/api/dermatologistAppointment/changeStatusToMissed/" +
+        URL + "/api/dermatologistAppointment/changeStatusToMissed/" +
           id,
         {},
         {

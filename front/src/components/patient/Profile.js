@@ -9,6 +9,8 @@ import { makeStyles } from '@material-ui/core/styles';
 import Allergies from './Allergies'
 import PasswordDialog from './PasswordDialog'
 import axios from "axios";
+import {URL} from "../other/components"
+
 
 
 const useStyles = makeStyles((theme) => ({ //style za paper deo
@@ -117,7 +119,7 @@ const HomePage = () => {
         }
          
         if(validate(updateUser)){
-            axios.put("http://localhost:8080/api/patient/update", updateUser,config)
+            axios.put(URL + "/api/patient/update", updateUser,config)
             .then((res) => {
                 setUserCopy({id : updateUser.id,firstName : updateUser.firstName, lastName : updateUser.lastName, address : updateUser.address, phoneNumber : updateUser.phoneNumber, email : updateUser.email, patientPoints : updateUser.patientPoints, categoryOfPatient : updateUser.categoryOfPatient})
                 setAddress({streetName: updateUser.address.streetName, streetNumber: updateUser.address.streetNumber, city: updateUser.address.city, country: updateUser.address.country, longitude : updateUser.address.longitude, latitude : updateUser.address.latitude })

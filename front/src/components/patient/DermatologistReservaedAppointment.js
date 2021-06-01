@@ -20,6 +20,8 @@ import {
   import axios from "axios";
   import Alert from "@material-ui/lab/Alert";
   import Snackbar from "@material-ui/core/Snackbar";
+  import {URL} from "../other/components"
+
   
 
 const styles = (theme) => ({
@@ -74,7 +76,7 @@ const styles = (theme) => ({
     useEffect(() => {
       axios
         .get(
-          "http://localhost:8080/api/patient/" + userId + "/dermatologistAppointment/all/reserved/" +
+          URL + "/api/patient/" + userId + "/dermatologistAppointment/all/reserved/" +
           (currPage - 1).toString() +
           "",config)
         .then((res) => {
@@ -114,12 +116,12 @@ const styles = (theme) => ({
     const HandleClickCancelDermatologistAppointment = (row) => {
       axios
       .put(
-        "http://localhost:8080/api/dermatologistAppointment/cancel", row,config)
+        URL + "/api/dermatologistAppointment/cancel", row,config)
       .then((res) => {
         if(res.data){
           axios
           .get(
-            "http://localhost:8080/api/patient/" + userId + "/dermatologistAppointment/all/reserved/" +
+            URL + "/api/patient/" + userId + "/dermatologistAppointment/all/reserved/" +
             (currPage - 1).toString() +
             "",config)
           .then((res) => {

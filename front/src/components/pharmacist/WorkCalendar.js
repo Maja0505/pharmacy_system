@@ -13,6 +13,8 @@ import {
 } from "@syncfusion/ej2-react-schedule";
 import axios from "axios";
 import { useEffect, useState } from "react";
+import {URL} from "../other/components"
+
 
 const WorkCalendar = () => {
   const token = localStorage.getItem("token");
@@ -35,7 +37,7 @@ const WorkCalendar = () => {
   useEffect(async () => {
     axios
       .get(
-        "http://localhost:8080/api/pharmacistAppointment/allMissed/" + userId,
+        URL + "/api/pharmacistAppointment/allMissed/" + userId,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -47,7 +49,7 @@ const WorkCalendar = () => {
       });
     axios
       .get(
-        "http://localhost:8080/api/pharmacistAppointment/allExpired/" + userId,
+        URL + "/api/pharmacistAppointment/allExpired/" + userId,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -59,7 +61,7 @@ const WorkCalendar = () => {
       });
     axios
       .get(
-        "http://localhost:8080/api/pharmacistAppointment/allReserved/" + userId,
+        URL + "/api/pharmacistAppointment/allReserved/" + userId,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -88,7 +90,7 @@ const WorkCalendar = () => {
   const changeAppointmentToMissed = async (id) => {
     axios
       .put(
-        "http://localhost:8080/api/pharmacistAppointment/changeStatusToMissed/" +
+        URL + "/api/pharmacistAppointment/changeStatusToMissed/" +
           id,
         {},
         {

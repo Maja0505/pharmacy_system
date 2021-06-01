@@ -12,6 +12,8 @@ import {
 } from "@material-ui/core";
 import axios from "axios";
 import Alert from "@material-ui/lab/Alert";
+import {URL} from "../other/components"
+
 
 const VacationRequest = () => {
   const token = localStorage.getItem("token");
@@ -29,7 +31,7 @@ const VacationRequest = () => {
 
   const getDisabledDates = async () => {
     const res = await axios.get(
-      "http://localhost:8080/api/dermatologist/futureVacationRequest/" + userId,
+      URL + "/api/dermatologist/futureVacationRequest/" + userId,
       {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -149,7 +151,7 @@ const VacationRequest = () => {
 
     axios
       .post(
-        "http://localhost:8080/api/dermatologistVacationRequest/create",
+        URL + "/api/dermatologistVacationRequest/create",
         vacationRequest,
         {
           headers: {

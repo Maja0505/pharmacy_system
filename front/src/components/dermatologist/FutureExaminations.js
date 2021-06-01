@@ -15,6 +15,7 @@ import { Link } from "react-router-dom";
 
 import { useState, useEffect } from "react";
 import { makeStyles } from "@material-ui/core/styles";
+import {URL} from "../other/components"
 
 import axios from "axios";
 
@@ -53,7 +54,7 @@ const FutureExaminations = () => {
   useEffect(() => {
     axios
       .get(
-        "http://localhost:8080/api/dermatologistAppointment/allFutureReserveByDermatologist/" +
+        URL + "/api/dermatologistAppointment/allFutureReserveByDermatologist/" +
           userId,
         {
           headers: {
@@ -81,7 +82,7 @@ const FutureExaminations = () => {
     if (first_lastName.length === 2) {
       axios
         .get(
-          "http://localhost:8080/api/dermatologistAppointment/searchAllFutureReservedByPatient/" +
+          URL + "/api/dermatologistAppointment/searchAllFutureReservedByPatient/" +
             userId +
             "/" +
             first_lastName[0] +
@@ -110,7 +111,7 @@ const FutureExaminations = () => {
   const showAll = () => {
     axios
       .get(
-        "http://localhost:8080/api/dermatologistAppointment/allFutureReserveByDermatologist/" +
+        URL + "/api/dermatologistAppointment/allFutureReserveByDermatologist/" +
           userId,
         {
           headers: {
@@ -132,7 +133,7 @@ const FutureExaminations = () => {
   const setToMissed = (appointment) => {
     axios
       .put(
-        "http://localhost:8080/api/dermatologistAppointment/changeStatusToMissed/" +
+        URL + "/api/dermatologistAppointment/changeStatusToMissed/" +
           appointment.id,
         {},
         {

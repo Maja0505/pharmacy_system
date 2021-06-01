@@ -18,6 +18,8 @@ import {
   import { makeStyles } from "@material-ui/core/styles";
   import axios from "axios";
   import { BrowserRouter as Link } from "react-router-dom";
+  import {URL} from "../other/components"
+
 
   
   const useStyles = makeStyles((theme) => ({
@@ -59,7 +61,7 @@ import {
     useEffect(() => {
       axios
         .get(
-          "http://localhost:8080/api/pharmacy/all"
+          URL + "/api/pharmacy/all"
         ,config)
         .then((res) => {
           setRows(res.data);
@@ -95,7 +97,7 @@ import {
     
         axios
           .put(
-            "http://localhost:8080/api/pharmacy/sortByName/" +
+            URL + "/api/pharmacy/sortByName/" +
               (pharmacyNameAsc.asc ? "asc" : "desc"),
             rows
           ,config)
@@ -115,7 +117,7 @@ import {
   
       axios
         .put(
-          "http://localhost:8080/api/pharmacy/sortByCity/" +
+          URL + "/api/pharmacy/sortByCity/" +
             (pharmacyCityAsc.asc ? "asc" : "desc"),
           rows
         ,config)
@@ -135,7 +137,7 @@ import {
   
       axios
         .put(
-          "http://localhost:8080/api/pharmacy/sortByRating/" +
+          URL + "/api/pharmacy/sortByRating/" +
             (ratingAsc.asc ? "asc" : "desc"),
           rows,config
         )

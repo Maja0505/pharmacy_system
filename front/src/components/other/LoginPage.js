@@ -4,6 +4,7 @@ import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
 import axios from "axios";
 import { Link } from "react-router-dom";
+import {URL} from "./components"
 
 class Login extends Component {
   constructor(props) {
@@ -19,7 +20,7 @@ class Login extends Component {
 
   async loginClick() {
     await axios
-      .post("http://localhost:8080/auth/login", {
+      .post(URL + "/auth/login", {
         email: this.state.email,
         password: this.state.password,
       })
@@ -36,7 +37,7 @@ class Login extends Component {
         if (res.data.role === "Pharmacist") {
           axios
             .get(
-              "http://localhost:8080/api/pharmacist/getPharmacyId/" +
+              URL + "/api/pharmacist/getPharmacyId/" +
                 res.data.userId,
               {
                 headers: {

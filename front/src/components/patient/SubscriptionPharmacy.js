@@ -18,6 +18,7 @@ import {
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import axios from "axios";
+import {URL} from "../other/components"
 
 
 const useStyles = makeStyles((theme) => ({
@@ -55,7 +56,7 @@ const SubscriptionPharmacy = () => {
   useEffect(() => {
     axios
       .get(
-        "http://localhost:8080/api/patient/" + userId + "/subscription" 
+        URL + "/api/patient/" + userId + "/subscription" 
       ,config)
       .then((res) => {
         setRows(res.data);

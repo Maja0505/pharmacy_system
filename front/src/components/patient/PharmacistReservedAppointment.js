@@ -21,6 +21,8 @@ import {
   import axios from "axios";
   import Alert from "@material-ui/lab/Alert";
   import Snackbar from "@material-ui/core/Snackbar";
+  import {URL} from "../other/components"
+
   
   const useStyles = makeStyles((theme) => ({
     table: {
@@ -77,7 +79,7 @@ import {
     useEffect(() => {
       axios
         .get(
-          "http://localhost:8080/api/patient/" + userId + "/pharmacistAppointment/all/reserved/" +
+          URL + "/api/patient/" + userId + "/pharmacistAppointment/all/reserved/" +
           (currPage - 1).toString() +
           "",config)
         .then((res) => {
@@ -104,13 +106,13 @@ import {
     const HandleClickCancelPharmacistAppointment = (row) => {
       axios
       .put(
-        "http://localhost:8080/api/pharmacistAppointment/cancel/" + row.id,{},config
+        URL + "/api/pharmacistAppointment/cancel/" + row.id,{},config
       )
       .then((res) => {
         if(res.data){
           axios
           .get(
-            "http://localhost:8080/api/patient/"+ userId + "/pharmacistAppointment/all/reserved/" +
+            URL + "/api/patient/"+ userId + "/pharmacistAppointment/all/reserved/" +
             (currPage - 1).toString() +
             "",config)
           .then((res) => {

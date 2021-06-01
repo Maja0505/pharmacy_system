@@ -1,6 +1,7 @@
 import { Button, Card, CardContent, Grid, Typography } from "@material-ui/core";
 
 import { makeStyles } from "@material-ui/core/styles";
+import {URL} from "../other/components"
 
 import axios from "axios";
 
@@ -25,7 +26,7 @@ const WriteReportFirstStep = ({ appointment, setAppointment }) => {
   const changeAppointmentToMissed = () => {
     axios
       .put(
-        "http://localhost:8080/api/pharmacistAppointment/changeStatusToMissed/" +
+        URL + "/api/pharmacistAppointment/changeStatusToMissed/" +
           appointment.AppointmentId,
         {},
         {

@@ -26,6 +26,8 @@ import axios from "axios";
 import { Redirect } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
+import {URL} from "../other/components"
+
 
 const useStyles = makeStyles({
   cart: {
@@ -97,7 +99,7 @@ const ScheduleAppointment = ({ pharmacyInfo }) => {
 
     axios
       .get(
-        "http://localhost:8080/api/workingHours/allPharmacistWorkingHours/" +
+        URL + "/api/workingHours/allPharmacistWorkingHours/" +
           userId,
         {
           headers: {
@@ -113,7 +115,7 @@ const ScheduleAppointment = ({ pharmacyInfo }) => {
 
     axios
       .get(
-        "http://localhost:8080/api/pharmacistAppointment/allFutureReserved/" +
+        URL + "/api/pharmacistAppointment/allFutureReserved/" +
           userId,
         {
           headers: {

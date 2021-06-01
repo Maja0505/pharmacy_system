@@ -15,6 +15,8 @@ import {
   import axios from "axios";
   import CloseIcon from '@material-ui/icons/Close';
   import IconButton from '@material-ui/core/IconButton';
+  import {URL} from "../other/components"
+
 
 
 
@@ -83,7 +85,7 @@ const Allergies = ({allergies,setAllergies,patientId}) => {
 
     const HandleAddButton = () => {
       if(selectedMedicine != undefined && selectedMedicine != null){
-        axios.put("http://localhost:8080/api/patient/" + userId + "/addMedicineAllergies/" + selectedMedicine.medicineId,{},config)
+        axios.put(URL + "/api/patient/" + userId + "/addMedicineAllergies/" + selectedMedicine.medicineId,{},config)
         .then((res) => {
             if(res.data){
               setAllergies([...allergies,selectedMedicine])
@@ -95,7 +97,7 @@ const Allergies = ({allergies,setAllergies,patientId}) => {
     }
 
     const HandleClickRemoveAllerge = (row) => {
-      axios.put("http://localhost:8080/api/patient/" + userId + "/removeMedicineAllergies/" + row.medicineId,{},config)
+      axios.put(URL + "/api/patient/" + userId + "/removeMedicineAllergies/" + row.medicineId,{},config)
         .then((res) => {
             if(res.data){
               var index = allergies.indexOf(row)

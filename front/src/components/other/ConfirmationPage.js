@@ -3,6 +3,8 @@ import { Redirect } from "react-router-dom";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import { useState, useEffect } from "react";
+import {URL} from "./components"
+
 
 const ConfirmationPage = () => {
 
@@ -15,7 +17,7 @@ const ConfirmationPage = () => {
     const token = splitID[4];
     alert(token)
     axios
-        .put('http://localhost:8080/auth/confirm_account/'+token, {}
+        .put(URL + '/auth/confirm_account/'+token, {}
         )
       .then((res) => {
         alert("Token founded!")

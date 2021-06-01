@@ -17,6 +17,8 @@ import { useState, useEffect } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 
 import axios from "axios";
+import {URL} from "../other/components"
+
 
 const useStyles = makeStyles((theme) => ({
   table: {
@@ -52,7 +54,7 @@ const FutureExaminations = () => {
   useEffect(() => {
     axios
       .get(
-        "http://localhost:8080/api/pharmacistAppointment/allFutureReserved/" +
+        URL + "/api/pharmacistAppointment/allFutureReserved/" +
           userId,
         {
           headers: {
@@ -80,7 +82,7 @@ const FutureExaminations = () => {
     if (first_lastName.length === 2) {
       axios
         .get(
-          "http://localhost:8080/api/pharmacistAppointment/searchAllFutureReservedByPatient/" +
+          URL + "/api/pharmacistAppointment/searchAllFutureReservedByPatient/" +
             userId +
             "/" +
             first_lastName[0] +
@@ -109,7 +111,7 @@ const FutureExaminations = () => {
   const showAll = () => {
     axios
       .get(
-        "http://localhost:8080/api/pharmacistAppointment/allFutureReserved/" +
+        URL + "/api/pharmacistAppointment/allFutureReserved/" +
           userId,
         {
           headers: {
@@ -131,7 +133,7 @@ const FutureExaminations = () => {
   const setToMissed = (appointment) => {
     axios
       .put(
-        "http://localhost:8080/api/pharmacistAppointment/changeStatusToMissed/" +
+        URL + "/api/pharmacistAppointment/changeStatusToMissed/" +
           appointment.id,
         {},
         {
