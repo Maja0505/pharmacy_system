@@ -33,11 +33,11 @@ public class PharmacistAppointment extends Appointment {
 	private long pharmacistAppointmentDuration;
 
 	@JsonBackReference
-	@ManyToOne(cascade = {CascadeType.ALL}, fetch = FetchType.EAGER)
+	@ManyToOne(cascade = {CascadeType.ALL}, fetch = FetchType.LAZY)
 	private Patient patientWithPharmacistAppointment;
 
 	@JsonBackReference
-	@ManyToOne(cascade = {CascadeType.DETACH,CascadeType.MERGE,CascadeType.REFRESH,CascadeType.REMOVE}, fetch = FetchType.LAZY)
+	@ManyToOne(cascade = {CascadeType.ALL}, fetch = FetchType.LAZY)
 	private Pharmacist pharmacistForAppointment;
 	
 	public PharmacistAppointment() {
