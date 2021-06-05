@@ -74,7 +74,7 @@ const Allergies = ({allergies,setAllergies,patientId}) => {
     const [selectedMedicine, setSelectedMedicine] = useState(null)
 
     const getMedicine = async () => {
-        axios.get('http://localhost:8080/api/medicine/all/short', config)
+        axios.get(URL + '/api/medicine/all/short', config)
         .then((res)=>{
             setMedicines(res.data)
         }).catch((err) => {

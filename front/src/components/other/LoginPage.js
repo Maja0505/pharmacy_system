@@ -6,7 +6,7 @@ import axios from "axios";
 import { Link } from "react-router-dom";
 import {URL} from "./components"
 import {REACT_URL} from "./components"
-
+import background from "../../images/doctor.jpg";
 
 class Login extends Component {
   constructor(props) {
@@ -117,7 +117,10 @@ class Login extends Component {
       step: 300,
     };
     return (
-      <div>
+      <div style={{backgroundImage: `url(${background})` , height: "753px",
+      backgroundSize: "cover",
+      backgroundRepeat: "no-repeat",
+      backgroundPosition: "center",}}>
         <br />
         <TextField
           id="outlined-basic"
@@ -184,7 +187,7 @@ class Login extends Component {
         //stranica za promjenu lozinke
       } else {
         alert("treba da redirektuje");
-        window.location.href =  REACT_URL + "/patient";
+        window.location.href =  REACT_URL + "/patient/home2";
       }
     }
     if (this.state.roleUser === "Dermatologist") {

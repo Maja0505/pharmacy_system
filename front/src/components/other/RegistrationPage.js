@@ -180,7 +180,7 @@ class RegistrationPage extends Component {
 
       return(
         <div>
-        <h2 align="center">CHANGE PASSWORD</h2>
+        <h2 align="center">Registration</h2>
         <br/>
         <br/>
         <table align="center">

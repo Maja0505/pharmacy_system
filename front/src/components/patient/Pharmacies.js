@@ -17,8 +17,9 @@ import {
   import { useState, useEffect } from "react";
   import { makeStyles } from "@material-ui/core/styles";
   import axios from "axios";
-  import { BrowserRouter as Link } from "react-router-dom";
+  import {Link} from "react-router-dom";
   import {URL} from "../other/components"
+  
 
 
   
@@ -191,9 +192,9 @@ import {
           <TableCell className={classes.hederCell} >
           Price for farmacist(per hour)
           </TableCell>
-          <TableCell className={classes.hederCell} >
+          {userId != null && <TableCell className={classes.hederCell} >
             Profile
-          </TableCell>
+          </TableCell>}
         </TableRow>
       </TableHead>
     );
@@ -207,7 +208,17 @@ import {
             <TableCell>{row.pharmacyAverageRating}</TableCell>
             <TableCell>{row.priceListForAppointmentDTO.dermatologistAppointmentPricePerHour}</TableCell>
             <TableCell>{row.priceListForAppointmentDTO.pharmacistAppointmentPricePerHour}</TableCell>
-            <TableCell><Button  component={Link}  to={"/patient/HomePage/pharmacyProfilePage/" + row.id} onClick={() => openProfile(row)}>Open</Button></TableCell>
+            {userId != null && <TableCell><Button 
+            variant="text"
+            color="secondary"
+             onClick={() => openProfile(row)}>              
+                  <Link
+                     to={"/patient/pharmacyProfilePage/" + row.id}
+                    style={{ textDecoration: "none", color: "white" }}
+                  >
+                   Open
+                  </Link>
+              </Button></TableCell>}
           </TableRow>
         ))}
       </TableBody>

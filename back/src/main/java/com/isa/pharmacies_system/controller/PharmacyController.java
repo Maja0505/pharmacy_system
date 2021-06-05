@@ -45,7 +45,6 @@ public class PharmacyController {
 	}
 
 
-	@PreAuthorize("hasRole('ROLE_PATIENT')")
 	@GetMapping(value = "/all")
 	public ResponseEntity<List<PharmacyDTO>> getAllPharmacies() {
 		return new ResponseEntity<>(pharmacyConverter.convertPharmacyListToPharmacyDTOList(iPharmacyService.getAll()), HttpStatus.OK);
