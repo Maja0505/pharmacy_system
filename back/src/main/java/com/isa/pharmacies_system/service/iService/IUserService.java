@@ -9,4 +9,5 @@ public interface IUserService {
     Users findByEmail(String email) throws Exception;
     List<Users> findAll();
     Users save(Users user);
+    Users changePasswordWhenFirstTimeSingUp(String newPassword, String confirmationOfNewPassword,Long id);
 }
