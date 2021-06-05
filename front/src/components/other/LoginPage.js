@@ -7,6 +7,7 @@ import { Link } from "react-router-dom";
 import {URL} from "./components"
 import {REACT_URL} from "./components"
 import background from "../../images/doctor.jpg";
+import ChangePasswordDIalog from "./ChangePasswordDIalog.js";
 
 class Login extends Component {
   constructor(props) {
@@ -17,6 +18,7 @@ class Login extends Component {
       password: "",
       warn: false,
       firstLogin: false,
+      openDialog: true,
     };
   }
 
@@ -28,25 +30,22 @@ class Login extends Component {
       })
       .then((res) => {
         let tokenDTO = res.data;
-        alert(tokenDTO.isFirstLogin);
+        console.log(res.data);
         this.setState({
           userId: tokenDTO.userId,
           token: tokenDTO.accessToken,
           userEmail: tokenDTO.email,
           roleUser: tokenDTO.role,
           firstLogin: tokenDTO.isFirstLogin,
+          openDialog: true,
         });
         if (res.data.role === "Pharmacist") {
           axios
-            .get(
-              URL + "/api/pharmacist/getPharmacyId/" +
-                res.data.userId,
-              {
-                headers: {
-                  Authorization: `Bearer ${res.data.accessToken}`,
-                },
-              }
-            )
+            .get(URL + "/api/pharmacist/getPharmacyId/" + res.data.userId, {
+              headers: {
+                Authorization: `Bearer ${res.data.accessToken}`,
+              },
+            })
             .then((res) => {
               localStorage.setItem("pharmacyId", res.data);
             });
@@ -71,34 +70,11 @@ class Login extends Component {
     this.redirect();
   }
 
-  /*
-  login = (p) => {
-    if (p.role === "") {
-      alert("Unesite korisnicko ime i lozinku");
-    } else if (p.role === "") {
-      this.setState({
-        redirectionUser: p.username,
-      });
-    } else if (p.username === "pharm" && p.password === "pharm") {
-      this.setState({
-        redirectionUser: p.username,
-      });
-    } else if (p.username === "trki" && p.password === "trki") {
-      this.setState({
-        redirectionUser: p.username,
-      });
-    } else if (p.username === "tasa" && p.password === "tasa") {
-      this.setState({
-        redirectionUser: p.username,
-      });
-    } else if (p.username === "derm" && p.password === "derm") {
-      this.setState({
-        redirectionUser: p.username,
-      });
-    } else {
-      alert("Ne postoji");
-    }
-  };*/
+  setOpenDialog(state) {
+    state.setState({
+      openDialog: false,
+    });
+  }
 
   onTodoChangeUsername(value) {
     this.setState({
@@ -157,6 +133,15 @@ class Login extends Component {
             Login
           </Button>
         </div>
+        {this.state.firstLogin === true &&
+          this.state.roleUser !== "Patient" && (
+            <ChangePasswordDIalog
+              openDialog={this.state.openDialog}
+              setOpenDialog={this.setOpenDialog}
+              state={this}
+              role={this.state.roleUser}
+            />
+          )}
       </div>
     );
   }
@@ -167,7 +152,6 @@ class Login extends Component {
     var redirection3 = "/patient";
     var redirection4 = "/pharmacist";
     var redirection5 = "/dermatologist";
-    alert(this.state.roleUser + " " + this.state.firstLogin);
     if (this.state.roleUser === "System_admin") {
       if (this.state.firstLogin === true) {
         //stranica za promjenu lozinke
@@ -179,7 +163,7 @@ class Login extends Component {
       if (this.state.firstLogin === true) {
         //stranica za promjenu lozinke
       } else {
-        window.location.href =  REACT_URL + "/supplier";
+        window.location.href = REACT_URL + "/supplier";
       }
     }
     if (this.state.roleUser === "Patient") {
@@ -194,14 +178,14 @@ class Login extends Component {
       if (this.state.firstLogin === true) {
         //stranica za promjenu lozinke
       } else {
-        window.location.href =  REACT_URL + "/dermatologist";
+        window.location.href = REACT_URL + "/dermatologist/homePage";
       }
     }
     if (this.state.roleUser === "Pharmacist") {
       if (this.state.firstLogin === true) {
         //stranica za promjenu lozinke
       } else {
-        window.location.href =  REACT_URL + "/pharmacist";
+        window.location.href = REACT_URL + "/pharmacist/homePage";
       }
     }
   }

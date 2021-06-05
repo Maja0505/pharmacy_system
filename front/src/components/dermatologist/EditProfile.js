@@ -7,7 +7,7 @@ import Snackbar from "@material-ui/core/Snackbar";
 import Alert from "@material-ui/lab/Alert";
 import { makeStyles } from "@material-ui/core/styles";
 import PasswordDialog from "./PasswordDialog";
-import {URL} from "../other/components"
+import { URL } from "../other/components";
 
 import axios from "axios";
 
@@ -15,7 +15,8 @@ const useStyles = makeStyles((theme) => ({
   //style za paper deo
   paper: {
     padding: theme.spacing(2),
-    margin: theme.spacing("5%", "20%"),
+    margin: "auto",
+    marginTop: "5%",
     maxWidth: 500,
     backgroundColor: "white",
   },
@@ -83,14 +84,11 @@ const EditProfile = () => {
   };
 
   const getUser = async () => {
-    const res = await axios.get(
-      URL + "/api/dermatologist/" + userId,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
+    const res = await axios.get(URL + "/api/dermatologist/" + userId, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
     let pharamcist = res.data;
     setUser({
       id: pharamcist.id,
@@ -240,7 +238,7 @@ const EditProfile = () => {
 
   return (
     <>
-      <div className={classes.root}>
+      <div>
         <Paper className={classes.paper}>
           <h2 className={classes.h2}>PROFILE</h2>
           <Grid container spacing={4}>

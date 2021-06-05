@@ -17,12 +17,11 @@ import { useState, useEffect } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 
 import axios from "axios";
-import {URL} from "../other/components"
-
+import { URL } from "../other/components";
 
 const useStyles = makeStyles((theme) => ({
   table: {
-    marginTop: "5%",
+    marginTop: "3%",
   },
   hederRow: {
     background: "#4051bf",
@@ -53,15 +52,11 @@ const FutureExaminations = () => {
 
   useEffect(() => {
     axios
-      .get(
-        URL + "/api/pharmacistAppointment/allFutureReserved/" +
-          userId,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      )
+      .get(URL + "/api/pharmacistAppointment/allFutureReserved/" + userId, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
       .then((res) => {
         if (res.data.length === 0) {
           setEmptyTable(true);
@@ -82,7 +77,8 @@ const FutureExaminations = () => {
     if (first_lastName.length === 2) {
       axios
         .get(
-          URL + "/api/pharmacistAppointment/searchAllFutureReservedByPatient/" +
+          URL +
+            "/api/pharmacistAppointment/searchAllFutureReservedByPatient/" +
             userId +
             "/" +
             first_lastName[0] +
@@ -110,15 +106,11 @@ const FutureExaminations = () => {
 
   const showAll = () => {
     axios
-      .get(
-        URL + "/api/pharmacistAppointment/allFutureReserved/" +
-          userId,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      )
+      .get(URL + "/api/pharmacistAppointment/allFutureReserved/" + userId, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
       .then((res) => {
         if (res.data.length === 0) {
           setEmptyTable(true);
@@ -133,7 +125,8 @@ const FutureExaminations = () => {
   const setToMissed = (appointment) => {
     axios
       .put(
-        URL + "/api/pharmacistAppointment/changeStatusToMissed/" +
+        URL +
+          "/api/pharmacistAppointment/changeStatusToMissed/" +
           appointment.id,
         {},
         {
@@ -164,6 +157,7 @@ const FutureExaminations = () => {
         AppointmentId: appointment.id,
         Email: appointment.patientEmail,
         PhoneNumber: appointment.patientPhoneNumber,
+        PharmacyId: appointment.pharmacyId,
         PharmacyName: appointment.pharmacyName,
         PharamcyLocation: appointment.location,
         AppointmentStartTime: appointment.startTime,

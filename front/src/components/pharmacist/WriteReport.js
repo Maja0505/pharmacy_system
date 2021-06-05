@@ -18,14 +18,13 @@ import WriteReportFirstStep from "./WriteReportFirstStep.js";
 import WriteReportSecondStep from "./WriteReportSecondStep.js";
 import ScheduleAppointment from "./ScheduleAppointment.js";
 import WriteReportThirdStep from "./WriteReportThirdStep.js";
-import {URL} from "../other/components"
-
+import { URL } from "../other/components";
 
 import axios from "axios";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
-    background: "#bed5e7",
+    background: "white",
     margin: "auto",
   },
   schedule: {
@@ -34,7 +33,7 @@ const useStyles = makeStyles((theme) => ({
   },
   steper: {
     width: "80%",
-    background: "#bed5e7",
+    background: "white",
     margin: "auto",
   },
   backButton: {

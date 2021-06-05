@@ -6,8 +6,8 @@ import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import Login from "./components/other/LoginPage";
 import PatientHomePage from "./components/patient/BasicPage";
-import DermatologistHomePage from "./components/dermatologist/HomePage";
-import PharmacistHomePage from "./components/pharmacist/HomePage";
+import DermatologistHomePage from "./components/dermatologist/BasicPage";
+import PharmacistHomePage from "./components/pharmacist/BasicPage";
 import SupplierHomePage from "./components/supplier/HomePage";
 import SystemAdminHomePage from "./components/systemAdmin/HomePage";
 import RegistrationPage from "./components/other/RegistrationPage";
@@ -16,14 +16,7 @@ import Profile from './components/patient/Profile'
 import Start from './components/other/StartPage'
 import Pharmacies from "./components/patient/Pharmacies"
 import Medicines from "./components/other/Medicine";
-
-
 import NavBar from "./components/other/NavBar.js";
-
-
-
-
-
 
 function App() {
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
@@ -56,7 +49,11 @@ function App() {
             <Route exact path="/medicines" component={Medicines}></Route>
 
             <Route exact path="/login" component={Login}></Route>
-            <Route exact path="/confirmAccount/:token" component={ConfirmationPage}></Route>
+            <Route
+              exact
+              path="/confirmAccount/:token"
+              component={ConfirmationPage}
+            ></Route>
             <Route path="/patient" component={PatientHomePage}></Route>
             <Route
               path="/dermatologist"
