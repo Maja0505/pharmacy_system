@@ -17,8 +17,7 @@ import Autocomplete from "@material-ui/lab/Autocomplete";
 
 import axios from "axios";
 import { useEffect, useState } from "react";
-import {URL} from "../other/components"
-
+import { URL } from "../other/components";
 
 const WorkCalendar = () => {
   const token = localStorage.getItem("token");
@@ -56,7 +55,8 @@ const WorkCalendar = () => {
   const addAppointmentForSelectedPharmacy = (pharmacyId) => {
     axios
       .get(
-        URL + "/api/dermatologistAppointment/allMissed/" +
+        URL +
+          "/api/dermatologistAppointment/allMissed/" +
           userId +
           "/" +
           pharmacyId,
@@ -71,7 +71,8 @@ const WorkCalendar = () => {
       });
     axios
       .get(
-        URL + "/api/dermatologistAppointment/allExpired/" +
+        URL +
+          "/api/dermatologistAppointment/allExpired/" +
           userId +
           "/" +
           pharmacyId,
@@ -86,7 +87,8 @@ const WorkCalendar = () => {
       });
     axios
       .get(
-        URL + "/api/dermatologistAppointment/allReserved/" +
+        URL +
+          "/api/dermatologistAppointment/allReserved/" +
           userId +
           "/" +
           pharmacyId,
@@ -118,8 +120,7 @@ const WorkCalendar = () => {
   const changeAppointmentToMissed = async (id) => {
     axios
       .put(
-        URL + "/api/dermatologistAppointment/changeStatusToMissed/" +
-          id,
+        URL + "/api/dermatologistAppointment/changeStatusToMissed/" + id,
         {},
         {
           headers: {
@@ -137,7 +138,9 @@ const WorkCalendar = () => {
       })
       .catch((error) => {
         setOpenDialog(false);
-        alert("You can only set missed for appointment which is in past!");
+        alert(
+          "Appointment not start yet.\nYou can only set status missed for appointment which is started and not finished yet or for appointments in past!"
+        );
       });
   };
 
