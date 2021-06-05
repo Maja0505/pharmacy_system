@@ -167,12 +167,10 @@ class Login extends Component {
       }
     }
     if (this.state.roleUser === "Patient") {
-      if (this.state.firstLogin === true) {
-        //stranica za promjenu lozinke
-      } else {
+     
         alert("treba da redirektuje");
         window.location.href =  REACT_URL + "/patient/home2";
-      }
+      
     }
     if (this.state.roleUser === "Dermatologist") {
       if (this.state.firstLogin === true) {
