@@ -29,7 +29,7 @@ import CloseIcon from '@material-ui/icons/Close';
 import Typography from '@material-ui/core/Typography';
 import { withStyles } from '@material-ui/core/styles';
 import {URL} from "../other/components"
-
+import {Redirect} from "react-router-dom"
 
   
   const useStyles = makeStyles((theme) => ({
@@ -108,6 +108,7 @@ import {URL} from "../other/components"
     const [openReportDialog, setOpenReportDialog] = useState(false);
     const token = localStorage.getItem("token");
     const userId = localStorage.getItem("userId");
+    const [redirection,setRedirection] = useState(false)
     const config = {
       headers: { Authorization: `Bearer ${token}` }
   };
@@ -119,7 +120,10 @@ import {URL} from "../other/components"
         .then((res) => {
           setRows(res.data);
           setCopyRows(res.data);
-          console.log(res)
+        }).catch((error) => {
+          if(error.response.status === 401){
+            setRedirection(true)
+          }
         });
     }, []);
   
@@ -147,7 +151,11 @@ import {URL} from "../other/components"
                 setPharmacy(res.data)
                 setOpenPharmacyDialog(true)
             }
-        )
+        ).catch((error) => {
+          if(error.response.status === 401){
+            setRedirection(true)
+          }
+        });
     };
     const handleClosePharmacyDialog = () => {
         setOpenPharmacyDialog(false);
@@ -160,7 +168,11 @@ import {URL} from "../other/components"
                 setPharmacist(res.data)
                 setOpenPharmacistDialog(true)
             }
-        )
+        ).catch((error) => {
+          if(error.response.status === 401){
+            setRedirection(true)
+          }
+        });
     };
     const handleClosePharmacistDialog = () => {
         setOpenPharmacistDialog(false);
@@ -207,6 +219,10 @@ import {URL} from "../other/components"
         ,config)
         .then((res) => {
           setRows(res.data);
+        }).catch((error) => {
+          if(error.response.status === 401){
+            setRedirection(true)
+          }
         });
   };
 
@@ -227,6 +243,10 @@ import {URL} from "../other/components"
       ,config)
       .then((res) => {
         setRows(res.data);
+      }).catch((error) => {
+        if(error.response.status === 401){
+          setRedirection(true)
+        }
       });
 };
 
@@ -247,6 +267,10 @@ const sortByPrice = () => {
     ,config)
     .then((res) => {
       setRows(res.data);
+    }).catch((error) => {
+      if(error.response.status === 401){
+        setRedirection(true)
+      }
     });
 };
   
@@ -409,7 +433,8 @@ const sortByPrice = () => {
     )
     return (
       <div>
-        
+      {redirection === true && <Redirect to="/login"></Redirect>}
+
         <Grid container spacing={1}>
           <Grid item xs={2} />
           <Grid item xs={8}>

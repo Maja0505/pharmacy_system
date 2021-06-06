@@ -26,7 +26,7 @@ import { withStyles } from '@material-ui/core/styles';
 import { getConfig } from '@testing-library/dom';
 import {URL} from '../other/components'
 import {REACT_URL} from '../other/components'
-
+import {Redirect} from "react-router-dom"
 
 
 
@@ -78,6 +78,7 @@ const Complaint = () => {
     const classes = useStyles();
     const token = localStorage.getItem("token");
     const userId = localStorage.getItem("userId");
+    const [redirection,setRedirection] = useState(false)
     const config = {
       headers: { Authorization: `Bearer ${token}`, consumes:'application/json' }
   };
@@ -101,18 +102,30 @@ const Complaint = () => {
             axios.get(URL + '/api/patient/' + userId +  '/dermatologist/expired',config)
             .then((res) => {
                 setStaffs(res.data)
-            })
+            }).catch((error) => {
+              if(error.response.status === 401){
+                setRedirection(true)
+              }
+            });
         }else if(type == 'Pharmacy_complaint'){
             axios.get(URL + '/api/patient/' + userId + '/pharmacy',config)
             .then((res) => {
                 setPharmacies(res.data)
-            })
+            }).catch((error) => {
+              if(error.response.status === 401){
+                setRedirection(true)
+              }
+            });
 
         }else{
             axios.get(URL + '/api/patient/' + userId + '/pharmacist/expired',config)
             .then((res) => {
                 setStaffs(res.data)
-            })
+            }).catch((error) => {
+              if(error.response.status === 401){
+                setRedirection(true)
+              }
+            });
 
         }
         setSelectedType(type)
@@ -326,6 +339,7 @@ const Complaint = () => {
       )
     return (
         <div>
+            {redirection === true && <Redirect to="/login"></Redirect>}
             <h2>Complaint</h2>
             {CreateComplaintDialog} 
             <ComboBoxComponent 

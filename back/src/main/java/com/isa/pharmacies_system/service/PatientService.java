@@ -148,18 +148,18 @@ public class PatientService implements IPatientService {
     }
 
     @Override
-    public Set<DermatologistAppointment> getAllReservedDermatologistAppointmentsForPatient(Long id,int page){
-        return patientRepository.getAllByDermatologistAppointment(id, PageRequest.of(page,10)).stream().filter(dermatologistAppointment -> dermatologistAppointment.getStatusOfAppointment().equals(StatusOfAppointment.Reserved)).collect(Collectors.toSet());
+    public Set<DermatologistAppointment> getAllReservedDermatologistAppointmentsForPatient(Long id){
+        return patientRepository.getAllByDermatologistAppointment(id).stream().filter(dermatologistAppointment -> dermatologistAppointment.getStatusOfAppointment().equals(StatusOfAppointment.Reserved)).collect(Collectors.toSet());
     }
 
     @Override
-    public Set<PharmacistAppointment> getAllReservedPharmacistAppointmentsForPatient(Long id, int page){
-        return patientRepository.getAllByPharmacistAppointment(id, PageRequest.of(page,10)).stream().filter(dermatologistAppointment -> dermatologistAppointment.getStatusOfAppointment().equals(StatusOfAppointment.Reserved)).collect(Collectors.toSet());
+    public Set<PharmacistAppointment> getAllReservedPharmacistAppointmentsForPatient(Long id){
+        return patientRepository.getAllByPharmacistAppointment(id).stream().filter(dermatologistAppointment -> dermatologistAppointment.getStatusOfAppointment().equals(StatusOfAppointment.Reserved)).collect(Collectors.toSet());
     }
 
     @Override
-    public Page<MedicineReservation> getAllMedicineReservationsForPatient(Long id, int page){
-        return patientRepository.getAllByMedicineReservations(id, PageRequest.of(page,10));
+    public Set<MedicineReservation> getAllMedicineReservationsForPatient(Long id){
+        return patientRepository.getAllByMedicineReservations(id);
     }
 
     @Override

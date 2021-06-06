@@ -28,8 +28,7 @@ import axios from "axios";
 import { Redirect } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
-import {URL} from "../other/components"
-
+import { URL } from "../other/components";
 
 const useStyles = makeStyles({
   cart: {
@@ -41,7 +40,7 @@ const useStyles = makeStyles({
 const SheduleAppointment = ({ pharmacyInfo }) => {
   const token = localStorage.getItem("token");
   const userId = localStorage.getItem("userId");
-
+  const [redirection, setRedirection] = useState(false);
   const [data, setData] = useState([]);
   const resourceDataSource = [{ Id: 4, Color: "#8c9290", Name: "open" }];
 
@@ -103,10 +102,7 @@ const SheduleAppointment = ({ pharmacyInfo }) => {
     }
     axios
       .get(
-        URL + "/api/workingHours/all/" +
-          userId +
-          "/" +
-          patientInfo.PharmacyId,
+        URL + "/api/workingHours/all/" + userId + "/" + patientInfo.PharmacyId,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -117,11 +113,17 @@ const SheduleAppointment = ({ pharmacyInfo }) => {
         res.data.map((workDay) => {
           addToWorkingDates(workDay);
         });
+      })
+      .catch((error) => {
+        if (error.response.status === 401) {
+          setRedirection(true);
+        }
       });
 
     axios
       .get(
-        URL + "/api/dermatologistAppointment/allFutureOpen/" +
+        URL +
+          "/api/dermatologistAppointment/allFutureOpen/" +
           userId +
           "/" +
           patientInfo.PharmacyId,
@@ -133,11 +135,17 @@ const SheduleAppointment = ({ pharmacyInfo }) => {
       )
       .then((res) => {
         addAppointmentsToData(res.data);
+      })
+      .catch((error) => {
+        if (error.response.status === 401) {
+          setRedirection(true);
+        }
       });
 
     axios
       .get(
-        URL + "/api/dermatologistAppointment/allFutureReserved/" +
+        URL +
+          "/api/dermatologistAppointment/allFutureReserved/" +
           userId +
           "/" +
           patientInfo.PharmacyId,
@@ -149,6 +157,11 @@ const SheduleAppointment = ({ pharmacyInfo }) => {
       )
       .then((res) => {
         addAppointmentsToData(res.data);
+      })
+      .catch((error) => {
+        if (error.response.status === 401) {
+          setRedirection(true);
+        }
       });
   }, []);
 
@@ -292,6 +305,7 @@ const SheduleAppointment = ({ pharmacyInfo }) => {
 
   return (
     <>
+      {redirection === true && <Redirect to="/login"></Redirect>}
       {JSON.parse(localStorage.getItem("PatientForDermatologistReport")) ===
         null && <Redirect to="/dermatologist" />}
       {JSON.parse(localStorage.getItem("PatientForDermatologistReport")) !==

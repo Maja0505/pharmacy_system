@@ -7,10 +7,9 @@ import DialogActions from "@material-ui/core/DialogActions";
 import { ComboBoxComponent } from "@syncfusion/ej2-react-dropdowns";
 
 import { useState } from "react";
-
+import { Redirect } from "react-router-dom";
 import axios from "axios";
-import {URL} from "../other/components"
-
+import { URL } from "../other/components";
 
 const AppointmentCreateDialog = ({
   openDialog,
@@ -24,7 +23,7 @@ const AppointmentCreateDialog = ({
 }) => {
   const token = localStorage.getItem("token");
   const userId = localStorage.getItem("userId");
-
+  const [redirection, setRedirection] = useState(false);
   const durationData = [15, 30, 45, 60, 75, 90, 105, 120];
   const [appointmentDuration, setAppointmentDuration] = useState(15);
 
@@ -82,7 +81,6 @@ const AppointmentCreateDialog = ({
   };
 
   const createAppointment = (a) => {
-    console.log(patient);
     if (a.EndTime !== null) {
       axios
         .post(
@@ -109,6 +107,9 @@ const AppointmentCreateDialog = ({
           createManualApppointment(a);
         })
         .catch((error) => {
+          if (error.response.status === 401) {
+            setRedirection(true);
+          }
           setOpenAlertUnsuccses(true);
         });
     }
@@ -178,32 +179,35 @@ const AppointmentCreateDialog = ({
   );
 
   return (
-    <Dialog
-      onClose={closeDialog}
-      aria-labelledby="customized-dialog-title"
-      open={openDialog}
-    >
-      <DialogTitle
-        id="customized-dialog-title"
+    <>
+      {redirection === true && <Redirect to="/login"></Redirect>}
+      <Dialog
         onClose={closeDialog}
-        style={{ color: "#1a237e", margin: "auto" }}
+        aria-labelledby="customized-dialog-title"
+        open={openDialog}
       >
-        CREATE APPOINTMENT
-      </DialogTitle>
-      <DialogContent>{ManualCreateDialog}</DialogContent>
-      <DialogActions>
-        <Button autoFocus color="secondary" onClick={closeDialog}>
-          Close
-        </Button>
-        <Button
-          autoFocus
-          color="primary"
-          onClick={() => createAppointment(appointment)}
+        <DialogTitle
+          id="customized-dialog-title"
+          onClose={closeDialog}
+          style={{ color: "#1a237e", margin: "auto" }}
         >
-          Create appointment
-        </Button>
-      </DialogActions>
-    </Dialog>
+          CREATE APPOINTMENT
+        </DialogTitle>
+        <DialogContent>{ManualCreateDialog}</DialogContent>
+        <DialogActions>
+          <Button autoFocus color="secondary" onClick={closeDialog}>
+            Close
+          </Button>
+          <Button
+            autoFocus
+            color="primary"
+            onClick={() => createAppointment(appointment)}
+          >
+            Create appointment
+          </Button>
+        </DialogActions>
+      </Dialog>
+    </>
   );
 };
 

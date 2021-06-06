@@ -3,6 +3,7 @@ import { FormLabel, Grid, TextField, Box } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 
 import React, { useEffect, useState } from "react";
+import { Redirect } from "react-router-dom";
 
 const useStyles = makeStyles({
   formLabel: {
@@ -13,7 +14,7 @@ const useStyles = makeStyles({
 const WriteReportSecondStep = ({ appointment, report, setReport }) => {
   const token = localStorage.getItem("token");
   const userId = localStorage.getItem("userId");
-
+  const [redirection, setRedirection] = useState(false);
   const classes = useStyles();
 
   const [nowTime, setDate] = useState(new Date());
@@ -32,6 +33,7 @@ const WriteReportSecondStep = ({ appointment, report, setReport }) => {
 
   return (
     <div>
+      {redirection === true && <Redirect to="/login"></Redirect>}
       {appointment.FirstName !== undefined && (
         <>
           <Grid container spacing={0} style={{ marginTop: "1%" }}>

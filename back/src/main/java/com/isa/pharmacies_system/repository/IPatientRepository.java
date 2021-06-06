@@ -11,17 +11,18 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
+import java.util.Set;
 
 public interface IPatientRepository extends JpaRepository<Patient, Long> {
 
     @Query("select p.dermatologistAppointment from Patient p where p.id=?1 ")
-    Page<DermatologistAppointment> getAllByDermatologistAppointment(Long id,Pageable pagable);
+    Set<DermatologistAppointment> getAllByDermatologistAppointment(Long id);
 
     @Query("select p.pharmacistAppointments from Patient p where p.id=?1 ")
-    Page<PharmacistAppointment> getAllByPharmacistAppointment(Long id, Pageable pagable);
+    Set<PharmacistAppointment> getAllByPharmacistAppointment(Long id);
 
     @Query("select p.patientMedicineReservations from Patient p where p.id=?1 ")
-    Page<MedicineReservation> getAllByMedicineReservations(Long id, Pageable pagable);
+    Set<MedicineReservation> getAllByMedicineReservations(Long id);
 
     @Query("select p.patientEPrescriptions from Patient p where p.id=?1")
     List<EPrescription> getAllEPrescriptionsForPatient(Long id);

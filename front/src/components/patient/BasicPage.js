@@ -22,6 +22,9 @@ import Complaint from './Complaint'
 import MedicineHome from './MedicineHome'
 import AppointmentsHome from './AppointmentsHome'
 import Medicine from './Medicine'
+import {Redirect} from "react-router-dom"
+import Login from "../other/LoginPage.js"
+
 
 
 
@@ -35,7 +38,9 @@ const BasicPage = () => {
     <Router>
         <Switch>
             <div>
-                <NavBar user="patient" />
+            {(userId !== undefined && userId !== null) && <NavBar user="patient" />}
+            <Route exact path="/login" component={Login}></Route>
+
                 <Route
                 path="/patient/profile"
                 component={Profile}

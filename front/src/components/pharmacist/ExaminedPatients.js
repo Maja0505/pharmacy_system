@@ -13,6 +13,7 @@ import { useState, useEffect } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import axios from "axios";
 import { URL } from "../other/components";
+import { Redirect } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
   table: {
@@ -36,7 +37,7 @@ const useStyles = makeStyles((theme) => ({
 const ExaminedPatients = () => {
   const token = localStorage.getItem("token");
   const userId = localStorage.getItem("userId");
-
+  const [redirection, setRedirection] = useState(false);
   const classes = useStyles();
 
   const [rows, setRows] = useState([]);
@@ -110,6 +111,11 @@ const ExaminedPatients = () => {
       )
       .then((res) => {
         setRows(res.data);
+      })
+      .catch((error) => {
+        if (error.response.status === 401) {
+          setRedirection(true);
+        }
       });
   };
 
@@ -137,6 +143,11 @@ const ExaminedPatients = () => {
       )
       .then((res) => {
         setRows(res.data);
+      })
+      .catch((error) => {
+        if (error.response.status === 401) {
+          setRedirection(true);
+        }
       });
   };
 
@@ -164,6 +175,11 @@ const ExaminedPatients = () => {
       )
       .then((res) => {
         setRows(res.data);
+      })
+      .catch((error) => {
+        if (error.response.status === 401) {
+          setRedirection(true);
+        }
       });
   };
 
@@ -191,6 +207,11 @@ const ExaminedPatients = () => {
       )
       .then((res) => {
         setRows(res.data);
+      })
+      .catch((error) => {
+        if (error.response.status === 401) {
+          setRedirection(true);
+        }
       });
   };
 
@@ -218,6 +239,11 @@ const ExaminedPatients = () => {
       )
       .then((res) => {
         setRows(res.data);
+      })
+      .catch((error) => {
+        if (error.response.status === 401) {
+          setRedirection(true);
+        }
       });
   };
 
@@ -245,6 +271,11 @@ const ExaminedPatients = () => {
       )
       .then((res) => {
         setRows(res.data);
+      })
+      .catch((error) => {
+        if (error.response.status === 401) {
+          setRedirection(true);
+        }
       });
   };
 
@@ -338,6 +369,7 @@ const ExaminedPatients = () => {
 
   return (
     <div>
+      {redirection === true && <Redirect to="/login"></Redirect>}
       {SearchPart}
       <Grid container spacing={1}>
         <Grid item xs={2} />

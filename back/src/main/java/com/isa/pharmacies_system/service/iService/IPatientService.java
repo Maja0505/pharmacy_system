@@ -26,9 +26,9 @@ public interface IPatientService {
     Boolean addMedicineAllergies(Long patientId, Long medicineId);
     Set<DermatologistAppointment> getDermatologistAppointmentForPatient(Long id);
     Boolean checkIsPatientAllergiesOnSomeMedicine(Long patientId,Medicine medicine);
-    Set<DermatologistAppointment> getAllReservedDermatologistAppointmentsForPatient(Long id,int page);
-    Set<PharmacistAppointment> getAllReservedPharmacistAppointmentsForPatient(Long id, int page);
-    Page<MedicineReservation> getAllMedicineReservationsForPatient(Long id, int page);
+    Set<DermatologistAppointment> getAllReservedDermatologistAppointmentsForPatient(Long id);
+    Set<PharmacistAppointment> getAllReservedPharmacistAppointmentsForPatient(Long id);
+    Set<MedicineReservation> getAllMedicineReservationsForPatient(Long id);
     List<EPrescription> getAllEPrescriptionsForPatient(Long id);
     List<Pharmacy> getSubscriptionPharmaciesForPatient(Long id);
     List<UserPersonalInfoDTO> getAllDermatologistForPatient(Long patientId);

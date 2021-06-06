@@ -16,7 +16,7 @@ import {
   import CloseIcon from '@material-ui/icons/Close';
   import IconButton from '@material-ui/core/IconButton';
   import {URL} from "../other/components"
-
+  import {Redirect} from "react-router-dom"
 
 
 
@@ -62,6 +62,7 @@ const Allergies = ({allergies,setAllergies,patientId}) => {
     const classes = useStyles()
     const token = localStorage.getItem("token");
     const userId = localStorage.getItem("userId");
+    const [redirection,setRedirection] = useState(false)
     const config = {
       headers: { Authorization: `Bearer ${token}` }
   };
@@ -73,12 +74,14 @@ const Allergies = ({allergies,setAllergies,patientId}) => {
     const [medicines,setMedicines] = useState([]);
     const [selectedMedicine, setSelectedMedicine] = useState(null)
 
-    const getMedicine = async () => {
+    const getMedicine =  () => {
         axios.get(URL + '/api/medicine/all/short', config)
         .then((res)=>{
             setMedicines(res.data)
-        }).catch((err) => {
-            console.log(err);
+        }).catch((error) => {
+          if(error.response.status === 401){
+            setRedirection(true)
+          }
         });
        
     }
@@ -92,7 +95,11 @@ const Allergies = ({allergies,setAllergies,patientId}) => {
               setSelectedMedicine({})  
             }
           }
-        )
+        ).catch((error) => {
+          if(error.response.status === 401){
+            setRedirection(true)
+          }
+        });
       }
     }
 
@@ -107,7 +114,11 @@ const Allergies = ({allergies,setAllergies,patientId}) => {
               setSelectedMedicine({})  
             }
           }
-        )
+        ).catch((error) => {
+          if(error.response.status === 401){
+            setRedirection(true)
+          }
+        });
     }
 
     const TableHeader = (
@@ -139,6 +150,7 @@ const Allergies = ({allergies,setAllergies,patientId}) => {
 
     return (
         <div>
+            {redirection === true && <Redirect to="/login"></Redirect>}
             <Grid container spacing={1} >
                 <Grid container justify="center" >
                     <Grid  item xs={20}>
@@ -153,7 +165,7 @@ const Allergies = ({allergies,setAllergies,patientId}) => {
                       />
                     </Grid>
                     <Grid item>
-                    <Button onClick={HandleAddButton} variant="contained" color="primary" style={{height:'100%'}}>Add</Button>
+                    <Button onClick={HandleAddButton} disabled = {selectedMedicine === null || selectedMedicine.medicineId === undefined} variant="contained" color="primary" style={{height:'100%'}}>Add</Button>
                     </Grid>
                 </Grid>
             </Grid>

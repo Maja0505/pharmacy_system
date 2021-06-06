@@ -14,10 +14,12 @@ import {
 import axios from "axios";
 import Alert from "@material-ui/lab/Alert";
 import { URL } from "../other/components";
+import { Redirect } from "react-router-dom";
 
 const VacationRequest = () => {
   const token = localStorage.getItem("token");
   const userId = localStorage.getItem("userId");
+  const [redirection, setRedirection] = useState(false);
 
   const [disableDates, setDisableDates] = useState([
     {
@@ -30,15 +32,20 @@ const VacationRequest = () => {
   }, []);
 
   const getDisabledDates = async () => {
-    const res = await axios.get(
-      URL + "/api/dermatologist/futureVacationRequest/" + userId,
-      {
+    const res = await axios
+      .get(URL + "/api/dermatologist/futureVacationRequest/" + userId, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
-      }
-    );
-    res.data.map((vacationRequest) => createDisableDates(vacationRequest));
+      })
+      .catch((error) => {
+        if (error.response.status === 401) {
+          setRedirection(true);
+        }
+      });
+    if (res !== undefined) {
+      res.data.map((vacationRequest) => createDisableDates(vacationRequest));
+    }
   };
 
   const createDisableDates = async (vacationRequest) => {
@@ -164,6 +171,10 @@ const VacationRequest = () => {
         setTypeOfVacation("Holiday");
       })
       .catch(function (error) {
+        if (error.response.status === 401) {
+          setRedirection(true);
+        }
+
         setOpenAlertUnsuccses(true);
       });
   };
@@ -186,6 +197,7 @@ const VacationRequest = () => {
 
   return (
     <div>
+      {redirection === true && <Redirect to="/login"></Redirect>}
       <Grid container spacing={1} style={{ marginTop: "3%" }}>
         <Grid item xs={2} />
         <Grid item xs={8}>

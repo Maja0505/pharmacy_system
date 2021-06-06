@@ -54,6 +54,7 @@ public class PatientConverter{
         patientAdditionalInfoDTO.setEmail(patient.getEmail());
         patientAdditionalInfoDTO.setPatientPoints(patient.getPatientPoints());
         patientAdditionalInfoDTO.setCategoryOfPatient(patient.getCategoryOfPatient());
+        patientAdditionalInfoDTO.setPenalty(patient.getPenalty());
 
         List<MedicineForAllergiesDTO> medicineForAllergiesDTOList = new ArrayList<>();
         for (Medicine medicine: patient.getMedicineAllergies()) {

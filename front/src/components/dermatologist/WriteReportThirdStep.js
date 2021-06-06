@@ -19,6 +19,7 @@ import { makeStyles } from "@material-ui/core/styles";
 
 import RecipeAddItemDialog from "./RecipeAddItemDialog.js";
 import { URL } from "../other/components";
+import { Redirect } from "react-router-dom";
 
 import axios from "axios";
 
@@ -43,7 +44,7 @@ const WriteReportThirdStep = ({
   const userId = localStorage.getItem("userId");
 
   const classes = useStyles();
-
+  const [redirection, setRedirection] = useState(false);
   const [selectedMedicine, setSelectedMedicine] = useState(null);
   const [showIngredients, setShowIngredients] = useState(false);
   const [showNotes, setShowNotes] = useState(false);
@@ -60,6 +61,11 @@ const WriteReportThirdStep = ({
       })
       .then((res) => {
         setMedicinesInPharmacy(res.data);
+      })
+      .catch((error) => {
+        if (error.response.status === 401) {
+          setRedirection(true);
+        }
       });
   }, []);
 
@@ -91,11 +97,17 @@ const WriteReportThirdStep = ({
       .then((res) => {
         setMedicinesInPharmacy(res.data);
         setIsAlternative(false);
+      })
+      .catch((error) => {
+        if (error.response.status === 401) {
+          setRedirection(true);
+        }
       });
   };
 
   return (
     <div>
+      {redirection === true && <Redirect to="/login"></Redirect>}
       <Grid
         container
         spacing={0}

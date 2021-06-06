@@ -43,6 +43,24 @@ public class PharmacyConverter {
 		return pharmacyDTO;
 	}
 
+
+	public PharmacyProfileDTO convertPharmacyToPharmacyProfileDTO(Pharmacy pharmacy){
+
+		PharmacyProfileDTO pharmacyDTO = new PharmacyProfileDTO();
+		pharmacyDTO.setId(pharmacy.getId());
+		pharmacyDTO.setPharmacyName(pharmacy.getPharmacyName());
+		pharmacyDTO.setStreetName(pharmacy.getPharmacyAddress().getStreetName());
+		pharmacyDTO.setCityForPharmacy(pharmacy.getPharmacyAddress().getCity());
+		pharmacyDTO.setStreetNumber(pharmacy.getPharmacyAddress().getStreetNumber());
+		pharmacyDTO.setCountry(pharmacy.getPharmacyAddress().getCountry());
+		PriceListForAppointmentDTO priceList = priceListService.findPriceListByPharmacyId(pharmacyDTO.getId());
+		pharmacyDTO.setPharmacistPerHour(priceList.getPharmacistAppointmentPricePerHour());
+		pharmacyDTO.setDermatologistPerHour(priceList.getDermatologistAppointmentPricePerHour());
+		pharmacyDTO.setPharmacyAverageRating(pharmacy.getPharmacyAverageRating());
+		pharmacyDTO.setPharmacyDescription(pharmacy.getPharmacyDescription());
+		return pharmacyDTO;
+	}
+
 	public List<PharmacyDTO> convertPharmacyListToPharmacyDTOList(List<Pharmacy> pharmacies){
 		List<PharmacyDTO> pharmacyDTOS = new ArrayList<>();
 		for (Pharmacy pharmacy: pharmacies) {

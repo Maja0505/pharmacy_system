@@ -4,7 +4,8 @@ import DialogTitle from "@material-ui/core/DialogTitle";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogActions from "@material-ui/core/DialogActions";
 import { Link } from "react-router-dom";
-
+import { Redirect } from "react-router-dom";
+import { useState } from "react";
 const AppointmentInfoDialog = ({
   openDialog,
   setOpenDialog,
@@ -15,7 +16,7 @@ const AppointmentInfoDialog = ({
   const closeDialog = () => {
     setOpenDialog(false);
   };
-
+  const [redirection, setRedirection] = useState(false);
   const writeReport = () => {
     localStorage.setItem(
       "PatientForPharmacistReport",
@@ -125,37 +126,40 @@ const AppointmentInfoDialog = ({
   );
 
   return (
-    <Dialog
-      onClose={closeDialog}
-      aria-labelledby="customized-dialog-title"
-      open={openDialog}
-    >
-      <DialogTitle
-        id="customized-dialog-title"
+    <>
+      {redirection === true && <Redirect to="/login"></Redirect>}
+      <Dialog
         onClose={closeDialog}
-        style={{ color: "#1a237e", margin: "auto" }}
+        aria-labelledby="customized-dialog-title"
+        open={openDialog}
       >
-        APPOINTMENT INFO
-      </DialogTitle>
-      {AppointmentDialogContent}
-      <DialogActions>
-        <Button autoFocus color="secondary" onClick={closeDialog}>
-          Close
-        </Button>
-        {appointment.colorId === 2 &&
-          schedule === false &&
-          now < appointment.endTime && (
-            <Button autoFocus color="primary" onClick={writeReport}>
-              <Link
-                to="/pharmacist/writeReport"
-                style={{ textDecoration: "none" }}
-              >
-                Write report
-              </Link>
-            </Button>
-          )}
-      </DialogActions>
-    </Dialog>
+        <DialogTitle
+          id="customized-dialog-title"
+          onClose={closeDialog}
+          style={{ color: "#1a237e", margin: "auto" }}
+        >
+          APPOINTMENT INFO
+        </DialogTitle>
+        {AppointmentDialogContent}
+        <DialogActions>
+          <Button autoFocus color="secondary" onClick={closeDialog}>
+            Close
+          </Button>
+          {appointment.colorId === 2 &&
+            schedule === false &&
+            now < appointment.endTime && (
+              <Button autoFocus color="primary" onClick={writeReport}>
+                <Link
+                  to="/pharmacist/writeReport"
+                  style={{ textDecoration: "none" }}
+                >
+                  Write report
+                </Link>
+              </Button>
+            )}
+        </DialogActions>
+      </Dialog>
+    </>
   );
 };
 

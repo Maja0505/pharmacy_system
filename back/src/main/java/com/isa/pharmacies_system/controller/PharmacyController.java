@@ -1,11 +1,9 @@
 package com.isa.pharmacies_system.controller;
 
-
 import java.time.LocalDateTime;
 import java.util.List;
-import com.isa.pharmacies_system.DTO.PharmacistAppointmentTimeDTO;
-import com.isa.pharmacies_system.DTO.PharmacyDTO;
-import com.isa.pharmacies_system.DTO.PharmacyWhereDermatologistWorkDTO;
+
+import com.isa.pharmacies_system.DTO.*;
 import com.isa.pharmacies_system.converter.PharmacyConverter;
 import com.isa.pharmacies_system.service.iService.IPriceListService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,8 +12,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-
-import com.isa.pharmacies_system.DTO.PharmacyNewDTO;
 import com.isa.pharmacies_system.domain.pharmacy.Pharmacy;
 import com.isa.pharmacies_system.service.iService.IPharmacyService;
 
@@ -35,15 +31,14 @@ public class PharmacyController {
 
 	@PreAuthorize("hasRole('ROLE_PATIENT')")
 	@GetMapping(value = "/{id}")
-	public ResponseEntity<PharmacyDTO> findOneForPharmacyAdmin(@PathVariable Long id) {
+	public ResponseEntity<PharmacyProfileDTO> findOneForPharmacyAdmin(@PathVariable Long id) {
 		try {
-			return new ResponseEntity<>(pharmacyConverter.convertPharmacyToPharmacyDTO(iPharmacyService.getById(id)), HttpStatus.OK);
+			return new ResponseEntity<>(pharmacyConverter.convertPharmacyToPharmacyProfileDTO(iPharmacyService.getById(id)), HttpStatus.OK);
 		} catch (Exception e) {
 			return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
 		}
 
 	}
-
 
 	@GetMapping(value = "/all")
 	public ResponseEntity<List<PharmacyDTO>> getAllPharmacies() {
@@ -77,7 +72,6 @@ public class PharmacyController {
 		}
 	}
 
-	@PreAuthorize("hasRole('ROLE_PATIENT')")
 	@PutMapping(value = "/sortByName/{asc}",consumes = "application/json")
 	public ResponseEntity<List<PharmacyDTO>> getSortedPharmacyByName(@RequestBody List<PharmacyDTO> pharmacies, @PathVariable String asc){
 		try {
@@ -92,7 +86,6 @@ public class PharmacyController {
 
 	}
 
-	@PreAuthorize("hasRole('ROLE_PATIENT')")
 	@PutMapping(value = "/sortByRating/{asc}",consumes = "application/json")
 	public ResponseEntity<List<PharmacyDTO>> getSortedPharmacyByRating(@RequestBody List<PharmacyDTO> pharmacies, @PathVariable String asc){
 		try {
@@ -107,7 +100,24 @@ public class PharmacyController {
 
 	}
 
-	@PreAuthorize("hasRole('ROLE_PATIENT')")
+	@PutMapping(value = "/search/{word}", consumes = "application/json")
+	public ResponseEntity<List<PharmacyDTO>> searchPharmacyByNameAndCity(@PathVariable String word, @RequestBody List<PharmacyDTO> pharmacyDTOS){
+		try {
+			return new ResponseEntity<>(iPharmacyService.searchPharmacyByNameAndCity(word,pharmacyDTOS),HttpStatus.OK);
+		}catch (Exception e){
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		}
+	}
+
+	@PutMapping(value = "/filter", consumes = "application/json")
+	public ResponseEntity<List<PharmacyDTO>> filterPharmacy(@RequestBody FilteringPharmacyDTO filteringPharmacyDTO) {
+		try {
+			return new ResponseEntity<>(iPharmacyService.filterPharmacy(filteringPharmacyDTO), HttpStatus.OK);
+		} catch (Exception e) {
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		}
+	}
+
 	@PutMapping(value = "/sortByCity/{asc}",consumes = "application/json")
 	public ResponseEntity<List<PharmacyDTO>> getSortedPharmacyByCity(@RequestBody List<PharmacyDTO> pharmacies, @PathVariable String asc){
 		try {
@@ -119,7 +129,6 @@ public class PharmacyController {
 		}catch (Exception e){
 			return new ResponseEntity<>(null,HttpStatus.BAD_REQUEST);
 		}
-
 	}
 
 	//Nemanja
@@ -137,5 +146,4 @@ public class PharmacyController {
 			return new ResponseEntity<>(null,HttpStatus.BAD_REQUEST);
 		}
 	}
-
 }

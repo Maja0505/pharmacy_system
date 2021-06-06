@@ -8,6 +8,7 @@ import appointments from "../../images/appointment.jpg"
 import ePrescription from "../../images/eprescription.png"
 import rating from "../../images/rating.jpg"
 import complaint from "../../images/complaint.png"
+import {Redirect} from "react-router-dom"
 
 
 
@@ -18,7 +19,7 @@ import background from "../../images/doctor.jpg";
 
 
 
-import React from 'react';
+import React,{useState} from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import ButtonBase from '@material-ui/core/ButtonBase';
 import Typography from '@material-ui/core/Typography';
@@ -135,29 +136,24 @@ const HomePage2 = () => {
 
     const classes = useStyles();
     let history = useHistory();
+    const [redirection,setRedirection] = useState(false)
+
     
     const HandleClickButton = (title) => {
-        console.log(title)
 
         if(title === 'Pharmacy'){
-            console.log('eto me')
             history.push('/patient/pharmacies')
         }
         else if(title === 'Medicines'){
-            console.log('eto me')
             history.push('/patient/medicines')
         }
         else if(title === 'E-Prescriptions'){
-            console.log('eto me')
             history.push('/patient/ePrescriptionList')
         }else if(title === 'Rating'){
-            console.log('eto me')
             history.push('/patient/rating')
         }else if(title === 'Appointments'){
-            console.log('eto me')
             history.push('/patient/appointments')
         }else if(title === 'Complaint'){
-          console.log('eto me')
           history.push('/patient/complaint')
       }
     }

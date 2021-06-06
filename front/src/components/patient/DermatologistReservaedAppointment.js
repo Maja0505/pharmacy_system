@@ -21,6 +21,7 @@ import {
   import Alert from "@material-ui/lab/Alert";
   import Snackbar from "@material-ui/core/Snackbar";
   import {URL} from "../other/components"
+  import {Redirect} from "react-router-dom"
 
   
 
@@ -67,6 +68,8 @@ const styles = (theme) => ({
     const [openAlertError, setOpenAlertError] = useState(false)
     const [openAlertSuccess, setOpenAlertSuccess] = useState(false)
     const [alertTextSuccess, setAlertTextSuccess] = useState('')
+    const [redirection,setRedirection] = useState(false)
+
     const token = localStorage.getItem("token");
     const userId = localStorage.getItem("userId");
     const config = {
@@ -76,13 +79,14 @@ const styles = (theme) => ({
     useEffect(() => {
       axios
         .get(
-          URL + "/api/patient/" + userId + "/dermatologistAppointment/all/reserved/" +
-          (currPage - 1).toString() +
-          "",config)
+          URL + "/api/patient/" + userId + "/dermatologistAppointment/all/reserved",config)
         .then((res) => {
           setRows(res.data);
           setCopyRows(res.data);
-          console.log(res)
+        }).catch((error) => {
+          if(error.response.status === 401){
+            setRedirection(true)
+          }
         });
     }, []);
 
@@ -121,13 +125,14 @@ const styles = (theme) => ({
         if(res.data){
           axios
           .get(
-            URL + "/api/patient/" + userId + "/dermatologistAppointment/all/reserved/" +
-            (currPage - 1).toString() +
-            "",config)
+            URL + "/api/patient/" + userId + "/dermatologistAppointment/all/reserved",config)
           .then((res) => {
             setRows(res.data);
             setCopyRows(res.data);
-            console.log(res)
+          }).catch((error) => {
+            if(error.response.status === 401){
+              setRedirection(true)
+            }
           });
           setAlertTextSuccess('Success cancel reservation')
           setOpenAlertSuccess(true)
@@ -138,6 +143,9 @@ const styles = (theme) => ({
         }
         
       }).catch(error => {
+          if(error.response.status === 401){
+            setRedirection(true)
+          }
         setAlertTextError("You cant't cancel reservation");
         setOpenAlertError(true);
       });
@@ -215,6 +223,7 @@ const styles = (theme) => ({
   
     return (
       <div>
+        {redirection === true && <Redirect to="/login"></Redirect>}
           {SearchPart}
         <Grid container spacing={1}>
           <Grid item xs={2} />

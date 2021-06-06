@@ -4,6 +4,8 @@ import { makeStyles } from "@material-ui/core/styles";
 import { URL } from "../other/components";
 
 import axios from "axios";
+import { Redirect } from "react-router-dom";
+import { useState } from "react";
 
 const useStyles = makeStyles({
   cart: {
@@ -20,7 +22,7 @@ const useStyles = makeStyles({
 const WriteReportFirstStep = ({ appointment, setAppointment }) => {
   const token = localStorage.getItem("token");
   const userId = localStorage.getItem("userId");
-
+  const [redirection, setRedirection] = useState(false);
   const classes = useStyles();
 
   const changeAppointmentToMissed = () => {
@@ -44,6 +46,9 @@ const WriteReportFirstStep = ({ appointment, setAppointment }) => {
         );
       })
       .catch((error) => {
+        if (error.response.status === 401) {
+          setRedirection(true);
+        }
         alert(
           "Appointment not start yet.\nYou can only set status missed for appointment which is started and not finished yet!"
         );
@@ -52,6 +57,7 @@ const WriteReportFirstStep = ({ appointment, setAppointment }) => {
 
   return (
     <div>
+      {redirection === true && <Redirect to="/login"></Redirect>}
       {appointment.FirstName !== undefined && (
         <>
           <Grid container spacing={1} style={{ marginTop: "1%" }}>

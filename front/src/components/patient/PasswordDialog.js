@@ -7,7 +7,7 @@ import TextField from "@material-ui/core/TextField";
 import DialogActions from '@material-ui/core/DialogActions';
 import axios from "axios";
 import {URL} from "../other/components"
-
+import {Redirect} from "react-router-dom"
 
 const PasswordDialog = ({openDialog,id,setOpenAlert,setOpenDialog,setAlertText}) => {
 
@@ -19,6 +19,7 @@ const PasswordDialog = ({openDialog,id,setOpenAlert,setOpenDialog,setAlertText})
     const [error, setError] = useState('')
     const token = localStorage.getItem("token");
     const userId = localStorage.getItem("userId");
+    const [redirection,setRedirection] = useState(false)
     const config = {
       headers: { Authorization: `Bearer ${token}`, consumes:'application/json' }
   };
@@ -45,9 +46,10 @@ const PasswordDialog = ({openDialog,id,setOpenAlert,setOpenDialog,setAlertText})
             setAlertText('Success change passowrd!')
             setOpenAlert(true)
             setOpenDialog(false)
-        })
-        .catch((err) => {
-            console.log(err);
+        }).catch((error) => {
+            if(error.response.status === 401){
+              setRedirection(true)
+            }
             setError('wrong current or confirmed password')
         });
     }
@@ -56,6 +58,8 @@ const PasswordDialog = ({openDialog,id,setOpenAlert,setOpenDialog,setAlertText})
 
     return (
         <div>
+      {redirection === true && <Redirect to="/login"></Redirect>}
+
      <Dialog       //Dialog za promenu lozinke
         onClose={closeDialog}
         aria-labelledby="customized-dialog-title"

@@ -60,7 +60,7 @@ class RegistrationPage extends Component {
 		    password: this.state.password,
             confirmPassword: this.state.confirmPassword
         };
-        alert(user.email);
+        alert("Check your email and confirm account " + user.email);
         if(this.state.password != this.state.confirmPassword){
             alert("Passwords don't match");
         }

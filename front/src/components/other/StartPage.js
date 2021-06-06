@@ -100,24 +100,18 @@ const StartPage = () => {
     let history = useHistory();
     
     const HandleClickButton = (title) => {
-        console.log(title)
 
         if(title === 'Pharmacy'){
-            console.log('eto me')
             history.push('/pharmacies')
         }
         else if(title === 'Medicines'){
-            console.log('eto me')
             history.push('/medicines')
         }
         else if(title === 'E-Prescriptions'){
-            console.log('eto me')
             history.push('/patient/ePrescriptionList')
         }else if(title === 'Rating'){
-            console.log('eto me')
             history.push('/patient/rating')
         }else if(title === 'Appointments'){
-            console.log('eto me')
             history.push('/patient/appointments')
         }
     }

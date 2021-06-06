@@ -6,8 +6,8 @@ import WorkCalendar from "../../images/workCalendar.png";
 import VacationRequest from "../../images/vacationRequest.png";
 import Examinations from "../../images/examinations.png";
 import background from "../../images/doctor.jpg";
-
-
+import { Redirect } from "react-router-dom";
+import { useState } from "react";
 import { useHistory } from "react-router-dom";
 
 const images = [
@@ -100,6 +100,7 @@ const useStyles = makeStyles((theme) => ({
 const HomePage = () => {
   const classes = useStyles();
   let history = useHistory();
+  const [redirection, setRedirection] = useState(false);
   const handleClickButton = (title) => {
     if (title === "Work calendar") {
       history.push("/dermatologist/workCalendar");
@@ -113,10 +114,16 @@ const HomePage = () => {
   };
 
   return (
-    <div style={{backgroundImage: `url(${background})` , height: "753px",
-    backgroundSize: "cover",
-    backgroundRepeat: "no-repeat",
-    backgroundPosition: "center",}}>
+    <div
+      style={{
+        backgroundImage: `url(${background})`,
+        height: "753px",
+        backgroundSize: "cover",
+        backgroundRepeat: "no-repeat",
+        backgroundPosition: "center",
+      }}
+    >
+      {redirection === true && <Redirect to="/login"></Redirect>}
       {images.map((image) => (
         <ButtonBase
           focusRipple
