@@ -36,7 +36,7 @@ public class EmailService {
         mail.setTo(email);
         mail.setFrom(env.getProperty("spring.mail.username"));
         mail.setSubject("Confirm registration");
-        mail.setText("Please confirm your registration by clicking the link below \n\n"+ "http://localhost:8080/auth/confirm_account/" + confirmationToken);
+        mail.setText("Please confirm your registration by clicking the link below \n\n"+ "http://localhost:3000/auth/confirm_account/" + confirmationToken);
         javaMailSender.send(mail);
     }
 

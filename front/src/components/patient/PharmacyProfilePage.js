@@ -214,9 +214,6 @@ import {URL} from "../other/components"
         });
     };
    
-    const openProfile = (row) => {
-      console.log(row)
-    }
 
     const HandleClickScheduleDermatologistAppointment = (row) => {
       if(penalty < 3){

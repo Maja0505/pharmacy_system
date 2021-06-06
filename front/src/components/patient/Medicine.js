@@ -83,10 +83,7 @@ import {
       );
     };
 
-    const openProfile = (row) => {
-      console.log(row)
-    }
-
+   
     const TableHeader = (
       <TableHead>
         <TableRow className={classes.hederRow}>

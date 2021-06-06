@@ -98,7 +98,6 @@ const WriteReportThirdStep = ({
     <div>
       <Grid
         container
-        spacing={0}
         style={{ marginTop: "2%", width: "80%", margin: "auto" }}
       >
         <Grid item xs={3}>

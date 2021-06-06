@@ -82,7 +82,6 @@ import {
         .then((res) => {
           setRows(res.data);
           setCopyRows(res.data);
-          console.log(res)
         });
     }, []);
   
@@ -113,7 +112,6 @@ import {
           .then((res) => {
             setRows(res.data);
             setCopyRows(res.data);
-            console.log(res)
           });
           setAlertTextSuccess('Success cancel reservation')
           setOpenAlertSuccess(true)

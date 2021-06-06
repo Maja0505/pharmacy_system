@@ -24,7 +24,7 @@ public class TokenUtils {
 	public String SECRET;
 
 	// Period vazenja
-	@Value("3600000") //sat vremena
+	@Value("14400000") //sat vremena
 	private int EXPIRES_IN;
 
 	// Naziv headera kroz koji ce se prosledjivati JWT u komunikaciji server-klijent

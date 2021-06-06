@@ -97,7 +97,6 @@ const HomePage = () => {
         setUserCopy({id : patient.id,firstName : patient.firstName, lastName : patient.lastName, address : patient.address, phoneNumber : patient.phoneNumber, email : patient.email, patientPoints : patient.patientPoints, categoryOfPatient : patient.categoryOfPatient, penalty : patient.penalty})
         setAddress({streetName: patient.address.streetName, streetNumber: patient.address.streetNumber, city: patient.address.city, country: patient.address.country, longitude : patient.address.longitude, latitude : patient.address.latitude })
         setAllergies(patient.medicineForAllergiesDTO)
-        console.log(patient.medicineForAllergiesDTO)
     }
 
     const handleEditButton = () => {

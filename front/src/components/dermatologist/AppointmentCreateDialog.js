@@ -156,7 +156,6 @@ const AppointmentCreateDialog = ({
   };
 
   const createPredefinedApppointment = (a) => {
-    console.log(data);
     setData(
       data.map((d) =>
         d.id === a.id

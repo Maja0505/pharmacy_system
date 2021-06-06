@@ -116,7 +116,6 @@ import {URL} from "../other/components"
         .then((res) => {
           setRows(res.data);
           setCopyRows(res.data);
-          console.log(res)
         });
     }, []);
 

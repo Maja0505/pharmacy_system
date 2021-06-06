@@ -82,7 +82,6 @@ const AppointmentCreateDialog = ({
   };
 
   const createAppointment = (a) => {
-    console.log(patient);
     if (a.EndTime !== null) {
       axios
         .post(

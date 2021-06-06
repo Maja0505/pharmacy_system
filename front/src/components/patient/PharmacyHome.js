@@ -15,7 +15,6 @@ const PharmacyHome = () => {
 
 
     const HandleAllClickButton = () => {
-      console.log(userId)
       if(!allButton){
         setAllButton(true)
         setFollowedButton(false)

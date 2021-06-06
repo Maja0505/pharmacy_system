@@ -80,7 +80,6 @@ const styles = (theme) => ({
         .then((res) => {
           setRows(res.data);
           setCopyRows(res.data);
-          console.log(res)
         });
     }, []);
 
@@ -123,7 +122,6 @@ const styles = (theme) => ({
           .then((res) => {
             setRows(res.data);
             setCopyRows(res.data);
-            console.log(res)
           });
           setAlertTextSuccess('Success cancel reservation')
           setOpenAlertSuccess(true)

@@ -30,7 +30,6 @@ class Login extends Component {
       })
       .then((res) => {
         let tokenDTO = res.data;
-        console.log(res.data);
         this.setState({
           userId: tokenDTO.userId,
           token: tokenDTO.accessToken,
@@ -45,7 +44,6 @@ class Login extends Component {
         localStorage.setItem("userEmail", this.state.userEmail);
         localStorage.setItem("roleUser", this.state.roleUser);
         localStorage.setItem("firstLogin", this.state.firstLogin);
-        console.log("TOKEN " + this.state.token);
       })
       .catch(function (error) {
         if (error.response) {
@@ -53,8 +51,6 @@ class Login extends Component {
         }
       });
 
-    console.log("email: " + this.state.email);
-    console.log("pass: " + this.state.password);
 
     this.redirect();
   }

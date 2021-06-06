@@ -209,7 +209,7 @@ const WriteReport = () => {
       {appointment !== null && (
         <div>
           <Paper className={classes.paper} elevation={0}>
-            <Typography variant="h4" style={{ marginTop: "3%" }}>
+            <Typography variant="h4" style={{ marginTop: "2%" }}>
               Write report
             </Typography>
             <Stepper

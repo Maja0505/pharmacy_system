@@ -249,7 +249,6 @@ import {URL} from "../other/components"
     };
 
     const openProfile = (row) => {
-      console.log(row)
     }
 
     const TableHeader = (
@@ -409,7 +408,7 @@ import {URL} from "../other/components"
           setFilterAndSearch(true)
 
         }).catch(error => {
-          console.log('greska')
+          console.log(error)
         })
       }
      

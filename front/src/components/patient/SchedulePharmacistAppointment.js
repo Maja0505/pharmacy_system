@@ -193,7 +193,6 @@ export default function Checkout() {
         .put(
           URL + "/api/pharmacy/free",timeDTO,config)
         .then((res) => {
-          console.log(res.data)
           if(res.data.length === 0){
             setAlertTextError('There are no available pharmacists in selected time')
             setOpenAlertError(true)
