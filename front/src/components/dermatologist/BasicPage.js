@@ -10,15 +10,23 @@ import FutureExaminations from "./FutureExaminations.js";
 import HomePage from "./HomePage.js";
 import Examinations from "./Examinations.js";
 import { useState } from "react";
-const BasicPage = () => {
+import { Redirect } from "react-router-dom";
+import LoginPage from "../other/LoginPage.js";
 
+const BasicPage = () => {
   const userId = localStorage.getItem("userId");
-  const [redirection,setRedirection] = useState(false)
+  const [redirection, setRedirection] = useState(false);
   return (
     <Router>
       <Switch>
         <div>
-        {(userId !== undefined && userId !== null) && <NavBar user={"dermatologist"} />}
+          {userId !== undefined && userId !== null && (
+            <NavBar user={"dermatologist"} />
+          )}
+          {redirection === true && <Redirect to="/login"></Redirect>}
+          <Route path="/login">
+            <LoginPage />
+          </Route>
           <Route
             path="/dermatologist/editProfile"
             component={EditProfile}

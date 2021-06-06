@@ -8,8 +8,7 @@ import Alert from "@material-ui/lab/Alert";
 import { makeStyles } from "@material-ui/core/styles";
 import PasswordDialog from "./PasswordDialog";
 import { URL } from "../other/components";
-import {Redirect} from "react-router-dom"
-
+import { Redirect } from "react-router-dom";
 
 import axios from "axios";
 
@@ -30,7 +29,7 @@ const useStyles = makeStyles((theme) => ({
 const EditProfile = () => {
   const token = localStorage.getItem("token");
   const userId = localStorage.getItem("userId");
-  const [redirection,setRedirection] = useState(false)
+  const [redirection, setRedirection] = useState(false);
 
   const [user, setUser] = useState({
     id: -1,
@@ -87,40 +86,44 @@ const EditProfile = () => {
   };
 
   const getUser = async () => {
-    const res = await axios.get(URL + "/api/dermatologist/" + userId, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    }).catch((error) => {
-      if(error.response.status === 401){
-        setRedirection(true)
-      }
-    });
-    let pharamcist = res.data;
-    setUser({
-      id: pharamcist.id,
-      firstName: pharamcist.firstName,
-      lastName: pharamcist.lastName,
-      address: pharamcist.address,
-      phoneNumber: pharamcist.phoneNumber,
-      email: pharamcist.email,
-    });
-    setUserCopy({
-      id: pharamcist.id,
-      firstName: pharamcist.firstName,
-      lastName: pharamcist.lastName,
-      address: pharamcist.address,
-      phoneNumber: pharamcist.phoneNumber,
-      email: pharamcist.email,
-    });
-    setAddress({
-      streetName: pharamcist.address.streetName,
-      streetNumber: pharamcist.address.streetNumber,
-      city: pharamcist.address.city,
-      country: pharamcist.address.country,
-      longitude: pharamcist.address.longitude,
-      latitude: pharamcist.address.latitude,
-    });
+    const res = await axios
+      .get(URL + "/api/dermatologist/" + userId, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .catch((error) => {
+        if (error.response.status === 401) {
+          setRedirection(true);
+        }
+      });
+    if (res !== undefined) {
+      let pharamcist = res.data;
+      setUser({
+        id: pharamcist.id,
+        firstName: pharamcist.firstName,
+        lastName: pharamcist.lastName,
+        address: pharamcist.address,
+        phoneNumber: pharamcist.phoneNumber,
+        email: pharamcist.email,
+      });
+      setUserCopy({
+        id: pharamcist.id,
+        firstName: pharamcist.firstName,
+        lastName: pharamcist.lastName,
+        address: pharamcist.address,
+        phoneNumber: pharamcist.phoneNumber,
+        email: pharamcist.email,
+      });
+      setAddress({
+        streetName: pharamcist.address.streetName,
+        streetNumber: pharamcist.address.streetNumber,
+        city: pharamcist.address.city,
+        country: pharamcist.address.country,
+        longitude: pharamcist.address.longitude,
+        latitude: pharamcist.address.latitude,
+      });
+    }
   };
 
   const handleSaveButton = () => {
@@ -161,8 +164,8 @@ const EditProfile = () => {
           setOpenAlert(true);
         })
         .catch((error) => {
-          if(error.response.status === 401){
-            setRedirection(true)
+          if (error.response.status === 401) {
+            setRedirection(true);
           }
         });
       setEditState(false);
@@ -247,6 +250,7 @@ const EditProfile = () => {
 
   return (
     <>
+      {redirection === true && <Redirect to="/login"></Redirect>}
       <div>
         <Paper className={classes.paper}>
           <h2 className={classes.h2}>PROFILE</h2>

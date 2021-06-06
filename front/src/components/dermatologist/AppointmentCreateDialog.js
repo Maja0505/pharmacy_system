@@ -3,9 +3,9 @@ import Dialog from "@material-ui/core/Dialog";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogActions from "@material-ui/core/DialogActions";
-import {URL} from "../other/components"
-import {Redirect} from "react-router-dom"
-import { useState } from "react"
+import { URL } from "../other/components";
+import { Redirect } from "react-router-dom";
+import { useState } from "react";
 
 import { TimePickerComponent } from "@syncfusion/ej2-react-calendars";
 
@@ -27,7 +27,7 @@ const AppointmentCreateDialog = ({
 }) => {
   const token = localStorage.getItem("token");
   const userId = localStorage.getItem("userId");
-  const [redirection,setRedirection] = useState(false)
+  const [redirection, setRedirection] = useState(false);
   const closeDialog = () => {
     setOpenDialog(false);
   };
@@ -113,17 +113,17 @@ const AppointmentCreateDialog = ({
             createManualApppointment(a);
           })
           .catch((error) => {
-
-              if(error.response.status === 401){
-                setRedirection(true)
-            } 
+            if (error.response.status === 401) {
+              setRedirection(true);
+            }
 
             setOpenAlertUnsuccses(true);
           });
       } else {
         axios
           .put(
-            URL + "/api/dermatologistAppointment/book/" +
+            URL +
+              "/api/dermatologistAppointment/book/" +
               a.id +
               "/" +
               patient.Id,
@@ -140,11 +140,10 @@ const AppointmentCreateDialog = ({
             createPredefinedApppointment(a);
           })
           .catch((error) => {
-            
-              if(error.response.status === 401){
-                setRedirection(true)
-              }
-          
+            if (error.response.status === 401) {
+              setRedirection(true);
+            }
+
             setOpenAlertUnsuccses(true);
           });
       }
@@ -283,35 +282,38 @@ const AppointmentCreateDialog = ({
   );
 
   return (
-    <Dialog
-      onClose={closeDialog}
-      aria-labelledby="customized-dialog-title"
-      open={openDialog}
-    >
-      <DialogTitle
-        id="customized-dialog-title"
+    <>
+      {redirection === true && <Redirect to="/login"></Redirect>}
+      <Dialog
         onClose={closeDialog}
-        style={{ color: "#1a237e", margin: "auto" }}
+        aria-labelledby="customized-dialog-title"
+        open={openDialog}
       >
-        CREATE APPOINTMENT
-      </DialogTitle>
-      <DialogContent>
-        {predefinedAppointment === false && ManualCreateDialog}
-        {predefinedAppointment === true && PredefinedCreateDialog}
-      </DialogContent>
-      <DialogActions>
-        <Button autoFocus color="secondary" onClick={closeDialog}>
-          Close
-        </Button>
-        <Button
-          autoFocus
-          color="primary"
-          onClick={() => createAppointment(appointment)}
+        <DialogTitle
+          id="customized-dialog-title"
+          onClose={closeDialog}
+          style={{ color: "#1a237e", margin: "auto" }}
         >
-          Create appointment
-        </Button>
-      </DialogActions>
-    </Dialog>
+          CREATE APPOINTMENT
+        </DialogTitle>
+        <DialogContent>
+          {predefinedAppointment === false && ManualCreateDialog}
+          {predefinedAppointment === true && PredefinedCreateDialog}
+        </DialogContent>
+        <DialogActions>
+          <Button autoFocus color="secondary" onClick={closeDialog}>
+            Close
+          </Button>
+          <Button
+            autoFocus
+            color="primary"
+            onClick={() => createAppointment(appointment)}
+          >
+            Create appointment
+          </Button>
+        </DialogActions>
+      </Dialog>
+    </>
   );
 };
 

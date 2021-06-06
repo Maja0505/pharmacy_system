@@ -2,12 +2,13 @@ import { useState } from "react";
 import { Button } from "@material-ui/core";
 import FeatureExaminations from "./FutureExaminations.js";
 import PastExaminations from "./ExaminedPatients.js";
-import {Redirect} from "react-router-dom"
+import { Redirect } from "react-router-dom";
 const Examinations = () => {
   const [future, setFuture] = useState(true);
-  const [redirection,setRedirection] = useState(false)
+  const [redirection, setRedirection] = useState(false);
   return (
     <div style={{ marginTop: "3%" }}>
+      {redirection === true && <Redirect to="/login"></Redirect>}
       <Button
         variant={future !== true ? "contained" : "outlined"}
         color="primary"
