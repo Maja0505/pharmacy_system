@@ -31,7 +31,7 @@ import Alert from "@material-ui/lab/Alert";
 import Snackbar from "@material-ui/core/Snackbar";
 import { set } from "date-fns";
 import {URL} from "../other/components"
-
+import {Redirect} from "react-router-dom"
 
 
   
@@ -117,6 +117,7 @@ import {URL} from "../other/components"
 
     const token = localStorage.getItem("token");
     const userId = localStorage.getItem("userId");
+    const [redirection,setRedirection] = useState(false)
     const config = {
       headers: { Authorization: `Bearer ${token}`, consumes:'application/json' }
   };

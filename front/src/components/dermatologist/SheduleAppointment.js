@@ -30,7 +30,6 @@ import { useEffect, useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import {URL} from "../other/components"
 
-
 const useStyles = makeStyles({
   cart: {
     fontSize: 15,
@@ -41,7 +40,7 @@ const useStyles = makeStyles({
 const SheduleAppointment = ({ pharmacyInfo }) => {
   const token = localStorage.getItem("token");
   const userId = localStorage.getItem("userId");
-
+  const [redirection,setRedirection] = useState(false)
   const [data, setData] = useState([]);
   const resourceDataSource = [{ Id: 4, Color: "#8c9290", Name: "open" }];
 
@@ -117,6 +116,10 @@ const SheduleAppointment = ({ pharmacyInfo }) => {
         res.data.map((workDay) => {
           addToWorkingDates(workDay);
         });
+      }).catch((error) => {
+        if(error.response.status === 401){
+          setRedirection(true)
+        }
       });
 
     axios
@@ -133,6 +136,10 @@ const SheduleAppointment = ({ pharmacyInfo }) => {
       )
       .then((res) => {
         addAppointmentsToData(res.data);
+      }).catch((error) => {
+        if(error.response.status === 401){
+          setRedirection(true)
+        }
       });
 
     axios
@@ -149,6 +156,10 @@ const SheduleAppointment = ({ pharmacyInfo }) => {
       )
       .then((res) => {
         addAppointmentsToData(res.data);
+      }).catch((error) => {
+        if(error.response.status === 401){
+          setRedirection(true)
+        }
       });
   }, []);
 

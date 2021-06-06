@@ -8,6 +8,7 @@ import Alert from "@material-ui/lab/Alert";
 import { makeStyles } from "@material-ui/core/styles";
 import PasswordDialog from "./PasswordDialog";
 import { URL } from "../other/components";
+import {Redirect} from "react-router-dom"
 
 import axios from "axios";
 
@@ -37,6 +38,7 @@ const EditProfile = () => {
 
   const token = localStorage.getItem("token");
   const userId = localStorage.getItem("userId");
+  const [redirection,setRedirection] = useState(false)
 
   const [userCopy, setUserCopy] = useState({
     id: -1,

@@ -4,7 +4,8 @@ import DialogTitle from "@material-ui/core/DialogTitle";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogActions from "@material-ui/core/DialogActions";
 import { Link } from "react-router-dom";
-
+import {Redirect} from "react-router-dom"
+import { useState } from "react";
 const AppointmentInfoDialog = ({
   openDialog,
   setOpenDialog,
@@ -14,7 +15,7 @@ const AppointmentInfoDialog = ({
 }) => {
   const token = localStorage.getItem("token");
   const userId = localStorage.getItem("userId");
-
+  const [redirection,setRedirection] = useState(false)
   const closeDialog = () => {
     setOpenDialog(false);
   };

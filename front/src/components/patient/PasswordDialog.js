@@ -7,7 +7,7 @@ import TextField from "@material-ui/core/TextField";
 import DialogActions from '@material-ui/core/DialogActions';
 import axios from "axios";
 import {URL} from "../other/components"
-
+import {Redirect} from "react-router-dom"
 
 const PasswordDialog = ({openDialog,id,setOpenAlert,setOpenDialog,setAlertText}) => {
 
@@ -19,6 +19,7 @@ const PasswordDialog = ({openDialog,id,setOpenAlert,setOpenDialog,setAlertText})
     const [error, setError] = useState('')
     const token = localStorage.getItem("token");
     const userId = localStorage.getItem("userId");
+    const [redirection,setRedirection] = useState(false)
     const config = {
       headers: { Authorization: `Bearer ${token}`, consumes:'application/json' }
   };

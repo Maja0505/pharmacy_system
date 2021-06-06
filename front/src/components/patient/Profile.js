@@ -10,7 +10,7 @@ import Allergies from './Allergies'
 import PasswordDialog from './PasswordDialog'
 import axios from "axios";
 import {URL} from "../other/components"
-
+import {Redirect} from "react-router-dom"
 
 
 const useStyles = makeStyles((theme) => ({ //style za paper deo
@@ -28,7 +28,7 @@ const useStyles = makeStyles((theme) => ({ //style za paper deo
   }));
 
 const HomePage = () => {
-
+    const [redirection,setRedirection] = useState(false)
     const [user, setUser] = useState ({
         id : -1,
         firstName : '',

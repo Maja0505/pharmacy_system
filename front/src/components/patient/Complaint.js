@@ -26,7 +26,7 @@ import { withStyles } from '@material-ui/core/styles';
 import { getConfig } from '@testing-library/dom';
 import {URL} from '../other/components'
 import {REACT_URL} from '../other/components'
-
+import {Redirect} from "react-router-dom"
 
 
 
@@ -78,6 +78,7 @@ const Complaint = () => {
     const classes = useStyles();
     const token = localStorage.getItem("token");
     const userId = localStorage.getItem("userId");
+    const [redirection,setRedirection] = useState(false)
     const config = {
       headers: { Authorization: `Bearer ${token}`, consumes:'application/json' }
   };

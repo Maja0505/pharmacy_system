@@ -18,7 +18,7 @@ import {REACT_URL, URL} from "../other/components"
 import Alert from "@material-ui/lab/Alert";
 import Snackbar from "@material-ui/core/Snackbar";
 import axios from "axios";
-
+import {Redirect} from "react-router-dom"
 
 
 const StyledMenu = withStyles({
@@ -59,6 +59,7 @@ const AppointmentsHome = () => {
     const [anchorEl2, setAnchorEl2] = React.useState(null);
     const token = localStorage.getItem("token");
     const userId = localStorage.getItem("userId");
+    const [redirection,setRedirection] = useState(false)
     const config = {
       headers: { Authorization: `Bearer ${token}` }
   };

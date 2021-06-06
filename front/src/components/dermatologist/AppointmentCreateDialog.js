@@ -4,7 +4,8 @@ import DialogTitle from "@material-ui/core/DialogTitle";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogActions from "@material-ui/core/DialogActions";
 import {URL} from "../other/components"
-
+import {Redirect} from "react-router-dom"
+import { useState } from "react"
 
 import { TimePickerComponent } from "@syncfusion/ej2-react-calendars";
 
@@ -26,7 +27,7 @@ const AppointmentCreateDialog = ({
 }) => {
   const token = localStorage.getItem("token");
   const userId = localStorage.getItem("userId");
-
+  const [redirection,setRedirection] = useState(false)
   const closeDialog = () => {
     setOpenDialog(false);
   };
@@ -112,6 +113,11 @@ const AppointmentCreateDialog = ({
             createManualApppointment(a);
           })
           .catch((error) => {
+
+              if(error.response.status === 401){
+                setRedirection(true)
+            } 
+
             setOpenAlertUnsuccses(true);
           });
       } else {
@@ -134,6 +140,11 @@ const AppointmentCreateDialog = ({
             createPredefinedApppointment(a);
           })
           .catch((error) => {
+            
+              if(error.response.status === 401){
+                setRedirection(true)
+              }
+          
             setOpenAlertUnsuccses(true);
           });
       }

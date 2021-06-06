@@ -9,13 +9,16 @@ import ScheduleAppointment from "./SheduleAppointment.js";
 import FutureExaminations from "./FutureExaminations.js";
 import HomePage from "./HomePage.js";
 import Examinations from "./Examinations.js";
-
+import { useState } from "react";
 const BasicPage = () => {
+
+  const userId = localStorage.getItem("userId");
+  const [redirection,setRedirection] = useState(false)
   return (
     <Router>
       <Switch>
         <div>
-          <NavBar user={"dermatologist"} />
+        {(userId !== undefined && userId !== null) && <NavBar user={"dermatologist"} />}
           <Route
             path="/dermatologist/editProfile"
             component={EditProfile}

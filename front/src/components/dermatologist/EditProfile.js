@@ -8,6 +8,8 @@ import Alert from "@material-ui/lab/Alert";
 import { makeStyles } from "@material-ui/core/styles";
 import PasswordDialog from "./PasswordDialog";
 import { URL } from "../other/components";
+import {Redirect} from "react-router-dom"
+
 
 import axios from "axios";
 
@@ -28,6 +30,7 @@ const useStyles = makeStyles((theme) => ({
 const EditProfile = () => {
   const token = localStorage.getItem("token");
   const userId = localStorage.getItem("userId");
+  const [redirection,setRedirection] = useState(false)
 
   const [user, setUser] = useState({
     id: -1,
@@ -88,6 +91,10 @@ const EditProfile = () => {
       headers: {
         Authorization: `Bearer ${token}`,
       },
+    }).catch((error) => {
+      if(error.response.status === 401){
+        setRedirection(true)
+      }
     });
     let pharamcist = res.data;
     setUser({
@@ -153,8 +160,10 @@ const EditProfile = () => {
           setAlertText("Success update!");
           setOpenAlert(true);
         })
-        .catch((err) => {
-          console.log(err);
+        .catch((error) => {
+          if(error.response.status === 401){
+            setRedirection(true)
+          }
         });
       setEditState(false);
     }

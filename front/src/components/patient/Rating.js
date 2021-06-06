@@ -31,7 +31,7 @@ import FormLabel from '@material-ui/core/FormLabel';
 import Alert from "@material-ui/lab/Alert";
 import Snackbar from "@material-ui/core/Snackbar";
 import {URL} from '../other/components'
-
+import {Redirect} from "react-router-dom"
 
 
 
@@ -86,6 +86,7 @@ const Rating = () => {
     const [alertTextSuccess, setAlertTextSuccess] = useState('')
     const token = localStorage.getItem("token");
     const userId = localStorage.getItem("userId");
+    const [redirection,setRedirection] = useState(false)
     const config = {
       headers: { Authorization: `Bearer ${token}` }
   };

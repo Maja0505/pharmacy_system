@@ -12,6 +12,7 @@ import {
 } from "@material-ui/core";
 
 import { Link } from "react-router-dom";
+import {Redirect} from "react-router-dom"
 
 import { useState, useEffect } from "react";
 import { makeStyles } from "@material-ui/core/styles";
@@ -41,7 +42,7 @@ const useStyles = makeStyles((theme) => ({
 const FutureExaminations = () => {
   const token = localStorage.getItem("token");
   const userId = localStorage.getItem("userId");
-
+  const [redirection,setRedirection] = useState(false)
   const classes = useStyles();
 
   const [data, setData] = useState([]);
@@ -69,6 +70,10 @@ const FutureExaminations = () => {
         } else {
           setEmptyTable(false);
           setData(res.data);
+        }
+      }).catch((error) => {
+        if(error.response.status === 401){
+          setRedirection(true)
         }
       });
   }, []);
@@ -102,6 +107,10 @@ const FutureExaminations = () => {
             setEmptyTable(false);
             setData(res.data);
           }
+        }).catch((error) => {
+          if(error.response.status === 401){
+            setRedirection(true)
+          }
         });
     } else {
       alert("Invalid format of input type.\nValid (example) is : `Pera Peric`");
@@ -127,6 +136,10 @@ const FutureExaminations = () => {
           setEmptyTable(false);
           setData(res.data);
         }
+      }).catch((error) => {
+        if(error.response.status === 401){
+          setRedirection(true)
+        }
       });
   };
 
@@ -148,6 +161,10 @@ const FutureExaminations = () => {
         );
       })
       .catch((error) => {
+          if(error.response.status === 401){
+            setRedirection(true)
+          }
+
         alert(
           "Appointment not start yet.\nYou can only set status missed for appointment which is started and not finished yet!"
         );

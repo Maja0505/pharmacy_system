@@ -16,7 +16,7 @@ import {
   import CloseIcon from '@material-ui/icons/Close';
   import IconButton from '@material-ui/core/IconButton';
   import {URL} from "../other/components"
-
+  import {Redirect} from "react-router-dom"
 
 
 
@@ -62,6 +62,7 @@ const Allergies = ({allergies,setAllergies,patientId}) => {
     const classes = useStyles()
     const token = localStorage.getItem("token");
     const userId = localStorage.getItem("userId");
+    const [redirection,setRedirection] = useState(false)
     const config = {
       headers: { Authorization: `Bearer ${token}` }
   };

@@ -8,13 +8,17 @@ import ScheduleAppointment from "./ScheduleAppointment.js";
 import MedicineReservation from "./MedicineReservation.js";
 import Examinations from "./Examinations.js";
 import HomePage from "./HomePage.js";
+import Login from "../other/LoginPage.js"
 
 const BasicPage = () => {
+
+  const userId = localStorage.getItem("userId");
+
   return (
     <Router>
       <Switch>
         <div>
-          <NavBar user={"pharmacist"} />
+          {(userId !== undefined && userId !== null) &&  <NavBar user={"pharmacist"} />}
           <Route path="/pharmacist/homePage">
             <HomePage />
           </Route>
@@ -38,6 +42,7 @@ const BasicPage = () => {
           <Route path="/pharmacist/examinations">
             <Examinations />
           </Route>
+          <Route exact path="/login" component={Login}></Route>
         </div>
       </Switch>
     </Router>

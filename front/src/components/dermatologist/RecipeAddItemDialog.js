@@ -5,7 +5,7 @@ import DialogContent from "@material-ui/core/DialogContent";
 import DialogActions from "@material-ui/core/DialogActions";
 
 import { TextField, Grid } from "@material-ui/core";
-
+import {Redirect} from "react-router-dom"
 import { useState } from "react";
 
 import axios from "axios";
@@ -26,7 +26,7 @@ const RecipeAddItemDialog = ({
 }) => {
   const token = localStorage.getItem("token");
   const userId = localStorage.getItem("userId");
-
+  const [redirection,setRedirection] = useState(false)
   const [recomendeDailyIntake, setRecomendedDailyIntake] = useState("");
   const [medicineAmount, setMedicineAmount] = useState(1);
   const [haveEnough, setHaveEnought] = useState(null);
@@ -70,6 +70,10 @@ const RecipeAddItemDialog = ({
         } else {
           setOpenAlertSuccsess(true);
           setHaveEnought(true);
+        }
+      }).catch((error) => {
+        if(error.response.status === 401){
+          setRedirection(true)
         }
       });
   };

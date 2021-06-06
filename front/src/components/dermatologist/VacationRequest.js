@@ -14,10 +14,12 @@ import {
 import axios from "axios";
 import Alert from "@material-ui/lab/Alert";
 import { URL } from "../other/components";
+import {Redirect} from "react-router-dom"
 
 const VacationRequest = () => {
   const token = localStorage.getItem("token");
   const userId = localStorage.getItem("userId");
+  const [redirection,setRedirection] = useState(false)
 
   const [disableDates, setDisableDates] = useState([
     {
@@ -37,7 +39,11 @@ const VacationRequest = () => {
           Authorization: `Bearer ${token}`,
         },
       }
-    );
+    ).catch((error) => {
+      if(error.response.status === 401){
+        setRedirection(true)
+      }
+    });
     res.data.map((vacationRequest) => createDisableDates(vacationRequest));
   };
 
@@ -164,6 +170,10 @@ const VacationRequest = () => {
         setTypeOfVacation("Holiday");
       })
       .catch(function (error) {
+          if(error.response.status === 401){
+            setRedirection(true)
+          }
+ 
         setOpenAlertUnsuccses(true);
       });
   };

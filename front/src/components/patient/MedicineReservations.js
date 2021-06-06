@@ -35,7 +35,7 @@ import Snackbar from "@material-ui/core/Snackbar";
 import {URL} from "../other/components"
 import Fab from '@material-ui/core/Fab';
 import AddIcon from '@material-ui/icons/Add';
-
+import {Redirect} from "react-router-dom"
 
 import {
     MuiPickersUtilsProvider,
@@ -127,6 +127,7 @@ import setDate from "date-fns/setDate";
     const [penalty,setPenalty] = useState(0)
     const token = localStorage.getItem("token");
     const userId = localStorage.getItem("userId");
+    const [redirection,setRedirection] = useState(false)
     const config = {
       headers: { Authorization: `Bearer ${token}` }
   };

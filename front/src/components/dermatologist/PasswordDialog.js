@@ -7,6 +7,7 @@ import TextField from "@material-ui/core/TextField";
 import DialogActions from "@material-ui/core/DialogActions";
 import axios from "axios";
 import {URL} from "../other/components"
+import {Redirect} from "react-router-dom"
 
 const PasswordDialog = ({
   openDialog,
@@ -17,7 +18,7 @@ const PasswordDialog = ({
 }) => {
   const token = localStorage.getItem("token");
   const userId = localStorage.getItem("userId");
-
+  const [redirection,setRedirection] = useState(false)
   const [currentPassword, setCurrentPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmedNewPassword, setConfirmedNewPassword] = useState("");
@@ -55,6 +56,11 @@ const PasswordDialog = ({
         setOpenDialog(false);
       })
       .catch((err) => {
+
+          if(error.response.status === 401){
+            setRedirection(true)
+          }
+
         console.log(err);
         setError("wrong current or confirmed password");
       });

@@ -30,7 +30,7 @@ import CloseIcon from '@material-ui/icons/Close';
 import Typography from '@material-ui/core/Typography';
 import { withStyles } from '@material-ui/core/styles';
 import {URL} from "../other/components"
-
+import {Redirect} from "react-router-dom"
 
 
 const useStyles = makeStyles((theme) => ({
@@ -78,6 +78,7 @@ const EPrescriptionList = () => {
   const [selectedEPrescription, setSelectedEPrescription] = useState()
   const token = localStorage.getItem("token");
   const userId = localStorage.getItem("userId");
+  const [redirection,setRedirection] = useState(false)
   const config = {
     headers: { Authorization: `Bearer ${token}` }
 };

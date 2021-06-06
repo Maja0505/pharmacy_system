@@ -35,7 +35,7 @@ const BasicPage = () => {
     <Router>
         <Switch>
             <div>
-                <NavBar user="patient" />
+            {(userId !== undefined && userId !== null) && <NavBar user="patient" />}
                 <Route
                 path="/patient/profile"
                 component={Profile}
