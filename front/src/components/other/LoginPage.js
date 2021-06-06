@@ -112,6 +112,7 @@ class Login extends Component {
           id="outlined-basic"
           label="Password"
           variant="outlined"
+          type="password"
           value={this.state.password}
           onChange={(e) => this.onTodoChangePassword(e.target.value)}
           size="small"
@@ -168,7 +169,6 @@ class Login extends Component {
     }
     if (this.state.roleUser === "Patient") {
      
-        alert("treba da redirektuje");
         window.location.href =  REACT_URL + "/patient/home2";
       
     }

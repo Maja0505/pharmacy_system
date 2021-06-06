@@ -124,11 +124,11 @@ const HomePage = () => {
   };
 
   return (
-    <>
-      <div style={{backgroundImage: `url(${background})` , height: "753px",
-      backgroundSize: "cover",
-      backgroundRepeat: "no-repeat",
-      backgroundPosition: "center",}}>
+    <div style={{backgroundImage: `url(${background})` , height: "753px",
+    backgroundSize: "cover",
+    backgroundRepeat: "no-repeat",
+    backgroundPosition: "center",}}>
+      <div >
         {images.map((image) => (
           <ButtonBase
             focusRipple
@@ -200,7 +200,7 @@ const HomePage = () => {
           </ButtonBase>
         ))}
       </div>
-    </>
+    </div>
   );
 };
 

@@ -11,9 +11,8 @@ const NavBar = ({ user }) => {
       <Grid container>
         <Grid item xs={6}></Grid>
         <Grid item xs={6} container style={{ textAlign: "right" }}>
-          <Grid item xs={2} />
-          <Grid item xs={2} />
-          <Grid item xs={2}>
+          <Grid item xs={3} />
+          <Grid item xs={3}>
             <Typography>
               <Link
                 to="/pharmacist/homePage"
@@ -23,7 +22,7 @@ const NavBar = ({ user }) => {
               </Link>
             </Typography>
           </Grid>
-          <Grid item xs={2}>
+          <Grid item xs={3}>
             <Typography>
               <Link
                 to="/pharmacist/editProfile"
@@ -33,7 +32,7 @@ const NavBar = ({ user }) => {
               </Link>
             </Typography>
           </Grid>
-          <Grid item xs={2}>
+          <Grid item xs={3}>
             <Typography>
               <a
                 href="/"
@@ -54,9 +53,8 @@ const NavBar = ({ user }) => {
       <Grid container>
         <Grid item xs={6}></Grid>
         <Grid item xs={6} container style={{ textAlign: "right" }}>
-          <Grid item xs={2} />
-          <Grid item xs={2} />
-          <Grid item xs={2}>
+          <Grid item xs={3} />
+          <Grid item xs={3}>
             <Typography>
               <Link
                 to="/dermatologist/homePage"
@@ -66,7 +64,7 @@ const NavBar = ({ user }) => {
               </Link>
             </Typography>
           </Grid>
-          <Grid item xs={2}>
+          <Grid item xs={3}>
             <Typography>
               <Link
                 to="/dermatologist/editProfile"
@@ -76,7 +74,7 @@ const NavBar = ({ user }) => {
               </Link>
             </Typography>
           </Grid>
-          <Grid item xs={2}>
+          <Grid item xs={3}>
             <Typography>
               <a
                 href="/"
@@ -96,7 +94,7 @@ const NavBar = ({ user }) => {
     <Toolbar>
       <Grid container spacing={1}>
         <Grid item xs={6}>
-          <Typography>Hay {user}</Typography>
+          
         </Grid>
         <Grid item xs={6} container spacing={1} style={{ textAlign: "right" }}>
           <Grid item xs={3}></Grid>
@@ -140,7 +138,7 @@ const NavBar = ({ user }) => {
     <Toolbar>
       <Grid container spacing={1}>
         <Grid item xs={6}>
-          <Typography>Hay {user}</Typography>
+          
         </Grid>
         <Grid item xs={6} container spacing={1} style={{ textAlign: "right" }}>
           <Grid item xs={3}></Grid>
