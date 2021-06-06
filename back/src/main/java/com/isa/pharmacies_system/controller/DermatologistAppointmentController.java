@@ -82,10 +82,7 @@ public class DermatologistAppointmentController {
     public ResponseEntity<Boolean> cancelDermatologistAppointment(@RequestBody DermatologistAppointmentDTO dermatologistAppointmentDTO){
         try {
             DermatologistAppointment dermatologistAppointment = dermatologistAppointmentService.findOne(dermatologistAppointmentDTO.getId());
-            if(dermatologistAppointmentService.cancelDermatologistAppointment(dermatologistAppointment)){
-                return new ResponseEntity<>(HttpStatus.OK);
-            }
-            return new ResponseEntity<>(HttpStatus.NOT_MODIFIED);
+                return new ResponseEntity<>(dermatologistAppointmentService.cancelDermatologistAppointment(dermatologistAppointment),HttpStatus.OK);
         }catch (Exception e){
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }

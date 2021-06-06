@@ -93,7 +93,7 @@ const PharmacieTableWithFreePharmacist = ({pharmacies,setSelectedPharmacy}) => {
         <Grid container spacing={1}>
           <Grid item xs={2} />
           <Grid item xs={8}>
-          <TableContainer style={{ height: "450px", marginTop: "2%" }}>
+          <TableContainer style={{ marginTop: "2%" }}>
             <Table>
               {TableHeader}
               {TableContent}

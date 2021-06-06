@@ -14,6 +14,12 @@ import ListItemText from '@material-ui/core/ListItemText';
 import InboxIcon from '@material-ui/icons/MoveToInbox';
 import DraftsIcon from '@material-ui/icons/Drafts';
 import SendIcon from '@material-ui/icons/Send';
+import {REACT_URL, URL} from "../other/components"
+import Alert from "@material-ui/lab/Alert";
+import Snackbar from "@material-ui/core/Snackbar";
+import axios from "axios";
+
+
 
 const StyledMenu = withStyles({
     paper: {
@@ -51,6 +57,12 @@ const StyledMenu = withStyles({
 const AppointmentsHome = () => {
     const [anchorEl, setAnchorEl] = React.useState(null);
     const [anchorEl2, setAnchorEl2] = React.useState(null);
+    const token = localStorage.getItem("token");
+    const userId = localStorage.getItem("userId");
+    const config = {
+      headers: { Authorization: `Bearer ${token}` }
+  };
+
 
 
     const handleClick = (event) => {
@@ -76,7 +88,19 @@ const AppointmentsHome = () => {
     const [pharmacistReserved,setPharmacistReserved] = useState(false)
     const [dermatologistReserved,setDermatologistReserved] = useState(false)
     const [pharmacistCreate,setPharmacistCreate] = useState(false)
+    const [dermatologistCreate,setPDermatologistCreate] = useState(false)
+    const [alertTextErrorPenalty, setAlertTextErrorPenalty] = useState('')
+    const [openAlertErrorPenalty, setOpenAlertErrorPenalty] = useState(false)
+    const [penalty,setPenalty] = useState(0)
 
+
+
+    useEffect(() => {
+      axios.get(URL + '/api/patient/' + userId +'/additionalInfo',config)
+        .then((res)=> {
+          setPenalty(res.data.penalty)
+        }) 
+    }, []);
 
     const HandlePharmacistHistoryClickButton = () => {
       if(!pharmacistHistory){
@@ -85,6 +109,7 @@ const AppointmentsHome = () => {
         setPharmacistReserved(false)
         setDermatologistReserved(false)
         setPharmacistCreate(false)
+        setPDermatologistCreate(false)
       }
       handleClose()
     }
@@ -96,6 +121,7 @@ const AppointmentsHome = () => {
             setPharmacistReserved(false)
             setDermatologistReserved(false)
             setPharmacistCreate(false)
+            setPDermatologistCreate(false)
 
           }
           handleClose2()
@@ -108,6 +134,7 @@ const AppointmentsHome = () => {
         setPharmacistReserved(true)
         setDermatologistReserved(false)
         setPharmacistCreate(false)
+        setPDermatologistCreate(false)
 
 
         }
@@ -120,24 +147,60 @@ const AppointmentsHome = () => {
             setPharmacistReserved(false)
             setDermatologistReserved(true)
             setPharmacistCreate(false)
+            setPDermatologistCreate(false)
+
 
 
         }
         handleClose2()
       }
 
-      const HandlePharmacistCreateClickButton = () => {
-        if(!pharmacistCreate){
+      const HandleDermatologistCreateClickButton = () => {
+        if( penalty < 3){
+        if(!dermatologistReserved){
             setPharmacistHistory(false)
             setDermatologistHistory(false)
             setPharmacistReserved(false)
             setDermatologistReserved(false)
-            setPharmacistCreate(true)
+            setPharmacistCreate(false)
+            setPDermatologistCreate(true)
+            window.location.href = REACT_URL + '/patient/pharmacies'
+
 
 
         }
+        }else{
+          setAlertTextErrorPenalty("You can't reserve medicine because you have more than 3 penalties")
+          setOpenAlertErrorPenalty(true)
+
+        }
+        handleClose2()
+      }
+
+      const HandlePharmacistCreateClickButton = () => {
+      if( penalty < 3){
+        if(!pharmacistCreate){
+          setPharmacistHistory(false)
+          setDermatologistHistory(false)
+          setPharmacistReserved(false)
+          setDermatologistReserved(false)
+          setPharmacistCreate(true)
+          setPDermatologistCreate(false)
+      }
+      }else{
+        setAlertTextErrorPenalty("You can't reserve medicine because you have more than 3 penalties")
+        setOpenAlertErrorPenalty(true)
+      }
+       
         handleClose()
       }
+
+      const handleCloseAlertErrorPenalty = (event, reason) => {
+        if (reason === 'clickaway') {
+          return;
+        }
+        setOpenAlertErrorPenalty(false);
+      };
  
 
     const PharmacistAppointmentHistoryy = (
@@ -217,7 +280,7 @@ const AppointmentsHome = () => {
           </ListItemIcon>
           <ListItemText primary="Reserved" />
         </StyledMenuItem>
-        <StyledMenuItem>
+        <StyledMenuItem selected={dermatologistCreate} onClick={HandleDermatologistCreateClickButton}>
           <ListItemIcon>
             <InboxIcon fontSize="small" />
           </ListItemIcon>
@@ -229,6 +292,12 @@ const AppointmentsHome = () => {
                 {pharmacistReserved && PharmacistReservedAppointmentt}
                 {dermatologistReserved && DermatologistReservaedAppointmentt}
                 {pharmacistCreate && CreatePharmacistApp}
+
+      <Snackbar open={openAlertErrorPenalty} autoHideDuration={1500} onClose={handleCloseAlertErrorPenalty}>
+        <Alert severity="error">
+          {alertTextErrorPenalty}
+        </Alert>
+      </Snackbar>
             </div>
 
      

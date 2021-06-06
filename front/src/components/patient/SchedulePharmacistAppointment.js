@@ -47,8 +47,8 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: 'flex-end',
   },
   button: {
-    marginTop: theme.spacing(3),
-    marginLeft: theme.spacing(1),
+    margin:"auto",
+    marginTop:"2%"
   },
 }));
 
@@ -290,11 +290,10 @@ export default function Checkout() {
             {activeStep === steps.length ? (
               <React.Fragment>
                 <Typography variant="h5" gutterBottom>
-                  Thank you for your order.
+                  
                 </Typography>
                 <Typography variant="subtitle1">
-                  Your order number is #2001539. We have emailed your order confirmation, and will
-                  send you an update when your order has shipped.
+                  
                 </Typography>
               </React.Fragment>
             ) : (

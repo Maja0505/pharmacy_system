@@ -50,7 +50,6 @@ import {
   
     const [copyRows, setCopyRows] = useState({});
   
-    const [currPage, setCurrPage] = useState(1);
     const [alertTextError, setAlertTextError] = useState('')
     const [openAlertError, setOpenAlertError] = useState(false)
     const [openAlertSuccess, setOpenAlertSuccess] = useState(false)
@@ -79,9 +78,7 @@ import {
     useEffect(() => {
       axios
         .get(
-          URL + "/api/patient/" + userId + "/pharmacistAppointment/all/reserved/" +
-          (currPage - 1).toString() +
-          "",config)
+          URL + "/api/patient/" + userId + "/pharmacistAppointment/all/reserved",config)
         .then((res) => {
           setRows(res.data);
           setCopyRows(res.data);
@@ -112,9 +109,7 @@ import {
         if(res.data){
           axios
           .get(
-            URL + "/api/patient/"+ userId + "/pharmacistAppointment/all/reserved/" +
-            (currPage - 1).toString() +
-            "",config)
+            URL + "/api/patient/"+ userId + "/pharmacistAppointment/all/reserved" ,config)
           .then((res) => {
             setRows(res.data);
             setCopyRows(res.data);

@@ -153,7 +153,7 @@ const Allergies = ({allergies,setAllergies,patientId}) => {
                       />
                     </Grid>
                     <Grid item>
-                    <Button onClick={HandleAddButton} variant="contained" color="primary" style={{height:'100%'}}>Add</Button>
+                    <Button onClick={HandleAddButton} disabled = {selectedMedicine === null || selectedMedicine.medicineId === undefined} variant="contained" color="primary" style={{height:'100%'}}>Add</Button>
                     </Grid>
                 </Grid>
             </Grid>

@@ -76,9 +76,7 @@ const styles = (theme) => ({
     useEffect(() => {
       axios
         .get(
-          URL + "/api/patient/" + userId + "/dermatologistAppointment/all/reserved/" +
-          (currPage - 1).toString() +
-          "",config)
+          URL + "/api/patient/" + userId + "/dermatologistAppointment/all/reserved",config)
         .then((res) => {
           setRows(res.data);
           setCopyRows(res.data);
@@ -121,9 +119,7 @@ const styles = (theme) => ({
         if(res.data){
           axios
           .get(
-            URL + "/api/patient/" + userId + "/dermatologistAppointment/all/reserved/" +
-            (currPage - 1).toString() +
-            "",config)
+            URL + "/api/patient/" + userId + "/dermatologistAppointment/all/reserved",config)
           .then((res) => {
             setRows(res.data);
             setCopyRows(res.data);

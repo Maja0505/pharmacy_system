@@ -38,7 +38,8 @@ const HomePage = () => {
         email : '',
         patientPoints : '',
         categoryOfPatient : '',
-        allergies : {}
+        allergies : {},
+        penalty:''
 
     })
 
@@ -50,7 +51,8 @@ const HomePage = () => {
         phoneNumber : '',
         email : '',
         patientPoints : '',
-        categoryOfPatient : ''
+        categoryOfPatient : '',
+        penalty:''
 
     })
 
@@ -91,8 +93,8 @@ const HomePage = () => {
     const getUser = async () => {
         const res = await axios.get(URL + '/api/patient/' + userId +'/additionalInfo',config)
         let patient = res.data
-        setUser({id : patient.id,firstName : patient.firstName, lastName : patient.lastName, address : patient.address, phoneNumber : patient.phoneNumber, email : patient.email, patientPoints : patient.patientPoints, categoryOfPatient : patient.categoryOfPatient, allergies : patient.allergies})
-        setUserCopy({id : patient.id,firstName : patient.firstName, lastName : patient.lastName, address : patient.address, phoneNumber : patient.phoneNumber, email : patient.email, patientPoints : patient.patientPoints, categoryOfPatient : patient.categoryOfPatient})
+        setUser({id : patient.id,firstName : patient.firstName, lastName : patient.lastName, address : patient.address, phoneNumber : patient.phoneNumber, email : patient.email, patientPoints : patient.patientPoints, categoryOfPatient : patient.categoryOfPatient, allergies : patient.allergies, penalty : patient.penalty})
+        setUserCopy({id : patient.id,firstName : patient.firstName, lastName : patient.lastName, address : patient.address, phoneNumber : patient.phoneNumber, email : patient.email, patientPoints : patient.patientPoints, categoryOfPatient : patient.categoryOfPatient, penalty : patient.penalty})
         setAddress({streetName: patient.address.streetName, streetNumber: patient.address.streetNumber, city: patient.address.city, country: patient.address.country, longitude : patient.address.longitude, latitude : patient.address.latitude })
         setAllergies(patient.medicineForAllergiesDTO)
         console.log(patient.medicineForAllergiesDTO)
@@ -115,7 +117,8 @@ const HomePage = () => {
             phoneNumber : user.phoneNumber,
             email : user.email,
             patientPoints : user.patientPoints,
-            categoryOfPatient : user.categoryOfPatient
+            categoryOfPatient : user.categoryOfPatient,
+            penalty : user.penalty
         }
          
         if(validate(updateUser)){
@@ -251,6 +254,11 @@ const HomePage = () => {
                             <tr>
                                 <td>Category: </td>
                                 <td>{user.categoryOfPatient}</td>
+
+                            </tr>
+                            <tr>
+                                <td>Penalty: </td>
+                                <td>{user.penalty}</td>
 
                             </tr>
 

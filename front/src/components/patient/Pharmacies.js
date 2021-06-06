@@ -298,7 +298,7 @@ import {URL} from "../other/components"
              onClick={() => openProfile(row)}>              
                   <Link
                      to={"/patient/pharmacyProfilePage/" + row.id}
-                    style={{ textDecoration: "none", color: "white" }}
+                    style={{ textDecoration: "none", color: "gray" }}
                   >
                    Open
                   </Link>

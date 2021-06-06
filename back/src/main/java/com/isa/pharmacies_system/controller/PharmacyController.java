@@ -2,10 +2,8 @@ package com.isa.pharmacies_system.controller;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import com.isa.pharmacies_system.DTO.FilteringPharmacyDTO;
-import com.isa.pharmacies_system.DTO.PharmacistAppointmentTimeDTO;
-import com.isa.pharmacies_system.DTO.PharmacyDTO;
-import com.isa.pharmacies_system.DTO.PharmacyWhereDermatologistWorkDTO;
+
+import com.isa.pharmacies_system.DTO.*;
 import com.isa.pharmacies_system.converter.PharmacyConverter;
 import com.isa.pharmacies_system.service.iService.IPriceListService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +12,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-import com.isa.pharmacies_system.DTO.PharmacyNewDTO;
 import com.isa.pharmacies_system.domain.pharmacy.Pharmacy;
 import com.isa.pharmacies_system.service.iService.IPharmacyService;
 
@@ -34,9 +31,9 @@ public class PharmacyController {
 
 	@PreAuthorize("hasRole('ROLE_PATIENT')")
 	@GetMapping(value = "/{id}")
-	public ResponseEntity<PharmacyDTO> findOneForPharmacyAdmin(@PathVariable Long id) {
+	public ResponseEntity<PharmacyProfileDTO> findOneForPharmacyAdmin(@PathVariable Long id) {
 		try {
-			return new ResponseEntity<>(pharmacyConverter.convertPharmacyToPharmacyDTO(iPharmacyService.getById(id)), HttpStatus.OK);
+			return new ResponseEntity<>(pharmacyConverter.convertPharmacyToPharmacyProfileDTO(iPharmacyService.getById(id)), HttpStatus.OK);
 		} catch (Exception e) {
 			return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
 		}

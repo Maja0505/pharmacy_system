@@ -396,7 +396,6 @@ const Rating = () => {
               <DialogContent dividers>
                   <Typography gutterBottom>
                     <FormControl component="fieldset">
-                      <FormLabel component="legend">Gender</FormLabel>
                       <RadioGroup aria-label="gender" name="gender1" value={radioValue} onChange={handleChange}>
                           <FormControlLabel value="One" control={<Radio />} label="One" />
                           <FormControlLabel value="Two" control={<Radio />} label="Two" />

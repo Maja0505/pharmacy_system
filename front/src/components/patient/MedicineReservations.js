@@ -116,13 +116,15 @@ import setDate from "date-fns/setDate";
     const [pharmacies, setPharmacies] = useState([])
     const [selectedMedicine, setSelectedMedicine] = useState(null)
     const [selectedPharmacy, setSelectedPharmacy] = useState(null)
-    const [currPage, setCurrPage] = useState(1);
     const [open, setOpen] = React.useState(false);
     const [selectedDate, setSelectedDate] = React.useState();
     const [alertTextError, setAlertTextError] = useState('')
     const [openAlertError, setOpenAlertError] = useState(false)
+    const [alertTextErrorPenalty, setAlertTextErrorPenalty] = useState('')
+    const [openAlertErrorPenalty, setOpenAlertErrorPenalty] = useState(false)
     const [openAlertSuccess, setOpenAlertSuccess] = useState(false)
     const [alertTextSuccess, setAlertTextSuccess] = useState('')
+    const [penalty,setPenalty] = useState(0)
     const token = localStorage.getItem("token");
     const userId = localStorage.getItem("userId");
     const config = {
@@ -135,6 +137,13 @@ import setDate from "date-fns/setDate";
         return;
       }
       setOpenAlertError(false);
+    };
+
+    const handleCloseAlertErrorPenalty = (event, reason) => {
+      if (reason === 'clickaway') {
+        return;
+      }
+      setOpenAlertErrorPenalty(false);
     };
   
     const handleCloseAlertSuccess = (event, reason) => {
@@ -159,9 +168,7 @@ import setDate from "date-fns/setDate";
             if(res.data){
                 axios
                 .get(
-                  URL + "/api/patient/" + userId + "/medicineReservation/" +
-                  (currPage - 1).toString() +
-                  ""
+                  URL + "/api/patient/" + userId + "/medicineReservation"
                 ,config)
                 .then((res) => {
                   setRows(res.data);
@@ -204,21 +211,25 @@ import setDate from "date-fns/setDate";
         })
     }
 
+
     useEffect(() => {
       axios
         .get(
-          URL + "/api/patient/" + userId + "/medicineReservation/" +
-          (currPage - 1).toString() +
-          "",config)
+          URL + "/api/patient/" + userId + "/medicineReservation",config)
         .then((res) => {
           setRows(res.data);
           setCopyRows(res.data);
         }).catch(error => {
 
         })
+      axios.get(URL + '/api/patient/' + userId +'/additionalInfo',config)
+        .then((res)=> {
+          setPenalty(res.data.penalty)
+        }) 
     }, []);
 
     const handleClickOpen = () => {
+      if (penalty < 3){
         setOpen(true);
         axios
         .get(
@@ -236,6 +247,11 @@ import setDate from "date-fns/setDate";
         }).catch(error => {
 
         })
+      }else{
+        setAlertTextErrorPenalty("You can't reserve medicine because you have more than 3 penalties")
+        setOpenAlertErrorPenalty(true)
+      }
+      
     };
     const handleClose = () => {
         setOpen(false);
@@ -407,6 +423,11 @@ import setDate from "date-fns/setDate";
       <Snackbar open={openAlertSuccess} autoHideDuration={1500} onClose={handleCloseAlertSuccess}>
         <Alert severity="success">
           {alertTextSuccess}
+        </Alert>
+      </Snackbar>
+      <Snackbar open={openAlertErrorPenalty} autoHideDuration={1500} onClose={handleCloseAlertErrorPenalty}>
+        <Alert severity="error">
+          {alertTextErrorPenalty}
         </Alert>
       </Snackbar>
       </div>
