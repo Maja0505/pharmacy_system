@@ -49,7 +49,7 @@ const WriteReport = () => {
   const userId = localStorage.getItem("userId");
 
   const classes = useStyles();
-  const [redirection,setRedirection] = useState(false)
+  const [redirection, setRedirection] = useState(false);
   const [openAlertSuccsess, setOpenAlertSuccsess] = useState(false);
   const [openAlertUnsuccsess, setOpenAlertUnsuccses] = useState(false);
   const alertTextSuccsess = useState("Have enough medicine in pharmacy!");
@@ -167,9 +167,9 @@ const WriteReport = () => {
         setAppointment(null);
       })
       .catch((error) => {
-          if(error.response.status === 401){
-            setRedirection(true)
-          }
+        if (error.response.status === 401) {
+          setRedirection(true);
+        }
         alert("Conflict problem with recipe items please pick again");
         setActiveStep(2);
         setRecipeItems([]);
@@ -206,6 +206,7 @@ const WriteReport = () => {
 
   return (
     <>
+      {redirection === true && <Redirect to="/login"></Redirect>}
       {appointment === null && <Redirect to="/dermatologist/workCalendar" />}
 
       {appointment !== null && (

@@ -8,7 +8,7 @@ import {
 } from "@material-ui/core";
 
 import { makeStyles } from "@material-ui/core/styles";
-import {Redirect} from "react-router-dom"
+import { Redirect } from "react-router-dom";
 import { useState, useEffect } from "react";
 
 import axios from "axios";
@@ -31,7 +31,7 @@ const MedicineReservation = () => {
   const userId = localStorage.getItem("userId");
   const [pharamcyId, setPharmacyId] = useState();
 
-  const [redirection,setRedirection] = useState(false)
+  const [redirection, setRedirection] = useState(false);
 
   const classes = useStyles();
   const [medicineReservationId, setMedicineReservationId] = useState("");
@@ -47,9 +47,10 @@ const MedicineReservation = () => {
       })
       .then((res) => {
         setPharmacyId(res.data);
-      }).catch((error) => {
-        if(error.response.status === 401){
-          setRedirection(true)
+      })
+      .catch((error) => {
+        if (error.response.status === 401) {
+          setRedirection(true);
         }
       });
   }, []);
@@ -76,7 +77,10 @@ const MedicineReservation = () => {
         setMedicineReservation(res.data);
         setHaveReservation(true);
       })
-      .catch((status) => {
+      .catch((error) => {
+        if (error.response.status === 401) {
+          setRedirection(true);
+        }
         setHaveReservation(false);
       });
   };
@@ -97,6 +101,11 @@ const MedicineReservation = () => {
           ...medicineReservation,
           statusOfMedicineReservation: "FINISHED",
         });
+      })
+      .catch((error) => {
+        if (error.response.status === 401) {
+          setRedirection(true);
+        }
       });
   };
 

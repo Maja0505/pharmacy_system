@@ -16,6 +16,7 @@ import {
 import LiveHelp from "@material-ui/icons/LiveHelp";
 import { useState, useEffect } from "react";
 import { makeStyles } from "@material-ui/core/styles";
+import { Redirect } from "react-router-dom";
 
 import RecipeAddItemDialog from "./RecipeAddItemDialog.js";
 import { URL } from "../other/components";
@@ -41,7 +42,7 @@ const WriteReportThirdStep = ({
 }) => {
   const token = localStorage.getItem("token");
   const userId = localStorage.getItem("userId");
-
+  const [redirection, setRedirection] = useState(false);
   const classes = useStyles();
 
   const [selectedMedicine, setSelectedMedicine] = useState(null);
@@ -60,6 +61,11 @@ const WriteReportThirdStep = ({
       })
       .then((res) => {
         setMedicinesInPharmacy(res.data);
+      })
+      .catch((error) => {
+        if (error.response.status === 401) {
+          setRedirection(true);
+        }
       });
   }, []);
 
@@ -91,15 +97,18 @@ const WriteReportThirdStep = ({
       .then((res) => {
         setMedicinesInPharmacy(res.data);
         setIsAlternative(false);
+      })
+      .catch((error) => {
+        if (error.response.status === 401) {
+          setRedirection(true);
+        }
       });
   };
 
   return (
     <div>
-      <Grid
-        container
-        style={{ marginTop: "2%", width: "80%", margin: "auto" }}
-      >
+      {redirection === true && <Redirect to="/login"></Redirect>}
+      <Grid container style={{ marginTop: "2%", width: "80%", margin: "auto" }}>
         <Grid item xs={3}>
           {isAlternative === true && (
             <>

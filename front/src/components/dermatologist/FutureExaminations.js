@@ -12,11 +12,11 @@ import {
 } from "@material-ui/core";
 
 import { Link } from "react-router-dom";
-import {Redirect} from "react-router-dom"
+import { Redirect } from "react-router-dom";
 
 import { useState, useEffect } from "react";
 import { makeStyles } from "@material-ui/core/styles";
-import {URL} from "../other/components"
+import { URL } from "../other/components";
 
 import axios from "axios";
 
@@ -42,7 +42,7 @@ const useStyles = makeStyles((theme) => ({
 const FutureExaminations = () => {
   const token = localStorage.getItem("token");
   const userId = localStorage.getItem("userId");
-  const [redirection,setRedirection] = useState(false)
+  const [redirection, setRedirection] = useState(false);
   const classes = useStyles();
 
   const [data, setData] = useState([]);
@@ -55,7 +55,8 @@ const FutureExaminations = () => {
   useEffect(() => {
     axios
       .get(
-        URL + "/api/dermatologistAppointment/allFutureReserveByDermatologist/" +
+        URL +
+          "/api/dermatologistAppointment/allFutureReserveByDermatologist/" +
           userId,
         {
           headers: {
@@ -71,9 +72,10 @@ const FutureExaminations = () => {
           setEmptyTable(false);
           setData(res.data);
         }
-      }).catch((error) => {
-        if(error.response.status === 401){
-          setRedirection(true)
+      })
+      .catch((error) => {
+        if (error.response.status === 401) {
+          setRedirection(true);
         }
       });
   }, []);
@@ -87,7 +89,8 @@ const FutureExaminations = () => {
     if (first_lastName.length === 2) {
       axios
         .get(
-          URL + "/api/dermatologistAppointment/searchAllFutureReservedByPatient/" +
+          URL +
+            "/api/dermatologistAppointment/searchAllFutureReservedByPatient/" +
             userId +
             "/" +
             first_lastName[0] +
@@ -107,9 +110,10 @@ const FutureExaminations = () => {
             setEmptyTable(false);
             setData(res.data);
           }
-        }).catch((error) => {
-          if(error.response.status === 401){
-            setRedirection(true)
+        })
+        .catch((error) => {
+          if (error.response.status === 401) {
+            setRedirection(true);
           }
         });
     } else {
@@ -120,7 +124,8 @@ const FutureExaminations = () => {
   const showAll = () => {
     axios
       .get(
-        URL + "/api/dermatologistAppointment/allFutureReserveByDermatologist/" +
+        URL +
+          "/api/dermatologistAppointment/allFutureReserveByDermatologist/" +
           userId,
         {
           headers: {
@@ -136,9 +141,10 @@ const FutureExaminations = () => {
           setEmptyTable(false);
           setData(res.data);
         }
-      }).catch((error) => {
-        if(error.response.status === 401){
-          setRedirection(true)
+      })
+      .catch((error) => {
+        if (error.response.status === 401) {
+          setRedirection(true);
         }
       });
   };
@@ -146,7 +152,8 @@ const FutureExaminations = () => {
   const setToMissed = (appointment) => {
     axios
       .put(
-        URL + "/api/dermatologistAppointment/changeStatusToMissed/" +
+        URL +
+          "/api/dermatologistAppointment/changeStatusToMissed/" +
           appointment.id,
         {},
         {
@@ -161,9 +168,9 @@ const FutureExaminations = () => {
         );
       })
       .catch((error) => {
-          if(error.response.status === 401){
-            setRedirection(true)
-          }
+        if (error.response.status === 401) {
+          setRedirection(true);
+        }
 
         alert(
           "Appointment not start yet.\nYou can only set status missed for appointment which is started and not finished yet!"
@@ -308,6 +315,7 @@ const FutureExaminations = () => {
 
   return (
     <div>
+      {redirection === true && <Redirect to="/login"></Redirect>}
       {SearchPart}
       <Grid container>
         <Grid item xs={2} />

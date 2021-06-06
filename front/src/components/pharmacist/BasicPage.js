@@ -8,17 +8,20 @@ import ScheduleAppointment from "./ScheduleAppointment.js";
 import MedicineReservation from "./MedicineReservation.js";
 import Examinations from "./Examinations.js";
 import HomePage from "./HomePage.js";
-import Login from "../other/LoginPage.js"
-
+import Login from "../other/LoginPage.js";
+import { Redirect } from "react-router-dom";
+import { useState } from "react";
 const BasicPage = () => {
-
   const userId = localStorage.getItem("userId");
-
+  const [redirection, setRedirection] = useState(false);
   return (
     <Router>
       <Switch>
         <div>
-          {(userId !== undefined && userId !== null) &&  <NavBar user={"pharmacist"} />}
+          {redirection === true && <Redirect to="/login"></Redirect>}
+          {userId !== undefined && userId !== null && (
+            <NavBar user={"pharmacist"} />
+          )}
           <Route path="/pharmacist/homePage">
             <HomePage />
           </Route>
