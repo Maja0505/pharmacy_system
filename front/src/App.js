@@ -73,8 +73,8 @@ const redirect = () => {
 
             <Route exact path="/login" component={Login}></Route>
             <Route
-              exact
-              path="/confirmAccount/:token"
+              
+              path="/auth/confirmAccount/:token"
               component={ConfirmationPage}
             ></Route>
             <Route path="/patient" component={PatientHomePage}></Route>

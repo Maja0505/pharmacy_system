@@ -87,7 +87,7 @@ public class PatientService implements IPatientService {
         Patient patient = findOne(userPasswordDTO.getId());
         BCryptPasswordEncoder b = new BCryptPasswordEncoder();
 
-        if(b.matches(patient.getPassword(), userPasswordDTO.getConfirmedPassword()) && checkPassword(userPasswordDTO.getNewPassword(), userPasswordDTO.getConfirmedNewPassword())){
+        if(b.matches(userPasswordDTO.getConfirmedPassword(),patient.getPassword()) && checkPassword(userPasswordDTO.getNewPassword(), userPasswordDTO.getConfirmedNewPassword())){
             patient.setPassword(b.encode(userPasswordDTO.getNewPassword()));
             savePatient(patient);
             return true;

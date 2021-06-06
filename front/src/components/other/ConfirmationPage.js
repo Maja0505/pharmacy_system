@@ -14,7 +14,7 @@ const ConfirmationPage = () => {
   useEffect(() => {
     var splitID = []
     splitID = window.location.href.split("/");
-    const token = splitID[4];
+    const token = splitID[3];
     alert(token)
     axios
         .put(URL + '/auth/confirm_account/'+token, {}
