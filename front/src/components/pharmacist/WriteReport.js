@@ -13,19 +13,17 @@ import {
   Snackbar,
 } from "@material-ui/core";
 import Alert from "@material-ui/lab/Alert";
-
 import WriteReportFirstStep from "./WriteReportFirstStep.js";
 import WriteReportSecondStep from "./WriteReportSecondStep.js";
 import ScheduleAppointment from "./ScheduleAppointment.js";
 import WriteReportThirdStep from "./WriteReportThirdStep.js";
-import {URL} from "../other/components"
-
+import { URL } from "../other/components";
 
 import axios from "axios";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
-    background: "#bed5e7",
+    background: "white",
     margin: "auto",
   },
   schedule: {
@@ -34,7 +32,7 @@ const useStyles = makeStyles((theme) => ({
   },
   steper: {
     width: "80%",
-    background: "#bed5e7",
+    background: "white",
     margin: "auto",
   },
   backButton: {
@@ -49,7 +47,7 @@ const useStyles = makeStyles((theme) => ({
 const WriteReport = () => {
   const token = localStorage.getItem("token");
   const userId = localStorage.getItem("userId");
-
+  const [redirection, setRedirection] = useState(false);
   const classes = useStyles();
 
   const [openAlertSuccsess, setOpenAlertSuccsess] = useState(false);
@@ -169,6 +167,9 @@ const WriteReport = () => {
         setAppointment(null);
       })
       .catch((error) => {
+        if (error.response.status === 401) {
+          setRedirection(true);
+        }
         alert("Conflict problem with recipe items please pick again");
         setActiveStep(2);
         setRecipeItems([]);
@@ -205,12 +206,13 @@ const WriteReport = () => {
 
   return (
     <>
+      {redirection === true && <Redirect to="/login"></Redirect>}
       {appointment === null && <Redirect to="/pharmacist/workCalendar" />}
 
       {appointment !== null && (
         <div>
           <Paper className={classes.paper} elevation={0}>
-            <Typography variant="h4" style={{ marginTop: "3%" }}>
+            <Typography variant="h4" style={{ marginTop: "2%" }}>
               Write report
             </Typography>
             <Stepper

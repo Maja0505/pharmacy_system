@@ -13,18 +13,17 @@ import {
   Snackbar,
 } from "@material-ui/core";
 import Alert from "@material-ui/lab/Alert";
-
 import WriteReportFirstStep from "./WriteReportFirstStep.js";
 import WriteReportSecondStep from "./WriteReportSecondStep.js";
 import ScheduleAppointment from "./SheduleAppointment.js";
 import WriteReportThirdStep from "./WriteReportThirdStep.js";
-import {URL} from "../other/components"
+import { URL } from "../other/components";
 
 import axios from "axios";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
-    background: "#bed5e7",
+    background: "white",
     margin: "auto",
   },
   schedule: {
@@ -33,7 +32,7 @@ const useStyles = makeStyles((theme) => ({
   },
   steper: {
     width: "80%",
-    background: "#bed5e7",
+    background: "white",
     margin: "auto",
   },
   backButton: {
@@ -50,7 +49,7 @@ const WriteReport = () => {
   const userId = localStorage.getItem("userId");
 
   const classes = useStyles();
-
+  const [redirection, setRedirection] = useState(false);
   const [openAlertSuccsess, setOpenAlertSuccsess] = useState(false);
   const [openAlertUnsuccsess, setOpenAlertUnsuccses] = useState(false);
   const alertTextSuccsess = useState("Have enough medicine in pharmacy!");
@@ -168,6 +167,9 @@ const WriteReport = () => {
         setAppointment(null);
       })
       .catch((error) => {
+        if (error.response.status === 401) {
+          setRedirection(true);
+        }
         alert("Conflict problem with recipe items please pick again");
         setActiveStep(2);
         setRecipeItems([]);
@@ -204,12 +206,13 @@ const WriteReport = () => {
 
   return (
     <>
+      {redirection === true && <Redirect to="/login"></Redirect>}
       {appointment === null && <Redirect to="/dermatologist/workCalendar" />}
 
       {appointment !== null && (
         <div>
           <Paper className={classes.paper} elevation={0}>
-            <Typography variant="h4" style={{ marginTop: "3%" }}>
+            <Typography variant="h4" style={{ marginTop: "2%" }}>
               Write report
             </Typography>
             <Stepper

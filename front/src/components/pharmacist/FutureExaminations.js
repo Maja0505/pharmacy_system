@@ -15,14 +15,13 @@ import { Link } from "react-router-dom";
 
 import { useState, useEffect } from "react";
 import { makeStyles } from "@material-ui/core/styles";
-
+import { Redirect } from "react-router-dom";
 import axios from "axios";
-import {URL} from "../other/components"
-
+import { URL } from "../other/components";
 
 const useStyles = makeStyles((theme) => ({
   table: {
-    marginTop: "5%",
+    marginTop: "3%",
   },
   hederRow: {
     background: "#4051bf",
@@ -42,7 +41,7 @@ const useStyles = makeStyles((theme) => ({
 const FutureExaminations = () => {
   const token = localStorage.getItem("token");
   const userId = localStorage.getItem("userId");
-
+  const [redirection, setRedirection] = useState(false);
   const classes = useStyles();
 
   const [data, setData] = useState([]);
@@ -53,15 +52,11 @@ const FutureExaminations = () => {
 
   useEffect(() => {
     axios
-      .get(
-        URL + "/api/pharmacistAppointment/allFutureReserved/" +
-          userId,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      )
+      .get(URL + "/api/pharmacistAppointment/allFutureReserved/" + userId, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
       .then((res) => {
         if (res.data.length === 0) {
           setEmptyTable(true);
@@ -69,6 +64,11 @@ const FutureExaminations = () => {
         } else {
           setEmptyTable(false);
           setData(res.data);
+        }
+      })
+      .catch((error) => {
+        if (error.response.status === 401) {
+          setRedirection(true);
         }
       });
   }, []);
@@ -82,7 +82,8 @@ const FutureExaminations = () => {
     if (first_lastName.length === 2) {
       axios
         .get(
-          URL + "/api/pharmacistAppointment/searchAllFutureReservedByPatient/" +
+          URL +
+            "/api/pharmacistAppointment/searchAllFutureReservedByPatient/" +
             userId +
             "/" +
             first_lastName[0] +
@@ -102,6 +103,11 @@ const FutureExaminations = () => {
             setEmptyTable(false);
             setData(res.data);
           }
+        })
+        .catch((error) => {
+          if (error.response.status === 401) {
+            setRedirection(true);
+          }
         });
     } else {
       alert("Invalid format of input type.\nValid (example) is : `Pera Peric`");
@@ -110,15 +116,11 @@ const FutureExaminations = () => {
 
   const showAll = () => {
     axios
-      .get(
-        URL + "/api/pharmacistAppointment/allFutureReserved/" +
-          userId,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      )
+      .get(URL + "/api/pharmacistAppointment/allFutureReserved/" + userId, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
       .then((res) => {
         if (res.data.length === 0) {
           setEmptyTable(true);
@@ -127,13 +129,19 @@ const FutureExaminations = () => {
           setEmptyTable(false);
           setData(res.data);
         }
+      })
+      .catch((error) => {
+        if (error.response.status === 401) {
+          setRedirection(true);
+        }
       });
   };
 
   const setToMissed = (appointment) => {
     axios
       .put(
-        URL + "/api/pharmacistAppointment/changeStatusToMissed/" +
+        URL +
+          "/api/pharmacistAppointment/changeStatusToMissed/" +
           appointment.id,
         {},
         {
@@ -148,6 +156,9 @@ const FutureExaminations = () => {
         );
       })
       .catch((error) => {
+        if (error.response.status === 401) {
+          setRedirection(true);
+        }
         alert(
           "Appointment not start yet.\nYou can only set status missed for appointment which is started and not finished yet!"
         );
@@ -164,6 +175,7 @@ const FutureExaminations = () => {
         AppointmentId: appointment.id,
         Email: appointment.patientEmail,
         PhoneNumber: appointment.patientPhoneNumber,
+        PharmacyId: appointment.pharmacyId,
         PharmacyName: appointment.pharmacyName,
         PharamcyLocation: appointment.location,
         AppointmentStartTime: appointment.startTime,
@@ -285,6 +297,7 @@ const FutureExaminations = () => {
 
   return (
     <div>
+      {redirection === true && <Redirect to="/login"></Redirect>}
       {SearchPart}
       <Grid container>
         <Grid item xs={2} />

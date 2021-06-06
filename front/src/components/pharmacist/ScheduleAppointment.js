@@ -26,21 +26,19 @@ import axios from "axios";
 import { Redirect } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
-import {URL} from "../other/components"
-
+import { URL } from "../other/components";
 
 const useStyles = makeStyles({
   cart: {
     fontSize: 15,
-    backgroundColor: "#3f51b5",
-    color: "#FFFFFF",
+    backgroundColor: "#bed5e7",
   },
 });
 
 const ScheduleAppointment = ({ pharmacyInfo }) => {
   const token = localStorage.getItem("token");
   const userId = localStorage.getItem("userId");
-
+  const [redirection, setRedirection] = useState(false);
   const [data, setData] = useState([]);
 
   const [openCreateDialog, setOpenCreateDialog] = useState(false);
@@ -98,33 +96,35 @@ const ScheduleAppointment = ({ pharmacyInfo }) => {
     }
 
     axios
-      .get(
-        URL + "/api/workingHours/allPharmacistWorkingHours/" +
-          userId,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      )
+      .get(URL + "/api/workingHours/allPharmacistWorkingHours/" + userId, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
       .then((res) => {
         res.data.map((workDay) => {
           addToWorkingDates(workDay);
         });
+      })
+      .catch((error) => {
+        if (error.response.status === 401) {
+          setRedirection(true);
+        }
       });
 
     axios
-      .get(
-        URL + "/api/pharmacistAppointment/allFutureReserved/" +
-          userId,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      )
+      .get(URL + "/api/pharmacistAppointment/allFutureReserved/" + userId, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
       .then((res) => {
         addAppointmentsToData(res.data);
+      })
+      .catch((error) => {
+        if (error.response.status === 401) {
+          setRedirection(true);
+        }
       });
   }, []);
 
@@ -265,6 +265,7 @@ const ScheduleAppointment = ({ pharmacyInfo }) => {
 
   return (
     <>
+      {redirection === true && <Redirect to="/login"></Redirect>}
       {JSON.parse(localStorage.getItem("PatientForPharmacistReport")) ===
         null && <Redirect to="/pharmacist" />}
       {JSON.parse(localStorage.getItem("PatientForPharmacistReport")) !==

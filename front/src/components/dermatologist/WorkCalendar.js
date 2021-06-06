@@ -14,18 +14,17 @@ import {
 import { TextField, Grid, Typography } from "@material-ui/core";
 
 import Autocomplete from "@material-ui/lab/Autocomplete";
-
+import { Redirect } from "react-router-dom";
 import axios from "axios";
 import { useEffect, useState } from "react";
-import {URL} from "../other/components"
-
+import { URL } from "../other/components";
 
 const WorkCalendar = () => {
   const token = localStorage.getItem("token");
   const userId = localStorage.getItem("userId");
 
   const [data, setData] = useState([]);
-
+  const [redirection, setRedirection] = useState(false);
   const [pharmacies, setPharmacies] = useState([]);
 
   const resourceDataSource = [
@@ -50,13 +49,19 @@ const WorkCalendar = () => {
       .then((res) => {
         setPharmacies(res.data);
         addAppointmentForSelectedPharmacy(res.data[0].pharmacyId);
+      })
+      .catch((error) => {
+        if (error.response.status === 401) {
+          setRedirection(true);
+        }
       });
   }, []);
 
   const addAppointmentForSelectedPharmacy = (pharmacyId) => {
     axios
       .get(
-        URL + "/api/dermatologistAppointment/allMissed/" +
+        URL +
+          "/api/dermatologistAppointment/allMissed/" +
           userId +
           "/" +
           pharmacyId,
@@ -68,10 +73,16 @@ const WorkCalendar = () => {
       )
       .then((res) => {
         addAppointmentsToData(res.data);
+      })
+      .catch((error) => {
+        if (error.response.status === 401) {
+          setRedirection(true);
+        }
       });
     axios
       .get(
-        URL + "/api/dermatologistAppointment/allExpired/" +
+        URL +
+          "/api/dermatologistAppointment/allExpired/" +
           userId +
           "/" +
           pharmacyId,
@@ -83,10 +94,16 @@ const WorkCalendar = () => {
       )
       .then((res) => {
         addAppointmentsToData(res.data);
+      })
+      .catch((error) => {
+        if (error.response.status === 401) {
+          setRedirection(true);
+        }
       });
     axios
       .get(
-        URL + "/api/dermatologistAppointment/allReserved/" +
+        URL +
+          "/api/dermatologistAppointment/allReserved/" +
           userId +
           "/" +
           pharmacyId,
@@ -98,6 +115,11 @@ const WorkCalendar = () => {
       )
       .then((res) => {
         addAppointmentsToData(res.data);
+      })
+      .catch((error) => {
+        if (error.response.status === 401) {
+          setRedirection(true);
+        }
       });
   };
 
@@ -118,8 +140,7 @@ const WorkCalendar = () => {
   const changeAppointmentToMissed = async (id) => {
     axios
       .put(
-        URL + "/api/dermatologistAppointment/changeStatusToMissed/" +
-          id,
+        URL + "/api/dermatologistAppointment/changeStatusToMissed/" + id,
         {},
         {
           headers: {
@@ -136,8 +157,14 @@ const WorkCalendar = () => {
         );
       })
       .catch((error) => {
+        if (error.response.status === 401) {
+          setRedirection(true);
+        }
+
         setOpenDialog(false);
-        alert("You can only set missed for appointment which is in past!");
+        alert(
+          "Appointment not start yet.\nYou can only set status missed for appointment which is started and not finished yet or for appointments in past!"
+        );
       });
   };
 
@@ -148,6 +175,7 @@ const WorkCalendar = () => {
 
   return (
     <div style={{ marginLeft: "15%", marginTop: "2%" }}>
+      {redirection === true && <Redirect to="/login"></Redirect>}
       <Grid container>
         <Grid item xs={6}>
           <Typography variant="h4" style={{ width: "100%" }}>

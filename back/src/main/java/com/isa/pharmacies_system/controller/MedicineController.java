@@ -51,8 +51,8 @@ public class MedicineController {
 	}
 
 	@GetMapping(value = "/all")
-	public ResponseEntity<List<Medicine>> getAllMedicines() {
-		return new ResponseEntity<>(medicineService.getAll(), HttpStatus.OK);
+	public ResponseEntity<List<MedicineNewDTO>> getAllMedicines() {
+		return new ResponseEntity<>(medicineConverter.convertMedicinesToMedicineNewDTOS(medicineService.getAll()), HttpStatus.OK);
 	}
 
 	@PreAuthorize("hasRole('ROLE_PATIENT')")

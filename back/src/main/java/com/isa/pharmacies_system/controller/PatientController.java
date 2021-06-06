@@ -181,11 +181,11 @@ public class PatientController {
 
     //#1
     @PreAuthorize("hasRole('ROLE_PATIENT')")
-    @GetMapping(value = "/{id}/dermatologistAppointment/all/reserved/{page}")
-    public ResponseEntity<List<DermatologistAppointmentDTO>> getAllReservedDermatologistAppointmentsForPatient(@PathVariable Long id,@PathVariable int page){
+    @GetMapping(value = "/{id}/dermatologistAppointment/all/reserved")
+    public ResponseEntity<List<DermatologistAppointmentDTO>> getAllReservedDermatologistAppointmentsForPatient(@PathVariable Long id){
 
         try {
-            List<DermatologistAppointmentDTO> dermatologistAppointmentDTOS = dermatologistAppointmentConverter.convertListOfDermatologistAppointmentToDermatologistAppointmentDTOS(List.copyOf(patientService.getAllReservedDermatologistAppointmentsForPatient(id,page)));
+            List<DermatologistAppointmentDTO> dermatologistAppointmentDTOS = dermatologistAppointmentConverter.convertListOfDermatologistAppointmentToDermatologistAppointmentDTOS(List.copyOf(patientService.getAllReservedDermatologistAppointmentsForPatient(id)));
             return new ResponseEntity<>(dermatologistAppointmentDTOS,HttpStatus.OK);
         }catch (Exception e){
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -194,11 +194,11 @@ public class PatientController {
 
     //#1
     @PreAuthorize("hasRole('ROLE_PATIENT')")
-    @GetMapping(value = "/{id}/pharmacistAppointment/all/reserved/{page}")
-    public ResponseEntity<List<PharmacistAppointmentDTO>> getAllReservedPharmacistAppointmentsForPatient(@PathVariable Long id,@PathVariable int page){
+    @GetMapping(value = "/{id}/pharmacistAppointment/all/reserved")
+    public ResponseEntity<List<PharmacistAppointmentDTO>> getAllReservedPharmacistAppointmentsForPatient(@PathVariable Long id){
 
         try {
-            List<PharmacistAppointmentDTO> pharmacistAppointmentDTOS = pharmacistAppointmentConverter.convertPharmacistAppointmentsListToDTOS(List.copyOf(patientService.getAllReservedPharmacistAppointmentsForPatient(id,page)));
+            List<PharmacistAppointmentDTO> pharmacistAppointmentDTOS = pharmacistAppointmentConverter.convertPharmacistAppointmentsListToDTOS(List.copyOf(patientService.getAllReservedPharmacistAppointmentsForPatient(id)));
             return new ResponseEntity<>(pharmacistAppointmentDTOS,HttpStatus.OK);
         }catch (Exception e){
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -207,11 +207,11 @@ public class PatientController {
 
     //#1
     @PreAuthorize("hasRole('ROLE_PATIENT')")
-    @GetMapping(value = "/{id}/medicineReservation/{page}")
-    public ResponseEntity<List<MedicineReservationInfoDTO>> getAllMedicineReservationsForPatient(@PathVariable Long id, @PathVariable int page){
+    @GetMapping(value = "/{id}/medicineReservation")
+    public ResponseEntity<List<MedicineReservationInfoDTO>> getAllMedicineReservationsForPatient(@PathVariable Long id){
 
         try {
-            Page<MedicineReservation> medicineReservations = patientService.getAllMedicineReservationsForPatient(id,page);
+            Set<MedicineReservation> medicineReservations = patientService.getAllMedicineReservationsForPatient(id);
             return new ResponseEntity<>(medicineReservationConverter.convertMedicineReservationListToMedicineReservationInfoDTOS(medicineReservations),HttpStatus.OK);
         }catch (Exception e){
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);

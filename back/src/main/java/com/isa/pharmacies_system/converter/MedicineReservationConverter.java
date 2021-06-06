@@ -10,6 +10,7 @@ import org.springframework.data.domain.Page;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 public class MedicineReservationConverter {
 
@@ -27,7 +28,7 @@ public class MedicineReservationConverter {
         return medicineReservation;
     }
 
-    public List<MedicineReservationInfoDTO> convertMedicineReservationListToMedicineReservationInfoDTOS(Page<MedicineReservation> medicineReservations){
+    public List<MedicineReservationInfoDTO> convertMedicineReservationListToMedicineReservationInfoDTOS(Set<MedicineReservation> medicineReservations){
         List<MedicineReservationInfoDTO> medicineReservationInfoDTOS = new ArrayList<>();
         for (MedicineReservation medicineReservation:medicineReservations) {
                 medicineReservationInfoDTOS.add(convertMedicineReservationToMedicineReservationInfoDTO(medicineReservation));

@@ -1,8 +1,9 @@
-import { FormLabel, Grid, TextField } from "@material-ui/core";
+import { FormLabel, Grid, TextField, Box } from "@material-ui/core";
 
 import { makeStyles } from "@material-ui/core/styles";
 
 import React, { useEffect, useState } from "react";
+import { Redirect } from "react-router-dom";
 
 const useStyles = makeStyles({
   formLabel: {
@@ -13,7 +14,7 @@ const useStyles = makeStyles({
 const WriteReportSecondStep = ({ appointment, report, setReport }) => {
   const token = localStorage.getItem("token");
   const userId = localStorage.getItem("userId");
-
+  const [redirection, setRedirection] = useState(false);
   const classes = useStyles();
 
   const [nowTime, setDate] = useState(new Date());
@@ -32,6 +33,7 @@ const WriteReportSecondStep = ({ appointment, report, setReport }) => {
 
   return (
     <div>
+      {redirection === true && <Redirect to="/login"></Redirect>}
       {appointment.FirstName !== undefined && (
         <>
           <Grid container spacing={0} style={{ marginTop: "1%" }}>
@@ -49,58 +51,68 @@ const WriteReportSecondStep = ({ appointment, report, setReport }) => {
               />
             </Grid>
             <Grid item xs={4}>
-              <table>
-                <tbody>
-                  <tr>
-                    <td>
-                      <FormLabel className={classes.formLabel}>
-                        Patient :
-                      </FormLabel>
-                    </td>
-                    <td style={{ padding: "5%" }}>
-                      <FormLabel className={classes.formLabel}>
-                        {appointment.FirstName} {appointment.LastName}
-                      </FormLabel>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td style={{ padding: "5%" }}>
-                      <FormLabel className={classes.formLabel}>
-                        Email :
-                      </FormLabel>
-                    </td>
-                    <td>
-                      <FormLabel className={classes.formLabel}>
-                        {appointment.Email}
-                      </FormLabel>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td style={{ padding: "5%" }}>
-                      <FormLabel className={classes.formLabel}>
-                        Phone number :
-                      </FormLabel>
-                    </td>
-                    <td>
-                      <FormLabel className={classes.formLabel}>
-                        {appointment.PhoneNumber}
-                      </FormLabel>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td style={{ padding: "5%" }}>
-                      <FormLabel className={classes.formLabel}>
-                        Now time :
-                      </FormLabel>
-                    </td>
-                    <td>
-                      <FormLabel className={classes.formLabel}>
-                        {nowTime.toString().split(" ")[4]} h
-                      </FormLabel>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
+              <Box
+                border={1}
+                borderRadius={5}
+                style={{
+                  background: "#bed5e7",
+                  borderColor: "#b8b8b8",
+                  width: "65%",
+                }}
+              >
+                <table>
+                  <tbody>
+                    <tr>
+                      <td>
+                        <FormLabel className={classes.formLabel}>
+                          Patient :
+                        </FormLabel>
+                      </td>
+                      <td style={{ padding: "5%" }}>
+                        <FormLabel className={classes.formLabel}>
+                          {appointment.FirstName} {appointment.LastName}
+                        </FormLabel>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td style={{ padding: "5%" }}>
+                        <FormLabel className={classes.formLabel}>
+                          Email :
+                        </FormLabel>
+                      </td>
+                      <td>
+                        <FormLabel className={classes.formLabel}>
+                          {appointment.Email}
+                        </FormLabel>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td style={{ padding: "5%" }}>
+                        <FormLabel className={classes.formLabel}>
+                          Phone number :
+                        </FormLabel>
+                      </td>
+                      <td>
+                        <FormLabel className={classes.formLabel}>
+                          {appointment.PhoneNumber}
+                        </FormLabel>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td style={{ padding: "5%" }}>
+                        <FormLabel className={classes.formLabel}>
+                          Now time :
+                        </FormLabel>
+                      </td>
+                      <td>
+                        <FormLabel className={classes.formLabel}>
+                          {nowTime.toString().split(" ")[4]} h
+                        </FormLabel>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </Box>
             </Grid>
           </Grid>
         </>

@@ -11,13 +11,11 @@ import {
     Grid,
     TextField,
     Button,
-    TableContainer
+    TableContainer,
+    
 
   } from "@material-ui/core";
-  import {
-    NavigateNext,
-    NavigateBefore,
-  } from "@material-ui/icons";
+import Icon from '@material-ui/core/Icon';
 import { useState, useEffect } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import React from 'react';
@@ -28,13 +26,16 @@ import MuiDialogContent from '@material-ui/core/DialogContent';
 import MuiDialogActions from '@material-ui/core/DialogActions';
 import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
+import AddCircleTwoToneIcon from '@material-ui/icons/AddCircleTwoTone';
 import Typography from '@material-ui/core/Typography';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import DateFnsUtils from '@date-io/date-fns';
 import Alert from "@material-ui/lab/Alert";
 import Snackbar from "@material-ui/core/Snackbar";
 import {URL} from "../other/components"
-
+import Fab from '@material-ui/core/Fab';
+import AddIcon from '@material-ui/icons/Add';
+import {Redirect} from "react-router-dom"
 
 import {
     MuiPickersUtilsProvider,
@@ -47,7 +48,7 @@ import setDate from "date-fns/setDate";
   
   const useStyles = makeStyles((theme) => ({
     table: {
-      marginTop: "5%",
+      marginTop: "1%",
     },
     hederRow: {
       background: "#4051bf",
@@ -115,15 +116,18 @@ import setDate from "date-fns/setDate";
     const [pharmacies, setPharmacies] = useState([])
     const [selectedMedicine, setSelectedMedicine] = useState(null)
     const [selectedPharmacy, setSelectedPharmacy] = useState(null)
-    const [currPage, setCurrPage] = useState(1);
     const [open, setOpen] = React.useState(false);
     const [selectedDate, setSelectedDate] = React.useState();
     const [alertTextError, setAlertTextError] = useState('')
     const [openAlertError, setOpenAlertError] = useState(false)
+    const [alertTextErrorPenalty, setAlertTextErrorPenalty] = useState('')
+    const [openAlertErrorPenalty, setOpenAlertErrorPenalty] = useState(false)
     const [openAlertSuccess, setOpenAlertSuccess] = useState(false)
     const [alertTextSuccess, setAlertTextSuccess] = useState('')
+    const [penalty,setPenalty] = useState(0)
     const token = localStorage.getItem("token");
     const userId = localStorage.getItem("userId");
+    const [redirection,setRedirection] = useState(false)
     const config = {
       headers: { Authorization: `Bearer ${token}` }
   };
@@ -134,6 +138,13 @@ import setDate from "date-fns/setDate";
         return;
       }
       setOpenAlertError(false);
+    };
+
+    const handleCloseAlertErrorPenalty = (event, reason) => {
+      if (reason === 'clickaway') {
+        return;
+      }
+      setOpenAlertErrorPenalty(false);
     };
   
     const handleCloseAlertSuccess = (event, reason) => {
@@ -158,17 +169,17 @@ import setDate from "date-fns/setDate";
             if(res.data){
                 axios
                 .get(
-                  URL + "/api/patient/" + userId + "/medicineReservation/" +
-                  (currPage - 1).toString() +
-                  ""
+                  URL + "/api/patient/" + userId + "/medicineReservation"
                 ,config)
                 .then((res) => {
                   setRows(res.data);
                   setCopyRows(res.data);
                   handleClose()
-                }).catch(error => {
-
-                })
+                }).catch((error) => {
+                  if(error.response.status === 401){
+                    setRedirection(true)
+                  }
+                });
              
                 }else{
                   handleClose()
@@ -198,43 +209,64 @@ import setDate from "date-fns/setDate";
                   setOpenAlertError(true);
                 }
             }
-        ).catch(error => {
-
-        })
+        ).catch((error) => {
+          if(error.response.status === 401){
+            setRedirection(true)
+          }
+        });
     }
+
 
     useEffect(() => {
       axios
         .get(
-          URL + "/api/patient/" + userId + "/medicineReservation/" +
-          (currPage - 1).toString() +
-          "",config)
+          URL + "/api/patient/" + userId + "/medicineReservation",config)
         .then((res) => {
           setRows(res.data);
           setCopyRows(res.data);
-        }).catch(error => {
-
-        })
+        }) .catch((error) => {
+          if(error.response.status === 401){
+            setRedirection(true)
+          }
+        });
+      axios.get(URL + '/api/patient/' + userId +'/additionalInfo',config)
+        .then((res)=> {
+          setPenalty(res.data.penalty)
+        }).catch((error) => {
+          if(error.response.status === 401){
+            setRedirection(true)
+          }
+        }); 
     }, []);
 
     const handleClickOpen = () => {
+      if (penalty < 3){
         setOpen(true);
         axios
         .get(
           URL + "/api/medicine/all/short",config)
         .then((res) => {
           setMedicines(res.data)
-        }).catch(error => {
-
-        })
+        }) .catch((error) => {
+          if(error.response.status === 401){
+            setRedirection(true)
+          }
+        });
         axios
         .get(
           URL + "/api/pharmacy/all",config)
         .then((res) => {
             setPharmacies(res.data)
-        }).catch(error => {
-
-        })
+        }).catch((error) => {
+          if(error.response.status === 401){
+            setRedirection(true)
+          }
+        });
+      }else{
+        setAlertTextErrorPenalty("You can't reserve medicine because you have more than 3 penalties")
+        setOpenAlertErrorPenalty(true)
+      }
+      
     };
     const handleClose = () => {
         setOpen(false);
@@ -379,10 +411,13 @@ import setDate from "date-fns/setDate";
   
     return (
       <div>
+      {redirection === true && <Redirect to="/login"></Redirect>}
+
+       <Fab color="primary" aria-label="add" onClick={handleClickOpen}  style={{marginTop:"2%", marginLeft:"50%"}}>
+        <AddIcon />
+      </Fab>
           {SearchPart}
-        <Button variant="outlined" color="primary" onClick={handleClickOpen}>
-       CREATE RESERVATION
-      </Button>
+      
         <Grid container spacing={1}>
           <Grid item xs={2} />
           <Grid item xs={8}>
@@ -404,6 +439,11 @@ import setDate from "date-fns/setDate";
       <Snackbar open={openAlertSuccess} autoHideDuration={1500} onClose={handleCloseAlertSuccess}>
         <Alert severity="success">
           {alertTextSuccess}
+        </Alert>
+      </Snackbar>
+      <Snackbar open={openAlertErrorPenalty} autoHideDuration={1500} onClose={handleCloseAlertErrorPenalty}>
+        <Alert severity="error">
+          {alertTextErrorPenalty}
         </Alert>
       </Snackbar>
       </div>

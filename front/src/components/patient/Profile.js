@@ -10,7 +10,7 @@ import Allergies from './Allergies'
 import PasswordDialog from './PasswordDialog'
 import axios from "axios";
 import {URL} from "../other/components"
-
+import {Redirect} from "react-router-dom"
 
 
 const useStyles = makeStyles((theme) => ({ //style za paper deo
@@ -28,7 +28,7 @@ const useStyles = makeStyles((theme) => ({ //style za paper deo
   }));
 
 const HomePage = () => {
-
+    const [redirection,setRedirection] = useState(false)
     const [user, setUser] = useState ({
         id : -1,
         firstName : '',
@@ -38,7 +38,8 @@ const HomePage = () => {
         email : '',
         patientPoints : '',
         categoryOfPatient : '',
-        allergies : {}
+        allergies : {},
+        penalty:''
 
     })
 
@@ -50,7 +51,8 @@ const HomePage = () => {
         phoneNumber : '',
         email : '',
         patientPoints : '',
-        categoryOfPatient : ''
+        categoryOfPatient : '',
+        penalty:''
 
     })
 
@@ -89,13 +91,19 @@ const HomePage = () => {
 
   
     const getUser = async () => {
-        const res = await axios.get(URL + '/api/patient/' + userId +'/additionalInfo',config)
-        let patient = res.data
-        setUser({id : patient.id,firstName : patient.firstName, lastName : patient.lastName, address : patient.address, phoneNumber : patient.phoneNumber, email : patient.email, patientPoints : patient.patientPoints, categoryOfPatient : patient.categoryOfPatient, allergies : patient.allergies})
-        setUserCopy({id : patient.id,firstName : patient.firstName, lastName : patient.lastName, address : patient.address, phoneNumber : patient.phoneNumber, email : patient.email, patientPoints : patient.patientPoints, categoryOfPatient : patient.categoryOfPatient})
-        setAddress({streetName: patient.address.streetName, streetNumber: patient.address.streetNumber, city: patient.address.city, country: patient.address.country, longitude : patient.address.longitude, latitude : patient.address.latitude })
-        setAllergies(patient.medicineForAllergiesDTO)
-        console.log(patient.medicineForAllergiesDTO)
+        const res = await axios.get(URL + '/api/patient/' + userId +'/additionalInfo',config).then((res)=>{}).catch((error) => {
+            if(error.response.status === 401){
+              setRedirection(true)
+            }
+          });
+          if(res != undefined){
+            let patient = res.data
+            setUser({id : patient.id,firstName : patient.firstName, lastName : patient.lastName, address : patient.address, phoneNumber : patient.phoneNumber, email : patient.email, patientPoints : patient.patientPoints, categoryOfPatient : patient.categoryOfPatient, allergies : patient.allergies, penalty : patient.penalty})
+            setUserCopy({id : patient.id,firstName : patient.firstName, lastName : patient.lastName, address : patient.address, phoneNumber : patient.phoneNumber, email : patient.email, patientPoints : patient.patientPoints, categoryOfPatient : patient.categoryOfPatient, penalty : patient.penalty})
+            setAddress({streetName: patient.address.streetName, streetNumber: patient.address.streetNumber, city: patient.address.city, country: patient.address.country, longitude : patient.address.longitude, latitude : patient.address.latitude })
+            setAllergies(patient.medicineForAllergiesDTO)
+          }
+       
     }
 
     const handleEditButton = () => {
@@ -115,7 +123,8 @@ const HomePage = () => {
             phoneNumber : user.phoneNumber,
             email : user.email,
             patientPoints : user.patientPoints,
-            categoryOfPatient : user.categoryOfPatient
+            categoryOfPatient : user.categoryOfPatient,
+            penalty : user.penalty
         }
          
         if(validate(updateUser)){
@@ -127,9 +136,11 @@ const HomePage = () => {
                 setOpenAlert(true)
 
             })
-            .catch((err) => {
-                console.log(err);
-            });
+            .catch((error) => {
+                if(error.response.status === 401){
+                  setRedirection(true)
+                }
+              });
             setEditState(false)
         }
       
@@ -193,6 +204,8 @@ const HomePage = () => {
     return (
     <>
     <div className={classes.root}>
+    {redirection === true && <Redirect to="/login"></Redirect>}
+
         <Paper className={classes.paper}>
             <h2 className={classes.h2}>PROFILE</h2>
             <Grid container spacing={1} >
@@ -251,6 +264,11 @@ const HomePage = () => {
                             <tr>
                                 <td>Category: </td>
                                 <td>{user.categoryOfPatient}</td>
+
+                            </tr>
+                            <tr>
+                                <td>Penalty: </td>
+                                <td>{user.penalty}</td>
 
                             </tr>
 

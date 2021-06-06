@@ -30,7 +30,7 @@ import CloseIcon from '@material-ui/icons/Close';
 import Typography from '@material-ui/core/Typography';
 import { withStyles } from '@material-ui/core/styles';
 import {URL} from "../other/components"
-
+import {Redirect} from "react-router-dom"
 
 
 const useStyles = makeStyles((theme) => ({
@@ -78,6 +78,7 @@ const EPrescriptionList = () => {
   const [selectedEPrescription, setSelectedEPrescription] = useState()
   const token = localStorage.getItem("token");
   const userId = localStorage.getItem("userId");
+  const [redirection,setRedirection] = useState(false)
   const config = {
     headers: { Authorization: `Bearer ${token}` }
 };
@@ -88,6 +89,10 @@ const EPrescriptionList = () => {
         URL + "/api/patient/" + userId + "/ePrescription", config)
       .then((res) => {
         setRows(res.data);
+      }).catch((error) => {
+        if(error.response.status === 401){
+          setRedirection(true)
+        }
       });
   }, []);
 
@@ -99,7 +104,11 @@ const EPrescriptionList = () => {
             setOpenEPrescriptionItemListDialog(true)
             setSelectedEPrescription(ePrescription.id)
         }
-    )
+    ).catch((error) => {
+      if(error.response.status === 401){
+        setRedirection(true)
+      }
+    });
 };
 const handleClickCloseEPrescriptionItemDialog = () => {
     setOpenEPrescriptionItemListDialog(false);
@@ -134,6 +143,10 @@ const sortByDate = () => {
     ,config)
     .then((res) => {
       setRows(res.data);
+    }).catch((error) => {
+      if(error.response.status === 401){
+        setRedirection(true)
+      }
     });
 };
 
@@ -153,6 +166,10 @@ const sortByStatus = () => {
     ,config)
     .then((res) => {
       setRows(res.data);
+    }).catch((error) => {
+      if(error.response.status === 401){
+        setRedirection(true)
+      }
     });
 };
 
@@ -250,6 +267,7 @@ const sortByStatus = () => {
 
     return (
         <div>
+         {redirection === true && <Redirect to="/login"></Redirect>}
             <h3>E-Prescriptions</h3>
         <Grid container spacing={1}>
           <Grid item xs={2} />

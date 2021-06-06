@@ -16,10 +16,10 @@ import {
 import LiveHelp from "@material-ui/icons/LiveHelp";
 import { useState, useEffect } from "react";
 import { makeStyles } from "@material-ui/core/styles";
+import { Redirect } from "react-router-dom";
 
 import RecipeAddItemDialog from "./RecipeAddItemDialog.js";
-import {URL} from "../other/components"
-
+import { URL } from "../other/components";
 
 import axios from "axios";
 
@@ -42,7 +42,7 @@ const WriteReportThirdStep = ({
 }) => {
   const token = localStorage.getItem("token");
   const userId = localStorage.getItem("userId");
-
+  const [redirection, setRedirection] = useState(false);
   const classes = useStyles();
 
   const [selectedMedicine, setSelectedMedicine] = useState(null);
@@ -54,17 +54,18 @@ const WriteReportThirdStep = ({
 
   useEffect(() => {
     axios
-      .get(
-        URL + "/api/pharmacyStorageItem/all/" +
-          appointment.PharmacyId,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      )
+      .get(URL + "/api/pharmacyStorageItem/all/" + appointment.PharmacyId, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
       .then((res) => {
         setMedicinesInPharmacy(res.data);
+      })
+      .catch((error) => {
+        if (error.response.status === 401) {
+          setRedirection(true);
+        }
       });
   }, []);
 
@@ -88,28 +89,26 @@ const WriteReportThirdStep = ({
 
   const seeAllMedicinesInPharmacy = () => {
     axios
-      .get(
-        URL + "/api/pharmacyStorageItem/all/" +
-          appointment.PharmacyId,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      )
+      .get(URL + "/api/pharmacyStorageItem/all/" + appointment.PharmacyId, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
       .then((res) => {
         setMedicinesInPharmacy(res.data);
         setIsAlternative(false);
+      })
+      .catch((error) => {
+        if (error.response.status === 401) {
+          setRedirection(true);
+        }
       });
   };
 
   return (
     <div>
-      <Grid
-        container
-        spacing={0}
-        style={{ marginTop: "2%", width: "80%", margin: "auto" }}
-      >
+      {redirection === true && <Redirect to="/login"></Redirect>}
+      <Grid container style={{ marginTop: "2%", width: "80%", margin: "auto" }}>
         <Grid item xs={3}>
           {isAlternative === true && (
             <>
@@ -133,7 +132,11 @@ const WriteReportThirdStep = ({
           <Box
             border={1}
             borderRadius={5}
-            style={{ marginTop: "8%", borderColor: "#b8b8b8" }}
+            style={{
+              marginTop: "8%",
+              borderColor: "#b8b8b8",
+              background: "#bed5e7",
+            }}
           >
             <List
               style={{
@@ -303,6 +306,7 @@ const WriteReportThirdStep = ({
               overflow: "auto",
               maxHeight: "300px",
               minHeight: "62px",
+              background: "#bed5e7",
             }}
           >
             {recipeItems.length === 0 && (

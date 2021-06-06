@@ -1,73 +1,28 @@
 import { AppBar, Typography, Toolbar, Grid } from "@material-ui/core";
 import { Link } from "react-router-dom";
 
-const setPharmacistPatientReport = () => {
-  localStorage.setItem("PatientForPharmacistReport", JSON.stringify(null));
-};
-
-const setDermatologistPatientReport = () => {
-  localStorage.setItem("PatientForDermatologistReport", JSON.stringify(null));
+const clearLocalStorage = () => {
+  localStorage.clear();
 };
 
 const NavBar = ({ user }) => {
   const NavBarForPharmacist = (
     <Toolbar>
       <Grid container>
-        <Grid item xs={3}>
-          <Typography>Hay {user}</Typography>
-        </Grid>
-        <Grid item xs={8} container style={{ textAlign: "right" }}>
-          <Grid item xs={2}>
+        <Grid item xs={6}></Grid>
+        <Grid item xs={6} container style={{ textAlign: "right" }}>
+          <Grid item xs={3} />
+          <Grid item xs={3}>
             <Typography>
               <Link
-                to="/pharmacist/medicineReservations"
+                to="/pharmacist/homePage"
                 style={{ color: "#fafafa", textDecoration: "none" }}
               >
-                Medicine reservations
+                Home page
               </Link>
             </Typography>
           </Grid>
-          <Grid item xs={2}>
-            <Typography>
-              <Link
-                to="/pharmacist/futureExaminations"
-                style={{ color: "#fafafa", textDecoration: "none" }}
-              >
-                Future examinations
-              </Link>
-            </Typography>
-          </Grid>
-          <Grid item xs={2}>
-            <Typography>
-              <Link
-                to="/pharmacist/examinedPatients"
-                style={{ color: "#fafafa", textDecoration: "none" }}
-              >
-                Examined patients
-              </Link>
-            </Typography>
-          </Grid>
-          <Grid item xs={2}>
-            <Typography>
-              <Link
-                to="/pharmacist/workCalendar"
-                style={{ color: "#fafafa", textDecoration: "none" }}
-              >
-                Work calendar
-              </Link>
-            </Typography>
-          </Grid>
-          <Grid item xs={2}>
-            <Typography>
-              <Link
-                to="/pharmacist/vacationRequest"
-                style={{ color: "#fafafa", textDecoration: "none" }}
-              >
-                Vacation Request
-              </Link>
-            </Typography>
-          </Grid>
-          <Grid item xs={2}>
+          <Grid item xs={3}>
             <Typography>
               <Link
                 to="/pharmacist/editProfile"
@@ -77,12 +32,12 @@ const NavBar = ({ user }) => {
               </Link>
             </Typography>
           </Grid>
-          <Grid item xs={2}>
+          <Grid item xs={3}>
             <Typography>
               <a
                 href="/"
                 style={{ color: "#fafafa", textDecoration: "none" }}
-                onClick={setPharmacistPatientReport}
+                onClick={clearLocalStorage}
               >
                 Sing out
               </a>
@@ -96,51 +51,20 @@ const NavBar = ({ user }) => {
   const NavBarForDermatologist = (
     <Toolbar>
       <Grid container>
-        <Grid item xs={3}>
-          <Typography>Hay {user}</Typography>
-        </Grid>
-        <Grid item xs={8} container style={{ textAlign: "right" }}>
-          <Grid item xs={2}>
+        <Grid item xs={6}></Grid>
+        <Grid item xs={6} container style={{ textAlign: "right" }}>
+          <Grid item xs={3} />
+          <Grid item xs={3}>
             <Typography>
               <Link
-                to="/dermatologist/futureExaminations"
+                to="/dermatologist/homePage"
                 style={{ color: "#fafafa", textDecoration: "none" }}
               >
-                Future examinations
+                Home page
               </Link>
             </Typography>
           </Grid>
-          <Grid item xs={2}>
-            <Typography>
-              <Link
-                to="/dermatologist/examinedPatients"
-                style={{ color: "#fafafa", textDecoration: "none" }}
-              >
-                Examined patients
-              </Link>
-            </Typography>
-          </Grid>
-          <Grid item xs={2}>
-            <Typography>
-              <Link
-                to="/dermatologist/workCalendar"
-                style={{ color: "#fafafa", textDecoration: "none" }}
-              >
-                Work calendar
-              </Link>
-            </Typography>
-          </Grid>
-          <Grid item xs={2}>
-            <Typography>
-              <Link
-                to="/dermatologist/vacationRequest"
-                style={{ color: "#fafafa", textDecoration: "none" }}
-              >
-                Vacation request
-              </Link>
-            </Typography>
-          </Grid>
-          <Grid item xs={2}>
+          <Grid item xs={3}>
             <Typography>
               <Link
                 to="/dermatologist/editProfile"
@@ -150,12 +74,12 @@ const NavBar = ({ user }) => {
               </Link>
             </Typography>
           </Grid>
-          <Grid item xs={2}>
+          <Grid item xs={3}>
             <Typography>
               <a
                 href="/"
                 style={{ color: "#fafafa", textDecoration: "none" }}
-                onClick={setDermatologistPatientReport}
+                onClick={clearLocalStorage}
               >
                 Sing out
               </a>
@@ -170,33 +94,37 @@ const NavBar = ({ user }) => {
     <Toolbar>
       <Grid container spacing={1}>
         <Grid item xs={6}>
-          <Typography>Hay {user}</Typography>
+          
         </Grid>
         <Grid item xs={6} container spacing={1} style={{ textAlign: "right" }}>
           <Grid item xs={3}></Grid>
           <Grid item xs={3}>
             <Typography>
-              <a
-                href="/patient/Profile"
+              <Link
+                to="/patient/profile"
                 style={{ color: "#fafafa", textDecoration: "none" }}
               >
                 Profile
-              </a>
+              </Link>
+            </Typography>
+          </Grid>
+          <Grid item xs={3}>
+            <Typography>
+              <Link
+                to="/patient/home2"
+                style={{ color: "#fafafa", textDecoration: "none" }}
+              >
+                Home Page
+              </Link>
             </Typography>
           </Grid>
           <Grid item xs={3}>
             <Typography>
               <a
-                href="/patient/HomePage"
+                href="/"
                 style={{ color: "#fafafa", textDecoration: "none" }}
+                onClick={clearLocalStorage}
               >
-                Home Page
-              </a>
-            </Typography>
-          </Grid>
-          <Grid item xs={3}>
-            <Typography>
-              <a href="/" style={{ color: "#fafafa", textDecoration: "none" }}>
                 Sing out
               </a>
             </Typography>
@@ -206,12 +134,54 @@ const NavBar = ({ user }) => {
     </Toolbar>
   );
 
+    const NavBarForUnregistred = (
+    <Toolbar>
+      <Grid container spacing={1}>
+        <Grid item xs={6}>
+          
+        </Grid>
+        <Grid item xs={6} container spacing={1} style={{ textAlign: "right" }}>
+          <Grid item xs={3}></Grid>
+          <Grid item xs={3}>
+            <Typography>
+              <Link
+                to="/"
+                style={{ color: "#fafafa", textDecoration: "none" }}
+              >
+                Home 
+              </Link>
+            </Typography>
+          </Grid>
+          <Grid item xs={3}>
+            <Typography>
+              <Link
+                to="/login"
+                style={{ color: "#fafafa", textDecoration: "none" }}
+              >
+                Sign in
+              </Link>
+            </Typography>
+          </Grid>
+          <Grid item xs={3}>
+            <Typography>
+              <Link to="/registerPatient" style={{ color: "#fafafa", textDecoration: "none" }}>
+               Sign up
+              </Link>
+            </Typography>
+          </Grid>
+        </Grid>
+      </Grid>
+    </Toolbar>
+  );
+  
+
   return (
     <>
       <AppBar position="static">
         {user === "pharmacist" && NavBarForPharmacist}
         {user === "dermatologist" && NavBarForDermatologist}
         {user === "patient" && NavBarForPatient}
+        {(user === "unregistred" || user === undefined) && NavBarForUnregistred}
       </AppBar>
     </>
   );

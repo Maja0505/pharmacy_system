@@ -3,18 +3,16 @@ import {
   Card,
   CardContent,
   Typography,
-  Snackbar,
   Button,
   TextField,
 } from "@material-ui/core";
 
 import { makeStyles } from "@material-ui/core/styles";
-
-import { useState } from "react";
+import { Redirect } from "react-router-dom";
+import { useState, useEffect } from "react";
 
 import axios from "axios";
-import {URL} from "../other/components"
-
+import { URL, REACT_URL } from "../other/components";
 
 const useStyles = makeStyles({
   cart: {
@@ -31,12 +29,31 @@ const useStyles = makeStyles({
 const MedicineReservation = () => {
   const token = localStorage.getItem("token");
   const userId = localStorage.getItem("userId");
-  const pharamcyId = localStorage.getItem("pharmacyId");
+  const [pharamcyId, setPharmacyId] = useState();
+
+  const [redirection, setRedirection] = useState(false);
 
   const classes = useStyles();
   const [medicineReservationId, setMedicineReservationId] = useState("");
   const [haveReservation, setHaveReservation] = useState(null);
   const [medicineReservation, setMedicineReservation] = useState({});
+
+  useEffect(() => {
+    axios
+      .get(URL + "/api/pharmacist/getPharmacyId/" + userId, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .then((res) => {
+        setPharmacyId(res.data);
+      })
+      .catch((error) => {
+        if (error.response.status === 401) {
+          setRedirection(true);
+        }
+      });
+  }, []);
 
   const changeMedicineReservationId = (text) => {
     setMedicineReservationId(text);
@@ -45,7 +62,8 @@ const MedicineReservation = () => {
   const searchReservation = () => {
     axios
       .get(
-        URL + "/api/medicineReservation/get/" +
+        URL +
+          "/api/medicineReservation/get/" +
           medicineReservationId +
           "/" +
           pharamcyId,
@@ -59,7 +77,10 @@ const MedicineReservation = () => {
         setMedicineReservation(res.data);
         setHaveReservation(true);
       })
-      .catch((status) => {
+      .catch((error) => {
+        if (error.response.status === 401) {
+          setRedirection(true);
+        }
         setHaveReservation(false);
       });
   };
@@ -67,8 +88,7 @@ const MedicineReservation = () => {
   const changeStatusOfReservation = () => {
     axios
       .put(
-        URL + "/api/medicineReservation/finish/" +
-          medicineReservationId,
+        URL + "/api/medicineReservation/finish/" + medicineReservationId,
         {},
         {
           headers: {
@@ -81,6 +101,11 @@ const MedicineReservation = () => {
           ...medicineReservation,
           statusOfMedicineReservation: "FINISHED",
         });
+      })
+      .catch((error) => {
+        if (error.response.status === 401) {
+          setRedirection(true);
+        }
       });
   };
 
@@ -196,6 +221,7 @@ const MedicineReservation = () => {
 
   return (
     <div>
+      {redirection === true && <Redirect to="/login"></Redirect>}
       <Grid container>
         <Grid item xs={2} />
         <Grid item xs={6} style={{ margin: "auto", marginTop: "5%" }}>

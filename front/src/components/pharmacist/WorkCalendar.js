@@ -13,13 +13,12 @@ import {
 } from "@syncfusion/ej2-react-schedule";
 import axios from "axios";
 import { useEffect, useState } from "react";
-import {URL} from "../other/components"
-
-
+import { URL } from "../other/components";
+import { Redirect } from "react-router-dom";
 const WorkCalendar = () => {
   const token = localStorage.getItem("token");
   const userId = localStorage.getItem("userId");
-
+  const [redirection, setRedirection] = useState(false);
   const [data, setData] = useState([]);
 
   const resourceDataSource = [
@@ -36,40 +35,46 @@ const WorkCalendar = () => {
 
   useEffect(async () => {
     axios
-      .get(
-        URL + "/api/pharmacistAppointment/allMissed/" + userId,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      )
+      .get(URL + "/api/pharmacistAppointment/allMissed/" + userId, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
       .then((res) => {
         addAppointmentsToData(res.data);
+      })
+      .catch((error) => {
+        if (error.response.status === 401) {
+          setRedirection(true);
+        }
       });
     axios
-      .get(
-        URL + "/api/pharmacistAppointment/allExpired/" + userId,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      )
+      .get(URL + "/api/pharmacistAppointment/allExpired/" + userId, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
       .then((res) => {
         addAppointmentsToData(res.data);
+      })
+      .catch((error) => {
+        if (error.response.status === 401) {
+          setRedirection(true);
+        }
       });
     axios
-      .get(
-        URL + "/api/pharmacistAppointment/allReserved/" + userId,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      )
+      .get(URL + "/api/pharmacistAppointment/allReserved/" + userId, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
       .then((res) => {
         addAppointmentsToData(res.data);
+      })
+      .catch((error) => {
+        if (error.response.status === 401) {
+          setRedirection(true);
+        }
       });
   }, []);
 
@@ -90,8 +95,7 @@ const WorkCalendar = () => {
   const changeAppointmentToMissed = async (id) => {
     axios
       .put(
-        URL + "/api/pharmacistAppointment/changeStatusToMissed/" +
-          id,
+        URL + "/api/pharmacistAppointment/changeStatusToMissed/" + id,
         {},
         {
           headers: {
@@ -108,13 +112,19 @@ const WorkCalendar = () => {
         );
       })
       .catch((error) => {
+        if (error.response.status === 401) {
+          setRedirection(true);
+        }
         setOpenDialog(false);
-        alert("You can only set missed for appointment which is in past!");
+        alert(
+          "Appointment not start yet.\nYou can only set status missed for appointment which is started and not finished yet or for appointments in past!"
+        );
       });
   };
 
   return (
     <div style={{ marginLeft: "15%", marginTop: "3%" }}>
+      {redirection === true && <Redirect to="/login"></Redirect>}
       <h1 style={{ width: "80%" }}>Work calendar</h1>
       <ScheduleComponent
         eventSettings={{

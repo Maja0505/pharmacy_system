@@ -9,6 +9,7 @@ public class PatientAdditionalInfoDTO extends UserPersonalInfoDTO{
     private double patientPoints;
     private CategoryOfPatient categoryOfPatient;
     private List<MedicineForAllergiesDTO> medicineForAllergiesDTO;
+    private int penalty;
 
     public PatientAdditionalInfoDTO() {
     }
@@ -27,6 +28,14 @@ public class PatientAdditionalInfoDTO extends UserPersonalInfoDTO{
 
     public void setCategoryOfPatient(CategoryOfPatient categoryOfPatient) {
         this.categoryOfPatient = categoryOfPatient;
+    }
+
+    public int getPenalty() {
+        return penalty;
+    }
+
+    public void setPenalty(int penalty) {
+        this.penalty = penalty;
     }
 
     public List<MedicineForAllergiesDTO> getMedicineForAllergiesDTO() {

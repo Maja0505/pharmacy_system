@@ -224,6 +224,7 @@ public class PharmacistAppointmentService implements IPharmacistAppointmentServi
     }
 
     //Nemanja
+    @Transactional
     @Override
     public Boolean changePharmacistAppointmentStatusToMissed(PharmacistAppointment pharmacistAppointment) {
         if(pharmacistAppointment.getStatusOfAppointment().equals(StatusOfAppointment.Reserved) && pharmacistAppointment.getPharmacistAppointmentStartTime().isBefore(LocalDateTime.now())){

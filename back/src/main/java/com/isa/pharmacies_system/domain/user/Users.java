@@ -57,7 +57,7 @@ public class Users implements UserDetails {
 	@Column(name = "enableLogin", unique = false, nullable = false)
 	private boolean enableLogin;
 	
-	@Column(name = "isFirstLogin", unique = false, nullable = false)
+	@Column(name = "isFirstLogin")
 	private boolean isFirstLogin;
 
 	@Column(name = "last_password_reset_date", unique = false, nullable = false)

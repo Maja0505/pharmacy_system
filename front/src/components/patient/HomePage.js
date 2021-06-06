@@ -17,6 +17,8 @@ import EPrescriptionList from './EPrescriptionList'
 import SubscriptionPharmacy from './SubscriptionPharmacy'
 import Rating from './Rating'
 import Complaint from './Complaint'
+import {Redirect} from "react-router-dom"
+
 
 import { BrowserRouter as Router, Route, Link } from "react-router-dom";
 
@@ -328,7 +330,6 @@ const HomePage = () => {
                   <Route path='/patient/HomePage/subscriptionPharmacy' component={SubscriptionPharmacy}></Route>
                   <Route path='/patient/HomePage/rating' component={Rating}></Route>
                   <Route path='/patient/HomePage/complaint' component={Complaint}></Route>
-
                 </Paper>
               </Grid>
           </Grid>

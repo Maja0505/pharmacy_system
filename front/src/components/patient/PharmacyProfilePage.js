@@ -31,7 +31,7 @@ import Alert from "@material-ui/lab/Alert";
 import Snackbar from "@material-ui/core/Snackbar";
 import { set } from "date-fns";
 import {URL} from "../other/components"
-
+import {Redirect} from "react-router-dom"
 
 
   
@@ -107,10 +107,17 @@ import {URL} from "../other/components"
     const { id } = useParams()
     const [dermatologistAppointmentPart,setDermatologistAppointmentPart] = useState(false)
     const [dermatologistAppointment,setDermatologistAppointment] = useState([])
+    const [alertTextErrorPenalty, setAlertTextErrorPenalty] = useState('')
+    const [openAlertErrorPenalty, setOpenAlertErrorPenalty] = useState(false)
     const [openAlertSuccess, setOpenAlertSuccess] = useState(false)
     const [alertTextSuccess, setAlertTextSuccess] = useState('')
+    const [ openAlertInfo,  setOpenAlertInfo] = useState(false)
+    const [ alertTextInfo,  setAlertTextInfo] = useState('')
+    const [penalty,setPenalty] = useState(0)
+
     const token = localStorage.getItem("token");
     const userId = localStorage.getItem("userId");
+    const [redirection,setRedirection] = useState(false)
     const config = {
       headers: { Authorization: `Bearer ${token}`, consumes:'application/json' }
   };
@@ -122,9 +129,32 @@ import {URL} from "../other/components"
         .then((res) => {
           setPharmacy(res.data)
         });
+        axios.get(URL + '/api/patient/' + userId +'/additionalInfo',config)
+        .then((res)=> {
+          setPenalty(res.data.penalty)
+        }).catch((error) => {
+          if(error.response.status === 401){
+            setRedirection(true)
+          }
+        }); 
     }, []);
 
+    const handleCloseAlertErrorPenalty = (event, reason) => {
+      if (reason === 'clickaway') {
+        return;
+      }
+      setOpenAlertErrorPenalty(false);
+    };
+  
+
     
+    const handleCloseAlertInfo = (event, reason) => {
+      if (reason === 'clickaway') {
+        return;
+      }
+       setOpenAlertInfo(false);
+    };
+
     const handleCloseAlertSuccess = (event, reason) => {
       if (reason === 'clickaway') {
         return;
@@ -143,10 +173,14 @@ import {URL} from "../other/components"
             setDermatologistAppointment(res.data)
             setDermatologistAppointmentPart(true)
           }else{
-            setAlertTextSuccess('There are no open appointments')
-            setOpenAlertSuccess(true)
+             setAlertTextInfo('There are no open appointments')
+             setOpenAlertInfo(true)
           }
           
+        }).catch((error) => {
+          if(error.response.status === 401){
+            setRedirection(true)
+          }
         });
       }else{
         setDermatologistAppointmentPart(false)
@@ -170,6 +204,10 @@ import {URL} from "../other/components"
           } else {
             setHaveNextPage(false);
           }
+        }).catch((error) => {
+          if(error.response.status === 401){
+            setRedirection(true)
+          }
         });
     };
   
@@ -186,15 +224,17 @@ import {URL} from "../other/components"
             setCurrPage(currPage - 1);
             setRows(res.data);
           }
+        }).catch((error) => {
+          if(error.response.status === 401){
+            setRedirection(true)
+          }
         });
     };
    
-    const openProfile = (row) => {
-      console.log(row)
-    }
 
     const HandleClickScheduleDermatologistAppointment = (row) => {
-      axios
+      if(penalty < 3){
+        axios
         .put(
           URL + "/api/dermatologistAppointment/book/" + row.id + "/" + id,{},config)
         .then((res) => {
@@ -204,9 +244,23 @@ import {URL} from "../other/components"
           .then((res) => {
             setDermatologistAppointment(res.data)
             setDermatologistAppointmentPart(true)
-  
+            setAlertTextSuccess("Success reservation")
+            setOpenAlertSuccess(true)
+          }).catch((error) => {
+            if(error.response.status === 401){
+              setRedirection(true)
+            }
           });
+        }).catch((error) => {
+          if(error.response.status === 401){
+            setRedirection(true)
+          }
         });
+      }else{
+        setAlertTextErrorPenalty("You can't reserve medicine because you have more than 3 penalties")
+        setOpenAlertErrorPenalty(true)
+      }
+      
     }
 
 
@@ -265,7 +319,7 @@ import {URL} from "../other/components"
 
     const scheduleDermatologistAppointment = (
       <>
-      <Grid container spacing={1}>
+      <Grid container  style={{marginTop:"3%"}}>
       <Grid item xs={2} />
       <Grid item xs={8}>
         <Table>
@@ -275,51 +329,53 @@ import {URL} from "../other/components"
       </Grid>
       <Grid item xs={2}></Grid>
     </Grid>
-    <Grid container spacing={1} className={classes.table}>
-      <Grid item xs={2} />
-      <Grid item xs={8} container spacing={1}>
-        <Grid item xs={2}>
-          {currPage > 1 && (
-            <NavigateBefore
-              className={classes.icons}
-              fontSize="large"
-              onClick={beforePage}
-            />
-          )}
-        </Grid>
-        <Grid item xs={8}>
-          Current Page {currPage}
-        </Grid>
-        <Grid item xs={2}>
-          {haveNextPage && (
-            <NavigateNext
-              className={classes.icons}
-              fontSize="large"
-              onClick={nextPage}
-            />
-          )}
-        </Grid>
-      </Grid>
-      <Grid item xs={2} />
-    </Grid>
     </>
     );
 
     return (
 
       <div>
-        <h3>{pharmacy.pharmacyName}</h3>
-        <p>Info:</p>
-        <p>Address:</p>
-        <p>Rating: {pharmacy.pharmacyAverageRating}</p>
-        <p>Dermatologist price: </p>
-        <p>Dermatologist price: </p>
-        <Button style={{backgroundColor:"green"}} onClick = {HandleClickDermatologistAppointment}>Show dermatologist appointment</Button>
+      {redirection === true && <Redirect to="/login"></Redirect>}
+        <h2>{pharmacy.pharmacyName}</h2>
+       
+        <Grid container>
+        <Grid item xs={2}/>
+            <Grid item xs={3}>
+                <Grid style={{textAlign:"right"}}><h4>Info:</h4></Grid>
+                <Grid style={{textAlign:"right"}}><h4>Address:</h4></Grid>
+                <Grid style={{textAlign:"right"}}><h4>Rating:</h4></Grid>
+                <Grid style={{textAlign:"right"}}><h4>Dermatologist price:</h4></Grid>
+                <Grid style={{textAlign:"right"}}><h4>Dermatologist price:</h4></Grid>
+                <Grid></Grid>
+            </Grid>
+            <Grid item xs={1}></Grid>
+
+            <Grid item xs={4}>
+            <Grid style={{textAlign:"left"}}><h4>{pharmacy.pharmacyDescription}</h4></Grid>
+                <Grid style={{textAlign:"left"}}><h4>{pharmacy.streetName} {pharmacy.streetNumber},{pharmacy.cityForPharmacy},{pharmacy.country}</h4></Grid>
+                <Grid style={{textAlign:"left"}}><h4>{pharmacy.pharmacyAverageRating}</h4></Grid>
+                <Grid style={{textAlign:"left"}}><h4>{pharmacy.dermatologistPerHour} </h4></Grid>
+                <Grid style={{textAlign:"left"}}><h4>{pharmacy.pharmacistPerHour}</h4></Grid>
+                <Grid style={{textAlign:"left"}}><Button style={{backgroundColor:"green"}} onClick = {HandleClickDermatologistAppointment}>Show dermatologist appointment</Button></Grid>
+            </Grid>
+            <Grid item xs={2}></Grid>
+
+        </Grid>
         <div style={{visibility: dermatologistAppointmentPart ? 'visible' : 'hidden'}}>
           {dermatologistAppointment.length != 0 && scheduleDermatologistAppointment}
         </div>
-        <Snackbar open={openAlertSuccess} autoHideDuration={1500} onClose={handleCloseAlertSuccess}>
+        <Snackbar open={ openAlertInfo} autoHideDuration={1500} onClose={handleCloseAlertInfo}>
         <Alert severity="warning">
+          { alertTextInfo}
+        </Alert>
+      </Snackbar>
+      <Snackbar open={openAlertErrorPenalty} autoHideDuration={1500} onClose={handleCloseAlertErrorPenalty}>
+        <Alert severity="error">
+          {alertTextErrorPenalty}
+        </Alert>
+      </Snackbar>
+      <Snackbar open={openAlertSuccess} autoHideDuration={1500} onClose={handleCloseAlertSuccess}>
+        <Alert severity="success">
           {alertTextSuccess}
         </Alert>
       </Snackbar>

@@ -31,7 +31,7 @@ import FormLabel from '@material-ui/core/FormLabel';
 import Alert from "@material-ui/lab/Alert";
 import Snackbar from "@material-ui/core/Snackbar";
 import {URL} from '../other/components'
-
+import {Redirect} from "react-router-dom"
 
 
 
@@ -86,6 +86,7 @@ const Rating = () => {
     const [alertTextSuccess, setAlertTextSuccess] = useState('')
     const token = localStorage.getItem("token");
     const userId = localStorage.getItem("userId");
+    const [redirection,setRedirection] = useState(false)
     const config = {
       headers: { Authorization: `Bearer ${token}` }
   };
@@ -127,9 +128,11 @@ const Rating = () => {
                 setOpenAlertSuccess(true)
                 setRadioValue()
                 setOpenRatingDialog(false);
-            }).catch(error => {
-
-            })
+            }).catch((error) => {
+              if(error.response.status === 401){
+                setRedirection(true)
+              }
+            });
             
         }
         if(selectedType === 'Medicine_rating'){
@@ -147,9 +150,11 @@ const Rating = () => {
                 setOpenAlertSuccess(true)
                 setRadioValue()
                 setOpenRatingDialog(false);
-            }).catch(error => {
-              
-            })
+            }).catch((error) => {
+              if(error.response.status === 401){
+                setRedirection(true)
+              }
+            });
             
         }
         if(selectedType === 'Pharmacy_rating'){
@@ -167,9 +172,11 @@ const Rating = () => {
                 setOpenAlertSuccess(true)
                 setRadioValue()
                 setOpenRatingDialog(false);
-            }).catch(error => {
-              
-            })
+            }).catch((error) => {
+              if(error.response.status === 401){
+                setRedirection(true)
+              }
+            });
             
         }
     }
@@ -180,32 +187,40 @@ const Rating = () => {
             axios.get(URL + '/api/patient/' + userId + '/dermatologist/expired',config)
             .then((res) => {
                 setStaffs(res.data)
-            }).catch(error => {
-              
-            })
+            }).catch((error) => {
+              if(error.response.status === 401){
+                setRedirection(true)
+              }
+            });
         }else if(type == 'Medicine_rating'){
             axios.get(URL + '/api/patient/' + userId + '/medicine',config)
             .then((res) => {
                 setMedicines(res.data)
-            }).catch(error => {
-              
-            })
+            }).catch((error) => {
+              if(error.response.status === 401){
+                setRedirection(true)
+              }
+            });
 
         }else if(type == 'Pharmacy_rating'){
             axios.get(URL + '/api/patient/' + userId + '/pharmacy',config)
             .then((res) => {
                 setPharmacies(res.data)
-            }).catch(error => {
-              
-            })
+            }).catch((error) => {
+              if(error.response.status === 401){
+                setRedirection(true)
+              }
+            });
 
         }else{
             axios.get(URL + '/api/patient/' + userId + '/pharmacist/expired',config)
             .then((res) => {
                 setStaffs(res.data)
-            }).catch(error => {
-              
-            })
+            }).catch((error) => {
+              if(error.response.status === 401){
+                setRedirection(true)
+              }
+            });
 
         }
         setSelectedType(type)
@@ -396,7 +411,6 @@ const Rating = () => {
               <DialogContent dividers>
                   <Typography gutterBottom>
                     <FormControl component="fieldset">
-                      <FormLabel component="legend">Gender</FormLabel>
                       <RadioGroup aria-label="gender" name="gender1" value={radioValue} onChange={handleChange}>
                           <FormControlLabel value="One" control={<Radio />} label="One" />
                           <FormControlLabel value="Two" control={<Radio />} label="Two" />
@@ -421,6 +435,7 @@ const Rating = () => {
       )
     return (
         <div>
+          {redirection === true && <Redirect to="/login"></Redirect>}
             <h2>Rating form</h2>
             {CreateRatingDialog} 
             <ComboBoxComponent 

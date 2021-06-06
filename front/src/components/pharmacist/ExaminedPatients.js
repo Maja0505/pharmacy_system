@@ -12,12 +12,12 @@ import { ArrowDropDown, ArrowDropUp } from "@material-ui/icons";
 import { useState, useEffect } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import axios from "axios";
-import {URL} from "../other/components"
-
+import { URL } from "../other/components";
+import { Redirect } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
   table: {
-    marginTop: "5%",
+    marginTop: "3%",
   },
   hederRow: {
     background: "#4051bf",
@@ -37,7 +37,7 @@ const useStyles = makeStyles((theme) => ({
 const ExaminedPatients = () => {
   const token = localStorage.getItem("token");
   const userId = localStorage.getItem("userId");
-
+  const [redirection, setRedirection] = useState(false);
   const classes = useStyles();
 
   const [rows, setRows] = useState([]);
@@ -46,15 +46,11 @@ const ExaminedPatients = () => {
 
   useEffect(() => {
     axios
-      .get(
-        URL + "/api/pharmacistAppointment/allPastAppointment/" +
-          userId,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      )
+      .get(URL + "/api/pharmacistAppointment/allPastAppointment/" + userId, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
       .then((res) => {
         setRows(res.data);
         setCopyRows(res.data);
@@ -103,7 +99,8 @@ const ExaminedPatients = () => {
 
     axios
       .put(
-        URL + "/api/appointment/sortByPatientFirstName/" +
+        URL +
+          "/api/appointment/sortByPatientFirstName/" +
           (firstNameAsc.asc ? "asc" : "desc"),
         rows,
         {
@@ -114,6 +111,11 @@ const ExaminedPatients = () => {
       )
       .then((res) => {
         setRows(res.data);
+      })
+      .catch((error) => {
+        if (error.response.status === 401) {
+          setRedirection(true);
+        }
       });
   };
 
@@ -129,7 +131,8 @@ const ExaminedPatients = () => {
 
     axios
       .put(
-        URL + "/api/appointment/sortByPatientLastName/" +
+        URL +
+          "/api/appointment/sortByPatientLastName/" +
           (lastNameAsc.asc ? "asc" : "desc"),
         rows,
         {
@@ -140,6 +143,11 @@ const ExaminedPatients = () => {
       )
       .then((res) => {
         setRows(res.data);
+      })
+      .catch((error) => {
+        if (error.response.status === 401) {
+          setRedirection(true);
+        }
       });
   };
 
@@ -155,7 +163,8 @@ const ExaminedPatients = () => {
 
     axios
       .put(
-        URL + "/api/appointment/sortByPatientEmail/" +
+        URL +
+          "/api/appointment/sortByPatientEmail/" +
           (emailAsc.asc ? "asc" : "desc"),
         rows,
         {
@@ -166,6 +175,11 @@ const ExaminedPatients = () => {
       )
       .then((res) => {
         setRows(res.data);
+      })
+      .catch((error) => {
+        if (error.response.status === 401) {
+          setRedirection(true);
+        }
       });
   };
 
@@ -181,7 +195,8 @@ const ExaminedPatients = () => {
 
     axios
       .put(
-        URL + "/api/appointment/sortByAppointmentStartTime/" +
+        URL +
+          "/api/appointment/sortByAppointmentStartTime/" +
           (startTimeAsc.asc ? "asc" : "desc"),
         rows,
         {
@@ -192,6 +207,11 @@ const ExaminedPatients = () => {
       )
       .then((res) => {
         setRows(res.data);
+      })
+      .catch((error) => {
+        if (error.response.status === 401) {
+          setRedirection(true);
+        }
       });
   };
 
@@ -207,7 +227,8 @@ const ExaminedPatients = () => {
 
     axios
       .put(
-        URL + "/api/pharmacistAppointment/sortByAppointmentDuration/" +
+        URL +
+          "/api/pharmacistAppointment/sortByAppointmentDuration/" +
           (durationAsc.asc ? "asc" : "desc"),
         rows,
         {
@@ -218,6 +239,11 @@ const ExaminedPatients = () => {
       )
       .then((res) => {
         setRows(res.data);
+      })
+      .catch((error) => {
+        if (error.response.status === 401) {
+          setRedirection(true);
+        }
       });
   };
 
@@ -233,7 +259,8 @@ const ExaminedPatients = () => {
 
     axios
       .put(
-        URL + "/api/appointment/sortByAppointmentPrice/" +
+        URL +
+          "/api/appointment/sortByAppointmentPrice/" +
           (priceAsc.asc ? "asc" : "desc"),
         rows,
         {
@@ -244,6 +271,11 @@ const ExaminedPatients = () => {
       )
       .then((res) => {
         setRows(res.data);
+      })
+      .catch((error) => {
+        if (error.response.status === 401) {
+          setRedirection(true);
+        }
       });
   };
 
@@ -337,6 +369,7 @@ const ExaminedPatients = () => {
 
   return (
     <div>
+      {redirection === true && <Redirect to="/login"></Redirect>}
       {SearchPart}
       <Grid container spacing={1}>
         <Grid item xs={2} />

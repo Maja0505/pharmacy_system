@@ -14,12 +14,14 @@ import {
 } from "@material-ui/core";
 import  { useEffect, useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
+import {Redirect} from "react-router-dom"
 
 const SchedulePharmacistAppointment = ({date,time,duration,setDate,setTime,setDuration,setPharmacies}) => {
 
   const [durationList,setDurationList] = React.useState([
     5,10,15,20,25,30,35,40,45,50,55,60,65,70,75,80,85,90
   ])
+  const [redirection,setRedirection] = useState(false)
 
 
 
@@ -32,6 +34,7 @@ const SchedulePharmacistAppointment = ({date,time,duration,setDate,setTime,setDu
 
   return (
         <div>
+           {redirection === true && <Redirect to="/login"></Redirect>}
             Schedule pharmacist appointment
               <p>Select date and start time:</p>
               <DatePickerComponent 

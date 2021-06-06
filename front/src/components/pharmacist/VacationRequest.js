@@ -9,15 +9,17 @@ import {
   FormControl,
   TextField,
   Snackbar,
+  Button,
 } from "@material-ui/core";
 import axios from "axios";
 import Alert from "@material-ui/lab/Alert";
-import {URL} from "../other/components"
-
+import { URL } from "../other/components";
+import { Redirect } from "react-router-dom";
 
 const VacationRequest = () => {
   const token = localStorage.getItem("token");
   const userId = localStorage.getItem("userId");
+  const [redirection, setRedirection] = useState(false);
 
   const [disableDates, setDisableDates] = useState([
     {
@@ -30,15 +32,20 @@ const VacationRequest = () => {
   }, []);
 
   const getDisabledDates = async () => {
-    const res = await axios.get(
-      URL + "/api/pharmacist/futureVacationRequest/" + userId,
-      {
+    const res = await axios
+      .get(URL + "/api/pharmacist/futureVacationRequest/" + userId, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
-      }
-    );
-    res.data.map((vacationRequest) => createDisableDates(vacationRequest));
+      })
+      .catch((error) => {
+        if (error.response.status === 401) {
+          setRedirection(true);
+        }
+      });
+    if (res !== undefined) {
+      res.data.map((vacationRequest) => createDisableDates(vacationRequest));
+    }
   };
 
   const createDisableDates = async (vacationRequest) => {
@@ -150,15 +157,11 @@ const VacationRequest = () => {
     };
 
     axios
-      .post(
-        URL + "/api/pharmacistVacationRequest/create",
-        vacationRequest,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      )
+      .post(URL + "/api/pharmacistVacationRequest/create", vacationRequest, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
       .then((res) => {
         setOpenAlertSuccsess(true);
         getDisabledDates();
@@ -167,7 +170,10 @@ const VacationRequest = () => {
         setNotes("");
         setTypeOfVacation("Holiday");
       })
-      .catch(function (error) {
+      .catch((error) => {
+        if (error.response.status === 401) {
+          setRedirection(true);
+        }
         setOpenAlertUnsuccses(true);
       });
   };
@@ -190,6 +196,7 @@ const VacationRequest = () => {
 
   return (
     <div>
+      {redirection === true && <Redirect to="/login"></Redirect>}
       <Grid container spacing={1} style={{ marginTop: "3%" }}>
         <Grid item xs={2} />
         <Grid item xs={8}>
@@ -240,7 +247,15 @@ const VacationRequest = () => {
       <Grid container spacing={1} style={{ marginTop: "3%" }}>
         <Grid item xs={2} />
         <Grid item xs={8}>
-          {from && <button onClick={sendVacationRequest}>Sent request</button>}
+          {from && (
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={sendVacationRequest}
+            >
+              Sent request
+            </Button>
+          )}
         </Grid>
         <Grid item xs={2} />
       </Grid>
