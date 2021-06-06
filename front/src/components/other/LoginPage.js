@@ -4,8 +4,8 @@ import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
 import axios from "axios";
 import { Link } from "react-router-dom";
-import {URL} from "./components"
-import {REACT_URL} from "./components"
+import { URL } from "./components";
+import { REACT_URL } from "./components";
 import background from "../../images/doctor.jpg";
 import ChangePasswordDIalog from "./ChangePasswordDIalog.js";
 
@@ -39,17 +39,6 @@ class Login extends Component {
           firstLogin: tokenDTO.isFirstLogin,
           openDialog: true,
         });
-        if (res.data.role === "Pharmacist") {
-          axios
-            .get(URL + "/api/pharmacist/getPharmacyId/" + res.data.userId, {
-              headers: {
-                Authorization: `Bearer ${res.data.accessToken}`,
-              },
-            })
-            .then((res) => {
-              localStorage.setItem("pharmacyId", res.data);
-            });
-        }
 
         localStorage.setItem("userId", this.state.userId);
         localStorage.setItem("token", this.state.token);
@@ -93,10 +82,15 @@ class Login extends Component {
       step: 300,
     };
     return (
-      <div style={{backgroundImage: `url(${background})` , height: "753px",
-      backgroundSize: "cover",
-      backgroundRepeat: "no-repeat",
-      backgroundPosition: "center",}}>
+      <div
+        style={{
+          backgroundImage: `url(${background})`,
+          height: "753px",
+          backgroundSize: "cover",
+          backgroundRepeat: "no-repeat",
+          backgroundPosition: "center",
+        }}
+      >
         <br />
         <TextField
           id="outlined-basic"
@@ -168,9 +162,7 @@ class Login extends Component {
       }
     }
     if (this.state.roleUser === "Patient") {
-     
-        window.location.href =  REACT_URL + "/patient/home2";
-      
+      window.location.href = REACT_URL + "/patient/home2";
     }
     if (this.state.roleUser === "Dermatologist") {
       if (this.state.firstLogin === true) {
