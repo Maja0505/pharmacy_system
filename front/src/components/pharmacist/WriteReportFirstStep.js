@@ -1,7 +1,7 @@
 import { Button, Card, CardContent, Grid, Typography } from "@material-ui/core";
 
 import { makeStyles } from "@material-ui/core/styles";
-import {URL} from "../other/components"
+import { URL } from "../other/components";
 
 import axios from "axios";
 
@@ -26,7 +26,8 @@ const WriteReportFirstStep = ({ appointment, setAppointment }) => {
   const changeAppointmentToMissed = () => {
     axios
       .put(
-        URL + "/api/pharmacistAppointment/changeStatusToMissed/" +
+        URL +
+          "/api/pharmacistAppointment/changeStatusToMissed/" +
           appointment.AppointmentId,
         {},
         {
@@ -40,6 +41,11 @@ const WriteReportFirstStep = ({ appointment, setAppointment }) => {
         localStorage.setItem(
           "PatientForPharmacistReport",
           JSON.stringify(null)
+        );
+      })
+      .catch((error) => {
+        alert(
+          "Appointment not start yet.\nYou can only set status missed for appointment which is started and not finished yet!"
         );
       });
   };

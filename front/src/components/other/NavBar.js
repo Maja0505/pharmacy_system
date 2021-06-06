@@ -11,9 +11,8 @@ const NavBar = ({ user }) => {
       <Grid container>
         <Grid item xs={6}></Grid>
         <Grid item xs={6} container style={{ textAlign: "right" }}>
-          <Grid item xs={2} />
-          <Grid item xs={2} />
-          <Grid item xs={2}>
+          <Grid item xs={3} />
+          <Grid item xs={3}>
             <Typography>
               <Link
                 to="/pharmacist/homePage"
@@ -23,7 +22,7 @@ const NavBar = ({ user }) => {
               </Link>
             </Typography>
           </Grid>
-          <Grid item xs={2}>
+          <Grid item xs={3}>
             <Typography>
               <Link
                 to="/pharmacist/editProfile"
@@ -33,7 +32,7 @@ const NavBar = ({ user }) => {
               </Link>
             </Typography>
           </Grid>
-          <Grid item xs={2}>
+          <Grid item xs={3}>
             <Typography>
               <a
                 href="/"
@@ -54,9 +53,8 @@ const NavBar = ({ user }) => {
       <Grid container>
         <Grid item xs={6}></Grid>
         <Grid item xs={6} container style={{ textAlign: "right" }}>
-          <Grid item xs={2} />
-          <Grid item xs={2} />
-          <Grid item xs={2}>
+          <Grid item xs={3} />
+          <Grid item xs={3}>
             <Typography>
               <Link
                 to="/dermatologist/homePage"
@@ -66,7 +64,7 @@ const NavBar = ({ user }) => {
               </Link>
             </Typography>
           </Grid>
-          <Grid item xs={2}>
+          <Grid item xs={3}>
             <Typography>
               <Link
                 to="/dermatologist/editProfile"
@@ -76,7 +74,7 @@ const NavBar = ({ user }) => {
               </Link>
             </Typography>
           </Grid>
-          <Grid item xs={2}>
+          <Grid item xs={3}>
             <Typography>
               <a
                 href="/"
@@ -96,28 +94,28 @@ const NavBar = ({ user }) => {
     <Toolbar>
       <Grid container spacing={1}>
         <Grid item xs={6}>
-          <Typography>Hay {user}</Typography>
+          
         </Grid>
         <Grid item xs={6} container spacing={1} style={{ textAlign: "right" }}>
           <Grid item xs={3}></Grid>
           <Grid item xs={3}>
             <Typography>
-              <a
-                href="/patient/Profile"
+              <Link
+                to="/patient/profile"
                 style={{ color: "#fafafa", textDecoration: "none" }}
               >
                 Profile
-              </a>
+              </Link>
             </Typography>
           </Grid>
           <Grid item xs={3}>
             <Typography>
-              <a
-                href="/patient/HomePage"
+              <Link
+                to="/patient/home2"
                 style={{ color: "#fafafa", textDecoration: "none" }}
               >
                 Home Page
-              </a>
+              </Link>
             </Typography>
           </Grid>
           <Grid item xs={3}>
@@ -136,12 +134,54 @@ const NavBar = ({ user }) => {
     </Toolbar>
   );
 
+    const NavBarForUnregistred = (
+    <Toolbar>
+      <Grid container spacing={1}>
+        <Grid item xs={6}>
+          
+        </Grid>
+        <Grid item xs={6} container spacing={1} style={{ textAlign: "right" }}>
+          <Grid item xs={3}></Grid>
+          <Grid item xs={3}>
+            <Typography>
+              <Link
+                to="/"
+                style={{ color: "#fafafa", textDecoration: "none" }}
+              >
+                Home 
+              </Link>
+            </Typography>
+          </Grid>
+          <Grid item xs={3}>
+            <Typography>
+              <Link
+                to="/login"
+                style={{ color: "#fafafa", textDecoration: "none" }}
+              >
+                Sign in
+              </Link>
+            </Typography>
+          </Grid>
+          <Grid item xs={3}>
+            <Typography>
+              <Link to="/registerPatient" style={{ color: "#fafafa", textDecoration: "none" }}>
+               Sign up
+              </Link>
+            </Typography>
+          </Grid>
+        </Grid>
+      </Grid>
+    </Toolbar>
+  );
+  
+
   return (
     <>
       <AppBar position="static">
         {user === "pharmacist" && NavBarForPharmacist}
         {user === "dermatologist" && NavBarForDermatologist}
         {user === "patient" && NavBarForPatient}
+        {(user === "unregistred" || user === undefined) && NavBarForUnregistred}
       </AppBar>
     </>
   );

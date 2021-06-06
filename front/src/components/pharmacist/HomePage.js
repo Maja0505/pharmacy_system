@@ -1,10 +1,12 @@
 import { makeStyles } from "@material-ui/core/styles";
 import ButtonBase from "@material-ui/core/ButtonBase";
 import Typography from "@material-ui/core/Typography";
-import MedicineReservation from "../images/medicineReservation.jpg";
-import WorkCalendar from "../images/workCalendar.png";
-import VacationRequest from "../images/vacationRequest.png";
-import Examinations from "../images/examinations.png";
+import MedicineReservation from "../../images/medicineReservation.jpg";
+import WorkCalendar from "../../images/workCalendar.png";
+import VacationRequest from "../../images/vacationRequest.png";
+import Examinations from "../../images/examinations.png";
+import background from "../../images/doctor.jpg";
+
 
 import { useHistory } from "react-router-dom";
 
@@ -122,8 +124,11 @@ const HomePage = () => {
   };
 
   return (
-    <>
-      <div>
+    <div style={{backgroundImage: `url(${background})` , height: "753px",
+    backgroundSize: "cover",
+    backgroundRepeat: "no-repeat",
+    backgroundPosition: "center",}}>
+      <div >
         {images.map((image) => (
           <ButtonBase
             focusRipple
@@ -195,7 +200,7 @@ const HomePage = () => {
           </ButtonBase>
         ))}
       </div>
-    </>
+    </div>
   );
 };
 

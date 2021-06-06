@@ -180,7 +180,7 @@ class RegistrationPage extends Component {
 
       return(
         <div>
-        <h2 align="center">CHANGE PASSWORD</h2>
+        <h2 align="center">Registration</h2>
         <br/>
         <br/>
         <table align="center">
@@ -231,12 +231,12 @@ class RegistrationPage extends Component {
                 <tr></tr>
                 <tr>
                     <td>Password:</td>
-                    <td><TextField  value={this.state.password}  onChange={e=> this.onTodoChangePassword(e.target.value)} id="outlined-basic" variant="outlined"  size="small"/></td>
+                    <td><TextField type="password"  value={this.state.password}  onChange={e=> this.onTodoChangePassword(e.target.value)} id="outlined-basic" variant="outlined"  size="small"/></td>
                 </tr>
                 <tr></tr>
                 <tr>
                     <td>Confirm Password:</td>
-                    <td><TextField  value={this.state.confirmPassword}  onChange={e=> this.onTodoChangeConfirmPassword(e.target.value)} id="outlined-basic" variant="outlined"  size="small"/></td>
+                    <td><TextField type="password" value={this.state.confirmPassword}  onChange={e=> this.onTodoChangeConfirmPassword(e.target.value)} id="outlined-basic" variant="outlined"  size="small"/></td>
                 </tr>
                 <tr></tr>
                 <tr>

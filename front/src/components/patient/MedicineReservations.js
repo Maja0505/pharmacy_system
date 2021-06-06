@@ -11,13 +11,11 @@ import {
     Grid,
     TextField,
     Button,
-    TableContainer
+    TableContainer,
+    
 
   } from "@material-ui/core";
-  import {
-    NavigateNext,
-    NavigateBefore,
-  } from "@material-ui/icons";
+import Icon from '@material-ui/core/Icon';
 import { useState, useEffect } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import React from 'react';
@@ -28,12 +26,15 @@ import MuiDialogContent from '@material-ui/core/DialogContent';
 import MuiDialogActions from '@material-ui/core/DialogActions';
 import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
+import AddCircleTwoToneIcon from '@material-ui/icons/AddCircleTwoTone';
 import Typography from '@material-ui/core/Typography';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import DateFnsUtils from '@date-io/date-fns';
 import Alert from "@material-ui/lab/Alert";
 import Snackbar from "@material-ui/core/Snackbar";
 import {URL} from "../other/components"
+import Fab from '@material-ui/core/Fab';
+import AddIcon from '@material-ui/icons/Add';
 
 
 import {
@@ -47,7 +48,7 @@ import setDate from "date-fns/setDate";
   
   const useStyles = makeStyles((theme) => ({
     table: {
-      marginTop: "5%",
+      marginTop: "1%",
     },
     hederRow: {
       background: "#4051bf",
@@ -379,10 +380,12 @@ import setDate from "date-fns/setDate";
   
     return (
       <div>
+      
+       <Fab color="primary" aria-label="add" onClick={handleClickOpen}  style={{marginTop:"2%", marginLeft:"50%"}}>
+        <AddIcon />
+      </Fab>
           {SearchPart}
-        <Button variant="outlined" color="primary" onClick={handleClickOpen}>
-       CREATE RESERVATION
-      </Button>
+      
         <Grid container spacing={1}>
           <Grid item xs={2} />
           <Grid item xs={8}>

@@ -25,6 +25,7 @@ import Typography from '@material-ui/core/Typography';
 import { withStyles } from '@material-ui/core/styles';
 import { getConfig } from '@testing-library/dom';
 import {URL} from '../other/components'
+import {REACT_URL} from '../other/components'
 
 
 
@@ -91,7 +92,7 @@ const Complaint = () => {
 
     };
     const handleClickSaveComplaint = () => {
-        
+      window.location.href =  REACT_URL + "/patient/home2";
     }
 
 

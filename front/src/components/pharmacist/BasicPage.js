@@ -15,6 +15,9 @@ const BasicPage = () => {
       <Switch>
         <div>
           <NavBar user={"pharmacist"} />
+          <Route path="/pharmacist/homePage">
+            <HomePage />
+          </Route>
           <Route path="/pharmacist/editProfile" component={EditProfile}></Route>
           <Route
             path="/pharmacist/vacationRequest"
@@ -31,9 +34,6 @@ const BasicPage = () => {
           </Route>
           <Route path="/pharmacist/medicineReservations">
             <MedicineReservation />
-          </Route>
-          <Route path="/pharmacist/homePage">
-            <HomePage />
           </Route>
           <Route path="/pharmacist/examinations">
             <Examinations />
