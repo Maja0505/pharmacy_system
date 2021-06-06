@@ -6,6 +6,8 @@ import DialogContent from "@material-ui/core/DialogContent";
 import TextField from "@material-ui/core/TextField";
 import DialogActions from "@material-ui/core/DialogActions";
 import axios from "axios";
+import {URL} from "../other/components"
+
 
 const PasswordDialog = ({
   openDialog,
@@ -14,6 +16,8 @@ const PasswordDialog = ({
   setOpenDialog,
   setAlertText,
 }) => {
+  const token = localStorage.getItem("token");
+
   const [currentPassword, setCurrentPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmedNewPassword, setConfirmedNewPassword] = useState("");
@@ -36,7 +40,11 @@ const PasswordDialog = ({
   const changePassword = (passwordDTO) => {
     setError("");
     axios
-      .put("http://localhost:8080/api/pharmacist/changePassword", passwordDTO)
+      .put(URL + "/api/pharmacist/changePassword", passwordDTO, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
       .then((res) => {
         setAlertText("Success change passowrd!");
         setOpenAlert(true);

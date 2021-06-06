@@ -1,5 +1,6 @@
 package com.isa.pharmacies_system.DTO;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.isa.pharmacies_system.domain.schedule.StatusOfAppointment;
 
 import java.time.LocalDateTime;
@@ -13,9 +14,11 @@ public class PharmacistReportDTO {
     private String pharmacistLastName;
     private String reportInfo;
     private Long appointmentId;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime pharmacistAppointmentStartTime;
     private Long duration;
     private double appointmentPoints;
+    private double appointmentPrice;
     private StatusOfAppointment statusOfAppointment;
 
     public PharmacistReportDTO() {
@@ -115,5 +118,13 @@ public class PharmacistReportDTO {
 
     public void setStatusOfAppointment(StatusOfAppointment statusOfAppointment) {
         this.statusOfAppointment = statusOfAppointment;
+    }
+
+    public double getAppointmentPrice() {
+        return appointmentPrice;
+    }
+
+    public void setAppointmentPrice(double appointmentPrice) {
+        this.appointmentPrice = appointmentPrice;
     }
 }

@@ -7,6 +7,8 @@ import DialogActions from "@material-ui/core/DialogActions";
 import { TextField, Grid } from "@material-ui/core";
 
 import { useState } from "react";
+import {URL} from "../other/components"
+
 
 import axios from "axios";
 
@@ -22,6 +24,9 @@ const RecipeAddItemDialog = ({
   recipeItems,
   setRecipeItems,
 }) => {
+  const token = localStorage.getItem("token");
+  const userId = localStorage.getItem("userId");
+
   const [recomendeDailyIntake, setRecomendedDailyIntake] = useState("");
   const [medicineAmount, setMedicineAmount] = useState(1);
   const [haveEnough, setHaveEnought] = useState(null);
@@ -45,12 +50,17 @@ const RecipeAddItemDialog = ({
   const checkAvailability = () => {
     axios
       .get(
-        "http://localhost:8080/api/pharmacyStorageItem/check/" +
+        URL + "/api/pharmacyStorageItem/check/" +
           selectedMedicine.itemId +
           "/" +
           medicineAmount +
           "/" +
-          appointment.Id
+          appointment.Id,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
       )
       .then((res) => {
         if (res.status === 202) {

@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,7 +17,7 @@ import com.isa.pharmacies_system.domain.medicine.Medicine;
 import com.isa.pharmacies_system.service.iService.IMedicineService;
 
 @Controller
-@CrossOrigin(origins="http://localhost:3000")
+@CrossOrigin(origins="*")
 @RequestMapping(value = "api/medicine", produces = MediaType.APPLICATION_JSON_VALUE)
 public class MedicineController {
 
@@ -50,9 +51,11 @@ public class MedicineController {
 	}
 
 	@GetMapping(value = "/all")
-	public ResponseEntity<List<Medicine>> getAllMedicines() {
-		return new ResponseEntity<>(medicineService.getAll(), HttpStatus.OK);
+	public ResponseEntity<List<MedicineNewDTO>> getAllMedicines() {
+		return new ResponseEntity<>(medicineConverter.convertMedicinesToMedicineNewDTOS(medicineService.getAll()), HttpStatus.OK);
 	}
+
+	@PreAuthorize("hasRole('ROLE_PATIENT')")
 	@GetMapping(value = "/all/short")
 	public ResponseEntity<List<MedicineForAllergiesDTO>> getAllMedicinesShortVersion() {
 		return new ResponseEntity<>(medicineConverter.convertMedicineListToMedicineForAllergiesDTOList(medicineService.getAll()), HttpStatus.OK);

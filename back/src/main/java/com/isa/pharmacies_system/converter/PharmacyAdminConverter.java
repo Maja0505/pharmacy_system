@@ -22,6 +22,8 @@ public class PharmacyAdminConverter {
 		pharmacyAdmin.setPassword(pharmacyAdminNewDTO.getPassword());
 		pharmacyAdmin.setPhoneNumber(pharmacyAdminNewDTO.getPhoneNumber());
 		pharmacyAdmin.setTypeOfUser(TypeOfUser.Pharmacy_admin);
+		pharmacyAdmin.setFirstLogin(true);
+		pharmacyAdmin.setEnabled(true);
 		pharmacyAdmin.setUserAddress(pharmacyAdminNewDTO.getResidentialAddress());
 		return pharmacyAdmin;
 	}

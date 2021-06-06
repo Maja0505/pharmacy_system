@@ -15,6 +15,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import com.isa.pharmacies_system.domain.schedule.StatusOfAppointment;
 import com.isa.pharmacies_system.domain.user.Patient;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
@@ -57,6 +58,7 @@ public class DermatologistAppointmentService implements IDermatologistAppointmen
     }
 
     //#1[3.13]
+    @Transactional
     @Override
     public Boolean bookDermatologistAppointment(Long patientId,Long appointmentId){
 
@@ -138,14 +140,14 @@ public class DermatologistAppointmentService implements IDermatologistAppointmen
 
     //Nemanja
     @Override
-    public Page<DermatologistAppointment> getAllPastDermatologistAppointmentByDermatologist(Long id, int page) {
-        return dermatologistAppointmentRepository.findAllPastDermatologistAppointment(id, PageRequest.of(page,10));
+    public List<DermatologistAppointment> getAllPastDermatologistAppointmentByDermatologist(Long id) {
+        return dermatologistAppointmentRepository.findAllPastDermatologistAppointment(id);
     }
 
     //Nemanja
     @Override
-    public Page<DermatologistAppointment> getAllPastDermatologistAppointmentByDermatologistAndPharmacy(Long idDermatologist, Long idPharmacy, int page) {
-        return dermatologistAppointmentRepository.findAllPastDermatologistAppointmentByPharmacy(idDermatologist,idPharmacy,PageRequest.of(page,10));
+    public List<DermatologistAppointment> getAllPastDermatologistAppointmentByDermatologistAndPharmacy(Long idDermatologist, Long idPharmacy) {
+        return dermatologistAppointmentRepository.findAllPastDermatologistAppointmentByPharmacy(idDermatologist,idPharmacy);
     }
 
     //Nemanja
@@ -225,9 +227,10 @@ public class DermatologistAppointmentService implements IDermatologistAppointmen
         if(!doesPatientHaveAnotherAppointmentInSameTime(patient,dermatologistAppointment)
             && !doesDermatologistHaveAppointmentInSameTime(dermatologist,dermatologistAppointment)){
 
+            Duration appointmentDuration = Duration.between(appointmentScheduleByStaffDTO.getAppointmentStartTime(),appointmentScheduleByStaffDTO.getAppointmentEndTime());
             Pharmacy pharmacy = pharmacyRepository.findById(appointmentScheduleByStaffDTO.getPharmacyId()).orElse(null);
             fillDermatologistAppointmentWithPatientPharmacyAndDermatologist(patient,dermatologist,pharmacy,dermatologistAppointment);
-            fillDermatologistAppointmentWithPrice(dermatologistAppointment);
+            fillDermatologistAppointmentWithPrice(dermatologistAppointment,appointmentDuration.toMinutes());
             dermatologistAppointmentRepository.save(dermatologistAppointment);
             return true;
         }
@@ -235,9 +238,9 @@ public class DermatologistAppointmentService implements IDermatologistAppointmen
     }
 
     //Nemanja
-    private void fillDermatologistAppointmentWithPrice(DermatologistAppointment dermatologistAppointment) {
+    private void fillDermatologistAppointmentWithPrice(DermatologistAppointment dermatologistAppointment, Long duration) {
         PriceListForAppointmentDTO priceListForAppointmentDTO = priceListRepository.getPriceListForAppointmentByPharmacyId(dermatologistAppointment.getPharmacyForDermatologistAppointment().getId());
-        dermatologistAppointment.setAppointmentPrice(priceListForAppointmentDTO.getDermatologistAppointmentPricePerHour());
+        dermatologistAppointment.setAppointmentPrice(priceListForAppointmentDTO.getDermatologistAppointmentPricePerHour() * duration/60);
     }
 
     //Nemanja
@@ -273,6 +276,7 @@ public class DermatologistAppointmentService implements IDermatologistAppointmen
     }
 
     //Nemanja
+    @Transactional
     @Override
     public Boolean changeDermatologistAppointmentStatusToMissed(DermatologistAppointment dermatologistAppointment) {
         if(dermatologistAppointment.getStatusOfAppointment().equals(StatusOfAppointment.Reserved) && dermatologistAppointment.getDermatologistAppointmentStartTime().isBefore(LocalDateTime.now())){
@@ -284,8 +288,61 @@ public class DermatologistAppointmentService implements IDermatologistAppointmen
         return false;
     }
 
+    @Transactional
+    @Override
+    public void setMissedDermatologistAppointmentEveryDayOnRightStatusAndIncreasePenaltyForPatient() {
+        List<DermatologistAppointment> listReservedAppointmentsInPast = dermatologistAppointmentRepository.findAllReservedDermatologistAppointmentInPast();
+        for (DermatologistAppointment da:
+             listReservedAppointmentsInPast) {
+            addPatientPoint(da.getPatientWithDermatologistAppointment());
+            da.setStatusOfAppointment(StatusOfAppointment.Missed);
+            dermatologistAppointmentRepository.save(da);
+        }
+    }
+
+
     //Nemanja
     private void addPatientPoint(Patient patient) {
-        patient.setPatientPoints(patient.getPatientPoints() + 1);
+        patient.setPenalty(patient.getPenalty() + 1);
     }
+
+    //Nemanja
+    @Transactional
+    @Override
+    public Boolean bookDermatologistAppointmentTest(Long patientId,Long appointmentId,Long milliseconds){
+
+        DermatologistAppointment dermatologistAppointment = findOne(appointmentId);
+        Patient patient = patientRepository.findById(patientId).orElse(null);
+        if(patient != null && patient.getPenalty() < 3){
+            if(isAppointmentOpen(dermatologistAppointment)
+                    && !doesPatientHaveAnotherAppointmentInSameTime(patient,dermatologistAppointment)){
+                dermatologistAppointment.setPatientWithDermatologistAppointment(patient);
+                dermatologistAppointment.setStatusOfAppointment(StatusOfAppointment.Reserved);
+                try { Thread.sleep(milliseconds); } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                }
+                dermatologistAppointmentRepository.save(dermatologistAppointment);
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    //Nemanja
+    @Transactional
+    @Override
+    public Boolean changeDermatologistAppointmentStatusToMissedTest(DermatologistAppointment dermatologistAppointment,Long milliseconds) {
+        if(dermatologistAppointment.getStatusOfAppointment().equals(StatusOfAppointment.Reserved) && dermatologistAppointment.getDermatologistAppointmentStartTime().isBefore(LocalDateTime.now())){
+            dermatologistAppointment.setStatusOfAppointment(StatusOfAppointment.Missed);
+            addPatientPoint(dermatologistAppointment.getPatientWithDermatologistAppointment());
+            try { Thread.sleep(milliseconds); } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+            }
+            dermatologistAppointmentRepository.save(dermatologistAppointment);
+            return true;
+        }
+        return false;
+    }
+
 }

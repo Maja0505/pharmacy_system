@@ -1,12 +1,15 @@
 package com.isa.pharmacies_system.DTO;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.isa.pharmacies_system.domain.schedule.TypeOfVacation;
 
 import java.time.LocalDate;
 
 public class VacationRequestDTO {
 
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern ="yyyy-MM-dd", timezone = "UTC")
     private LocalDate vacationStartDate;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern ="yyyy-MM-dd", timezone = "UTC")
     private LocalDate vacationEndDate;
     private String vacationRequestNotes;
     private TypeOfVacation typeOfVacation;

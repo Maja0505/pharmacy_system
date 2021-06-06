@@ -16,6 +16,7 @@ import com.isa.pharmacies_system.service.iService.IPatientService;
 import com.isa.pharmacies_system.service.iService.IPharmacyService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,7 +24,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Controller
-@CrossOrigin(origins="http://localhost:3000")
+@CrossOrigin(origins="*")
 @RequestMapping(value = "api/medicineReservation")
 public class MedicineReservationController {
 
@@ -51,14 +52,15 @@ public class MedicineReservationController {
                 Patient patient = patientService.findOne(patientId);
                 Medicine medicine = medicineService.findOne(medicineId);
                 Pharmacy pharmacy = pharmacyService.getById(pharmacyId);
+                System.out.println("prvi if");
                 MedicineReservation medicineReservation = medicineReservationConverter.convertMedicineReservationDTOToMedicineReservarvation(medicineReservationDTO,patient,medicine,pharmacy);
                 if(medicineReservationService.createMedicineReservation(medicineReservation)){
                     emailService.sendNotificationForSuccessMedicineReservation(medicineReservation);
-                    return new ResponseEntity<>(true,HttpStatus.OK);
+                    return new ResponseEntity<>(true,HttpStatus.CREATED);
                 }
-                return new ResponseEntity<>(false,HttpStatus.OK);
+                return new ResponseEntity<>(false,HttpStatus.FORBIDDEN);
             }
-            return new ResponseEntity<>(false,HttpStatus.OK);
+            return new ResponseEntity<>(false,HttpStatus.FORBIDDEN);
         }catch (Exception e){
             Thread.currentThread().interrupt();
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -66,8 +68,9 @@ public class MedicineReservationController {
     }
 
     //#1[3.19]
+    @PreAuthorize("hasRole('ROLE_PATIENT')")
     @PutMapping(value = "/cancel", consumes = "application/json")
-    public ResponseEntity<Boolean> createMedicineReservation(@RequestBody MedicineReservationInfoDTO medicineReservationInfoDTO){
+    public ResponseEntity<Boolean> cancelMedicineReservation(@RequestBody MedicineReservationInfoDTO medicineReservationInfoDTO){
         try {
           if(medicineReservationService.cancelMedicineReservation(medicineReservationInfoDTO)){
               return new ResponseEntity<>(true,HttpStatus.OK);
@@ -81,6 +84,7 @@ public class MedicineReservationController {
     }
 
     //Nemanja
+    @PreAuthorize("hasRole('ROLE_PHARMACIST')")
     @GetMapping("/get/{medicineReservationId}/{pharmacyId}")
     public ResponseEntity<MedicineReservationForTakingDTO> getMedicineReservationByIdAndPharmacy(@PathVariable Long medicineReservationId,@PathVariable Long pharmacyId){
         try {
@@ -96,6 +100,7 @@ public class MedicineReservationController {
     }
 
     //Nemanja
+    @PreAuthorize("hasRole('ROLE_PHARMACIST')")
     @PutMapping("/finish/{medicineReservationId}")
     public ResponseEntity<Boolean> finishMedicineReservation(@PathVariable Long medicineReservationId){
         try {

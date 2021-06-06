@@ -6,7 +6,8 @@ import {
     TableRow,
     TextField,
     Button,
-    Grid
+    Grid,
+    TableContainer
   } from "@material-ui/core";
   import { makeStyles } from '@material-ui/core/styles';
   import Autocomplete from '@material-ui/lab/Autocomplete';
@@ -14,6 +15,8 @@ import {
   import axios from "axios";
   import CloseIcon from '@material-ui/icons/Close';
   import IconButton from '@material-ui/core/IconButton';
+  import {URL} from "../other/components"
+
 
 
 
@@ -32,7 +35,11 @@ import {
         background: "#e57373",
       },
       hederCell: {
+        cursor: "pointer",
         color: "#ffffff",
+        position: "sticky",
+        top: 0,
+        background: "#4051bf",
       },
       icons: {
         cursor: "pointer",
@@ -51,7 +58,14 @@ import {
 
 
 const Allergies = ({allergies,setAllergies,patientId}) => {
+
     const classes = useStyles()
+    const token = localStorage.getItem("token");
+    const userId = localStorage.getItem("userId");
+    const config = {
+      headers: { Authorization: `Bearer ${token}` }
+  };
+
     useEffect(() => {
         getMedicine()
     },[])
@@ -60,7 +74,7 @@ const Allergies = ({allergies,setAllergies,patientId}) => {
     const [selectedMedicine, setSelectedMedicine] = useState(null)
 
     const getMedicine = async () => {
-        axios.get('http://localhost:8080/api/medicine/all/short')
+        axios.get(URL + '/api/medicine/all/short', config)
         .then((res)=>{
             setMedicines(res.data)
         }).catch((err) => {
@@ -71,7 +85,7 @@ const Allergies = ({allergies,setAllergies,patientId}) => {
 
     const HandleAddButton = () => {
       if(selectedMedicine != undefined && selectedMedicine != null){
-        axios.put("http://localhost:8080/api/patient/" + patientId + "/addMedicineAllergies/" + selectedMedicine.medicineId)
+        axios.put(URL + "/api/patient/" + userId + "/addMedicineAllergies/" + selectedMedicine.medicineId,{},config)
         .then((res) => {
             if(res.data){
               setAllergies([...allergies,selectedMedicine])
@@ -83,7 +97,7 @@ const Allergies = ({allergies,setAllergies,patientId}) => {
     }
 
     const HandleClickRemoveAllerge = (row) => {
-      axios.put("http://localhost:8080/api/patient/" + patientId + "/removeMedicineAllergies/" + row.medicineId)
+      axios.put(URL + "/api/patient/" + userId + "/removeMedicineAllergies/" + row.medicineId,{},config)
         .then((res) => {
             if(res.data){
               var index = allergies.indexOf(row)
@@ -144,10 +158,13 @@ const Allergies = ({allergies,setAllergies,patientId}) => {
                 </Grid>
             </Grid>
             <br></br>
-            <Table stickyHeader aria-label="sticky table">
-                {TableHeader}
-                {TableContent}
-            </Table>
+            <TableContainer style={{ height: "450px", marginTop: "2%" }}>
+              <Table stickyHeader aria-label="sticky table">
+                  {TableHeader}
+                  {TableContent}
+              </Table>
+            </TableContainer>
+            
         </div>
     )
 }

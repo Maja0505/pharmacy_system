@@ -7,6 +7,7 @@ import Snackbar from "@material-ui/core/Snackbar";
 import Alert from "@material-ui/lab/Alert";
 import { makeStyles } from "@material-ui/core/styles";
 import PasswordDialog from "./PasswordDialog";
+import { URL } from "../other/components";
 
 import axios from "axios";
 
@@ -14,7 +15,8 @@ const useStyles = makeStyles((theme) => ({
   //style za paper deo
   paper: {
     padding: theme.spacing(2),
-    margin: theme.spacing("5%", "20%"),
+    margin: "auto",
+    marginTop: "5%",
     maxWidth: 500,
     backgroundColor: "white",
   },
@@ -32,6 +34,9 @@ const EditProfile = () => {
     phoneNumber: "",
     email: "",
   });
+
+  const token = localStorage.getItem("token");
+  const userId = localStorage.getItem("userId");
 
   const [userCopy, setUserCopy] = useState({
     id: -1,
@@ -79,7 +84,11 @@ const EditProfile = () => {
   };
 
   const getUser = async () => {
-    const res = await axios.get("http://localhost:8080/api/pharmacist/6");
+    const res = await axios.get(URL + "/api/pharmacist/" + userId, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
     let pharamcist = res.data;
     setUser({
       id: pharamcist.id,
@@ -119,10 +128,28 @@ const EditProfile = () => {
 
     if (validate(updateUser)) {
       axios
-        .put("http://localhost:8080/api/pharmacist/update", updateUser)
+        .put(URL + "/api/pharmacist/update", updateUser, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        })
         .then((res) => {
-          setUserCopy({id : updateUser.id,firstName : updateUser.firstName, lastName : updateUser.lastName, address : updateUser.address, phoneNumber : updateUser.phoneNumber, email : updateUser.email})
-          setAddress({streetName: updateUser.address.streetName, streetNumber: updateUser.address.streetNumber, city: updateUser.address.city, country: updateUser.address.country, longitude : updateUser.address.longitude, latitude : updateUser.address.latitude })
+          setUserCopy({
+            id: updateUser.id,
+            firstName: updateUser.firstName,
+            lastName: updateUser.lastName,
+            address: updateUser.address,
+            phoneNumber: updateUser.phoneNumber,
+            email: updateUser.email,
+          });
+          setAddress({
+            streetName: updateUser.address.streetName,
+            streetNumber: updateUser.address.streetNumber,
+            city: updateUser.address.city,
+            country: updateUser.address.country,
+            longitude: updateUser.address.longitude,
+            latitude: updateUser.address.latitude,
+          });
           setAlertText("Success update!");
           setOpenAlert(true);
         })

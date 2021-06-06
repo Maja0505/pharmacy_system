@@ -13,6 +13,8 @@ import { makeStyles } from "@material-ui/core/styles";
 import { useState } from "react";
 
 import axios from "axios";
+import {URL} from "../other/components"
+
 
 const useStyles = makeStyles({
   cart: {
@@ -27,6 +29,10 @@ const useStyles = makeStyles({
 });
 
 const MedicineReservation = () => {
+  const token = localStorage.getItem("token");
+  const userId = localStorage.getItem("userId");
+  const pharamcyId = localStorage.getItem("pharmacyId");
+
   const classes = useStyles();
   const [medicineReservationId, setMedicineReservationId] = useState("");
   const [haveReservation, setHaveReservation] = useState(null);
@@ -39,9 +45,15 @@ const MedicineReservation = () => {
   const searchReservation = () => {
     axios
       .get(
-        "http://localhost:8080/api/medicineReservation/get/" +
+        URL + "/api/medicineReservation/get/" +
           medicineReservationId +
-          "/1"
+          "/" +
+          pharamcyId,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
       )
       .then((res) => {
         setMedicineReservation(res.data);
@@ -55,8 +67,14 @@ const MedicineReservation = () => {
   const changeStatusOfReservation = () => {
     axios
       .put(
-        "http://localhost:8080/api/medicineReservation/finish/" +
-          medicineReservationId
+        URL + "/api/medicineReservation/finish/" +
+          medicineReservationId,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
       )
       .then((res) => {
         setMedicineReservation({

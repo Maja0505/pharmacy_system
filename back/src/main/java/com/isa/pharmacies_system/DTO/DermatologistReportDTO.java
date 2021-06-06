@@ -1,5 +1,6 @@
 package com.isa.pharmacies_system.DTO;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.isa.pharmacies_system.domain.schedule.StatusOfAppointment;
 
 import java.time.LocalDateTime;
@@ -14,12 +15,34 @@ public class DermatologistReportDTO {
     private String dermatologistLastName;
     private String reportInfo;
     private Long appointmentId;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime dermatologistAppointmentStartTime;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime dermatologistAppointmentEndTime;
     private double appointmentPoints;
+    private double appointmentPrice;
+    private long durationOfAppointment;
+
+
     private StatusOfAppointment statusOfAppointment;
 
     public DermatologistReportDTO() {
+    }
+
+    public long getDurationOfAppointment() {
+        return durationOfAppointment;
+    }
+
+    public void setDurationOfAppointment(long durationOfAppointment) {
+        this.durationOfAppointment = durationOfAppointment;
+    }
+
+    public double getAppointmentPrice() {
+        return appointmentPrice;
+    }
+
+    public void setAppointmentPrice(double appointmentPrice) {
+        this.appointmentPrice = appointmentPrice;
     }
 
     public Long getId() {

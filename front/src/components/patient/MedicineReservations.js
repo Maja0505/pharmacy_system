@@ -11,11 +11,11 @@ import {
     Grid,
     TextField,
     Button,
+    TableContainer,
+    
+
   } from "@material-ui/core";
-  import {
-    NavigateNext,
-    NavigateBefore,
-  } from "@material-ui/icons";
+import Icon from '@material-ui/core/Icon';
 import { useState, useEffect } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import React from 'react';
@@ -26,11 +26,16 @@ import MuiDialogContent from '@material-ui/core/DialogContent';
 import MuiDialogActions from '@material-ui/core/DialogActions';
 import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
+import AddCircleTwoToneIcon from '@material-ui/icons/AddCircleTwoTone';
 import Typography from '@material-ui/core/Typography';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import DateFnsUtils from '@date-io/date-fns';
 import Alert from "@material-ui/lab/Alert";
 import Snackbar from "@material-ui/core/Snackbar";
+import {URL} from "../other/components"
+import Fab from '@material-ui/core/Fab';
+import AddIcon from '@material-ui/icons/Add';
+
 
 import {
     MuiPickersUtilsProvider,
@@ -43,7 +48,7 @@ import setDate from "date-fns/setDate";
   
   const useStyles = makeStyles((theme) => ({
     table: {
-      marginTop: "5%",
+      marginTop: "1%",
     },
     hederRow: {
       background: "#4051bf",
@@ -51,6 +56,9 @@ import setDate from "date-fns/setDate";
     hederCell: {
       cursor: "pointer",
       color: "#ffffff",
+      position: "sticky",
+      top: 0,
+      background: "#4051bf",
     },
     icons: {
       cursor: "pointer",
@@ -115,6 +123,11 @@ import setDate from "date-fns/setDate";
     const [openAlertError, setOpenAlertError] = useState(false)
     const [openAlertSuccess, setOpenAlertSuccess] = useState(false)
     const [alertTextSuccess, setAlertTextSuccess] = useState('')
+    const token = localStorage.getItem("token");
+    const userId = localStorage.getItem("userId");
+    const config = {
+      headers: { Authorization: `Bearer ${token}` }
+  };
   
   
     const handleCloseAlertError = (event, reason) => {
@@ -141,15 +154,15 @@ import setDate from "date-fns/setDate";
         var medicine = selectedMedicine.medicineId
         var pharmacy = selectedPharmacy.id
         var date = moment(selectedDate).format('YYYY-MM-DD')
-        axios.post("http://localhost:8080/api/medicineReservation/create/1/" + medicine +"/" + pharmacy,{ dateOfTakingMedicine: date }).
+        axios.post(URL + "/api/medicineReservation/create/" + userId + "/" + medicine +"/" + pharmacy,{ dateOfTakingMedicine: date },config).
         then((res) => {
             if(res.data){
                 axios
                 .get(
-                  "http://localhost:8080/api/patient/1/medicineReservation/" +
+                  URL + "/api/patient/" + userId + "/medicineReservation/" +
                   (currPage - 1).toString() +
                   ""
-                )
+                ,config)
                 .then((res) => {
                   setRows(res.data);
                   setCopyRows(res.data);
@@ -174,7 +187,7 @@ import setDate from "date-fns/setDate";
 
     const HandleCancelReservation = (row) => {
 
-        axios.put('http://localhost:8080/api/medicineReservation/cancel', row)
+        axios.put(URL + '/api/medicineReservation/cancel', row,config)
         .then(
             (res)=> {
              
@@ -194,11 +207,9 @@ import setDate from "date-fns/setDate";
     useEffect(() => {
       axios
         .get(
-          "http://localhost:8080/api/patient/1/medicineReservation/" +
+          URL + "/api/patient/" + userId + "/medicineReservation/" +
           (currPage - 1).toString() +
-          ""
-           
-        )
+          "",config)
         .then((res) => {
           setRows(res.data);
           setCopyRows(res.data);
@@ -211,8 +222,7 @@ import setDate from "date-fns/setDate";
         setOpen(true);
         axios
         .get(
-          "http://localhost:8080/api/medicine/all/short"
-        )
+          URL + "/api/medicine/all/short",config)
         .then((res) => {
           setMedicines(res.data)
         }).catch(error => {
@@ -220,8 +230,7 @@ import setDate from "date-fns/setDate";
         })
         axios
         .get(
-          "http://localhost:8080/api/pharmacy/all"
-        )
+          URL + "/api/pharmacy/all",config)
         .then((res) => {
             setPharmacies(res.data)
         }).catch(error => {
@@ -246,44 +255,6 @@ import setDate from "date-fns/setDate";
       );
     };
   
-    const [haveNextPage, setHaveNextPage] = useState(true);
-  
-    const nextPage = () => {
-      axios
-        .get(
-          "http://localhost:8080/api/pharmacy/all/" +
-            currPage.toString() +
-            ""
-        )
-        .then((res) => {
-          if (res.data.length > 0) {
-            setCurrPage(currPage + 1);
-            setRows(res.data);
-          } else {
-            setHaveNextPage(false);
-          }
-        }).catch(error => {
-
-        })
-    };
-  
-    const beforePage = () => {
-      axios
-        .get(
-          "http://localhost:8080/api/pharmacy/all/" +
-            (currPage - 2).toString() +
-            ""
-        )
-        .then((res) => {
-          setHaveNextPage(true);
-          if (res.data.length > 0) {
-            setCurrPage(currPage - 1);
-            setRows(res.data);
-          }
-        }).catch(error => {
-
-        })
-    };
   
     const TableHeader = (
       <TableHead>
@@ -409,46 +380,23 @@ import setDate from "date-fns/setDate";
   
     return (
       <div>
+      
+       <Fab color="primary" aria-label="add" onClick={handleClickOpen}  style={{marginTop:"2%", marginLeft:"50%"}}>
+        <AddIcon />
+      </Fab>
           {SearchPart}
-        <Button variant="outlined" color="primary" onClick={handleClickOpen}>
-       CREATE RESERVATION
-      </Button>
+      
         <Grid container spacing={1}>
           <Grid item xs={2} />
           <Grid item xs={8}>
+          <TableContainer style={{ height: "450px", marginTop: "2%" }}>
             <Table>
               {TableHeader}
               {TableContent}
             </Table>
+          </TableContainer>
           </Grid>
           <Grid item xs={2}></Grid>
-        </Grid>
-        <Grid container spacing={1} className={classes.table}>
-          <Grid item xs={2} />
-          <Grid item xs={8} container spacing={1}>
-            <Grid item xs={2}>
-              {currPage > 1 && (
-                <NavigateBefore
-                  className={classes.icons}
-                  fontSize="large"
-                  onClick={beforePage}
-                />
-              )}
-            </Grid>
-            <Grid item xs={8}>
-              Current Page {currPage}
-            </Grid>
-            <Grid item xs={2}>
-              {haveNextPage && (
-                <NavigateNext
-                  className={classes.icons}
-                  fontSize="large"
-                  onClick={nextPage}
-                />
-              )}
-            </Grid>
-          </Grid>
-          <Grid item xs={2} />
         </Grid>
         {CreateReservationDialog}
         <Snackbar open={openAlertError} autoHideDuration={1500} onClose={handleCloseAlertError}>

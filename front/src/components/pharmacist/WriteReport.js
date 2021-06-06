@@ -18,12 +18,13 @@ import WriteReportFirstStep from "./WriteReportFirstStep.js";
 import WriteReportSecondStep from "./WriteReportSecondStep.js";
 import ScheduleAppointment from "./ScheduleAppointment.js";
 import WriteReportThirdStep from "./WriteReportThirdStep.js";
+import { URL } from "../other/components";
 
 import axios from "axios";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
-    background: "#bed5e7",
+    background: "white",
     margin: "auto",
   },
   schedule: {
@@ -32,7 +33,7 @@ const useStyles = makeStyles((theme) => ({
   },
   steper: {
     width: "80%",
-    background: "#bed5e7",
+    background: "white",
     margin: "auto",
   },
   backButton: {
@@ -45,6 +46,9 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const WriteReport = () => {
+  const token = localStorage.getItem("token");
+  const userId = localStorage.getItem("userId");
+
   const classes = useStyles();
 
   const [openAlertSuccsess, setOpenAlertSuccsess] = useState(false);
@@ -151,7 +155,11 @@ const WriteReport = () => {
 
   const finishReport = async () => {
     axios
-      .post("http://localhost:8080/api/pharmacistReport/create", report)
+      .post(URL + "/api/pharmacistReport/create", report, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
       .then((res) => {
         localStorage.setItem(
           "PatientForPharmacistReport",

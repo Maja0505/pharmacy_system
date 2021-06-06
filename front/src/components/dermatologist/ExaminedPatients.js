@@ -6,16 +6,15 @@ import {
   TableRow,
   Grid,
   TextField,
+  TableContainer,
 } from "@material-ui/core";
-import {
-  ArrowDropDown,
-  ArrowDropUp,
-  NavigateNext,
-  NavigateBefore,
-} from "@material-ui/icons";
+import { ArrowDropDown, ArrowDropUp } from "@material-ui/icons";
+import Autocomplete from "@material-ui/lab/Autocomplete";
 import { useState, useEffect } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import axios from "axios";
+import {URL} from "../other/components"
+
 
 const useStyles = makeStyles((theme) => ({
   table: {
@@ -27,6 +26,9 @@ const useStyles = makeStyles((theme) => ({
   hederCell: {
     cursor: "pointer",
     color: "#ffffff",
+    position: "sticky",
+    top: 0,
+    background: "#4051bf",
   },
   icons: {
     cursor: "pointer",
@@ -34,24 +36,27 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const ExaminedPatients = () => {
+  const token = localStorage.getItem("token");
+  const userId = localStorage.getItem("userId");
+
+  const [pharmacies, setPharmacies] = useState([]);
+
   const classes = useStyles();
 
   const [rows, setRows] = useState([]);
 
   const [copyRows, setCopyRows] = useState({});
 
-  const [currPage, setCurrPage] = useState(1);
-
   useEffect(() => {
     axios
-      .get(
-        "http://localhost:8080/api/dermatologistAppointment/allPastAppointmentByDermatologistAndPharmacy/8/1/" +
-          (currPage - 1).toString() +
-          ""
-      )
+      .get(URL + "/api/pharmacy/getPharmacies/" + userId, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
       .then((res) => {
-        setRows(res.data);
-        setCopyRows(res.data);
+        setPharmacies(res.data);
+        addPastAppointmentForSelectedPharmacy(res.data[0].pharmacyId);
       });
   }, []);
 
@@ -97,9 +102,14 @@ const ExaminedPatients = () => {
 
     axios
       .put(
-        "http://localhost:8080/api/appointment/sortByPatientFirstName/" +
+        URL + "/api/appointment/sortByPatientFirstName/" +
           (firstNameAsc.asc ? "asc" : "desc"),
-        rows
+        rows,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
       )
       .then((res) => {
         setRows(res.data);
@@ -118,9 +128,14 @@ const ExaminedPatients = () => {
 
     axios
       .put(
-        "http://localhost:8080/api/appointment/sortByPatientLastName/" +
+        URL + "/api/appointment/sortByPatientLastName/" +
           (lastNameAsc.asc ? "asc" : "desc"),
-        rows
+        rows,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
       )
       .then((res) => {
         setRows(res.data);
@@ -139,9 +154,14 @@ const ExaminedPatients = () => {
 
     axios
       .put(
-        "http://localhost:8080/api/appointment/sortByPatientEmail/" +
+        URL + "/api/appointment/sortByPatientEmail/" +
           (emailAsc.asc ? "asc" : "desc"),
-        rows
+        rows,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
       )
       .then((res) => {
         setRows(res.data);
@@ -160,9 +180,14 @@ const ExaminedPatients = () => {
 
     axios
       .put(
-        "http://localhost:8080/api/appointment/sortByAppointmentStartTime/" +
+        URL + "/api/appointment/sortByAppointmentStartTime/" +
           (startTimeAsc.asc ? "asc" : "desc"),
-        rows
+        rows,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
       )
       .then((res) => {
         setRows(res.data);
@@ -181,9 +206,14 @@ const ExaminedPatients = () => {
 
     axios
       .put(
-        "http://localhost:8080/api/dermatologistAppointment/sortByAppointmentEndTime/" +
+        URL + "/api/dermatologistAppointment/sortByAppointmentEndTime/" +
           (endTimeAsc.asc ? "asc" : "desc"),
-        rows
+        rows,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
       )
       .then((res) => {
         setRows(res.data);
@@ -202,9 +232,14 @@ const ExaminedPatients = () => {
 
     axios
       .put(
-        "http://localhost:8080/api/appointment/sortByAppointmentPrice/" +
+        URL + "/api/appointment/sortByAppointmentPrice/" +
           (priceAsc.asc ? "asc" : "desc"),
-        rows
+        rows,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
       )
       .then((res) => {
         setRows(res.data);
@@ -228,37 +263,35 @@ const ExaminedPatients = () => {
 
   const [haveNextPage, setHaveNextPage] = useState(true);
 
-  const nextPage = () => {
+  const addPastAppointmentForSelectedPharmacy = (pharmacyId) => {
     axios
       .get(
-        "http://localhost:8080/api/dermatologistAppointment/allPastAppointmentByDermatologistAndPharmacy/8/1/" +
-          currPage.toString() +
-          ""
+        URL + "/api/dermatologistAppointment/allPastAppointmentByDermatologistAndPharmacy/" +
+          userId +
+          "/" +
+          pharmacyId,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
       )
       .then((res) => {
-        if (res.data.length > 0) {
-          setCurrPage(currPage + 1);
-          setRows(res.data);
-        } else {
-          setHaveNextPage(false);
-        }
+        setRows(res.data);
+        setCopyRows(res.data);
       });
   };
 
-  const beforePage = () => {
-    axios
-      .get(
-        "http://localhost:8080/api/dermatologistAppointment/allPastAppointmentByDermatologistAndPharmacy/8/1/" +
-          (currPage - 2).toString() +
-          ""
-      )
-      .then((res) => {
-        setHaveNextPage(true);
-        if (res.data.length > 0) {
-          setCurrPage(currPage - 1);
-          setRows(res.data);
-        }
-      });
+  const handleChangePharmacy = async (pharmacy) => {
+    setRows([]);
+    setCopyRows([]);
+    setFirstNameAsc({ asc: true, counter: -1 });
+    setLastNameAsc({ asc: true, counter: -1 });
+    setEmail({ asc: true, counter: -1 });
+    setStartTime({ asc: true, counter: -1 });
+    setEndTimeAsc({ asc: true, counter: -1 });
+    setPrice({ asc: true, counter: -1 });
+    addPastAppointmentForSelectedPharmacy(pharmacy.pharmacyId);
   };
 
   const TableHeader = (
@@ -325,12 +358,28 @@ const ExaminedPatients = () => {
   );
 
   const SearchPart = (
-    <Grid container spacing={1} className={classes.table}>
-      <Grid item xs={2} />
-      <Grid item xs={8} style={{ margin: "auto", textAlign: "right" }}>
+    <Grid container className={classes.table}>
+      <Grid item xs={2}></Grid>
+      <Grid item xs={2}>
+        {pharmacies.length !== 0 && (
+          <Autocomplete
+            id="controllable-states-demo"
+            size="small"
+            options={pharmacies}
+            getOptionLabel={(option) => option.pharmacyName}
+            defaultValue={pharmacies.find((v) => v.pharmacyName[0])}
+            disableClearable
+            onChange={(event, value) => handleChangePharmacy(value)}
+            renderInput={(params) => (
+              <TextField {...params} label="Pharmacy" variant="outlined" />
+            )}
+          />
+        )}
+      </Grid>
+      <Grid item xs={6} style={{ margin: "auto", textAlign: "right" }}>
         <TextField
           id="outlined-search"
-          label="Search patient"
+          label="Search patient by first name/last name/email"
           type="search"
           size="small"
           variant="outlined"
@@ -349,39 +398,14 @@ const ExaminedPatients = () => {
       <Grid container spacing={1}>
         <Grid item xs={2} />
         <Grid item xs={8}>
-          <Table>
-            {TableHeader}
-            {TableContent}
-          </Table>
+          <TableContainer style={{ height: "500px", marginTop: "2%" }}>
+            <Table>
+              {TableHeader}
+              {TableContent}
+            </Table>
+          </TableContainer>
         </Grid>
         <Grid item xs={2}></Grid>
-      </Grid>
-      <Grid container spacing={1} className={classes.table}>
-        <Grid item xs={2} />
-        <Grid item xs={8} container spacing={1}>
-          <Grid item xs={2}>
-            {currPage > 1 && (
-              <NavigateBefore
-                className={classes.icons}
-                fontSize="large"
-                onClick={beforePage}
-              />
-            )}
-          </Grid>
-          <Grid item xs={8}>
-            Current Page {currPage}
-          </Grid>
-          <Grid item xs={2}>
-            {haveNextPage && (
-              <NavigateNext
-                className={classes.icons}
-                fontSize="large"
-                onClick={nextPage}
-              />
-            )}
-          </Grid>
-        </Grid>
-        <Grid item xs={2} />
       </Grid>
     </div>
   );

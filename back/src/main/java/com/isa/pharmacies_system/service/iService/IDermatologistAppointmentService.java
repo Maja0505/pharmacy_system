@@ -15,8 +15,8 @@ public interface IDermatologistAppointmentService{
     DermatologistAppointment findOne(Long id);
     Boolean bookDermatologistAppointment(Long patientId, Long appointmentId);
     List<DermatologistAppointment> getOpenDermatologistAppointment(Long pharmacyId);
-    Page<DermatologistAppointment> getAllPastDermatologistAppointmentByDermatologist(Long id, int page);
-    Page<DermatologistAppointment> getAllPastDermatologistAppointmentByDermatologistAndPharmacy(Long idDermatologist,Long idPharmacy, int page);
+    List<DermatologistAppointment> getAllPastDermatologistAppointmentByDermatologist(Long id);
+    List<DermatologistAppointment> getAllPastDermatologistAppointmentByDermatologistAndPharmacy(Long idDermatologist,Long idPharmacy);
     List<PatientAppointmentInfoDTO> sortByAppointmentEndTime(List<PatientAppointmentInfoDTO> patientAppointmentInfoDTOList, Boolean asc);
     Boolean cancelDermatologistAppointment(DermatologistAppointment dermatologistAppointment);
     List<DermatologistAppointment> getAllFutureOpenDermatologistAppointmentForDermatologistInPharmacy(Long dermatologistId,Long pharmacyId);
@@ -28,4 +28,7 @@ public interface IDermatologistAppointmentService{
     List<DermatologistAppointment> findAllFutureReservedDermatologistAppointmentByDermatologist(Long dermatologistId);
     Boolean bookDermatologistAppointmentByDermatologist(AppointmentScheduleByStaffDTO appointmentScheduleByStaffDTO,DermatologistAppointment dermatologistAppointment);
     Boolean changeDermatologistAppointmentStatusToMissed(DermatologistAppointment dermatologistAppointment);
+    Boolean bookDermatologistAppointmentTest(Long patientId,Long appointmentId,Long milliseconds);
+    void setMissedDermatologistAppointmentEveryDayOnRightStatusAndIncreasePenaltyForPatient();
+    Boolean changeDermatologistAppointmentStatusToMissedTest(DermatologistAppointment dermatologistAppointment,Long milliseconds);
 }

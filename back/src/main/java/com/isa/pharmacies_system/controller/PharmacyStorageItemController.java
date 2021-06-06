@@ -12,6 +12,7 @@ import com.isa.pharmacies_system.service.iService.IMedicineRequestService;
 import com.isa.pharmacies_system.service.iService.IPharmacyStorageItemService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,7 +22,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import java.util.List;
 
 @Controller
-@CrossOrigin(origins="http://localhost:3000")
+@CrossOrigin(origins="*")
 @RequestMapping(value = "api/pharmacyStorageItem")
 public class PharmacyStorageItemController {
 
@@ -42,6 +43,7 @@ public class PharmacyStorageItemController {
     }
 
     //#1[3.19]
+    @PreAuthorize("hasRole('ROLE_PATIENT')")
     @GetMapping("/{medicineId}/{patientId}")
     public ResponseEntity<List<PharmacyWithMedicinePriceDTO>> getAllPharmacyStorageItemsWithSelectedMedicine(@PathVariable Long medicineId,@PathVariable Long patientId){
         try {
@@ -60,6 +62,7 @@ public class PharmacyStorageItemController {
     }
 
     //Nemanja
+    @PreAuthorize("hasRole('ROLE_DERMATOLOGIST') or hasRole('ROLE_PHARMACIST')")
     @GetMapping("/all/{pharmacyId}")
     public ResponseEntity<List<MedicineForRecipeDTO>> getAllPharmacyStorageItemsInPharmacy(@PathVariable Long pharmacyId){
         try {
@@ -71,6 +74,7 @@ public class PharmacyStorageItemController {
     }
 
     //Nemanja
+    @PreAuthorize("hasRole('ROLE_DERMATOLOGIST') or hasRole('ROLE_PHARMACIST')")
     @GetMapping("/check/{itemId}/{medicineAmount}/{patientId}")
     public ResponseEntity<List<MedicineForRecipeDTO>> haveEnoughMedicineAmountForPharmacyStorageItem(@PathVariable Long itemId,@PathVariable Long medicineAmount,@PathVariable Long patientId){
         try {

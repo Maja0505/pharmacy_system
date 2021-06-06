@@ -9,7 +9,8 @@ import {
     TableRow,
     Grid,
     TextField,
-    Button
+    Button,
+    TableContainer
   } from "@material-ui/core";
   import {
     NavigateNext,
@@ -20,6 +21,8 @@ import {
   import axios from "axios";
   import Alert from "@material-ui/lab/Alert";
   import Snackbar from "@material-ui/core/Snackbar";
+  import {URL} from "../other/components"
+
   
   const useStyles = makeStyles((theme) => ({
     table: {
@@ -31,6 +34,9 @@ import {
     hederCell: {
       cursor: "pointer",
       color: "#ffffff",
+      position: "sticky",
+      top: 0,
+      background: "#4051bf",
     },
     icons: {
       cursor: "pointer",
@@ -49,6 +55,11 @@ import {
     const [openAlertError, setOpenAlertError] = useState(false)
     const [openAlertSuccess, setOpenAlertSuccess] = useState(false)
     const [alertTextSuccess, setAlertTextSuccess] = useState('')
+    const token = localStorage.getItem("token");
+    const userId = localStorage.getItem("userId");
+    const config = {
+      headers: { Authorization: `Bearer ${token}` }
+  };
   
   
     const handleCloseAlertError = (event, reason) => {
@@ -68,11 +79,9 @@ import {
     useEffect(() => {
       axios
         .get(
-          "http://localhost:8080/api/patient/1/pharmacistAppointment/all/reserved/" +
+          URL + "/api/patient/" + userId + "/pharmacistAppointment/all/reserved/" +
           (currPage - 1).toString() +
-          ""
-           
-        )
+          "",config)
         .then((res) => {
           setRows(res.data);
           setCopyRows(res.data);
@@ -94,56 +103,18 @@ import {
       );
     };
   
-    const [haveNextPage, setHaveNextPage] = useState(true);
-  
-    const nextPage = () => {
-      axios
-        .get(
-          "http://localhost:8080/api/pharmacy/all/" +
-            currPage.toString() +
-            ""
-        )
-        .then((res) => {
-          if (res.data.length > 0) {
-            setCurrPage(currPage + 1);
-            setRows(res.data);
-          } else {
-            setHaveNextPage(false);
-          }
-        });
-    };
-  
-    const beforePage = () => {
-      axios
-        .get(
-          "http://localhost:8080/api/pharmacy/all/" +
-            (currPage - 2).toString() +
-            ""
-        )
-        .then((res) => {
-          setHaveNextPage(true);
-          if (res.data.length > 0) {
-            setCurrPage(currPage - 1);
-            setRows(res.data);
-          }
-        });
-    };
-
-
     const HandleClickCancelPharmacistAppointment = (row) => {
       axios
       .put(
-        "http://localhost:8080/api/pharmacistAppointment/cancel/" + row.id
+        URL + "/api/pharmacistAppointment/cancel/" + row.id,{},config
       )
       .then((res) => {
         if(res.data){
           axios
           .get(
-            "http://localhost:8080/api/patient/1/pharmacistAppointment/all/reserved/" +
+            URL + "/api/patient/"+ userId + "/pharmacistAppointment/all/reserved/" +
             (currPage - 1).toString() +
-            ""
-             
-          )
+            "",config)
           .then((res) => {
             setRows(res.data);
             setCopyRows(res.data);
@@ -234,39 +205,14 @@ import {
         <Grid container spacing={1}>
           <Grid item xs={2} />
           <Grid item xs={8}>
+          <TableContainer style={{ height: "450px", marginTop: "2%" }}>
             <Table>
               {TableHeader}
               {TableContent}
             </Table>
+          </TableContainer>
           </Grid>
           <Grid item xs={2}></Grid>
-        </Grid>
-        <Grid container spacing={1} className={classes.table}>
-          <Grid item xs={2} />
-          <Grid item xs={8} container spacing={1}>
-            <Grid item xs={2}>
-              {currPage > 1 && (
-                <NavigateBefore
-                  className={classes.icons}
-                  fontSize="large"
-                  onClick={beforePage}
-                />
-              )}
-            </Grid>
-            <Grid item xs={8}>
-              Current Page {currPage}
-            </Grid>
-            <Grid item xs={2}>
-              {haveNextPage && (
-                <NavigateNext
-                  className={classes.icons}
-                  fontSize="large"
-                  onClick={nextPage}
-                />
-              )}
-            </Grid>
-          </Grid>
-          <Grid item xs={2} />
         </Grid>
         <Snackbar open={openAlertError} autoHideDuration={1500} onClose={handleCloseAlertError}>
         <Alert severity="error">

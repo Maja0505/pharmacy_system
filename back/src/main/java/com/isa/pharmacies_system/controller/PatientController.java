@@ -17,6 +17,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,7 +27,7 @@ import java.util.List;
 import java.util.Set;
 
 @Controller
-@CrossOrigin(origins="http://localhost:3000")
+@CrossOrigin(origins="*")
 @RequestMapping(value = "/api/patient", produces = MediaType.APPLICATION_JSON_VALUE)
 public class PatientController {
 
@@ -35,9 +38,15 @@ public class PatientController {
     private DermatologistAppointmentConverter dermatologistAppointmentConverter;
     private PharmacistAppointmentConverter pharmacistAppointmentConverter;
     private IMedicineService medicineService;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
     private IPriceListService priceListService;
     private MedicineReservationConverter medicineReservationConverter;
     private PharmacyConverter pharmacyConverter;
+    private EPrescriptionItemConverter ePrescriptionItemConverter;
+
+
+    
 
     @Autowired
     public PatientController(IPatientService patientService, DermatologistAppointmentService dermatologistAppointmentService, MedicineService medicineService, IPriceListService priceListService) {
@@ -45,12 +54,13 @@ public class PatientController {
         this.patientService = patientService;
         this.priceListService = priceListService;
         this.userConverter = new UserConverter();
-        this.patientConverter = new PatientConverter();
+        this.patientConverter = new PatientConverter(new BCryptPasswordEncoder());
         this.dermatologistAppointmentConverter = new DermatologistAppointmentConverter(priceListService);
         this.pharmacistAppointmentConverter = new PharmacistAppointmentConverter(priceListService);
         this.medicineService = medicineService;
         this.medicineReservationConverter = new MedicineReservationConverter();
         this.pharmacyConverter = new PharmacyConverter(priceListService);
+        this.ePrescriptionItemConverter = new EPrescriptionItemConverter();
 
     }
 
@@ -84,6 +94,7 @@ public class PatientController {
     }
 
     //#1
+    @PreAuthorize("hasRole('ROLE_PATIENT')")
     @PutMapping(value ="/update", consumes = "application/json")
     public ResponseEntity<Boolean> updatePatientProfileInfo(@RequestBody UserPersonalInfoDTO userPersonalInfoDTO){
 
@@ -102,6 +113,7 @@ public class PatientController {
     }
 
     //#1
+    @PreAuthorize("hasRole('ROLE_PATIENT')")
     @PutMapping(value = "/changePassword",consumes = "application/json")
     public ResponseEntity<Boolean> changePassword(@RequestBody UserPasswordDTO userPasswordDTO){
 
@@ -116,6 +128,7 @@ public class PatientController {
     }
 
     //#1
+    @PreAuthorize("hasRole('ROLE_PATIENT')")
     @GetMapping(value = "/{id}/additionalInfo")
     public ResponseEntity<PatientAdditionalInfoDTO> getPatientAdditionalInfo(@PathVariable Long id){
 
@@ -128,6 +141,7 @@ public class PatientController {
     }
 
     //#1
+    @PreAuthorize("hasRole('ROLE_PATIENT')")
     @PutMapping(value = "/{patientId}/addMedicineAllergies/{medicineId}")
     public ResponseEntity<Boolean> addMedicineAllergies(@PathVariable Long patientId, @PathVariable Long medicineId){
 
@@ -140,7 +154,8 @@ public class PatientController {
     }
 
     //#1
-    @PutMapping(value = "/{patientId}/removeMedicineAllergies/{medicineId}")
+    @PreAuthorize("hasRole('ROLE_PATIENT')")
+    @PutMapping(value = "/{patientId}/removeMedicineAllergies/{medicineId}", consumes = "application/json")
     public ResponseEntity<Boolean> removeMedicineAllergies(@PathVariable Long patientId, @PathVariable Long medicineId){
 
         try {
@@ -165,6 +180,7 @@ public class PatientController {
     }
 
     //#1
+    @PreAuthorize("hasRole('ROLE_PATIENT')")
     @GetMapping(value = "/{id}/dermatologistAppointment/all/reserved/{page}")
     public ResponseEntity<List<DermatologistAppointmentDTO>> getAllReservedDermatologistAppointmentsForPatient(@PathVariable Long id,@PathVariable int page){
 
@@ -177,6 +193,7 @@ public class PatientController {
     }
 
     //#1
+    @PreAuthorize("hasRole('ROLE_PATIENT')")
     @GetMapping(value = "/{id}/pharmacistAppointment/all/reserved/{page}")
     public ResponseEntity<List<PharmacistAppointmentDTO>> getAllReservedPharmacistAppointmentsForPatient(@PathVariable Long id,@PathVariable int page){
 
@@ -189,6 +206,7 @@ public class PatientController {
     }
 
     //#1
+    @PreAuthorize("hasRole('ROLE_PATIENT')")
     @GetMapping(value = "/{id}/medicineReservation/{page}")
     public ResponseEntity<List<MedicineReservationInfoDTO>> getAllMedicineReservationsForPatient(@PathVariable Long id, @PathVariable int page){
 
@@ -200,16 +218,18 @@ public class PatientController {
         }
     }
 
+    @PreAuthorize("hasRole('ROLE_PATIENT')")
     @GetMapping(value = "/{id}/ePrescription")
-    public ResponseEntity<List<EPrescription>> getAllEPrescriptionsForPatient(@PathVariable Long id){
+    public ResponseEntity<List<EPrescriptionDTO>> getAllEPrescriptionsForPatient(@PathVariable Long id){
 
         try {
-            return new ResponseEntity<>(patientService.getAllEPrescriptionsForPatient(id),HttpStatus.OK);
+            return new ResponseEntity<>(ePrescriptionItemConverter.convertEPrescriptionToEPrescriptionDTOS(patientService.getAllEPrescriptionsForPatient(id)),HttpStatus.OK);
         }catch (Exception e){
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
 
+    @PreAuthorize("hasRole('ROLE_PATIENT')")
     @GetMapping(value = "/{id}/subscription")
     public ResponseEntity<List<PharmacyDTO>> getSubscriptionPharmaciesForPatient(@PathVariable Long id){
 
@@ -222,6 +242,7 @@ public class PatientController {
     }
 
     //#1
+    @PreAuthorize("hasRole('ROLE_PATIENT')")
     @GetMapping("/{id}/dermatologist/expired")
     public ResponseEntity<List<UserPersonalInfoDTO>> getAllDermatologistForPatient(@PathVariable Long id){
         try {
@@ -233,6 +254,7 @@ public class PatientController {
     }
 
     //#1
+    @PreAuthorize("hasRole('ROLE_PATIENT')")
     @GetMapping("/{id}/pharmacist/expired")
     public ResponseEntity<List<UserPersonalInfoDTO>> getAllPharmacistForPatient(@PathVariable Long id){
         try {
@@ -244,6 +266,7 @@ public class PatientController {
     }
 
     //#1
+    @PreAuthorize("hasRole('ROLE_PATIENT')")
     @GetMapping("/{id}/medicine")
     public ResponseEntity<List<MedicineDTO>> getAllMedicinesForPatient(@PathVariable Long id){
         try {
@@ -255,6 +278,7 @@ public class PatientController {
     }
 
     //#1
+    @PreAuthorize("hasRole('ROLE_PATIENT')")
     @GetMapping("/{id}/pharmacy")
     public ResponseEntity<List<PharmacyDTO>> getAllPharmaciesForPatient(@PathVariable Long id){
         try {

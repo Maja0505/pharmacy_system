@@ -21,6 +21,8 @@ import PharmacieTableWithFreePharmacist from './PharmacieTableWithFreePharmacist
 import PharmacistsTableForSchedulePharmacistAppointment from './PharmacistsTableForSchedulePharmacistAppointment'
 import axios from "axios";
 import Pharmacies from './Pharmacies';
+import {URL} from "../other/components"
+
 
 
 
@@ -63,7 +65,11 @@ export default function Checkout() {
   const [openAlertError, setOpenAlertError] = useState(false)
   const [openAlertSuccess, setOpenAlertSuccess] = useState(false)
   const [alertTextSuccess, setAlertTextSuccess] = useState('')
-
+  const token = localStorage.getItem("token");
+  const userId = localStorage.getItem("userId");
+  const config = {
+      headers: { Authorization: `Bearer ${token}` }
+  };
 
   const handleCloseAlertError = (event, reason) => {
     if (reason === 'clickaway') {
@@ -185,9 +191,7 @@ export default function Checkout() {
     }
     axios
         .put(
-          "http://localhost:8080/api/pharmacy/free",timeDTO
-           
-        )
+          URL + "/api/pharmacy/free",timeDTO,config)
         .then((res) => {
           console.log(res.data)
           if(res.data.length === 0){
@@ -214,9 +218,7 @@ export default function Checkout() {
     }
     axios
         .put(
-          "http://localhost:8080/api/pharmacist/free/" + selectedPharmacy.id,timeDTO
-           
-        )
+          URL + "/api/pharmacist/free/" + selectedPharmacy.id,timeDTO,config)
         .then((res) => {
           if(res.data.length == 0){
             setAlertTextError('There are no available pharmacists in selected time')
@@ -240,9 +242,7 @@ export default function Checkout() {
     }
     axios
     .post(
-      "http://localhost:8080/api/pharmacistAppointment/book/" + selectedPharmacist.id + '/1',timeDTO
-       
-    )
+      URL + "/api/pharmacistAppointment/book/" + selectedPharmacist.id + "/" + userId,timeDTO,config)
     .then((res) => {
       setAlertTextSuccess('Success schedule pharmacist appointment')
       setOpenAlertSuccess(true)

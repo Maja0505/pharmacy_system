@@ -13,8 +13,12 @@ import {
 } from "@syncfusion/ej2-react-schedule";
 import axios from "axios";
 import { useEffect, useState } from "react";
+import { URL } from "../other/components";
 
 const WorkCalendar = () => {
+  const token = localStorage.getItem("token");
+  const userId = localStorage.getItem("userId");
+
   const [data, setData] = useState([]);
 
   const resourceDataSource = [
@@ -31,17 +35,29 @@ const WorkCalendar = () => {
 
   useEffect(async () => {
     axios
-      .get("http://localhost:8080/api/pharmacistAppointment/allMissed/6")
+      .get(URL + "/api/pharmacistAppointment/allMissed/" + userId, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
       .then((res) => {
         addAppointmentsToData(res.data);
       });
     axios
-      .get("http://localhost:8080/api/pharmacistAppointment/allExpired/6")
+      .get(URL + "/api/pharmacistAppointment/allExpired/" + userId, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
       .then((res) => {
         addAppointmentsToData(res.data);
       });
     axios
-      .get("http://localhost:8080/api/pharmacistAppointment/allReserved/6")
+      .get(URL + "/api/pharmacistAppointment/allReserved/" + userId, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
       .then((res) => {
         addAppointmentsToData(res.data);
       });
@@ -64,8 +80,13 @@ const WorkCalendar = () => {
   const changeAppointmentToMissed = async (id) => {
     axios
       .put(
-        "http://localhost:8080/api/pharmacistAppointment/changeStatusToMissed/" +
-          id
+        URL + "/api/pharmacistAppointment/changeStatusToMissed/" + id,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
       )
       .then((res) => {
         setOpenDialog(false);
@@ -77,7 +98,9 @@ const WorkCalendar = () => {
       })
       .catch((error) => {
         setOpenDialog(false);
-        alert("You can only set missed for appointment which is in past!");
+        alert(
+          "Appointment not start yet.\nYou can only set status missed for appointment which is started and not finished yet or for appointments in past!"
+        );
       });
   };
 

@@ -10,7 +10,9 @@ import {
     TableRow,
     Grid,
     Button,
-    TextField
+    TextField,
+    TableContainer
+
   } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import Dialog from '@material-ui/core/Dialog';
@@ -21,6 +23,9 @@ import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
 import Typography from '@material-ui/core/Typography';
 import { withStyles } from '@material-ui/core/styles';
+import { getConfig } from '@testing-library/dom';
+import {URL} from '../other/components'
+import {REACT_URL} from '../other/components'
 
 
 
@@ -35,6 +40,9 @@ import { withStyles } from '@material-ui/core/styles';
     hederCell: {
       cursor: "pointer",
       color: "#ffffff",
+      position: "sticky",
+      top: 0,
+      background: "#4051bf",
     },
     icons: {
       cursor: "pointer",
@@ -68,6 +76,11 @@ const Complaint = () => {
     const [radioValue, setRadioValue] = React.useState('female');
     const [selectedRow, setSelectedRow] = useState()
     const classes = useStyles();
+    const token = localStorage.getItem("token");
+    const userId = localStorage.getItem("userId");
+    const config = {
+      headers: { Authorization: `Bearer ${token}`, consumes:'application/json' }
+  };
 
     const handleClickOpenComplaintDialog= (row) => {
         setSelectedRow(row)
@@ -79,24 +92,24 @@ const Complaint = () => {
 
     };
     const handleClickSaveComplaint = () => {
-        
+      window.location.href =  REACT_URL + "/patient/home2";
     }
 
 
     const HandleClickComplaintType = (type) => {
         if(type == 'Dermatologist_complaint'){
-            axios.get('http://localhost:8080/api/patient/1/dermatologist/expired')
+            axios.get(URL + '/api/patient/' + userId +  '/dermatologist/expired',config)
             .then((res) => {
                 setStaffs(res.data)
             })
         }else if(type == 'Pharmacy_complaint'){
-            axios.get('http://localhost:8080/api/patient/1/pharmacy')
+            axios.get(URL + '/api/patient/' + userId + '/pharmacy',config)
             .then((res) => {
                 setPharmacies(res.data)
             })
 
         }else{
-            axios.get('http://localhost:8080/api/patient/1/pharmacist/expired')
+            axios.get(URL + '/api/patient/' + userId + '/pharmacist/expired',config)
             .then((res) => {
                 setStaffs(res.data)
             })
@@ -231,10 +244,12 @@ const Complaint = () => {
             <Grid container spacing={1} style={{marginTop:'10%'}}>
                 <Grid item xs={2} />
                 <Grid item xs={8}>
+                <TableContainer style={{ height: "450px", marginTop: "2%" }}>
                     <Table>
                     {TableHeaderPharmacy}
                     {TableContentPharmacy}
                     </Table>
+                  </TableContainer>
                 </Grid>
                 <Grid item xs={2}></Grid>
             </Grid>

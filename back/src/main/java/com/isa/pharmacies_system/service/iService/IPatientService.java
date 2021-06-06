@@ -15,8 +15,10 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
 
-public interface IPatientService {
+import org.springframework.mail.MailException;
 
+public interface IPatientService {
+	void createPatient(Patient patient) throws MailException, InterruptedException;
     Patient findOne(Long id);
     List<Patient> findAll();
     void savePatient(Patient patient);
@@ -34,4 +36,5 @@ public interface IPatientService {
     List<MedicineDTO> getAllMedicinesForPatient(Long id);
     List<PharmacyDTO> getAllPharmaciesForPatient(Long patientId);
     Boolean removeMedicineAllergies(Long patientId, Long medicineId);
+    void resetAllPenaltiesForPatient();
 }

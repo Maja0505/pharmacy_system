@@ -28,6 +28,8 @@ import axios from "axios";
 import { Redirect } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
+import {URL} from "../other/components"
+
 
 const useStyles = makeStyles({
   cart: {
@@ -37,6 +39,9 @@ const useStyles = makeStyles({
 });
 
 const SheduleAppointment = ({ pharmacyInfo }) => {
+  const token = localStorage.getItem("token");
+  const userId = localStorage.getItem("userId");
+
   const [data, setData] = useState([]);
   const resourceDataSource = [{ Id: 4, Color: "#8c9290", Name: "open" }];
 
@@ -55,7 +60,9 @@ const SheduleAppointment = ({ pharmacyInfo }) => {
   const [workingDates, setWorkingDates] = useState([]);
   const [appointment, setAppointment] = useState({});
   const [appointmentInfo, setAppointmentInfo] = useState({});
-  const [patientInfo, setPatientInfo] = useState({ Id: -1 });
+  const [patientInfo, setPatientInfo] = useState(
+    JSON.parse(localStorage.getItem("PatientForDermatologistReport"))
+  );
 
   const handleCloseAlert = (event, reason) => {
     if (reason === "clickaway") {
@@ -89,24 +96,40 @@ const SheduleAppointment = ({ pharmacyInfo }) => {
   };
 
   useEffect(() => {
-    setPatientInfo(
-      JSON.parse(localStorage.getItem("PatientForDermatologistReport"))
-    );
-
     if (
       JSON.parse(localStorage.getItem("PatientForDermatologistReport")) === null
     ) {
       return;
     }
-    axios.get("http://localhost:8080/api/workingHours/all/8/1").then((res) => {
-      res.data.map((workDay) => {
-        addToWorkingDates(workDay);
+    axios
+      .get(
+        URL + "/api/workingHours/all/" +
+          userId +
+          "/" +
+          patientInfo.PharmacyId,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      )
+      .then((res) => {
+        res.data.map((workDay) => {
+          addToWorkingDates(workDay);
+        });
       });
-    });
 
     axios
       .get(
-        "http://localhost:8080/api/dermatologistAppointment/allFutureOpen/8/1"
+        URL + "/api/dermatologistAppointment/allFutureOpen/" +
+          userId +
+          "/" +
+          patientInfo.PharmacyId,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
       )
       .then((res) => {
         addAppointmentsToData(res.data);
@@ -114,7 +137,15 @@ const SheduleAppointment = ({ pharmacyInfo }) => {
 
     axios
       .get(
-        "http://localhost:8080/api/dermatologistAppointment/allFutureReserved/8/1"
+        URL + "/api/dermatologistAppointment/allFutureReserved/" +
+          userId +
+          "/" +
+          patientInfo.PharmacyId,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
       )
       .then((res) => {
         addAppointmentsToData(res.data);

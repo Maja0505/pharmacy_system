@@ -51,6 +51,7 @@ public class DermatologistAppointmentConverter {
         dermatologistAppointmentDTO.setPharmacyForDermatologistAppointment(pharmacyDTO);
         dermatologistAppointmentDTO.setPharmacyName(pharmacyDTO.getPharmacyName());
         dermatologistAppointmentDTO.setLocation(pharmacyDTO.getPharmacyAddress().getCity() + ", " + pharmacyDTO.getPharmacyAddress().getStreetName() + " " + pharmacyDTO.getPharmacyAddress().getStreetNumber());
+        dermatologistAppointmentDTO.setPharmacyId(pharmacyDTO.getId());
         Patient patient = dermatologistAppointment.getPatientWithDermatologistAppointment();
         utilityMethods.fillPatientInfoForDermatologistAppointment(patient,dermatologistAppointmentDTO);
         utilityMethods.setColorIdDermatologistAppointment(dermatologistAppointment,dermatologistAppointmentDTO);

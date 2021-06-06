@@ -3,17 +3,7 @@ package com.isa.pharmacies_system.domain.medicine;
 import java.time.Instant;
 import java.time.LocalDate;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
-import javax.persistence.SequenceGenerator;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -57,6 +47,9 @@ public class MedicineReservation {
 	//moze biti kreirana, propustena, otkazana i zavrsena
 	@Enumerated(EnumType.ORDINAL)
 	private StatusOfMedicineReservation statusOfMedicineReservation;
+
+	@Version
+	private Long version;
 
 	public MedicineReservation() {
 		// TODO Auto-generated constructor stub
@@ -121,7 +114,12 @@ public class MedicineReservation {
 	public void setStatusOfMedicineReservation(StatusOfMedicineReservation statusOfMedicineReservation) {
 		this.statusOfMedicineReservation = statusOfMedicineReservation;
 	}
-	
-	
 
+	public Long getVersion() {
+		return version;
+	}
+
+	public void setVersion(Long version) {
+		this.version = version;
+	}
 }

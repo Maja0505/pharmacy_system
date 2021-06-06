@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -47,10 +48,11 @@ public class PharmacistAppointmentService implements IPharmacistAppointmentServi
 
 
     //#1[3.16]Korak3
+    @Transactional
     @Override
     public Boolean bookPharmacistAppointment(Long patientId, Long pharmacistId, PharmacistAppointmentTimeDTO timeDTO,Boolean isPatient){
         Patient patient = patientRepository.findById(patientId).orElse(null);
-        Pharmacist pharmacist = pharmacistRepository.findById(pharmacistId).orElse(null);
+        Pharmacist pharmacist = pharmacistRepository.findLockedById(pharmacistId).orElse(null);
         PharmacistAppointment pharmacistAppointment;
         if(patient == null || pharmacist == null){
             return false;
@@ -63,11 +65,18 @@ public class PharmacistAppointmentService implements IPharmacistAppointmentServi
                 && !doesPatientHaveAnotherAppointmentInSameTime(patient,pharmacistAppointment)
                 && ((patient.getPenalty() < 3 && isPatient) || (!isPatient))){
 
+            fillPriceForPharmacistAppointment(timeDTO,pharmacistAppointment);
             pharmacistAppointmentRepository.save(pharmacistAppointment);
             return true;
         }else{
             return false;
         }
+    }
+
+    private void fillPriceForPharmacistAppointment(PharmacistAppointmentTimeDTO timeDTO, PharmacistAppointment pharmacistAppointment) {
+        PriceListForAppointmentDTO priceListForAppointmentDTO = priceListRepository.getPriceListForAppointmentByPharmacyId(pharmacistAppointment.getPharmacistForAppointment().getPharmacyForPharmacist().getId());
+        pharmacistAppointment.setAppointmentPrice(priceListForAppointmentDTO.getDermatologistAppointmentPricePerHour() * (long)timeDTO.getDuration()/60);
+
     }
 
     //#1
@@ -164,8 +173,8 @@ public class PharmacistAppointmentService implements IPharmacistAppointmentServi
 
     //Nemanja
     @Override
-    public Page<PharmacistAppointment> getAllPastPharmacistAppointmentByPharmacist(Long id,int page) {
-        return pharmacistAppointmentRepository.findAllPastPharmacistAppointment(id,PageRequest.of(page,10));
+    public List<PharmacistAppointment> getAllPastPharmacistAppointmentByPharmacist(Long id) {
+        return pharmacistAppointmentRepository.findAllPastPharmacistAppointment(id);
     }
 
     //Nemanja
@@ -215,6 +224,7 @@ public class PharmacistAppointmentService implements IPharmacistAppointmentServi
     }
 
     //Nemanja
+    @Transactional
     @Override
     public Boolean changePharmacistAppointmentStatusToMissed(PharmacistAppointment pharmacistAppointment) {
         if(pharmacistAppointment.getStatusOfAppointment().equals(StatusOfAppointment.Reserved) && pharmacistAppointment.getPharmacistAppointmentStartTime().isBefore(LocalDateTime.now())){
@@ -227,7 +237,61 @@ public class PharmacistAppointmentService implements IPharmacistAppointmentServi
     }
 
     //Nemanja
-    private void addPatientPoint(Patient patient) {
-        patient.setPatientPoints(patient.getPatientPoints() + 1);
+    @Transactional
+    @Override
+    public void setMissedPharmacistAppointmentEveryDayOnRightStatusAndIncreasePenaltyForPatient() {
+        List<PharmacistAppointment> allAppointmentsInPast = pharmacistAppointmentRepository.findAllReservedAppointmentsInPast();
+        for (PharmacistAppointment pa:
+             allAppointmentsInPast) {
+            if(pa.getPharmacistAppointmentStartTime().plusMinutes(pa.getPharmacistAppointmentDuration()).isBefore(LocalDateTime.now())){
+                addPatientPoint(pa.getPatientWithPharmacistAppointment());
+                pa.setStatusOfAppointment(StatusOfAppointment.Missed);
+                pharmacistAppointmentRepository.save(pa);
+            }
+        }
     }
+
+    //Nemanja
+    private void addPatientPoint(Patient patient) {
+        patient.setPenalty(patient.getPenalty() + 1);
+    }
+
+    //Nemanja
+    @Transactional
+    @Override
+    public Boolean bookPharmacistAppointmentTest(Long patientId, Long pharmacistId, PharmacistAppointmentTimeDTO timeDTO,Boolean isPatient,Long milliseconds){
+
+        PharmacistAppointment pharmacistAppointment = fillPatientAndPharmacistForAppointment(patientId,pharmacistId,timeDTO);
+        if(pharmacistAppointment == null){
+            return false;
+        }
+        if(timeDTO.getStartTime().isAfter(LocalDateTime.now())
+                && doesPharmacistWorkInSelectedDate(timeDTO, pharmacistAppointment.getPharmacistForAppointment())
+                && doesPharmacistHaveOpenSelectedAppointment(timeDTO, pharmacistAppointment.getPharmacistForAppointment())
+                && !doesPatientHaveAnotherAppointmentInSameTime(pharmacistAppointment.getPatientWithPharmacistAppointment(),pharmacistAppointment)
+                && ((pharmacistAppointment.getPatientWithPharmacistAppointment().getPenalty() < 3 && isPatient) || (!isPatient))){
+
+            fillPriceForPharmacistAppointment(timeDTO,pharmacistAppointment);
+            try { Thread.sleep(milliseconds); } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+            }
+            pharmacistAppointmentRepository.save(pharmacistAppointment);
+
+            return true;
+        }else{
+            return false;
+        }
+    }
+
+    //Nemanja
+    private PharmacistAppointment fillPatientAndPharmacistForAppointment(Long patientId, Long pharmacistId, PharmacistAppointmentTimeDTO timeDTO) {
+        Patient patient = patientRepository.findById(patientId).orElse(null);
+        Pharmacist pharmacist = pharmacistRepository.findLockedById(pharmacistId).orElse(null);
+        if(patient == null || pharmacist == null){
+            return null;
+        }else{
+            return createNewPharmacistAppointment(patient, pharmacist, timeDTO);
+        }
+    }
+
 }

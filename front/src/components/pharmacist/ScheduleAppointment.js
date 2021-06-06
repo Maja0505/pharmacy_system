@@ -26,16 +26,19 @@ import axios from "axios";
 import { Redirect } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
+import { URL } from "../other/components";
 
 const useStyles = makeStyles({
   cart: {
     fontSize: 15,
-    backgroundColor: "#3f51b5",
-    color: "#FFFFFF",
+    backgroundColor: "#bed5e7",
   },
 });
 
 const ScheduleAppointment = ({ pharmacyInfo }) => {
+  const token = localStorage.getItem("token");
+  const userId = localStorage.getItem("userId");
+
   const [data, setData] = useState([]);
 
   const [openCreateDialog, setOpenCreateDialog] = useState(false);
@@ -93,7 +96,11 @@ const ScheduleAppointment = ({ pharmacyInfo }) => {
     }
 
     axios
-      .get("http://localhost:8080/api/workingHours/allPharmacistWorkingHours/6")
+      .get(URL + "/api/workingHours/allPharmacistWorkingHours/" + userId, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
       .then((res) => {
         res.data.map((workDay) => {
           addToWorkingDates(workDay);
@@ -101,9 +108,11 @@ const ScheduleAppointment = ({ pharmacyInfo }) => {
       });
 
     axios
-      .get(
-        "http://localhost:8080/api/pharmacistAppointment/allFutureReserved/6"
-      )
+      .get(URL + "/api/pharmacistAppointment/allFutureReserved/" + userId, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
       .then((res) => {
         addAppointmentsToData(res.data);
       });

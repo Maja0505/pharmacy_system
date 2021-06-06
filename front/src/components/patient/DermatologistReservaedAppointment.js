@@ -8,7 +8,8 @@ import {
     TableRow,
     Grid,
     TextField,
-    Button
+    Button,
+    TableContainer
   } from "@material-ui/core";
   import {
     NavigateNext,
@@ -17,6 +18,25 @@ import {
   import { useState, useEffect } from "react";
   import { makeStyles } from "@material-ui/core/styles";
   import axios from "axios";
+  import Alert from "@material-ui/lab/Alert";
+  import Snackbar from "@material-ui/core/Snackbar";
+  import {URL} from "../other/components"
+
+  
+
+const styles = (theme) => ({
+  root: {
+    margin: 0,
+    padding: theme.spacing(2),
+  },
+  closeButton: {
+    position: 'absolute',
+    right: theme.spacing(1),
+    top: theme.spacing(1),
+    color: theme.palette.grey[500],
+    
+  },
+});
   
   const useStyles = makeStyles((theme) => ({
     table: {
@@ -28,6 +48,9 @@ import {
     hederCell: {
       cursor: "pointer",
       color: "#ffffff",
+      position: "sticky",
+      top: 0,
+      background: "#4051bf",
     },
     icons: {
       cursor: "pointer",
@@ -40,21 +63,42 @@ import {
     const [rows, setRows] = useState([]);
     const [copyRows, setCopyRows] = useState({});
     const [currPage, setCurrPage] = useState(1);
+    const [alertTextError, setAlertTextError] = useState('')
+    const [openAlertError, setOpenAlertError] = useState(false)
+    const [openAlertSuccess, setOpenAlertSuccess] = useState(false)
+    const [alertTextSuccess, setAlertTextSuccess] = useState('')
+    const token = localStorage.getItem("token");
+    const userId = localStorage.getItem("userId");
+    const config = {
+      headers: { Authorization: `Bearer ${token}`, consumes:'application/json' }
+  };
   
     useEffect(() => {
       axios
         .get(
-          "http://localhost:8080/api/patient/1/dermatologistAppointment/all/reserved/" +
+          URL + "/api/patient/" + userId + "/dermatologistAppointment/all/reserved/" +
           (currPage - 1).toString() +
-          ""
-           
-        )
+          "",config)
         .then((res) => {
           setRows(res.data);
           setCopyRows(res.data);
           console.log(res)
         });
     }, []);
+
+    const handleCloseAlertError = (event, reason) => {
+      if (reason === 'clickaway') {
+        return;
+      }
+      setOpenAlertError(false);
+    };
+  
+    const handleCloseAlertSuccess = (event, reason) => {
+      if (reason === 'clickaway') {
+        return;
+      }
+      setOpenAlertSuccess(false);
+    };
   
     const searchDermatologistAppointment = (e) => {
       e = e.trim();
@@ -72,58 +116,33 @@ import {
     const HandleClickCancelDermatologistAppointment = (row) => {
       axios
       .put(
-        "http://localhost:8080/api/dermatologistAppointment/cancel", row
-      )
+        URL + "/api/dermatologistAppointment/cancel", row,config)
       .then((res) => {
-        axios
-        .get(
-          "http://localhost:8080/api/patient/1/dermatologistAppointment/all/reserved/" +
-          (currPage - 1).toString() +
-          ""
-           
-        )
-        .then((res) => {
-          setRows(res.data);
-          setCopyRows(res.data);
-          console.log(res)
-        });
+        if(res.data){
+          axios
+          .get(
+            URL + "/api/patient/" + userId + "/dermatologistAppointment/all/reserved/" +
+            (currPage - 1).toString() +
+            "",config)
+          .then((res) => {
+            setRows(res.data);
+            setCopyRows(res.data);
+            console.log(res)
+          });
+          setAlertTextSuccess('Success cancel reservation')
+          setOpenAlertSuccess(true)
+
+        }else{
+          setAlertTextError("You cant't cancel reservation");
+          setOpenAlertError(true);
+        }
+        
+      }).catch(error => {
+        setAlertTextError("You cant't cancel reservation");
+        setOpenAlertError(true);
       });
     }
   
-    const [haveNextPage, setHaveNextPage] = useState(true);
-  
-    const nextPage = () => {
-      axios
-        .get(
-          "http://localhost:8080/api/pharmacy/all/" +
-            currPage.toString() +
-            ""
-        )
-        .then((res) => {
-          if (res.data.length > 0) {
-            setCurrPage(currPage + 1);
-            setRows(res.data);
-          } else {
-            setHaveNextPage(false);
-          }
-        });
-    };
-  
-    const beforePage = () => {
-      axios
-        .get(
-          "http://localhost:8080/api/pharmacy/all/" +
-            (currPage - 2).toString() +
-            ""
-        )
-        .then((res) => {
-          setHaveNextPage(true);
-          if (res.data.length > 0) {
-            setCurrPage(currPage - 1);
-            setRows(res.data);
-          }
-        });
-    };
   
     const TableHeader = (
       <TableHead>
@@ -200,40 +219,25 @@ import {
         <Grid container spacing={1}>
           <Grid item xs={2} />
           <Grid item xs={8}>
+          <TableContainer style={{ height: "450px", marginTop: "2%" }}>
             <Table>
               {TableHeader}
               {TableContent}
             </Table>
+          </TableContainer>
           </Grid>
           <Grid item xs={2}></Grid>
         </Grid>
-        <Grid container spacing={1} className={classes.table}>
-          <Grid item xs={2} />
-          <Grid item xs={8} container spacing={1}>
-            <Grid item xs={2}>
-              {currPage > 1 && (
-                <NavigateBefore
-                  className={classes.icons}
-                  fontSize="large"
-                  onClick={beforePage}
-                />
-              )}
-            </Grid>
-            <Grid item xs={8}>
-              Current Page {currPage}
-            </Grid>
-            <Grid item xs={2}>
-              {haveNextPage && (
-                <NavigateNext
-                  className={classes.icons}
-                  fontSize="large"
-                  onClick={nextPage}
-                />
-              )}
-            </Grid>
-          </Grid>
-          <Grid item xs={2} />
-        </Grid>
+        <Snackbar open={openAlertError} autoHideDuration={1500} onClose={handleCloseAlertError}>
+        <Alert severity="error">
+          {alertTextError}
+        </Alert>
+      </Snackbar>
+      <Snackbar open={openAlertSuccess} autoHideDuration={1500} onClose={handleCloseAlertSuccess}>
+        <Alert severity="success">
+          {alertTextSuccess}
+        </Alert>
+      </Snackbar>
       </div>
     );
   };

@@ -15,5 +15,4 @@ public interface IPharmacyRepository extends JpaRepository<Pharmacy, Long> {
     @Query("select p.pharmacistsInPharmacy as pharmacists from Pharmacy p where p.id = ?1")
     List<Pharmacist> getAllPharmacistsForPharmacy(Long pharmacyId);
 
-    Page<Pharmacy> findAll(Pageable pageable);
 }

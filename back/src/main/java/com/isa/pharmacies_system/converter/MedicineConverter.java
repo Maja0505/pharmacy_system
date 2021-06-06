@@ -56,6 +56,15 @@ public class MedicineConverter {
 		return medicineNewDTO;
 	}
 
+	public List<MedicineNewDTO> convertMedicinesToMedicineNewDTOS(List<Medicine> medicines){
+		List<MedicineNewDTO> medicineNewDTOS = new ArrayList<>();
+		for (Medicine p:
+				medicines) {
+			medicineNewDTOS.add(convertMedicineToMedicineNewDTO(p));
+		}
+		return medicineNewDTOS;
+	}
+
 	//Nemanja
 	public List<MedicineForRecipeDTO> convertPharmacyStorageItemsToMedicineForRecipeDTO(List<PharmacyStorageItem> pharmacyStorageItems){
 		List<MedicineForRecipeDTO> medicineForRecipeDTOs = new ArrayList<>();
@@ -67,7 +76,7 @@ public class MedicineConverter {
 	}
 
 	//Nemanja
-	private MedicineForRecipeDTO convertOnePharmacyStorageItemToMedicineForRecipe(PharmacyStorageItem p) {
+	public MedicineForRecipeDTO convertOnePharmacyStorageItemToMedicineForRecipe(PharmacyStorageItem p) {
 		MedicineForRecipeDTO medicineForRecipeDTO = new MedicineForRecipeDTO();
 		Medicine medicine = p.getMedicineItem();
 		medicineForRecipeDTO.setItemId(p.getId());

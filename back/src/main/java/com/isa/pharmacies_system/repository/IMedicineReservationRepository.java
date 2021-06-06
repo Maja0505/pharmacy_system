@@ -11,4 +11,7 @@ public interface IMedicineReservationRepository extends JpaRepository<MedicineRe
     //Nemanja
     @Query("select mr from MedicineReservation as mr where mr.id=?1 and mr.pharmacyForMedicineReservation.id=?2")
     List<MedicineReservation> findMedicineReservationByIdAndByPharmacy(Long medicineReservationId,Long pharmacyId);
+
+    @Query("select mr from MedicineReservation mr where mr.dateOfTakingMedicine < CURRENT_DATE AND mr.statusOfMedicineReservation = 2")
+    List<MedicineReservation> getAllMedicineReservationsWhoseDateIsInThePast();
 }

@@ -1,3 +1,5 @@
+//KAKO DA JE ZAPRATIIII???
+
 import React from 'react'
 import { useState, useEffect } from "react";
 import { TimePickerComponent, DatePickerComponent } from "@syncfusion/ej2-react-calendars";
@@ -11,10 +13,12 @@ import {
   Grid,
   Button,
   Link,
-  TextField
+  TextField,
+  TableContainer
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import axios from "axios";
+import {URL} from "../other/components"
 
 
 const useStyles = makeStyles((theme) => ({
@@ -27,6 +31,9 @@ const useStyles = makeStyles((theme) => ({
   hederCell: {
     cursor: "pointer",
     color: "#ffffff",
+    position: "sticky",
+    top: 0,
+    background: "#4051bf",
   },
   icons: {
     cursor: "pointer",
@@ -40,14 +47,21 @@ const SubscriptionPharmacy = () => {
 
   const classes = useStyles();
   const [rows,setRows] = useState([]);
+  const token = localStorage.getItem("token");
+  const userId = localStorage.getItem("userId");
+  const config = {
+    headers: { Authorization: `Bearer ${token}` }
+};
 
   useEffect(() => {
     axios
       .get(
-        "http://localhost:8080/api/patient/1//subscription" 
-      )
+        URL + "/api/patient/" + userId + "/subscription" 
+      ,config)
       .then((res) => {
         setRows(res.data);
+      }).catch(error => {
+
       });
   }, []);
  
@@ -94,10 +108,12 @@ const SubscriptionPharmacy = () => {
         <Grid container spacing={1}>
           <Grid item xs={2} />
           <Grid item xs={8}>
+          <TableContainer style={{ height: "450px", marginTop: "2%" }}>
             <Table>
               {TableHeader}
               {TableContent}
             </Table>
+            </TableContainer>
           </Grid>
           <Grid item xs={2}></Grid>
         </Grid>

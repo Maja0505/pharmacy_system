@@ -8,6 +8,7 @@ import {
   TextField,
   Button,
   Typography,
+  TableContainer,
 } from "@material-ui/core";
 
 import { Link } from "react-router-dom";
@@ -16,10 +17,11 @@ import { useState, useEffect } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 
 import axios from "axios";
+import { URL } from "../other/components";
 
 const useStyles = makeStyles((theme) => ({
   table: {
-    marginTop: "5%",
+    marginTop: "3%",
   },
   hederRow: {
     background: "#4051bf",
@@ -27,6 +29,9 @@ const useStyles = makeStyles((theme) => ({
   hederCell: {
     cursor: "pointer",
     color: "#ffffff",
+    position: "sticky",
+    top: 0,
+    background: "#4051bf",
   },
   icons: {
     cursor: "pointer",
@@ -34,6 +39,9 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const FutureExaminations = () => {
+  const token = localStorage.getItem("token");
+  const userId = localStorage.getItem("userId");
+
   const classes = useStyles();
 
   const [data, setData] = useState([]);
@@ -44,9 +52,11 @@ const FutureExaminations = () => {
 
   useEffect(() => {
     axios
-      .get(
-        "http://localhost:8080/api/pharmacistAppointment/allFutureReserved/6"
-      )
+      .get(URL + "/api/pharmacistAppointment/allFutureReserved/" + userId, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
       .then((res) => {
         if (res.data.length === 0) {
           setEmptyTable(true);
@@ -67,10 +77,18 @@ const FutureExaminations = () => {
     if (first_lastName.length === 2) {
       axios
         .get(
-          "http://localhost:8080/api/pharmacistAppointment/searchAllFutureReservedByPatient/6/" +
+          URL +
+            "/api/pharmacistAppointment/searchAllFutureReservedByPatient/" +
+            userId +
+            "/" +
             first_lastName[0] +
             "/" +
-            first_lastName[1]
+            first_lastName[1],
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
         )
         .then((res) => {
           if (res.data.length === 0) {
@@ -88,9 +106,11 @@ const FutureExaminations = () => {
 
   const showAll = () => {
     axios
-      .get(
-        "http://localhost:8080/api/pharmacistAppointment/allFutureReserved/6"
-      )
+      .get(URL + "/api/pharmacistAppointment/allFutureReserved/" + userId, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
       .then((res) => {
         if (res.data.length === 0) {
           setEmptyTable(true);
@@ -105,8 +125,15 @@ const FutureExaminations = () => {
   const setToMissed = (appointment) => {
     axios
       .put(
-        "http://localhost:8080/api/pharmacistAppointment/changeStatusToMissed/" +
-          appointment.id
+        URL +
+          "/api/pharmacistAppointment/changeStatusToMissed/" +
+          appointment.id,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
       )
       .then((res) => {
         setData(
@@ -130,6 +157,7 @@ const FutureExaminations = () => {
         AppointmentId: appointment.id,
         Email: appointment.patientEmail,
         PhoneNumber: appointment.patientPhoneNumber,
+        PharmacyId: appointment.pharmacyId,
         PharmacyName: appointment.pharmacyName,
         PharamcyLocation: appointment.location,
         AppointmentStartTime: appointment.startTime,
@@ -255,10 +283,14 @@ const FutureExaminations = () => {
       <Grid container>
         <Grid item xs={2} />
         <Grid item xs={8}>
-          <Table style={{ marginTop: "2%" }}>
-            {TableHeader}
-            {TableContent}
-          </Table>
+          {emptyTable === false && (
+            <TableContainer style={{ height: "450px", marginTop: "2%" }}>
+              <Table>
+                {TableHeader}
+                {TableContent}
+              </Table>
+            </TableContainer>
+          )}
         </Grid>
         <Grid item xs={2}></Grid>
       </Grid>

@@ -7,6 +7,7 @@ import com.isa.pharmacies_system.service.iService.IWorkingHoursService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,7 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import java.util.List;
 
 @Controller
-@CrossOrigin(origins="http://localhost:3000")
+@CrossOrigin(origins="*")
 @RequestMapping("api/workingHours")
 public class WorkingHoursController {
 
@@ -30,6 +31,7 @@ public class WorkingHoursController {
     }
 
     //Nemanja
+    @PreAuthorize("hasRole('ROLE_DERMATOLOGIST')")
     @GetMapping("/all/{dermatologistId}/{pharmacyId}")
     public ResponseEntity<List<WorkingHoursDTO>> getAllFutureWorkingHoursByDermatologistInPharmacy(@PathVariable Long dermatologistId, @PathVariable Long pharmacyId){
         try {
@@ -41,6 +43,7 @@ public class WorkingHoursController {
     }
 
     //Nemanja
+    @PreAuthorize("hasRole('ROLE_PHARMACIST')")
     @GetMapping("/allPharmacistWorkingHours/{pharmacistId}")
     public ResponseEntity<List<WorkingHoursDTO>> getAllFutureWorkingHoursByPharmacist(@PathVariable Long pharmacistId){
         try {

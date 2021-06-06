@@ -3,6 +3,7 @@ import { Button, Card, CardContent, Grid, Typography } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 
 import axios from "axios";
+import { URL } from "../other/components";
 
 const useStyles = makeStyles({
   cart: {
@@ -17,19 +18,34 @@ const useStyles = makeStyles({
 });
 
 const WriteReportFirstStep = ({ appointment, setAppointment }) => {
+  const token = localStorage.getItem("token");
+  const userId = localStorage.getItem("userId");
+
   const classes = useStyles();
 
   const changeAppointmentToMissed = () => {
     axios
       .put(
-        "http://localhost:8080/api/dermatologistAppointment/changeStatusToMissed/" +
-          appointment.AppointmentId
+        URL +
+          "/api/dermatologistAppointment/changeStatusToMissed/" +
+          appointment.AppointmentId,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
       )
       .then((res) => {
         setAppointment(null);
         localStorage.setItem(
           "PatientForDermatologistReport",
           JSON.stringify(null)
+        );
+      })
+      .catch((error) => {
+        alert(
+          "Appointment not start yet.\nYou can only set status missed for appointment which is started and not finished yet!"
         );
       });
   };

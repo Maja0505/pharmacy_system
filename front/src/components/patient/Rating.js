@@ -11,7 +11,8 @@ import {
     Grid,
     Button,
     Link,
-    TextField
+    TextField,
+    TableContainer
   } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import Dialog from '@material-ui/core/Dialog';
@@ -29,6 +30,7 @@ import FormControl from '@material-ui/core/FormControl';
 import FormLabel from '@material-ui/core/FormLabel';
 import Alert from "@material-ui/lab/Alert";
 import Snackbar from "@material-ui/core/Snackbar";
+import {URL} from '../other/components'
 
 
 
@@ -44,6 +46,9 @@ import Snackbar from "@material-ui/core/Snackbar";
     hederCell: {
       cursor: "pointer",
       color: "#ffffff",
+      position: "sticky",
+      top: 0,
+      background: "#4051bf",
     },
     icons: {
       cursor: "pointer",
@@ -79,7 +84,11 @@ const Rating = () => {
     const classes = useStyles();
     const [openAlertSuccess, setOpenAlertSuccess] = useState(false)
     const [alertTextSuccess, setAlertTextSuccess] = useState('')
-
+    const token = localStorage.getItem("token");
+    const userId = localStorage.getItem("userId");
+    const config = {
+      headers: { Authorization: `Bearer ${token}` }
+  };
     const handleClickOpenRatingDialog= (row) => {
         setSelectedRow(row)
         setOpenRatingDialog(true)
@@ -103,7 +112,7 @@ const Rating = () => {
             var staffDTO = {
                 id:0,
                 grade:radioValue,
-                patientId:1,
+                patientId:userId,
                 typeOfRating:selectedType,
                 staffId:selectedRow.id,
                 staffFirstName:selectedRow.firstName,
@@ -112,7 +121,7 @@ const Rating = () => {
 
 
             }
-            axios.post('http://localhost:8080/api/rating/staff',staffDTO)
+            axios.post(URL + '/api/rating/staff',staffDTO,config)
             .then((res)=> {
                 setAlertTextSuccess('Success set rating')
                 setOpenAlertSuccess(true)
@@ -127,12 +136,12 @@ const Rating = () => {
             var staffDTO = {
                 id:0,
                 grade:radioValue,
-                patientId:1,
+                patientId:userId,
                 typeOfRating:selectedType,
                 medicineId:selectedRow.medicineId,
                 medicineName:selectedRow.medicineName
             }
-            axios.post('http://localhost:8080/api/rating/medicine',staffDTO)
+            axios.post(URL + '/api/rating/medicine',staffDTO,config)
             .then((res)=> {
                 setAlertTextSuccess('Success set rating')
                 setOpenAlertSuccess(true)
@@ -147,12 +156,12 @@ const Rating = () => {
             var staffDTO = {
                 id:0,
                 grade:radioValue,
-                patientId:1,
+                patientId:userId,
                 typeOfRating:selectedType,
                 pharmacyId:selectedRow.id,
                 pharmacyName:selectedRow.pharmacyName
             }
-            axios.post('http://localhost:8080/api/rating/pharmacy',staffDTO)
+            axios.post(URL + '/api/rating/pharmacy',staffDTO,config)
             .then((res)=> {
                 setAlertTextSuccess('Success set rating')
                 setOpenAlertSuccess(true)
@@ -168,14 +177,14 @@ const Rating = () => {
 
     const HandleClickRatingType = (type) => {
         if(type == 'Dermatologist_rating'){
-            axios.get('http://localhost:8080/api/patient/1/dermatologist/expired')
+            axios.get(URL + '/api/patient/' + userId + '/dermatologist/expired',config)
             .then((res) => {
                 setStaffs(res.data)
             }).catch(error => {
               
             })
         }else if(type == 'Medicine_rating'){
-            axios.get('http://localhost:8080/api/patient/1/medicine')
+            axios.get(URL + '/api/patient/' + userId + '/medicine',config)
             .then((res) => {
                 setMedicines(res.data)
             }).catch(error => {
@@ -183,7 +192,7 @@ const Rating = () => {
             })
 
         }else if(type == 'Pharmacy_rating'){
-            axios.get('http://localhost:8080/api/patient/1/pharmacy')
+            axios.get(URL + '/api/patient/' + userId + '/pharmacy',config)
             .then((res) => {
                 setPharmacies(res.data)
             }).catch(error => {
@@ -191,7 +200,7 @@ const Rating = () => {
             })
 
         }else{
-            axios.get('http://localhost:8080/api/patient/1/pharmacist/expired')
+            axios.get(URL + '/api/patient/' + userId + '/pharmacist/expired',config)
             .then((res) => {
                 setStaffs(res.data)
             }).catch(error => {
@@ -241,10 +250,12 @@ const Rating = () => {
         <Grid container spacing={1} style={{marginTop:'10%'}}>
           <Grid item xs={2} />
           <Grid item xs={8}>
+          <TableContainer style={{ height: "450px", marginTop: "2%" }}>
             <Table>
               {TableHeaderForStaff}
               {TableContentForStaff}
             </Table>
+          </TableContainer>
           </Grid>
           <Grid item xs={2}></Grid>
         </Grid>
@@ -283,10 +294,12 @@ const Rating = () => {
         <Grid container spacing={1} style={{marginTop:'10%'}}>
           <Grid item xs={2} />
           <Grid item xs={8}>
+          <TableContainer style={{ height: "450px", marginTop: "2%" }}>
             <Table>
               {TableHeaderForMedicine}
               {TableContentForMedicine}
             </Table>
+            </TableContainer>
           </Grid>
           <Grid item xs={2}></Grid>
         </Grid>
@@ -328,10 +341,12 @@ const Rating = () => {
             <Grid container spacing={1} style={{marginTop:'10%'}}>
                 <Grid item xs={2} />
                 <Grid item xs={8}>
+                <TableContainer style={{ height: "450px", marginTop: "2%" }}>
                     <Table>
                     {TableHeaderPharmacy}
                     {TableContentPharmacy}
                     </Table>
+                  </TableContainer>
                 </Grid>
                 <Grid item xs={2}></Grid>
             </Grid>
