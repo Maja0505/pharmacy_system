@@ -22,6 +22,8 @@ import {
   import Alert from "@material-ui/lab/Alert";
   import Snackbar from "@material-ui/core/Snackbar";
   import {URL} from "../other/components"
+  import {Redirect} from "react-router-dom"
+
 
   
   const useStyles = makeStyles((theme) => ({
@@ -54,6 +56,8 @@ import {
     const [openAlertError, setOpenAlertError] = useState(false)
     const [openAlertSuccess, setOpenAlertSuccess] = useState(false)
     const [alertTextSuccess, setAlertTextSuccess] = useState('')
+    const [redirection,setRedirection] = useState(false)
+
     const token = localStorage.getItem("token");
     const userId = localStorage.getItem("userId");
     const config = {
@@ -82,6 +86,10 @@ import {
         .then((res) => {
           setRows(res.data);
           setCopyRows(res.data);
+        }).catch((error) => {
+          if(error.response.status === 401){
+            setRedirection(true)
+          }
         });
     }, []);
   
@@ -112,7 +120,11 @@ import {
           .then((res) => {
             setRows(res.data);
             setCopyRows(res.data);
-          });
+          }).catch((error) => {
+            if(error.response.status === 401){
+              setRedirection(true)
+            }
+          })
           setAlertTextSuccess('Success cancel reservation')
           setOpenAlertSuccess(true)
         }else{
@@ -121,6 +133,9 @@ import {
         }
       
       }).catch(error => {
+          if(error.response.status === 401){
+            setRedirection(true)
+          }
         setAlertTextError("You cant't cancel reservation");
         setOpenAlertError(true);
       })
@@ -194,6 +209,7 @@ import {
   
     return (
       <div>
+        {redirection === true && <Redirect to="/login"></Redirect>}
           {SearchPart}
         <Grid container spacing={1}>
           <Grid item xs={2} />

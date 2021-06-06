@@ -175,9 +175,11 @@ import setDate from "date-fns/setDate";
                   setRows(res.data);
                   setCopyRows(res.data);
                   handleClose()
-                }).catch(error => {
-
-                })
+                }).catch((error) => {
+                  if(error.response.status === 401){
+                    setRedirection(true)
+                  }
+                });
              
                 }else{
                   handleClose()
@@ -207,9 +209,11 @@ import setDate from "date-fns/setDate";
                   setOpenAlertError(true);
                 }
             }
-        ).catch(error => {
-
-        })
+        ).catch((error) => {
+          if(error.response.status === 401){
+            setRedirection(true)
+          }
+        });
     }
 
 
@@ -220,13 +224,19 @@ import setDate from "date-fns/setDate";
         .then((res) => {
           setRows(res.data);
           setCopyRows(res.data);
-        }).catch(error => {
-
-        })
+        }) .catch((error) => {
+          if(error.response.status === 401){
+            setRedirection(true)
+          }
+        });
       axios.get(URL + '/api/patient/' + userId +'/additionalInfo',config)
         .then((res)=> {
           setPenalty(res.data.penalty)
-        }) 
+        }).catch((error) => {
+          if(error.response.status === 401){
+            setRedirection(true)
+          }
+        }); 
     }, []);
 
     const handleClickOpen = () => {
@@ -237,17 +247,21 @@ import setDate from "date-fns/setDate";
           URL + "/api/medicine/all/short",config)
         .then((res) => {
           setMedicines(res.data)
-        }).catch(error => {
-
-        })
+        }) .catch((error) => {
+          if(error.response.status === 401){
+            setRedirection(true)
+          }
+        });
         axios
         .get(
           URL + "/api/pharmacy/all",config)
         .then((res) => {
             setPharmacies(res.data)
-        }).catch(error => {
-
-        })
+        }).catch((error) => {
+          if(error.response.status === 401){
+            setRedirection(true)
+          }
+        });
       }else{
         setAlertTextErrorPenalty("You can't reserve medicine because you have more than 3 penalties")
         setOpenAlertErrorPenalty(true)
@@ -397,7 +411,8 @@ import setDate from "date-fns/setDate";
   
     return (
       <div>
-      
+      {redirection === true && <Redirect to="/login"></Redirect>}
+
        <Fab color="primary" aria-label="add" onClick={handleClickOpen}  style={{marginTop:"2%", marginLeft:"50%"}}>
         <AddIcon />
       </Fab>

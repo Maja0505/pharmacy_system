@@ -1,4 +1,4 @@
-import React from 'react'
+import React,{useState} from 'react'
 import { TimePickerComponent, DatePickerComponent } from "@syncfusion/ej2-react-calendars";
 import { ComboBoxComponent } from '@syncfusion/ej2-react-dropdowns';
 import {
@@ -15,6 +15,8 @@ import {
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import axios from "axios";
+import {Redirect} from "react-router-dom"
+
 
 
 const useStyles = makeStyles((theme) => ({
@@ -42,6 +44,8 @@ const useStyles = makeStyles((theme) => ({
 const PharmacistsTableForSchedulePharmacistAppointment = ({pharmacists,setSelectedPharmacist}) => {
 
   const classes = useStyles();
+  const [redirection,setRedirection] = useState(false)
+
  
   const TableHeader = (
     <TableHead>

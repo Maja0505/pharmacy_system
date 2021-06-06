@@ -100,7 +100,11 @@ const AppointmentsHome = () => {
       axios.get(URL + '/api/patient/' + userId +'/additionalInfo',config)
         .then((res)=> {
           setPenalty(res.data.penalty)
-        }) 
+        }).catch((error) => {
+          if(error.response.status === 401){
+            setRedirection(true)
+          }
+        }); 
     }, []);
 
     const HandlePharmacistHistoryClickButton = () => {
@@ -229,7 +233,9 @@ const AppointmentsHome = () => {
 
     return (
       
-             <div style={{marginTop:"5%"}}>
+        <div style={{marginTop:"5%"}}>
+                {redirection === true && <Redirect to="/login"></Redirect>}
+
                 <Button  variant= {pharmacistHistory || pharmacistCreate || pharmacistReserved ? "outlined" : "contained"} size="large" color="primary"  onClick={handleClick}>
                 Pharmacist appointments
                 </Button>

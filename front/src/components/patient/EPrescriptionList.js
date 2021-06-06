@@ -89,6 +89,10 @@ const EPrescriptionList = () => {
         URL + "/api/patient/" + userId + "/ePrescription", config)
       .then((res) => {
         setRows(res.data);
+      }).catch((error) => {
+        if(error.response.status === 401){
+          setRedirection(true)
+        }
       });
   }, []);
 
@@ -100,7 +104,11 @@ const EPrescriptionList = () => {
             setOpenEPrescriptionItemListDialog(true)
             setSelectedEPrescription(ePrescription.id)
         }
-    )
+    ).catch((error) => {
+      if(error.response.status === 401){
+        setRedirection(true)
+      }
+    });
 };
 const handleClickCloseEPrescriptionItemDialog = () => {
     setOpenEPrescriptionItemListDialog(false);
@@ -135,6 +143,10 @@ const sortByDate = () => {
     ,config)
     .then((res) => {
       setRows(res.data);
+    }).catch((error) => {
+      if(error.response.status === 401){
+        setRedirection(true)
+      }
     });
 };
 
@@ -154,6 +166,10 @@ const sortByStatus = () => {
     ,config)
     .then((res) => {
       setRows(res.data);
+    }).catch((error) => {
+      if(error.response.status === 401){
+        setRedirection(true)
+      }
     });
 };
 
@@ -251,6 +267,7 @@ const sortByStatus = () => {
 
     return (
         <div>
+         {redirection === true && <Redirect to="/login"></Redirect>}
             <h3>E-Prescriptions</h3>
         <Grid container spacing={1}>
           <Grid item xs={2} />

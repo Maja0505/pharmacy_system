@@ -128,9 +128,11 @@ const Rating = () => {
                 setOpenAlertSuccess(true)
                 setRadioValue()
                 setOpenRatingDialog(false);
-            }).catch(error => {
-
-            })
+            }).catch((error) => {
+              if(error.response.status === 401){
+                setRedirection(true)
+              }
+            });
             
         }
         if(selectedType === 'Medicine_rating'){
@@ -148,9 +150,11 @@ const Rating = () => {
                 setOpenAlertSuccess(true)
                 setRadioValue()
                 setOpenRatingDialog(false);
-            }).catch(error => {
-              
-            })
+            }).catch((error) => {
+              if(error.response.status === 401){
+                setRedirection(true)
+              }
+            });
             
         }
         if(selectedType === 'Pharmacy_rating'){
@@ -168,9 +172,11 @@ const Rating = () => {
                 setOpenAlertSuccess(true)
                 setRadioValue()
                 setOpenRatingDialog(false);
-            }).catch(error => {
-              
-            })
+            }).catch((error) => {
+              if(error.response.status === 401){
+                setRedirection(true)
+              }
+            });
             
         }
     }
@@ -181,32 +187,40 @@ const Rating = () => {
             axios.get(URL + '/api/patient/' + userId + '/dermatologist/expired',config)
             .then((res) => {
                 setStaffs(res.data)
-            }).catch(error => {
-              
-            })
+            }).catch((error) => {
+              if(error.response.status === 401){
+                setRedirection(true)
+              }
+            });
         }else if(type == 'Medicine_rating'){
             axios.get(URL + '/api/patient/' + userId + '/medicine',config)
             .then((res) => {
                 setMedicines(res.data)
-            }).catch(error => {
-              
-            })
+            }).catch((error) => {
+              if(error.response.status === 401){
+                setRedirection(true)
+              }
+            });
 
         }else if(type == 'Pharmacy_rating'){
             axios.get(URL + '/api/patient/' + userId + '/pharmacy',config)
             .then((res) => {
                 setPharmacies(res.data)
-            }).catch(error => {
-              
-            })
+            }).catch((error) => {
+              if(error.response.status === 401){
+                setRedirection(true)
+              }
+            });
 
         }else{
             axios.get(URL + '/api/patient/' + userId + '/pharmacist/expired',config)
             .then((res) => {
                 setStaffs(res.data)
-            }).catch(error => {
-              
-            })
+            }).catch((error) => {
+              if(error.response.status === 401){
+                setRedirection(true)
+              }
+            });
 
         }
         setSelectedType(type)
@@ -421,6 +435,7 @@ const Rating = () => {
       )
     return (
         <div>
+          {redirection === true && <Redirect to="/login"></Redirect>}
             <h2>Rating form</h2>
             {CreateRatingDialog} 
             <ComboBoxComponent 

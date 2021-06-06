@@ -91,7 +91,11 @@ const HomePage = () => {
 
   
     const getUser = async () => {
-        const res = await axios.get(URL + '/api/patient/' + userId +'/additionalInfo',config)
+        const res = await axios.get(URL + '/api/patient/' + userId +'/additionalInfo',config).catch((error) => {
+            if(error.response.status === 401){
+              setRedirection(true)
+            }
+          });
         let patient = res.data
         setUser({id : patient.id,firstName : patient.firstName, lastName : patient.lastName, address : patient.address, phoneNumber : patient.phoneNumber, email : patient.email, patientPoints : patient.patientPoints, categoryOfPatient : patient.categoryOfPatient, allergies : patient.allergies, penalty : patient.penalty})
         setUserCopy({id : patient.id,firstName : patient.firstName, lastName : patient.lastName, address : patient.address, phoneNumber : patient.phoneNumber, email : patient.email, patientPoints : patient.patientPoints, categoryOfPatient : patient.categoryOfPatient, penalty : patient.penalty})
@@ -129,9 +133,11 @@ const HomePage = () => {
                 setOpenAlert(true)
 
             })
-            .catch((err) => {
-                console.log(err);
-            });
+            .catch((error) => {
+                if(error.response.status === 401){
+                  setRedirection(true)
+                }
+              });
             setEditState(false)
         }
       
@@ -195,6 +201,8 @@ const HomePage = () => {
     return (
     <>
     <div className={classes.root}>
+    {redirection === true && <Redirect to="/login"></Redirect>}
+
         <Paper className={classes.paper}>
             <h2 className={classes.h2}>PROFILE</h2>
             <Grid container spacing={1} >

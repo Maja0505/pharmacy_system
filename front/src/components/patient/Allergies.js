@@ -78,8 +78,10 @@ const Allergies = ({allergies,setAllergies,patientId}) => {
         axios.get(URL + '/api/medicine/all/short', config)
         .then((res)=>{
             setMedicines(res.data)
-        }).catch((err) => {
-            console.log(err);
+        }).catch((error) => {
+          if(error.response.status === 401){
+            setRedirection(true)
+          }
         });
        
     }
@@ -93,7 +95,11 @@ const Allergies = ({allergies,setAllergies,patientId}) => {
               setSelectedMedicine({})  
             }
           }
-        )
+        ).catch((error) => {
+          if(error.response.status === 401){
+            setRedirection(true)
+          }
+        });
       }
     }
 
@@ -108,7 +114,11 @@ const Allergies = ({allergies,setAllergies,patientId}) => {
               setSelectedMedicine({})  
             }
           }
-        )
+        ).catch((error) => {
+          if(error.response.status === 401){
+            setRedirection(true)
+          }
+        });
     }
 
     const TableHeader = (
@@ -140,6 +150,7 @@ const Allergies = ({allergies,setAllergies,patientId}) => {
 
     return (
         <div>
+            {redirection === true && <Redirect to="/login"></Redirect>}
             <Grid container spacing={1} >
                 <Grid container justify="center" >
                     <Grid  item xs={20}>

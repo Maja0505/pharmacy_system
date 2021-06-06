@@ -3,6 +3,7 @@ import Button from "@material-ui/core/Button";
 import { BrowserRouter as Router, Route, Switch,Link } from "react-router-dom";
 import Pharmacies from './Pharmacies'
 import SubscriptionPharmacy from './SubscriptionPharmacy'
+import {Redirect} from "react-router-dom"
 
 
 
@@ -12,6 +13,7 @@ const PharmacyHome = () => {
     const [followed,setFollowedButton] = useState(false)
     const userId = localStorage.getItem("userId");
 
+    const [redirection,setRedirection] = useState(false)
 
 
     const HandleAllClickButton = () => {

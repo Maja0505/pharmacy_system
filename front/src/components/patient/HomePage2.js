@@ -8,6 +8,7 @@ import appointments from "../../images/appointment.jpg"
 import ePrescription from "../../images/eprescription.png"
 import rating from "../../images/rating.jpg"
 import complaint from "../../images/complaint.png"
+import {Redirect} from "react-router-dom"
 
 
 
@@ -18,7 +19,7 @@ import background from "../../images/doctor.jpg";
 
 
 
-import React from 'react';
+import React,{useState} from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import ButtonBase from '@material-ui/core/ButtonBase';
 import Typography from '@material-ui/core/Typography';
@@ -135,6 +136,8 @@ const HomePage2 = () => {
 
     const classes = useStyles();
     let history = useHistory();
+    const [redirection,setRedirection] = useState(false)
+
     
     const HandleClickButton = (title) => {
 

@@ -5,6 +5,7 @@ import Pharmacies from './Pharmacies'
 import SubscriptionPharmacy from './SubscriptionPharmacy'
 import Medicines from "./Medicine";
 import MedicineReservations from './MedicineReservations'
+import {Redirect} from "react-router-dom"
 
 
 
@@ -12,6 +13,7 @@ const MedicineHome = () => {
 
     const [reservations,setReservation] = useState(false)
     const [MedicinesAll,setMedicines] = useState(true)
+    const [redirection,setRedirection] = useState(false)
 
 
     const HandleAllClickButton = () => {

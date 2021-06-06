@@ -19,6 +19,7 @@ import {
   import axios from "axios";
   import {Link} from "react-router-dom";
   import {URL} from "../other/components"
+  import {Redirect} from "react-router-dom"
 
 
   
@@ -46,7 +47,8 @@ import {
     const classes = useStyles();
   
     const [rows, setRows] = useState([]);
-  
+    const [redirection,setRedirection] = useState(false)
+
     const [copyRows, setCopyRows] = useState({});
   
     const token = localStorage.getItem("token");
@@ -66,6 +68,10 @@ import {
         .then((res) => {
           setRows(res.data);
           setCopyRows(res.data);
+        }).catch((error) => {
+          if(error.response.status === 401){
+            setRedirection(true)
+          }
         });
     }, []);
   
@@ -144,6 +150,7 @@ import {
   
     return (
       <div>
+        {redirection === true && <Redirect to="/login"></Redirect>}
         {SearchPart}
         <Grid container spacing={1}>
           <Grid item xs={2} />

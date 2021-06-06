@@ -117,6 +117,10 @@ import {Redirect} from "react-router-dom"
         .then((res) => {
           setRows(res.data);
           setCopyRows(res.data);
+        }).catch((error) => {
+          if(error.response.status === 401){
+            setRedirection(true)
+          }
         });
     }, []);
 
@@ -127,7 +131,11 @@ import {Redirect} from "react-router-dom"
                 setPharmacy(res.data)
                 setOpenPharmacyDialog(true)
             }
-        )
+        ).catch((error) => {
+          if(error.response.status === 401){
+            setRedirection(true)
+          }
+        });
     };
     const handleClosePharmacyDialog = () => {
         setOpenPharmacyDialog(false);
@@ -140,7 +148,11 @@ import {Redirect} from "react-router-dom"
                 setDermatologist(res.data)
                 setOpenDermatologistDialog(true)
             }
-        )
+        ).catch((error) => {
+          if(error.response.status === 401){
+            setRedirection(true)
+          }
+        });
     };
     const handleCloseDermatologistDialog = () => {
         setOpenDermatologistDialog(false);
@@ -187,6 +199,10 @@ import {Redirect} from "react-router-dom"
         ,config)
         .then((res) => {
           setRows(res.data);
+        }).catch((error) => {
+          if(error.response.status === 401){
+            setRedirection(true)
+          }
         });
   };
 
@@ -207,6 +223,10 @@ import {Redirect} from "react-router-dom"
       ,config)
       .then((res) => {
         setRows(res.data);
+      }).catch((error) => {
+        if(error.response.status === 401){
+          setRedirection(true)
+        }
       });
 };
 
@@ -227,6 +247,10 @@ const sortByPrice = () => {
     ,config)
     .then((res) => {
       setRows(res.data);
+    }).catch((error) => {
+      if(error.response.status === 401){
+        setRedirection(true)
+      }
     });
 };
   
@@ -376,6 +400,7 @@ const sortByPrice = () => {
     )
     return (
       <div>
+        {redirection === true && <Redirect to="/login"></Redirect>}
         <Grid container spacing={1}>
           <Grid item xs={2} />
           <Grid item xs={8}>

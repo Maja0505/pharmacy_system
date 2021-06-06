@@ -17,6 +17,8 @@ import EPrescriptionList from './EPrescriptionList'
 import SubscriptionPharmacy from './SubscriptionPharmacy'
 import Rating from './Rating'
 import Complaint from './Complaint'
+import {Redirect} from "react-router-dom"
+
 
 import { BrowserRouter as Router, Route, Link } from "react-router-dom";
 

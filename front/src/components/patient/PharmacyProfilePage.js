@@ -132,7 +132,11 @@ import {Redirect} from "react-router-dom"
         axios.get(URL + '/api/patient/' + userId +'/additionalInfo',config)
         .then((res)=> {
           setPenalty(res.data.penalty)
-        }) 
+        }).catch((error) => {
+          if(error.response.status === 401){
+            setRedirection(true)
+          }
+        }); 
     }, []);
 
     const handleCloseAlertErrorPenalty = (event, reason) => {
@@ -173,6 +177,10 @@ import {Redirect} from "react-router-dom"
              setOpenAlertInfo(true)
           }
           
+        }).catch((error) => {
+          if(error.response.status === 401){
+            setRedirection(true)
+          }
         });
       }else{
         setDermatologistAppointmentPart(false)
@@ -196,6 +204,10 @@ import {Redirect} from "react-router-dom"
           } else {
             setHaveNextPage(false);
           }
+        }).catch((error) => {
+          if(error.response.status === 401){
+            setRedirection(true)
+          }
         });
     };
   
@@ -211,6 +223,10 @@ import {Redirect} from "react-router-dom"
           if (res.data.length > 0) {
             setCurrPage(currPage - 1);
             setRows(res.data);
+          }
+        }).catch((error) => {
+          if(error.response.status === 401){
+            setRedirection(true)
           }
         });
     };
@@ -230,7 +246,15 @@ import {Redirect} from "react-router-dom"
             setDermatologistAppointmentPart(true)
             setAlertTextSuccess("Success reservation")
             setOpenAlertSuccess(true)
+          }).catch((error) => {
+            if(error.response.status === 401){
+              setRedirection(true)
+            }
           });
+        }).catch((error) => {
+          if(error.response.status === 401){
+            setRedirection(true)
+          }
         });
       }else{
         setAlertTextErrorPenalty("You can't reserve medicine because you have more than 3 penalties")
@@ -311,6 +335,7 @@ import {Redirect} from "react-router-dom"
     return (
 
       <div>
+      {redirection === true && <Redirect to="/login"></Redirect>}
         <h2>{pharmacy.pharmacyName}</h2>
        
         <Grid container>

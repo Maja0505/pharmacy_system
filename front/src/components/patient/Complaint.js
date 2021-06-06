@@ -102,18 +102,30 @@ const Complaint = () => {
             axios.get(URL + '/api/patient/' + userId +  '/dermatologist/expired',config)
             .then((res) => {
                 setStaffs(res.data)
-            })
+            }).catch((error) => {
+              if(error.response.status === 401){
+                setRedirection(true)
+              }
+            });
         }else if(type == 'Pharmacy_complaint'){
             axios.get(URL + '/api/patient/' + userId + '/pharmacy',config)
             .then((res) => {
                 setPharmacies(res.data)
-            })
+            }).catch((error) => {
+              if(error.response.status === 401){
+                setRedirection(true)
+              }
+            });
 
         }else{
             axios.get(URL + '/api/patient/' + userId + '/pharmacist/expired',config)
             .then((res) => {
                 setStaffs(res.data)
-            })
+            }).catch((error) => {
+              if(error.response.status === 401){
+                setRedirection(true)
+              }
+            });
 
         }
         setSelectedType(type)
@@ -327,6 +339,7 @@ const Complaint = () => {
       )
     return (
         <div>
+            {redirection === true && <Redirect to="/login"></Redirect>}
             <h2>Complaint</h2>
             {CreateComplaintDialog} 
             <ComboBoxComponent 

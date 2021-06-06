@@ -163,6 +163,10 @@ import {Redirect} from "react-router-dom"
         .then((res) => {
           setRows(res.data);
           setCopyRows(res.data);
+        }).catch((error) => {
+          if(error.response.status === 401){
+            setRedirection(true)
+          }
         });
     }, []);
 
@@ -200,6 +204,10 @@ import {Redirect} from "react-router-dom"
           ,config)
           .then((res) => {
             setRows(res.data);
+          }).catch((error) => {
+            if(error.response.status === 401){
+              setRedirection(true)
+            }
           });
     };
 
@@ -220,6 +228,10 @@ import {Redirect} from "react-router-dom"
         ,config)
         .then((res) => {
           setRows(res.data);
+        }).catch((error) => {
+          if(error.response.status === 401){
+            setRedirection(true)
+          }
         });
     };
   
@@ -240,6 +252,10 @@ import {Redirect} from "react-router-dom"
         )
         .then((res) => {
           setRows(res.data);
+        }).catch((error) => {
+          if(error.response.status === 401){
+            setRedirection(true)
+          }
         });
     };
   
@@ -325,7 +341,11 @@ import {Redirect} from "react-router-dom"
               setFilterAndSearch(true)
 
             }
-          )
+          ).catch((error) => {
+            if(error.response.status === 401){
+              setRedirection(true)
+            }
+          });
       }else{
         setRows(copyRows)
       }
@@ -408,9 +428,11 @@ import {Redirect} from "react-router-dom"
           setOpenFilterDialog(false);
           setFilterAndSearch(true)
 
-        }).catch(error => {
-          console.log(error)
-        })
+        }).catch((error) => {
+          if(error.response.status === 401){
+            setRedirection(true)
+          }
+        });
       }
      
 
@@ -559,6 +581,7 @@ import {Redirect} from "react-router-dom"
   
     return (
       <div>
+        {redirection === true && <Redirect to="/login"></Redirect>}
         <h3>All pharmacies</h3>
         {SearchPart}
         <Grid container spacing={1}>

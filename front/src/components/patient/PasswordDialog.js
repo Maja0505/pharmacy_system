@@ -46,9 +46,10 @@ const PasswordDialog = ({openDialog,id,setOpenAlert,setOpenDialog,setAlertText})
             setAlertText('Success change passowrd!')
             setOpenAlert(true)
             setOpenDialog(false)
-        })
-        .catch((err) => {
-            console.log(err);
+        }).catch((error) => {
+            if(error.response.status === 401){
+              setRedirection(true)
+            }
             setError('wrong current or confirmed password')
         });
     }
@@ -57,6 +58,8 @@ const PasswordDialog = ({openDialog,id,setOpenAlert,setOpenDialog,setAlertText})
 
     return (
         <div>
+      {redirection === true && <Redirect to="/login"></Redirect>}
+
      <Dialog       //Dialog za promenu lozinke
         onClose={closeDialog}
         aria-labelledby="customized-dialog-title"

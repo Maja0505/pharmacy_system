@@ -22,6 +22,7 @@ import PharmacistsTableForSchedulePharmacistAppointment from './PharmacistsTable
 import axios from "axios";
 import Pharmacies from './Pharmacies';
 import {URL} from "../other/components"
+import {Redirect} from "react-router-dom"
 
 
 
@@ -58,6 +59,7 @@ const useStyles = makeStyles((theme) => ({
 
 export default function Checkout() {
   const steps = ['Choose date for schedule', 'Choose pharmacy for appointment', 'Review your order'];
+  const [redirection,setRedirection] = useState(false)
 
   const classes = useStyles();
   const [activeStep, setActiveStep] = React.useState(0);
@@ -202,6 +204,9 @@ export default function Checkout() {
           }
         
         }).catch(error => {
+            if(error.response.status === 401){
+              setRedirection(true)
+            }
           setAlertTextError('There are no available pharmacists in selected time');
           setOpenAlertError(true);
         })
@@ -227,8 +232,10 @@ export default function Checkout() {
             setPharmacists(res.data)
           }
           
-        }).catch(error => {
-         
+        }) .catch((error) => {
+          if(error.response.status === 401){
+            setRedirection(true)
+          }
         });
   }
 
@@ -252,6 +259,9 @@ export default function Checkout() {
       setSelectedPharmacist()
       setSelectedPharmacy()
     }).catch(error => {
+      if(error.response.status === 401){
+          setRedirection(true)
+        }
       setAlertTextError('PENALIIIIIIII')
       setOpenAlertError(true)
     }
@@ -272,6 +282,8 @@ export default function Checkout() {
   }
   return (
     <React.Fragment>
+      {redirection === true && <Redirect to="/login"></Redirect>}
+
       <CssBaseline />
       <main className={classes.layout}>
        

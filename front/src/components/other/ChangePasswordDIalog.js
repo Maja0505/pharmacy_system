@@ -8,11 +8,13 @@ import DialogActions from "@material-ui/core/DialogActions";
 import axios from "axios";
 import { URL } from "./components";
 import { REACT_URL } from "./components";
+import {Redirect} from "react-router-dom"
+
 
 const ChangePasswordDIalog = ({ openDialog, setOpenDialog, state, role }) => {
   const token = localStorage.getItem("token");
   const userId = localStorage.getItem("userId");
-
+  const [redirection,setRedirection] = useState(false)
   const [newPassword, setNewPassword] = useState("");
   const [confirmedNewPassword, setConfirmedNewPassword] = useState("");
   const [error, setError] = useState("");
@@ -46,14 +48,18 @@ const ChangePasswordDIalog = ({ openDialog, setOpenDialog, state, role }) => {
         } else {
           window.location.href = REACT_URL + "/login";
         }
-      })
-      .catch((err) => {
+      }).catch((error) => {
+          if(error.response.status === 401){
+            setRedirection(true)
+          }
         setError("New pasword is empty or confirmed password is wrong");
       });
   };
 
   return (
     <>
+      {redirection === true && <Redirect to="/login"></Redirect>}
+
       {openDialog !== undefined && (
         <Dialog
           onClose={closeDialog}

@@ -19,6 +19,7 @@ import {
 import { makeStyles } from "@material-ui/core/styles";
 import axios from "axios";
 import {URL} from "../other/components"
+import {Redirect} from "react-router-dom"
 
 
 const useStyles = makeStyles((theme) => ({
@@ -49,6 +50,8 @@ const SubscriptionPharmacy = () => {
   const [rows,setRows] = useState([]);
   const token = localStorage.getItem("token");
   const userId = localStorage.getItem("userId");
+  const [redirection,setRedirection] = useState(false)
+
   const config = {
     headers: { Authorization: `Bearer ${token}` }
 };
@@ -60,8 +63,10 @@ const SubscriptionPharmacy = () => {
       ,config)
       .then((res) => {
         setRows(res.data);
-      }).catch(error => {
-
+      }).catch((error) => {
+        if(error.response.status === 401){
+          setRedirection(true)
+        }
       });
   }, []);
  
@@ -105,6 +110,7 @@ const SubscriptionPharmacy = () => {
 
     return (
         <div>
+        {redirection === true && <Redirect to="/login"></Redirect>}
         <h3>Followed pharmacies</h3>
         <Grid container spacing={1}>
           <Grid item xs={2} />
