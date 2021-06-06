@@ -91,7 +91,7 @@ const HomePage = () => {
 
   
     const getUser = async () => {
-        const res = await axios.get(URL + '/api/patient/' + userId +'/additionalInfo',config).catch((error) => {
+        const res = await axios.get(URL + '/api/patient/' + userId +'/additionalInfo',config).then((res)=>{}).catch((error) => {
             if(error.response.status === 401){
               setRedirection(true)
             }
