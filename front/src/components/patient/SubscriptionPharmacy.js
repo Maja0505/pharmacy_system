@@ -105,6 +105,7 @@ const SubscriptionPharmacy = () => {
 
     return (
         <div>
+        <h3>Followed pharmacies</h3>
         <Grid container spacing={1}>
           <Grid item xs={2} />
           <Grid item xs={8}>

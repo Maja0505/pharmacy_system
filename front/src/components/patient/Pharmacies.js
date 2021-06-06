@@ -33,7 +33,6 @@ import FormLabel from '@material-ui/core/FormLabel';
 import FormGroup from '@material-ui/core/FormGroup';
 import FormHelperText from '@material-ui/core/FormHelperText';
 import Checkbox from '@material-ui/core/Checkbox';
-import {Link} from "react-router-dom";
 import {URL} from "../other/components"
 
   
@@ -82,6 +81,7 @@ import {URL} from "../other/components"
     const [filterList, setFilterList] = useState([]);
   
     const [copyRows, setCopyRows] = useState({});
+    const [resetFilterAndSearch, setFilterAndSearch] = useState(false)
   
     const token = localStorage.getItem("token");
     const userId = localStorage.getItem("userId");
@@ -317,11 +317,13 @@ import {URL} from "../other/components"
           listForSearch = filterList
         }
 
-          axios.put("http://localhost:8080/api/pharmacy/search/" + searchValue,listForSearch)
+          axios.put(URL + "/api/pharmacy/search/" + searchValue,listForSearch)
           .then(
             (res) => {
               setRows(res.data)
               setSearchList(res.data)
+              setFilterAndSearch(true)
+
             }
           )
       }else{
@@ -396,7 +398,7 @@ import {URL} from "../other/components"
           pharmacyDTOS: listForFilter
         }
   
-        axios.put("http://localhost:8080/api/pharmacy/filter",filterDTO)
+        axios.put(URL + "/api/pharmacy/filter",filterDTO)
         .then((res) => {
           setRows(res.data)
           setFilterList(res.data)
@@ -404,6 +406,7 @@ import {URL} from "../other/components"
           setCopyStateDermatologistAppointmentPerHour(stateDermatologistAppointmentPerHour)
           setStateCopyPharmaciesAppointmentPerHour(statePharmaciesAppointmentPerHour)
           setOpenFilterDialog(false);
+          setFilterAndSearch(true)
 
         }).catch(error => {
           console.log('greska')
@@ -423,6 +426,8 @@ import {URL} from "../other/components"
       setCopyStateDermatologistAppointmentPerHour({ lessThen10D: false,lessThen20D: false,lessThen30D: false,lessThen40D: false,moreThen40D: false})
       setSearchValue("")
       setRows(copyRows)
+      setFilterAndSearch(false)
+
     }
 
     const CreateFilterDialog = (
@@ -440,7 +445,7 @@ import {URL} from "../other/components"
                   <FormGroup>
                     <FormControlLabel
                       control={<Checkbox checked={one} onChange={handleChangeRating} name="one" />}
-                      label="1-2"
+                      label="0-2"
                     />
                     <FormControlLabel
                       control={<Checkbox checked={two} onChange={handleChangeRating} name="two" />}
@@ -532,6 +537,8 @@ import {URL} from "../other/components"
       <Grid container spacing={1} className={classes.table}>
         <Grid item xs={2} />
         <Grid item xs={8} style={{ margin: "auto", textAlign: "right" }}>
+        {resetFilterAndSearch && <Button style={{backgroundColor:"red", marginRight:"auto"}} onClick={handleClickReset}>Reset</Button>}
+
         <Button  style={{backgroundColor:"gray",marginLeft:"3%"}}  onClick={handleClickOpenFilterDialog}>Filter</Button>
           <TextField
             id="outlined-search"
@@ -552,6 +559,7 @@ import {URL} from "../other/components"
   
     return (
       <div>
+        <h3>All pharmacies</h3>
         {SearchPart}
         <Grid container spacing={1}>
           <Grid item xs={2} />
@@ -565,34 +573,6 @@ import {URL} from "../other/components"
           </Grid>
           <Grid item xs={2}></Grid>
         </Grid>
-        <Grid container spacing={1} className={classes.table}>
-          <Grid item xs={2} />
-          <Grid item xs={8} container spacing={1}>
-            <Grid item xs={2}>
-              {currPage > 1 && (
-                <NavigateBefore
-                  className={classes.icons}
-                  fontSize="large"
-                  onClick={beforePage}
-                />
-              )}
-            </Grid>
-            <Grid item xs={8}>
-              Current Page {currPage}
-            </Grid>
-            <Grid item xs={2}>
-              {haveNextPage && (
-                <NavigateNext
-                  className={classes.icons}
-                  fontSize="large"
-                  onClick={nextPage}
-                />
-              )}
-            </Grid>
-          </Grid>
-          <Grid item xs={2} />
-        </Grid>
-        <Button style={{backgroundColor:"red"}} onClick={handleClickReset}>Reset</Button>
         {CreateFilterDialog}
       </div>
     );

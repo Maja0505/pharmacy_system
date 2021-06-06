@@ -96,7 +96,7 @@ public class PharmacyService implements IPharmacyService {
 	}
 
 	private Boolean checkFilterForRating(PharmacyDTO pharmacyDTO,FilteringPharmacyDTO filteringPharmacyDTO){
-		return (pharmacyDTO.getPharmacyAverageRating() >= 1 && pharmacyDTO.getPharmacyAverageRating() <= 2 && filteringPharmacyDTO.getFilterListForRating().get(0))
+		return (pharmacyDTO.getPharmacyAverageRating() >= 0 && pharmacyDTO.getPharmacyAverageRating() <= 2 && filteringPharmacyDTO.getFilterListForRating().get(0))
 				|| (pharmacyDTO.getPharmacyAverageRating() >= 2  && pharmacyDTO.getPharmacyAverageRating() <= 3 && filteringPharmacyDTO.getFilterListForRating().get(1))
 				|| (pharmacyDTO.getPharmacyAverageRating() >= 3  && pharmacyDTO.getPharmacyAverageRating() <= 4 && filteringPharmacyDTO.getFilterListForRating().get(2))
 				|| (pharmacyDTO.getPharmacyAverageRating() >= 4  && pharmacyDTO.getPharmacyAverageRating() <= 5 && filteringPharmacyDTO.getFilterListForRating().get(3));

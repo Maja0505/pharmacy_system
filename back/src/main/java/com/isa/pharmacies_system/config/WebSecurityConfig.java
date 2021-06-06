@@ -84,6 +84,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 				.antMatchers("/api/pharmacy/all").permitAll()
 				.antMatchers("/api/medicine/all").permitAll()
 
+				.antMatchers("/api/pharmacy/search/*").permitAll()
+				.antMatchers("/api/pharmacy/filter").permitAll()
+				.antMatchers("/api/pharmacy/sortByCity/*").permitAll()
+				.antMatchers("/api/pharmacy/sortByRating/*").permitAll()
+				.antMatchers("/api/pharmacy/sortByName/*").permitAll()
+
+
 				.antMatchers("/auth/confirm_account/*").permitAll()
 				.antMatchers("/h2-console/**").permitAll()
 				.antMatchers("/api/foo").permitAll()
@@ -113,7 +120,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	@Override
 	public void configure(WebSecurity web) throws Exception {
 		// TokenAuthenticationFilter will ignore everything under the listed path
-		web.ignoring().antMatchers(HttpMethod.PUT, "/auth/confirm_account/*");
+		web.ignoring().antMatchers(HttpMethod.PUT, "/auth/confirm_account/*","/api/pharmacy/sortByCity/*","/api/pharmacy/sortByRating/*","/api/pharmacy/sortByName/*","/api/pharmacy/filter","/api/pharmacy/search/*");
 		web.ignoring().antMatchers(HttpMethod.POST, "/auth/login","/auth/signup");
 		web.ignoring().antMatchers(HttpMethod.GET, "/", "/webjars/**", "/*.html", "/favicon.ico", "/**/*.html",
 				"/**/*.css", "/**/*.js","/api/pharmacy/all","/api/medicine/all");

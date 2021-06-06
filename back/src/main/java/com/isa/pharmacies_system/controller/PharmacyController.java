@@ -75,7 +75,6 @@ public class PharmacyController {
 		}
 	}
 
-	@PreAuthorize("hasRole('ROLE_PATIENT')")
 	@PutMapping(value = "/sortByName/{asc}",consumes = "application/json")
 	public ResponseEntity<List<PharmacyDTO>> getSortedPharmacyByName(@RequestBody List<PharmacyDTO> pharmacies, @PathVariable String asc){
 		try {
@@ -90,7 +89,6 @@ public class PharmacyController {
 
 	}
 
-	@PreAuthorize("hasRole('ROLE_PATIENT')")
 	@PutMapping(value = "/sortByRating/{asc}",consumes = "application/json")
 	public ResponseEntity<List<PharmacyDTO>> getSortedPharmacyByRating(@RequestBody List<PharmacyDTO> pharmacies, @PathVariable String asc){
 		try {
@@ -123,7 +121,6 @@ public class PharmacyController {
 		}
 	}
 
-	@PreAuthorize("hasRole('ROLE_PATIENT')")
 	@PutMapping(value = "/sortByCity/{asc}",consumes = "application/json")
 	public ResponseEntity<List<PharmacyDTO>> getSortedPharmacyByCity(@RequestBody List<PharmacyDTO> pharmacies, @PathVariable String asc){
 		try {
