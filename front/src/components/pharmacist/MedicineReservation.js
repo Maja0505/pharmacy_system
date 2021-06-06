@@ -3,18 +3,16 @@ import {
   Card,
   CardContent,
   Typography,
-  Snackbar,
   Button,
   TextField,
 } from "@material-ui/core";
 
 import { makeStyles } from "@material-ui/core/styles";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 import axios from "axios";
-import {URL} from "../other/components"
-
+import { URL, REACT_URL } from "../other/components";
 
 const useStyles = makeStyles({
   cart: {
@@ -31,12 +29,24 @@ const useStyles = makeStyles({
 const MedicineReservation = () => {
   const token = localStorage.getItem("token");
   const userId = localStorage.getItem("userId");
-  const pharamcyId = localStorage.getItem("pharmacyId");
+  const [pharamcyId, setPharmacyId] = useState();
 
   const classes = useStyles();
   const [medicineReservationId, setMedicineReservationId] = useState("");
   const [haveReservation, setHaveReservation] = useState(null);
   const [medicineReservation, setMedicineReservation] = useState({});
+
+  useEffect(() => {
+    axios
+      .get(URL + "/api/pharmacist/getPharmacyId/" + userId, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .then((res) => {
+        setPharmacyId(res.data);
+      });
+  }, []);
 
   const changeMedicineReservationId = (text) => {
     setMedicineReservationId(text);
@@ -45,7 +55,8 @@ const MedicineReservation = () => {
   const searchReservation = () => {
     axios
       .get(
-        URL + "/api/medicineReservation/get/" +
+        URL +
+          "/api/medicineReservation/get/" +
           medicineReservationId +
           "/" +
           pharamcyId,
@@ -67,8 +78,7 @@ const MedicineReservation = () => {
   const changeStatusOfReservation = () => {
     axios
       .put(
-        URL + "/api/medicineReservation/finish/" +
-          medicineReservationId,
+        URL + "/api/medicineReservation/finish/" + medicineReservationId,
         {},
         {
           headers: {
