@@ -1,6 +1,6 @@
 package com.isa.pharmacies_system.domain.medicine;
 
-import java.time.Instant;
+import java.time.LocalDateTime;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -26,10 +26,10 @@ public class MedicinePrice {
 	private long id;
 	
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm")
-	private Instant medicinePriceStartTime;
+	private LocalDateTime medicinePriceStartTime;
 	
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm")
-	private Instant medicnePriceEndTime;
+	private LocalDateTime medicnePriceEndTime;
 	
 	@Column(name="medicinePrice", unique=false, nullable=false)
 	private double medicinePrice;
@@ -47,7 +47,7 @@ public class MedicinePrice {
 		
 	}
 	
-	public MedicinePrice(long id, Instant medicinePriceStartTime, Instant medicnePriceEndTime, double medicinePrice,
+	public MedicinePrice(long id, LocalDateTime medicinePriceStartTime, LocalDateTime medicnePriceEndTime, double medicinePrice,
 			Medicine medicineWithPrices, PriceList priceListForMedicine) {
 		super();
 		this.id = id;
@@ -69,22 +69,22 @@ public class MedicinePrice {
 	}
 
 
-	public Instant getMedicinePriceStartTime() {
+	public LocalDateTime getMedicinePriceStartTime() {
 		return medicinePriceStartTime;
 	}
 
 
-	public void setMedicinePriceStartTime(Instant medicinePriceStartTime) {
+	public void setMedicinePriceStartTime(LocalDateTime medicinePriceStartTime) {
 		this.medicinePriceStartTime = medicinePriceStartTime;
 	}
 
 
-	public Instant getMedicnePriceEndTime() {
+	public LocalDateTime getMedicnePriceEndTime() {
 		return medicnePriceEndTime;
 	}
 
 
-	public void setMedicnePriceEndTime(Instant medicnePriceEndTime) {
+	public void setMedicnePriceEndTime(LocalDateTime medicnePriceEndTime) {
 		this.medicnePriceEndTime = medicnePriceEndTime;
 	}
 

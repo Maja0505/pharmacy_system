@@ -1,5 +1,6 @@
 package com.isa.pharmacies_system.service;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -8,12 +9,19 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.isa.pharmacies_system.DTO.MedicineNewDTO;
+import com.isa.pharmacies_system.DTO.MedicineReviewDTO;
+import com.isa.pharmacies_system.DTO.PharmacyForMedicineDTO;
 import com.isa.pharmacies_system.converter.MedicineConverter;
 import com.isa.pharmacies_system.domain.medicine.Medicine;
 import com.isa.pharmacies_system.domain.medicine.MedicineInfo;
+import com.isa.pharmacies_system.domain.medicine.MedicinePrice;
+import com.isa.pharmacies_system.domain.pharmacy.Pharmacy;
 import com.isa.pharmacies_system.repository.IMedicineInfoRepository;
 import com.isa.pharmacies_system.repository.IMedicineRepository;
 import com.isa.pharmacies_system.service.iService.IMedicineService;
+import com.isa.pharmacies_system.service.iService.IPharmacyService;
+import com.isa.pharmacies_system.service.iService.IPharmacyStorageService;
+import com.isa.pharmacies_system.service.iService.IPriceListService;
 
 @Service
 public class MedicineService implements IMedicineService {
@@ -21,12 +29,18 @@ public class MedicineService implements IMedicineService {
     private IMedicineRepository medicineRepository;
     private IMedicineInfoRepository iMedicineInfoRepository;
     private MedicineConverter medicineConverter;
+    private IPharmacyService iPharmacyService;
+    private IPharmacyStorageService iPharmacyStorageService;
+    private IPriceListService iPriceListService;
     
     @Autowired
-    public MedicineService(IMedicineRepository medicineRepository, IMedicineInfoRepository iMedicineInfoRepository) {
+    public MedicineService(IMedicineRepository medicineRepository, IMedicineInfoRepository iMedicineInfoRepository,IPharmacyService iPharmacyService,IPharmacyStorageService iPharmacyStorageService, IPriceListService iPriceListService) {
         this.medicineRepository = medicineRepository;
         this.iMedicineInfoRepository = iMedicineInfoRepository;
         this.medicineConverter = new MedicineConverter();
+        this.iPharmacyService = iPharmacyService;
+        this.iPharmacyStorageService = iPharmacyStorageService;
+        this.iPriceListService = iPriceListService;
     }
     
     @Override
@@ -46,7 +60,29 @@ public class MedicineService implements IMedicineService {
 		iMedicineInfoRepository.save((MedicineInfo) medicine);
 		return medicineRepository.save(medicine);
 	}
+	
+	@Override
+	public List<MedicineReviewDTO> getMedicinesAndPharmacyWithMedicines(){
+		List<MedicineReviewDTO> medicinesAndPharmacyWithMedicines = new ArrayList<MedicineReviewDTO>();
+		for (Medicine medicineIt : getAll()) {
+			MedicineReviewDTO medicine = new MedicineReviewDTO(medicineIt.getMedicineName(),medicineIt.getTypeOfMedicine(),medicineIt.getMedicineAverageRating());
+			medicine.setPharmacyWithMedicine(getPharmaciesWithMedicine(medicineIt));
+			medicinesAndPharmacyWithMedicines.add(medicine);
+		}
+		return medicinesAndPharmacyWithMedicines;
+	}
 
+	private List<PharmacyForMedicineDTO> getPharmaciesWithMedicine(Medicine medicineIt) {
+		List<PharmacyForMedicineDTO> pharmaciesForMedicine = new ArrayList<PharmacyForMedicineDTO>();
+		for (Pharmacy pharmacyIt : iPharmacyService.getAll()) {
+			MedicinePrice medicinePrice = iPriceListService.getPriceForMedicineInPharmacy(medicineIt, pharmacyIt);
+			if (iPharmacyStorageService.checkMedicineHaveInPharmacy(pharmacyIt, medicineIt) && medicinePrice!=null) {
+				pharmaciesForMedicine.add(new PharmacyForMedicineDTO(pharmacyIt.getPharmacyName(), medicinePrice.getMedicinePrice()));
+			}
+		}
+		return pharmaciesForMedicine;
+	}
+	
 	private Set<MedicineInfo> getSetAlternativeMedicines(MedicineNewDTO medicineNewDTO) throws Exception {
 		Set<MedicineInfo> medicines = new HashSet<MedicineInfo>();
 		for (String medicneNameIt : medicineNewDTO.getNamesOfAlternativeMedicines()) {
@@ -66,5 +102,10 @@ public class MedicineService implements IMedicineService {
 			if (medicineIt.getMedicineName().toUpperCase().equals(name.toUpperCase())) return medicineIt;
 		}
 		return null;
+	}
+
+	@Override
+	public MedicineInfo getMedicineInfoByMedicineName(String medicineName) {
+		return (MedicineInfo) getAll().stream().filter(medicine -> medicine.getMedicineName().equals(medicineName)).findFirst().orElse(null);
 	}
 }

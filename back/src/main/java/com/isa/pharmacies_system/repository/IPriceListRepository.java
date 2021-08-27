@@ -10,5 +10,5 @@ public interface IPriceListRepository extends JpaRepository<PriceList, Long> {
 
     //#1
     @Query("select new com.isa.pharmacies_system.DTO.PriceListForAppointmentDTO(p.dermatologistAppointmentPricePerHour,p.pharmacistAppointmentPricePerHour) from PriceList p where p.pharmacy.id = ?1")
-     PriceListForAppointmentDTO getPriceListForAppointmentByPharmacyId(Long pharmacyId);
+    PriceListForAppointmentDTO getPriceListForAppointmentByPharmacyId(Long pharmacyId);
 }

@@ -13,7 +13,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import com.isa.pharmacies_system.DTO.MedicineNewDTO;
+import com.isa.pharmacies_system.DTO.MedicineReviewDTO;
 import com.isa.pharmacies_system.domain.medicine.Medicine;
+import com.isa.pharmacies_system.domain.medicine.MedicineInfo;
 import com.isa.pharmacies_system.service.iService.IMedicineService;
 
 @Controller
@@ -54,6 +56,17 @@ public class MedicineController {
 	public ResponseEntity<List<MedicineNewDTO>> getAllMedicines() {
 		return new ResponseEntity<>(medicineConverter.convertMedicinesToMedicineNewDTOS(medicineService.getAll()), HttpStatus.OK);
 	}
+	
+	@GetMapping(value = "/getAll")
+	public ResponseEntity<List<MedicineReviewDTO>> getAllMedicinesWithPharmaciesAndPrices() {
+		return new ResponseEntity<>(medicineService.getMedicinesAndPharmacyWithMedicines(), HttpStatus.OK);
+	}
+	
+	@GetMapping(value = "/medicineInfo/{medicineName}")
+	public ResponseEntity<MedicineInfo> getMedicineInfoByMedicineName(@PathVariable String medicineName) {
+		return new ResponseEntity<>(medicineService.getMedicineInfoByMedicineName(medicineName), HttpStatus.OK);
+	}
+
 
 	@PreAuthorize("hasRole('ROLE_PATIENT')")
 	@GetMapping(value = "/all/short")

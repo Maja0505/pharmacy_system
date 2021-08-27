@@ -1,17 +1,21 @@
 package com.isa.pharmacies_system.service;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashSet;
+import java.util.List;
 import java.util.stream.Collectors;
 
-import com.isa.pharmacies_system.DTO.*;
-import com.isa.pharmacies_system.domain.user.Pharmacist;
-import com.isa.pharmacies_system.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
+import com.isa.pharmacies_system.DTO.FilteringPharmacyDTO;
+import com.isa.pharmacies_system.DTO.PharmacistAppointmentTimeDTO;
+import com.isa.pharmacies_system.DTO.PharmacyDTO;
+import com.isa.pharmacies_system.DTO.PharmacyNewDTO;
 import com.isa.pharmacies_system.converter.PharmacyConverter;
+import com.isa.pharmacies_system.domain.medicine.Medicine;
 import com.isa.pharmacies_system.domain.medicine.MedicinePrice;
 import com.isa.pharmacies_system.domain.pharmacy.Pharmacy;
 import com.isa.pharmacies_system.domain.pharmacy.PriceList;
@@ -19,6 +23,12 @@ import com.isa.pharmacies_system.domain.storage.PharmacyStorage;
 import com.isa.pharmacies_system.domain.storage.PharmacyStorageItem;
 import com.isa.pharmacies_system.domain.storage.Storage;
 import com.isa.pharmacies_system.domain.storage.TypeOfStorage;
+import com.isa.pharmacies_system.domain.user.Pharmacist;
+import com.isa.pharmacies_system.repository.IPharmacyRepository;
+import com.isa.pharmacies_system.repository.IPharmacyStorageRepository;
+import com.isa.pharmacies_system.repository.IPriceListRepository;
+import com.isa.pharmacies_system.repository.IStorageRepository;
+import com.isa.pharmacies_system.repository.IWorkingHoursRepository;
 import com.isa.pharmacies_system.service.iService.IPharmacyService;
 
 @Service
