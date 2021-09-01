@@ -2,6 +2,8 @@ package com.isa.pharmacies_system.domain.complaint;
 
 import static javax.persistence.InheritanceType.JOINED;
 
+import java.util.UUID;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -20,24 +22,30 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.isa.pharmacies_system.domain.user.Patient;
 
 @Entity
-@Table(name="complaints")
-@Inheritance(strategy=JOINED)
+@Table(name = "complaints")
+@Inheritance(strategy = JOINED)
 public class Complaint {
 	@Id
 	@SequenceGenerator(name = "mySeqGenComplaint", sequenceName = "mySeqComplaint", initialValue = 1, allocationSize = 1)
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "mySeqGenComplaint")
 	private long id;
+	
+	@Column(name = "serialNumber", unique = true, nullable = false)
+	private String serialNumber;
 
 	@JsonBackReference
 	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private Patient patientWithComplaint;
-	
-	@Column(name="complaintContent", unique=false, nullable=false)
+
+	@Column(name = "complaintContent", unique = false, nullable = false)
 	private String content;
-	
+
 	@Enumerated(EnumType.ORDINAL)
 	private TypeOfComplaint typeOfComplaint;
-	
+
+	@Enumerated(EnumType.ORDINAL)
+	private StatusOfComplaint statusOfComplaint;
+
 	public Complaint() {
 		// TODO Auto-generated constructor stub
 	}
@@ -45,6 +53,7 @@ public class Complaint {
 	public Complaint(long id, Patient patientWithComplaint, String content, TypeOfComplaint typeOfComplaint) {
 		super();
 		this.id = id;
+		this.serialNumber = UUID.randomUUID().toString();
 		this.patientWithComplaint = patientWithComplaint;
 		this.content = content;
 		this.typeOfComplaint = typeOfComplaint;
@@ -81,6 +90,21 @@ public class Complaint {
 	public void setTypeOfComplaint(TypeOfComplaint typeOfComplaint) {
 		this.typeOfComplaint = typeOfComplaint;
 	}
-	
-	
-}
+
+	public StatusOfComplaint getStatusOfComplaint() {
+		return statusOfComplaint;
+	}
+
+	public void setStatusOfComplaint(StatusOfComplaint statusOfComplaint) {
+		this.statusOfComplaint = statusOfComplaint;
+	}
+
+	public String getSerialNumber() {
+		return serialNumber;
+	}
+
+	public void setSerialNumber(String serialNumber) {
+		this.serialNumber = serialNumber;
+	}
+
+ }

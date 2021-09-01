@@ -1,0 +1,13 @@
+package com.isa.pharmacies_system.service.iService;
+
+import com.isa.pharmacies_system.DTO.DermatologistComplaintDTO;
+import com.isa.pharmacies_system.DTO.DermatologistComplaintResponseDTO;
+import com.isa.pharmacies_system.DTO.PharmacistComplaintResponseDTO;
+import com.isa.pharmacies_system.DTO.PharmacyComplaintResponseDTO;
+import com.isa.pharmacies_system.domain.complaint.DermatologistComplaintResponse;
+
+public interface IComplaintResponseService {
+	void createPharmacistComplaintResponse(PharmacistComplaintResponseDTO pharmacistComplaintResponseDTO);
+	void createDermatologistComplaintResponse(DermatologistComplaintResponseDTO dermatologistComplaintResponseDTO);
+	void createPharmacyComplaintResponse(PharmacyComplaintResponseDTO pharmacyComplaintResponseDTO);
+}
