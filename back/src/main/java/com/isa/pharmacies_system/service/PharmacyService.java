@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +16,6 @@ import com.isa.pharmacies_system.DTO.PharmacistAppointmentTimeDTO;
 import com.isa.pharmacies_system.DTO.PharmacyDTO;
 import com.isa.pharmacies_system.DTO.PharmacyNewDTO;
 import com.isa.pharmacies_system.converter.PharmacyConverter;
-import com.isa.pharmacies_system.domain.medicine.Medicine;
 import com.isa.pharmacies_system.domain.medicine.MedicinePrice;
 import com.isa.pharmacies_system.domain.pharmacy.Pharmacy;
 import com.isa.pharmacies_system.domain.pharmacy.PriceList;
@@ -23,7 +23,9 @@ import com.isa.pharmacies_system.domain.storage.PharmacyStorage;
 import com.isa.pharmacies_system.domain.storage.PharmacyStorageItem;
 import com.isa.pharmacies_system.domain.storage.Storage;
 import com.isa.pharmacies_system.domain.storage.TypeOfStorage;
+import com.isa.pharmacies_system.domain.user.Patient;
 import com.isa.pharmacies_system.domain.user.Pharmacist;
+import com.isa.pharmacies_system.repository.IPatientRepository;
 import com.isa.pharmacies_system.repository.IPharmacyRepository;
 import com.isa.pharmacies_system.repository.IPharmacyStorageRepository;
 import com.isa.pharmacies_system.repository.IPriceListRepository;
@@ -35,6 +37,7 @@ import com.isa.pharmacies_system.service.iService.IPharmacyService;
 public class PharmacyService implements IPharmacyService {
 	
 	private IPharmacyRepository iPharmacyRepository;
+	private IPatientRepository iPatientRepository;
 	private IPharmacyStorageRepository iPharmacyStorageRepository;
 	private IStorageRepository iStorageRepository;
 	private IPriceListRepository iPriceListRepository;
@@ -43,7 +46,7 @@ public class PharmacyService implements IPharmacyService {
 	private IWorkingHoursRepository workingHoursRepository;
 	
 	@Autowired
-	public PharmacyService(IPharmacyRepository iPharmacyRepository, IPriceListRepository iPriceListRepository, IPharmacyStorageRepository iPharmacyStorageRepository, IStorageRepository iStorageRepository, IWorkingHoursRepository workingHoursRepository) {
+	public PharmacyService(IPharmacyRepository iPharmacyRepository, IPriceListRepository iPriceListRepository, IPharmacyStorageRepository iPharmacyStorageRepository, IStorageRepository iStorageRepository, IWorkingHoursRepository workingHoursRepository, IPatientRepository iPatientRepository) {
 		this.iPharmacyRepository=iPharmacyRepository;
 		this.iPriceListRepository= iPriceListRepository;
 		this.iPharmacyStorageRepository=iPharmacyStorageRepository;
@@ -51,6 +54,7 @@ public class PharmacyService implements IPharmacyService {
 		this.workingHoursRepository = workingHoursRepository;
 		this.pharmacyConverter = new PharmacyConverter();
 		this.utilityMethods = new UtilityMethods();
+		this.iPatientRepository = iPatientRepository;
 	}
 	
 	@Override
@@ -204,6 +208,30 @@ public class PharmacyService implements IPharmacyService {
 				.filter(p -> p.getDermatologistsInPharmacy().stream()
 				.filter(d -> d.getId() == dermatologistId).count() > 0).collect(Collectors.toList());
 
+	}
+
+	@Override
+	public void subscribeOnPharmacy(long pharmacyId, String userEmail) {
+		// TODO Auto-generated method stub
+		Patient patient = iPatientRepository.getPatientByEmail(userEmail);
+		Set<Pharmacy> patientSubscribedPharmacies = patient.getPharmaciesSubscription(); 
+		patientSubscribedPharmacies.add(iPharmacyRepository.findById(pharmacyId).orElse(null));
+		patient.setPharmaciesSubscription(patientSubscribedPharmacies);
+		iPatientRepository.save(patient); 
+	}
+
+	@Override
+	public void unsubscribeOnPharmacy(long pharmacyId, String userEmail) {
+		Patient patient = iPatientRepository.getPatientByEmail(userEmail);
+		Set<Pharmacy> patientSubscribedPharmacies = patient.getPharmaciesSubscription().stream().filter(pharmacy -> pharmacy.getId()!=pharmacyId).collect(Collectors.toSet());
+		patient.setPharmaciesSubscription(patientSubscribedPharmacies);
+		iPatientRepository.save(patient); 
+	}
+
+	@Override
+	public boolean checkIfPatientSubscribedOnPharmacy(long pharmacyId, String userEmail) {
+		Patient patient = iPatientRepository.getPatientByEmail(userEmail);
+		return patient.getPharmaciesSubscription().stream().filter(pharmacy -> pharmacy.getId()!=pharmacyId).findFirst().orElse(null)!=null? true: false;
 	}
 
 }
