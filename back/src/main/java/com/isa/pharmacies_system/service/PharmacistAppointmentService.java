@@ -3,11 +3,15 @@ package com.isa.pharmacies_system.service;
 import com.isa.pharmacies_system.DTO.PatientAppointmentInfoDTO;
 import com.isa.pharmacies_system.DTO.PharmacistAppointmentTimeDTO;
 import com.isa.pharmacies_system.DTO.PriceListForAppointmentDTO;
+import com.isa.pharmacies_system.domain.pharmacy.SystemLoyalty;
 import com.isa.pharmacies_system.domain.schedule.*;
+import com.isa.pharmacies_system.domain.user.CategoryOfPatient;
 import com.isa.pharmacies_system.domain.user.Patient;
 import com.isa.pharmacies_system.domain.user.Pharmacist;
 import com.isa.pharmacies_system.repository.*;
 import com.isa.pharmacies_system.service.iService.IPharmacistAppointmentService;
+import com.isa.pharmacies_system.service.iService.ISystemLoyaltyService;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -30,15 +34,17 @@ public class PharmacistAppointmentService implements IPharmacistAppointmentServi
     private IPriceListRepository priceListRepository;
     private UtilityMethods utilityMethods;
     private IWorkingHoursRepository workingHoursRepository;
+    private ISystemLoyaltyService iSystemLoyaltyService;
 
     @Autowired
-    public PharmacistAppointmentService(IPharmacistAppointmentRepository pharmacistAppointmentRepository, IPharmacistRepository pharmacistRepository, IPatientRepository patientRepository, IPriceListRepository priceListRepository, IWorkingHoursRepository workingHoursRepository) {
+    public PharmacistAppointmentService(IPharmacistAppointmentRepository pharmacistAppointmentRepository, IPharmacistRepository pharmacistRepository, IPatientRepository patientRepository, IPriceListRepository priceListRepository, IWorkingHoursRepository workingHoursRepository, ISystemLoyaltyService iSystemLoyaltyService) {
         this.pharmacistAppointmentRepository = pharmacistAppointmentRepository;
         this.pharmacistRepository = pharmacistRepository;
         this.patientRepository = patientRepository;
         this.priceListRepository = priceListRepository;
         this.workingHoursRepository = workingHoursRepository;
         this.utilityMethods = new UtilityMethods();
+        this.iSystemLoyaltyService = iSystemLoyaltyService;
     }
 
     @Override
@@ -51,6 +57,7 @@ public class PharmacistAppointmentService implements IPharmacistAppointmentServi
     @Transactional
     @Override
     public Boolean bookPharmacistAppointment(Long patientId, Long pharmacistId, PharmacistAppointmentTimeDTO timeDTO,Boolean isPatient){
+    	SystemLoyalty systemLoyalty=iSystemLoyaltyService.get();
         Patient patient = patientRepository.findById(patientId).orElse(null);
         Pharmacist pharmacist = pharmacistRepository.findLockedById(pharmacistId).orElse(null);
         PharmacistAppointment pharmacistAppointment;
@@ -64,18 +71,41 @@ public class PharmacistAppointmentService implements IPharmacistAppointmentServi
                 && doesPharmacistHaveOpenSelectedAppointment(timeDTO, pharmacist)
                 && !doesPatientHaveAnotherAppointmentInSameTime(patient,pharmacistAppointment)
                 && ((patient.getPenalty() < 3 && isPatient) || (!isPatient))){
-
-            fillPriceForPharmacistAppointment(timeDTO,pharmacistAppointment);
+        	
+        	//dodati da se pacijentu mijenjaju poeni i provjerava rank
+        	patient.setPatientPoints(patient.getPatientPoints()+systemLoyalty.getPointsForDermatologistAppointment());
+        	if(patient.getPatientPoints()>=systemLoyalty.getDiscountRegular() && patient.getPatientPoints()<systemLoyalty.getDiscountSilver()) {
+				patient.setCategoryOfPatient(CategoryOfPatient.Regular);
+				//pharmacistAppointment.setAppointmentPrice(pharmacistAppointment.getAppointmentPrice()*systemLoyalty.getDiscountRegular()/100);
+			} else if(patient.getPatientPoints()>=systemLoyalty.getDiscountSilver() && patient.getPatientPoints()<systemLoyalty.getDiscountGold()) {
+				patient.setCategoryOfPatient(CategoryOfPatient.Silver);
+				//pharmacistAppointment.setAppointmentPrice(pharmacistAppointment.getAppointmentPrice()*systemLoyalty.getDiscountSilver()/100);
+			} else {
+				patient.setCategoryOfPatient(CategoryOfPatient.Gold);
+				//pharmacistAppointment.setAppointmentPrice(dermatologistAppointment.getAppointmentPrice()*systemLoyalty.getDiscountGold()/100);
+			}
+        	patientRepository.save(patient);
+        	
+        	fillPriceForPharmacistAppointment(timeDTO,pharmacistAppointment);
             pharmacistAppointmentRepository.save(pharmacistAppointment);
             return true;
         }else{
             return false;
         }
     }
-
+    //dodati provjeru za cijenu i rank
     private void fillPriceForPharmacistAppointment(PharmacistAppointmentTimeDTO timeDTO, PharmacistAppointment pharmacistAppointment) {
-        PriceListForAppointmentDTO priceListForAppointmentDTO = priceListRepository.getPriceListForAppointmentByPharmacyId(pharmacistAppointment.getPharmacistForAppointment().getPharmacyForPharmacist().getId());
-        pharmacistAppointment.setAppointmentPrice(priceListForAppointmentDTO.getDermatologistAppointmentPricePerHour() * (long)timeDTO.getDuration()/60);
+    	SystemLoyalty systemLoyalty=iSystemLoyaltyService.get();
+    	double coefficient=1.0;
+    	if (pharmacistAppointment.getPatientWithPharmacistAppointment().getCategoryOfPatient()==CategoryOfPatient.Regular) {
+    		coefficient=systemLoyalty.getDiscountRegular()/100;
+    	} else if (pharmacistAppointment.getPatientWithPharmacistAppointment().getCategoryOfPatient()==CategoryOfPatient.Silver) {
+    		coefficient=systemLoyalty.getDiscountSilver()/100;
+    	} else if (pharmacistAppointment.getPatientWithPharmacistAppointment().getCategoryOfPatient()==CategoryOfPatient.Gold) {
+    		coefficient=systemLoyalty.getDiscountGold()/100;
+    	}
+    	PriceListForAppointmentDTO priceListForAppointmentDTO = priceListRepository.getPriceListForAppointmentByPharmacyId(pharmacistAppointment.getPharmacistForAppointment().getPharmacyForPharmacist().getId());
+        pharmacistAppointment.setAppointmentPrice((priceListForAppointmentDTO.getDermatologistAppointmentPricePerHour() * (long)timeDTO.getDuration()/60)*coefficient);
 
     }
 

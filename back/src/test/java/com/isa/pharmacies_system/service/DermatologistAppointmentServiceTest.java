@@ -1,9 +1,16 @@
 package com.isa.pharmacies_system.service;
 
-import com.isa.pharmacies_system.domain.schedule.DermatologistAppointment;
-import com.isa.pharmacies_system.domain.schedule.StatusOfAppointment;
-import com.isa.pharmacies_system.domain.user.Patient;
-import com.isa.pharmacies_system.repository.*;
+import static com.isa.pharmacies_system.prototype.ProtoClass.protoDermatologistAppointment;
+import static com.isa.pharmacies_system.prototype.ProtoClass.protoDermatologistAppointmentOpen;
+import static com.isa.pharmacies_system.prototype.ProtoClass.protoPatient;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
+import javax.transaction.Transactional;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
@@ -11,12 +18,16 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import javax.transaction.Transactional;
-
-import static com.isa.pharmacies_system.prototype.ProtoClass.*;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.*;
-import static org.mockito.Mockito.times;
+import com.isa.pharmacies_system.domain.schedule.DermatologistAppointment;
+import com.isa.pharmacies_system.domain.schedule.StatusOfAppointment;
+import com.isa.pharmacies_system.domain.user.Patient;
+import com.isa.pharmacies_system.repository.IDermatologistAppointmentRepository;
+import com.isa.pharmacies_system.repository.IDermatologistRepository;
+import com.isa.pharmacies_system.repository.IPatientRepository;
+import com.isa.pharmacies_system.repository.IPharmacyRepository;
+import com.isa.pharmacies_system.repository.IPriceListRepository;
+import com.isa.pharmacies_system.repository.ISystemLoyaltyRepository;
+import com.isa.pharmacies_system.service.iService.ISystemLoyaltyService;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -27,6 +38,7 @@ class DermatologistAppointmentServiceTest {
     private IDermatologistRepository dermatologistRepository;
     private IPharmacyRepository pharmacyRepository;
     private IPriceListRepository priceListRepository;
+    private ISystemLoyaltyService systemLoyaltyService;
     private DermatologistAppointmentService dermatologistAppointmentService;
 
     @BeforeEach
@@ -36,7 +48,8 @@ class DermatologistAppointmentServiceTest {
         dermatologistRepository = mock(IDermatologistRepository.class);
         pharmacyRepository = mock(IPharmacyRepository.class);
         priceListRepository = mock(IPriceListRepository.class);
-        dermatologistAppointmentService = new DermatologistAppointmentService(dermatologistAppointmentRepository,patientRepository,dermatologistRepository,pharmacyRepository,priceListRepository);
+        systemLoyaltyService = mock(ISystemLoyaltyService.class);
+        dermatologistAppointmentService = new DermatologistAppointmentService(dermatologistAppointmentRepository,patientRepository,dermatologistRepository,pharmacyRepository,priceListRepository, systemLoyaltyService);
     }
 
     @Test

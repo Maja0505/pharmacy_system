@@ -1,19 +1,20 @@
 package com.isa.pharmacies_system.service;
 
-import com.isa.pharmacies_system.domain.medicine.MedicineReservation;
-import com.isa.pharmacies_system.domain.schedule.DermatologistAppointment;
-import com.isa.pharmacies_system.domain.user.Patient;
-import com.isa.pharmacies_system.domain.user.Users;
-import com.isa.pharmacies_system.repository.IPatientRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.core.env.Environment;
 import org.springframework.mail.MailException;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
+
+import com.isa.pharmacies_system.domain.complaint.DermatologistComplaintResponse;
+import com.isa.pharmacies_system.domain.complaint.PharmacistComplaintResponse;
+import com.isa.pharmacies_system.domain.complaint.PharmacyComplaintResponse;
+import com.isa.pharmacies_system.domain.medicine.EPrescription;
+import com.isa.pharmacies_system.domain.medicine.MedicineReservation;
+import com.isa.pharmacies_system.domain.user.Patient;
+import com.isa.pharmacies_system.repository.IPatientRepository;
 
 @Service
 public class EmailService {
@@ -81,6 +82,52 @@ public class EmailService {
 
         javaMailSender.send(mail);
     }
+    
+    @Async
+    public void sendResponseForPharmacistComplaint(PharmacistComplaintResponse pharmacistComplaintResponse) throws MailException, InterruptedException {
 
+        SimpleMailMessage mail = new SimpleMailMessage();
+        mail.setTo(pharmacistComplaintResponse.getPharmacistComplaint().getPatientWithComplaint().getEmail());
+        mail.setFrom(env.getProperty("spring.mail.username"));
+        mail.setSubject("Preuzimanje leka");
+        mail.setText(pharmacistComplaintResponse.getComplaintResponseContent());
 
+        javaMailSender.send(mail);
+    }
+    
+    @Async
+    public void sendResponseForDermatologistComplaint(DermatologistComplaintResponse dermatologistComplaintResponse) throws MailException, InterruptedException {
+
+        SimpleMailMessage mail = new SimpleMailMessage();
+        mail.setTo(dermatologistComplaintResponse.getDermatologistComplaint().getPatientWithComplaint().getEmail());
+        mail.setFrom(env.getProperty("spring.mail.username"));
+        mail.setSubject("Preuzimanje leka");
+        mail.setText(dermatologistComplaintResponse.getComplaintResponseContent());
+
+        javaMailSender.send(mail);
+    }
+
+    @Async
+    public void sendResponseForPharmacyComplaint(PharmacyComplaintResponse pharmacyComplaintResponse) throws MailException, InterruptedException {
+
+        SimpleMailMessage mail = new SimpleMailMessage();
+        mail.setTo(pharmacyComplaintResponse.getPharmacyComplaint().getPatientWithComplaint().getEmail());
+        mail.setFrom(env.getProperty("spring.mail.username"));
+        mail.setSubject("Preuzimanje leka");
+        mail.setText(pharmacyComplaintResponse.getComplaintResponseContent());
+
+        javaMailSender.send(mail);
+    }
+    
+    @Async
+    public void sendNoticeForProcessedEPrescription(EPrescription ePrescription) throws MailException, InterruptedException {
+    	String firstName = ePrescription.getPatientForEPrescription().getFirstName();
+        SimpleMailMessage mail = new SimpleMailMessage();
+        mail.setTo(ePrescription.getPatientForEPrescription().getEmail());
+        mail.setFrom(env.getProperty("spring.mail.username"));
+        mail.setSubject("Preuzimanje leka");
+        mail.setText("Pozdrav " + firstName + ",\n\nPreuzeli ste lijekove prepisane preko ERecepta.\n\nSrdacan pozdrav!");
+
+        javaMailSender.send(mail);
+    }
 }

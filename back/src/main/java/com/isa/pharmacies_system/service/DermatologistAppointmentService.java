@@ -1,30 +1,34 @@
 package com.isa.pharmacies_system.service;
 
-import com.isa.pharmacies_system.DTO.AppointmentScheduleByStaffDTO;
-import com.isa.pharmacies_system.DTO.PatientAppointmentInfoDTO;
-import com.isa.pharmacies_system.DTO.PriceListForAppointmentDTO;
-import com.isa.pharmacies_system.domain.pharmacy.Pharmacy;
-import com.isa.pharmacies_system.domain.schedule.DermatologistAppointment;
-import com.isa.pharmacies_system.domain.schedule.PharmacistAppointment;
-import com.isa.pharmacies_system.domain.user.Dermatologist;
-import com.isa.pharmacies_system.repository.*;
-import com.isa.pharmacies_system.service.iService.IDermatologistAppointmentService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.stereotype.Service;
-import com.isa.pharmacies_system.domain.schedule.StatusOfAppointment;
-import com.isa.pharmacies_system.domain.user.Patient;
-import org.springframework.transaction.annotation.Transactional;
-
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.Comparator;
-
 import java.util.List;
-import java.util.Locale;
 import java.util.stream.Collectors;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.isa.pharmacies_system.DTO.AppointmentScheduleByStaffDTO;
+import com.isa.pharmacies_system.DTO.PatientAppointmentInfoDTO;
+import com.isa.pharmacies_system.DTO.PriceListForAppointmentDTO;
+import com.isa.pharmacies_system.domain.pharmacy.Pharmacy;
+import com.isa.pharmacies_system.domain.pharmacy.SystemLoyalty;
+import com.isa.pharmacies_system.domain.schedule.DermatologistAppointment;
+import com.isa.pharmacies_system.domain.schedule.PharmacistAppointment;
+import com.isa.pharmacies_system.domain.schedule.StatusOfAppointment;
+import com.isa.pharmacies_system.domain.user.CategoryOfPatient;
+import com.isa.pharmacies_system.domain.user.Dermatologist;
+import com.isa.pharmacies_system.domain.user.Patient;
+import com.isa.pharmacies_system.repository.IDermatologistAppointmentRepository;
+import com.isa.pharmacies_system.repository.IDermatologistRepository;
+import com.isa.pharmacies_system.repository.IPatientRepository;
+import com.isa.pharmacies_system.repository.IPharmacyRepository;
+import com.isa.pharmacies_system.repository.IPriceListRepository;
+import com.isa.pharmacies_system.service.iService.IDermatologistAppointmentService;
+import com.isa.pharmacies_system.service.iService.ISystemLoyaltyService;
 
 @Service
 public class DermatologistAppointmentService implements IDermatologistAppointmentService {
@@ -35,14 +39,16 @@ public class DermatologistAppointmentService implements IDermatologistAppointmen
     private IPharmacyRepository pharmacyRepository;
     private UtilityMethods utilityMethods;
     private IPriceListRepository priceListRepository;
+    private ISystemLoyaltyService iSystemLoyaltyService;
 
     @Autowired
-    public DermatologistAppointmentService(IDermatologistAppointmentRepository dermatologistAppointmentRepository, IPatientRepository patientRepository, IDermatologistRepository dermatologistRepository, IPharmacyRepository pharmacyRepository, IPriceListRepository priceListRepository) {
+    public DermatologistAppointmentService(IDermatologistAppointmentRepository dermatologistAppointmentRepository, IPatientRepository patientRepository, IDermatologistRepository dermatologistRepository, IPharmacyRepository pharmacyRepository, IPriceListRepository priceListRepository, ISystemLoyaltyService iSystemLoyaltyService) {
         this.dermatologistAppointmentRepository = dermatologistAppointmentRepository;
         this.patientRepository = patientRepository;
         this.dermatologistRepository = dermatologistRepository;
         this.pharmacyRepository = pharmacyRepository;
         this.priceListRepository = priceListRepository;
+        this.iSystemLoyaltyService = iSystemLoyaltyService;
         this.utilityMethods = new UtilityMethods();
     }
 
@@ -61,12 +67,25 @@ public class DermatologistAppointmentService implements IDermatologistAppointmen
     @Transactional
     @Override
     public Boolean bookDermatologistAppointment(Long patientId,Long appointmentId){
-
+    	SystemLoyalty systemLoyalty=iSystemLoyaltyService.get();
         DermatologistAppointment dermatologistAppointment = findOne(appointmentId);
         Patient patient = patientRepository.findById(patientId).orElse(null);
         if(patient != null && patient.getPenalty() < 3){
             if(isAppointmentOpen(dermatologistAppointment)
                     && !doesPatientHaveAnotherAppointmentInSameTime(patient,dermatologistAppointment)){
+            	
+            	patient.setPatientPoints(patient.getPatientPoints()+systemLoyalty.getPointsForDermatologistAppointment());
+            	if(patient.getPatientPoints()>=systemLoyalty.getDiscountRegular() && patient.getPatientPoints()<systemLoyalty.getDiscountSilver()) {
+    				patient.setCategoryOfPatient(CategoryOfPatient.Regular);
+    				dermatologistAppointment.setAppointmentPrice(dermatologistAppointment.getAppointmentPrice()*systemLoyalty.getDiscountRegular()/100);
+    			} else if(patient.getPatientPoints()>=systemLoyalty.getDiscountSilver() && patient.getPatientPoints()<systemLoyalty.getDiscountGold()) {
+    				patient.setCategoryOfPatient(CategoryOfPatient.Silver);
+    				dermatologistAppointment.setAppointmentPrice(dermatologistAppointment.getAppointmentPrice()*systemLoyalty.getDiscountSilver()/100);
+    			} else {
+    				patient.setCategoryOfPatient(CategoryOfPatient.Gold);
+    				dermatologistAppointment.setAppointmentPrice(dermatologistAppointment.getAppointmentPrice()*systemLoyalty.getDiscountGold()/100);
+    			}
+            	patientRepository.save(patient);
                 dermatologistAppointment.setPatientWithDermatologistAppointment(patient);
                 dermatologistAppointment.setStatusOfAppointment(StatusOfAppointment.Reserved);
                 dermatologistAppointmentRepository.save(dermatologistAppointment);

@@ -1,22 +1,28 @@
 package com.isa.pharmacies_system.service;
 
-import com.isa.pharmacies_system.DTO.MedicineReservationInfoDTO;
-import com.isa.pharmacies_system.domain.medicine.MedicineReservation;
-import com.isa.pharmacies_system.domain.medicine.StatusOfMedicineReservation;
-import com.isa.pharmacies_system.domain.storage.PharmacyStorageItem;
-import com.isa.pharmacies_system.domain.user.Patient;
-import com.isa.pharmacies_system.repository.IMedicineReservationRepository;
-import com.isa.pharmacies_system.repository.IPatientRepository;
-import com.isa.pharmacies_system.repository.IPharmacyStorageItemRepository;
-import com.isa.pharmacies_system.service.iService.IMedicineReservationService;
+import java.time.Duration;
+import java.time.LocalDateTime;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.Duration;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.List;
+import com.isa.pharmacies_system.DTO.MedicineReservationInfoDTO;
+import com.isa.pharmacies_system.domain.medicine.MedicinePrice;
+import com.isa.pharmacies_system.domain.medicine.MedicineReservation;
+import com.isa.pharmacies_system.domain.medicine.StatusOfMedicineReservation;
+import com.isa.pharmacies_system.domain.pharmacy.SystemLoyalty;
+import com.isa.pharmacies_system.domain.storage.PharmacyStorageItem;
+import com.isa.pharmacies_system.domain.user.CategoryOfPatient;
+import com.isa.pharmacies_system.domain.user.Patient;
+import com.isa.pharmacies_system.repository.IMedicineReservationRepository;
+import com.isa.pharmacies_system.repository.IPatientRepository;
+import com.isa.pharmacies_system.repository.IPharmacyStorageItemRepository;
+import com.isa.pharmacies_system.repository.ISystemLoyaltyRepository;
+import com.isa.pharmacies_system.service.iService.IMedicineReservationService;
+import com.isa.pharmacies_system.service.iService.IPriceListService;
+import com.isa.pharmacies_system.service.iService.ISystemLoyaltyService;
 
 
 @Service
@@ -24,14 +30,18 @@ public class MedicineReservationService implements IMedicineReservationService {
 
     private IMedicineReservationRepository medicineReservationRepository;
     private IPharmacyStorageItemRepository pharmacyStorageItemRepository;
+    private IPriceListService iPriceListService;
     private UtilityMethods utilityMethods;
+    private ISystemLoyaltyService iSystemLoyaltyService;
     @Autowired
     private IPatientRepository patientRepository;
 
 
-    public MedicineReservationService(IMedicineReservationRepository medicineReservationRepository, IPharmacyStorageItemRepository pharmacyStorageItemRepository) {
+    public MedicineReservationService(IMedicineReservationRepository medicineReservationRepository, IPharmacyStorageItemRepository pharmacyStorageItemRepository, IPriceListService iPriceListService, ISystemLoyaltyService iSystemLoyaltyService) {
         this.medicineReservationRepository = medicineReservationRepository;
         this.pharmacyStorageItemRepository = pharmacyStorageItemRepository;
+        this.iPriceListService= iPriceListService;
+        this.iSystemLoyaltyService = iSystemLoyaltyService;
         this.utilityMethods = new UtilityMethods();
 
     }
@@ -41,15 +51,34 @@ public class MedicineReservationService implements IMedicineReservationService {
     @Override
     public Boolean createMedicineReservation(MedicineReservation medicineReservation){
         //uraditi provere
-        PharmacyStorageItem pharmacyStorageItem = pharmacyStorageItemRepository.getSelectedMedicineFromPharmacyStorage(medicineReservation.getReservedMedicine().getId(),medicineReservation.getPharmacyForMedicineReservation().getId());
+    	SystemLoyalty systemLoyalty=iSystemLoyaltyService.get();
+    	PharmacyStorageItem pharmacyStorageItem = pharmacyStorageItemRepository.getSelectedMedicineFromPharmacyStorage(medicineReservation.getReservedMedicine().getId(),medicineReservation.getPharmacyForMedicineReservation().getId());
         System.out.println(pharmacyStorageItem != null);
         System.out.println(doesPharmacyHaveSelectedMedicineInStorage(pharmacyStorageItem));
         System.out.println(medicineReservation.getPatientForMedicineReservation().getPenalty() < 3);
-
-
+        
         if(pharmacyStorageItem != null
                 && doesPharmacyHaveSelectedMedicineInStorage(pharmacyStorageItem)
                 && medicineReservation.getPatientForMedicineReservation().getPenalty() < 3){
+        	//Loyalty 
+        	
+        	MedicinePrice medicinePrice = iPriceListService.getPriceForMedicineInPharmacy(medicineReservation.getReservedMedicine(), medicineReservation.getPharmacyForMedicineReservation());
+            double coefficient=1.0;
+            medicineReservation.getPatientForMedicineReservation().setPatientPoints(medicineReservation.getPatientForMedicineReservation().getPatientPoints()+systemLoyalty.getPointsForDermatologistAppointment());
+        	if(medicineReservation.getPatientForMedicineReservation().getPatientPoints()>=systemLoyalty.getDiscountRegular() && medicineReservation.getPatientForMedicineReservation().getPatientPoints()<systemLoyalty.getDiscountSilver()) {
+        		medicineReservation.getPatientForMedicineReservation().setCategoryOfPatient(CategoryOfPatient.Regular);
+        		coefficient=systemLoyalty.getDiscountRegular()/100;
+    		} else if(medicineReservation.getPatientForMedicineReservation().getPatientPoints()>=systemLoyalty.getDiscountSilver() && medicineReservation.getPatientForMedicineReservation().getPatientPoints()<systemLoyalty.getDiscountGold()) {
+    			medicineReservation.getPatientForMedicineReservation().setCategoryOfPatient(CategoryOfPatient.Silver);
+    			coefficient=systemLoyalty.getDiscountSilver()/100;
+    		} else {
+    			medicineReservation.getPatientForMedicineReservation().setCategoryOfPatient(CategoryOfPatient.Gold);
+    			coefficient=systemLoyalty.getDiscountGold()/100;
+    		}
+        	patientRepository.save(medicineReservation.getPatientForMedicineReservation());
+                   
+            medicineReservation.setPrice(medicinePrice.getMedicinePrice()*coefficient);
+        	
             medicineReservationRepository.save(medicineReservation);
             pharmacyStorageItem.setMedicineAmount(pharmacyStorageItem.getMedicineAmount() - 1);
             pharmacyStorageItemRepository.save(pharmacyStorageItem);

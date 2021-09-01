@@ -1,10 +1,19 @@
 package com.isa.pharmacies_system.service;
 
-import com.isa.pharmacies_system.domain.medicine.MedicineReservation;
-import com.isa.pharmacies_system.domain.medicine.StatusOfMedicineReservation;
-import com.isa.pharmacies_system.domain.storage.PharmacyStorageItem;
-import com.isa.pharmacies_system.repository.IMedicineReservationRepository;
-import com.isa.pharmacies_system.repository.IPharmacyStorageItemRepository;
+import static com.isa.pharmacies_system.prototype.ProtoClass.protoMedicineReservation;
+import static com.isa.pharmacies_system.prototype.ProtoClass.protoMedicineReservations;
+import static com.isa.pharmacies_system.prototype.ProtoClass.protoPharmacyStorageItem;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
+import java.time.LocalDate;
+import java.util.List;
+
+import javax.transaction.Transactional;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
@@ -12,14 +21,12 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import javax.transaction.Transactional;
-import java.time.LocalDate;
-import java.util.List;
-
-import static com.isa.pharmacies_system.prototype.ProtoClass.*;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
+import com.isa.pharmacies_system.domain.medicine.MedicineReservation;
+import com.isa.pharmacies_system.domain.storage.PharmacyStorageItem;
+import com.isa.pharmacies_system.repository.IMedicineReservationRepository;
+import com.isa.pharmacies_system.repository.IPharmacyStorageItemRepository;
+import com.isa.pharmacies_system.service.iService.IPriceListService;
+import com.isa.pharmacies_system.service.iService.ISystemLoyaltyService;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -28,12 +35,16 @@ class MedicineReservationServiceTest {
     private IMedicineReservationRepository medicineReservationRepository;
     private IPharmacyStorageItemRepository pharmacyStorageItemRepository;
     private MedicineReservationService medicineReservationService;
+    private IPriceListService iPriceListService;
+    private ISystemLoyaltyService iSystemLoyaltyService;
 
     @BeforeEach
     void setUp(){
         medicineReservationRepository = mock(IMedicineReservationRepository.class);
         pharmacyStorageItemRepository = mock(IPharmacyStorageItemRepository.class);
-        medicineReservationService = new MedicineReservationService(medicineReservationRepository,pharmacyStorageItemRepository);
+        iPriceListService = mock(IPriceListService.class);
+        iSystemLoyaltyService = mock(ISystemLoyaltyService.class);
+        medicineReservationService = new MedicineReservationService(medicineReservationRepository,pharmacyStorageItemRepository,iPriceListService,iSystemLoyaltyService);
     }
 
     @Test

@@ -47,7 +47,10 @@ public class MedicineReservation {
 	//moze biti kreirana, propustena, otkazana i zavrsena
 	@Enumerated(EnumType.ORDINAL)
 	private StatusOfMedicineReservation statusOfMedicineReservation;
-
+	
+	@Column(name="price", unique=false, nullable=false)
+	private double price;
+	
 	@Version
 	private Long version;
 
@@ -57,7 +60,7 @@ public class MedicineReservation {
 	
 	public MedicineReservation(long id, Medicine reservedMedicine, Patient patientForMedicineReservation,
 							   LocalDate dateOfTakingMedicine, Pharmacy pharmacyForMedicineReservation,
-			StatusOfMedicineReservation statusOfMedicineReservation) {
+			StatusOfMedicineReservation statusOfMedicineReservation, double price) {
 		super();
 		this.id = id;
 		this.reservedMedicine = reservedMedicine;
@@ -65,6 +68,7 @@ public class MedicineReservation {
 		this.dateOfTakingMedicine = dateOfTakingMedicine;
 		this.pharmacyForMedicineReservation = pharmacyForMedicineReservation;
 		this.statusOfMedicineReservation = statusOfMedicineReservation;
+		this.price= price;
 	}
 
 	public long getId() {
@@ -122,4 +126,13 @@ public class MedicineReservation {
 	public void setVersion(Long version) {
 		this.version = version;
 	}
+
+	public double getPrice() {
+		return price;
+	}
+
+	public void setPrice(double price) {
+		this.price = price;
+	}
+	
 }
