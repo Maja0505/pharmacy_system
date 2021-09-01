@@ -18,6 +18,9 @@ public interface IPharmacyService {
 	List<PharmacyDTO> sortByPharmacyRating(List<PharmacyDTO> pharmacies, Boolean asc);
 	List<PharmacyDTO> sortByPharmacyCity(List<PharmacyDTO> pharmacies, Boolean asc);
 	List<Pharmacy> getAll();
+	void subscribeOnPharmacy(long pharmacyId, String userEmail);
+	void unsubscribeOnPharmacy(long pharmacyId, String userEmail);
+	boolean checkIfPatientSubscribedOnPharmacy(long pharmacyId, String userEmail);
     List<PharmacyDTO> searchPharmacyByNameAndCity(String word, List<PharmacyDTO> pharmacyDTOS);
 	List<PharmacyDTO> filterPharmacy(FilteringPharmacyDTO filteringPharmacyDTO);
 	List<Pharmacy> getAllPharmacyByDermatologistId(Long dermatologistId);
