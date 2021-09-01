@@ -4,6 +4,8 @@ import java.util.List;
 
 import com.isa.pharmacies_system.DTO.MedicineNewDTO;
 import com.isa.pharmacies_system.DTO.MedicineReviewDTO;
+import com.isa.pharmacies_system.DTO.PharmacyForEPrescriptionDTO;
+import com.isa.pharmacies_system.domain.medicine.EPrescriptionItem;
 import com.isa.pharmacies_system.domain.medicine.Medicine;
 import com.isa.pharmacies_system.domain.medicine.MedicineInfo;
 
@@ -14,4 +16,5 @@ public interface IMedicineService {
     List<MedicineReviewDTO> getMedicinesAndPharmacyWithMedicines();
     Medicine getMedicineByName(String name);
 	MedicineInfo getMedicineInfoByMedicineName(String medicineName);
+	List<PharmacyForEPrescriptionDTO> getPharmaciesWithTotalPriceForEPrescription(List<EPrescriptionItem> listOfEPrescriptionItems);
 }

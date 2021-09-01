@@ -1,6 +1,7 @@
 package com.isa.pharmacies_system.domain.pharmacy;
 
 import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -24,45 +25,41 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.isa.pharmacies_system.domain.user.PharmacyAdmin;
 
 @Entity
-@Table(name="orders")
+@Table(name = "orders")
 public class Order {
-	
+
 	@Id
 	@SequenceGenerator(name = "mySeqGenOrder", sequenceName = "mySeqOrder", initialValue = 1, allocationSize = 1)
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "mySeqGenOrder")
 	private long id;
-	
-	//spisak lekova sa kolicinama
+
+	// spisak lekova sa kolicinama
 	@JsonManagedReference
 	@OneToMany(mappedBy = "orderWithItem", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private Set<OrderItem> orderItems = new HashSet<OrderItem>();
-	
-	//rok do kojeg dobavljaci mogu da daju svoje ponude
+
+	// rok do kojeg dobavljaci mogu da daju svoje ponude
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm")
-	private Instant orderEndDate;
-	
-	//admin apoteke
+	private LocalDateTime orderEndDate;
+
+	// admin apoteke
 	@JsonBackReference
 	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private PharmacyAdmin pharmacyAdminForOrder;
-	
-	//spisak svih ponuda za narudzbenicu
+
+	// spisak svih ponuda za narudzbenicu
 	@JsonManagedReference
 	@OneToMany(mappedBy = "orderForOffer", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private Set<Offer> listOfOffersForOrder = new HashSet<Offer>();
-	
-	
+
 	@Enumerated(EnumType.ORDINAL)
 	private StateOfOrder stateOfOrder;
 
-	
 	public Order() {
-		
+
 	}
 
-	
-
-	public Order(long id, Set<OrderItem> orderItems, Instant orderEndDate, PharmacyAdmin pharmacyAdminForOrder,
+	public Order(long id, Set<OrderItem> orderItems, LocalDateTime orderEndDate, PharmacyAdmin pharmacyAdminForOrder,
 			Set<Offer> listOfOffersForOrder, StateOfOrder stateOfOrder) {
 		super();
 		this.id = id;
@@ -73,19 +70,13 @@ public class Order {
 		this.stateOfOrder = stateOfOrder;
 	}
 
-
-
 	public Set<OrderItem> getOrderItems() {
 		return orderItems;
 	}
 
-
-
 	public void setOrderItems(Set<OrderItem> orderItems) {
 		this.orderItems = orderItems;
 	}
-
-
 
 	public long getId() {
 		return id;
@@ -95,12 +86,11 @@ public class Order {
 		this.id = id;
 	}
 
-
-	public Instant getOrderEndDate() {
+	public LocalDateTime getOrderEndDate() {
 		return orderEndDate;
 	}
 
-	public void setOrderEndDate(Instant orderEndDate) {
+	public void setOrderEndDate(LocalDateTime orderEndDate) {
 		this.orderEndDate = orderEndDate;
 	}
 
@@ -127,9 +117,5 @@ public class Order {
 	public void setStateOfOrder(StateOfOrder stateOfOrder) {
 		this.stateOfOrder = stateOfOrder;
 	}
-	
-	
-	
-	
 
 }

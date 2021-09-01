@@ -4,14 +4,17 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.isa.pharmacies_system.DTO.MedicineNewDTO;
 import com.isa.pharmacies_system.DTO.MedicineReviewDTO;
+import com.isa.pharmacies_system.DTO.PharmacyForEPrescriptionDTO;
 import com.isa.pharmacies_system.DTO.PharmacyForMedicineDTO;
 import com.isa.pharmacies_system.converter.MedicineConverter;
+import com.isa.pharmacies_system.domain.medicine.EPrescriptionItem;
 import com.isa.pharmacies_system.domain.medicine.Medicine;
 import com.isa.pharmacies_system.domain.medicine.MedicineInfo;
 import com.isa.pharmacies_system.domain.medicine.MedicinePrice;
@@ -70,6 +73,33 @@ public class MedicineService implements IMedicineService {
 			medicinesAndPharmacyWithMedicines.add(medicine);
 		}
 		return medicinesAndPharmacyWithMedicines;
+	}
+	
+	@Override
+	public List<PharmacyForEPrescriptionDTO> getPharmaciesWithTotalPriceForEPrescription(List<EPrescriptionItem> listOfEPrescriptionItems){
+		List<PharmacyForEPrescriptionDTO> pharmaciesAndTotalPrice = new ArrayList<PharmacyForEPrescriptionDTO>();
+		List<Pharmacy> pharmacies = getListOfPharmacyWithAllMedicineForEPrescription(listOfEPrescriptionItems);
+		for (Pharmacy pharmacy : pharmacies) {
+			double totalPrice = 0;
+			for (EPrescriptionItem ePrescriptionItem : listOfEPrescriptionItems) {
+				MedicinePrice medicinePrice = iPriceListService.getPriceForMedicineInPharmacy(ePrescriptionItem.getMedicineItem(), pharmacy);
+				totalPrice+=ePrescriptionItem.getMedicineAmount() * medicinePrice.getMedicinePrice();
+			}
+			pharmaciesAndTotalPrice.add(new PharmacyForEPrescriptionDTO(pharmacy.getId(),pharmacy.getPharmacyName(),pharmacy.getPharmacyAddress(),pharmacy.getPharmacyAverageRating(),totalPrice));
+		}
+		return pharmaciesAndTotalPrice;
+	}
+
+	private List<Pharmacy> getListOfPharmacyWithAllMedicineForEPrescription(List<EPrescriptionItem> listOfEPrescriptionItems) {
+		List<Pharmacy> pharmacies = iPharmacyService.getAll();
+		for (EPrescriptionItem ePrescriptionItem : listOfEPrescriptionItems) {
+			for (Pharmacy pharmacy : iPharmacyService.getAll()) {
+				if (!iPharmacyStorageService.checkMedicineHaveInPharmacy(pharmacy, ePrescriptionItem.getMedicineItem())){
+					pharmacies = pharmacies.stream().filter(pharmaciesIt -> pharmaciesIt.getId()!=pharmacy.getId()).collect(Collectors.toList());
+				}
+			}
+		}
+		return pharmacies;
 	}
 
 	private List<PharmacyForMedicineDTO> getPharmaciesWithMedicine(Medicine medicineIt) {
