@@ -43,10 +43,14 @@ public class Medicine extends MedicineInfo {
 	
 	@Column(name="medicineAverageRating", unique=false, nullable=false)
 	private double medicineAverageRating;
+	
+	@Column(name="medicinePoints", unique=false, nullable=false)
+	private long medicinePoints;
 
 	@JsonManagedReference
 	@OneToMany(mappedBy = "medicineForRating", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private Set<MedicineRating> medicineRatings = new HashSet<MedicineRating>();
+	
 	
 	public Medicine()
 	{
@@ -54,13 +58,14 @@ public class Medicine extends MedicineInfo {
 	}
 
 	public Medicine(Set<MedicinePrice> medicinePrices, Set<Item> items, Set<MedicineReservation> medicineReservations,
-			double medicineAverageRating, Set<MedicineRating> medicineRatings) {
+			double medicineAverageRating, Set<MedicineRating> medicineRatings, long medicinePoints) {
 		super();
 		this.medicinePrices = medicinePrices;
 		this.items = items;
 		this.medicineReservations = medicineReservations;
 		this.medicineAverageRating = medicineAverageRating;
 		this.medicineRatings = medicineRatings;
+		this.medicinePoints = medicinePoints;
 	}
 
 	public Set<MedicinePrice> getMedicinePrices() {
@@ -103,7 +108,12 @@ public class Medicine extends MedicineInfo {
 		this.medicineRatings = medicineRatings;
 	}
 
-	
-	
+	public long getMedicinePoints() {
+		return medicinePoints;
+	}
+
+	public void setMedicinePoints(long medicinePoints) {
+		this.medicinePoints = medicinePoints;
+	}
 	
 }

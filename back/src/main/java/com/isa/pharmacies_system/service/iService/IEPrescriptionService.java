@@ -12,4 +12,12 @@ public interface IEPrescriptionService {
     List<EPrescriptionDTO> sortByEPrescriptionByDate(List<EPrescriptionDTO> ePrescriptions, boolean asc);
 
     List<EPrescriptionDTO> sortByEPrescriptionByStatus(List<EPrescriptionDTO> ePrescriptions, boolean asc);
+    
+    EPrescription createEPrescription(long patientId);
+    
+    List<EPrescriptionItem> getListOfEPrescriptionItemsFromString(long ePrescriptionId, String itemsInString);
+    
+    EPrescription updateEPrescriptionToProcessed(long ePrescriptionId, long pharmacyId);
+    
+    void updateAmountForMedicineInPharmacyStorage(long ePrescriptionId);
 }

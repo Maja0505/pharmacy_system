@@ -17,11 +17,12 @@ public class MedicineNewDTO {
 	private FormOfMedicine form;
 	private Boolean onRecept;
 	private String manufacturerName;
+	private long points;
 	
 	public MedicineNewDTO() {}
 
 	public MedicineNewDTO(String name, String code, TypeOfMedicine type, String notes, Set<Ingredient> ingredients,
-			List<String> namesOfAlternativeMedicines, FormOfMedicine form, Boolean onRecept, String manufacturerName) {
+			List<String> namesOfAlternativeMedicines, FormOfMedicine form, Boolean onRecept, String manufacturerName, long points) {
 		super();
 		this.name = name;
 		this.code = code;
@@ -32,6 +33,7 @@ public class MedicineNewDTO {
 		this.form = form;
 		this.onRecept = onRecept;
 		this.manufacturerName = manufacturerName;
+		this.points = points;
 	}
 
 	public String getName() {
@@ -104,6 +106,14 @@ public class MedicineNewDTO {
 
 	public void setManufacturerName(String manufacturerName) {
 		this.manufacturerName = manufacturerName;
+	}
+
+	public long getPoints() {
+		return points;
+	}
+
+	public void setPoints(long points) {
+		this.points = points;
 	}
 	
 }

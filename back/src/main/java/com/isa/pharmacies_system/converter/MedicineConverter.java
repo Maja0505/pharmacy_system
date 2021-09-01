@@ -39,6 +39,7 @@ public class MedicineConverter {
 		medicine.setNotes(medicineNewDTO.getNotes());
 		medicine.setPrescriptionRegime(medicineNewDTO.getOnRecept() ? PrescriptionRegime.With_prescription : PrescriptionRegime.Without_prescription);
 		medicine.setTypeOfMedicine(medicineNewDTO.getType());
+		medicine.setMedicinePoints(medicineNewDTO.getPoints());
 		return medicine;
 	}
 	
@@ -53,6 +54,7 @@ public class MedicineConverter {
 		medicineNewDTO.setOnRecept(medicine.getPrescriptionRegime()==PrescriptionRegime.With_prescription ? true : false);
 		medicineNewDTO.setNotes(medicine.getNotes());
 		medicineNewDTO.setType(medicine.getTypeOfMedicine());
+		medicineNewDTO.setPoints(medicine.getMedicinePoints());
 		return medicineNewDTO;
 	}
 
