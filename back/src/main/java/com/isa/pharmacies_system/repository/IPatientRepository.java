@@ -17,7 +17,10 @@ public interface IPatientRepository extends JpaRepository<Patient, Long> {
 
     @Query("select p.dermatologistAppointment from Patient p where p.id=?1 ")
     Set<DermatologistAppointment> getAllByDermatologistAppointment(Long id);
-
+    
+    @Query("select p from Patient p where p.email=?1 ")
+    Patient getPatientByEmail(String email);
+    
     @Query("select p.pharmacistAppointments from Patient p where p.id=?1 ")
     Set<PharmacistAppointment> getAllByPharmacistAppointment(Long id);
 
