@@ -1,6 +1,6 @@
 package com.isa.pharmacies_system.domain.pharmacy;
 
-import java.time.Instant;
+import java.time.LocalDateTime;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -33,7 +33,7 @@ public class Offer {
 	private double fullPrice;
 	
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm")
-	private Instant deliveryDate;
+	private LocalDateTime deliveryDate;
 	
 	//dobavljac
 	@JsonBackReference
@@ -52,7 +52,7 @@ public class Offer {
 		
 	}
 	
-	public Offer(long id, double fullPrice, Instant deliveryDate, Supplier offerSupplier, Order orderForOffer,
+	public Offer(long id, double fullPrice, LocalDateTime deliveryDate, Supplier offerSupplier, Order orderForOffer,
 			StateOfOffer stateOfOffer) {
 		super();
 		this.id = id;
@@ -79,11 +79,11 @@ public class Offer {
 		this.fullPrice = fullPrice;
 	}
 
-	public Instant getDeliveryDate() {
+	public LocalDateTime getDeliveryDate() {
 		return deliveryDate;
 	}
 
-	public void setDeliveryDate(Instant deliveryDate) {
+	public void setDeliveryDate(LocalDateTime deliveryDate) {
 		this.deliveryDate = deliveryDate;
 	}
 
